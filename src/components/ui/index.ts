@@ -13,3 +13,7 @@ export { PopUp } from './PopUp';
 export { Container } from './Container';
 export { Player } from './Player';
 export { Illustration } from './Illustration';
+
+// Layout
+export { Background } from './Background';
+export { Menu } from './Menu';

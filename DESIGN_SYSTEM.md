@@ -129,9 +129,12 @@
 <IconButton type="play" size="sm" />
 <IconButton type="pause" size="sm" />
 ```
-**Props:** `type` (back|play|pause), `size` (sm|lg), `pressed`, `onClick`
+**Props:** `type` (back|play|pause), `variant` (default|light), `size` (sm|lg), `pressed`, `onClick`
 
-Синие круглые кнопки с точечными иконками. Back=150px, Play/Pause=90px.
+- `default` — синий круг с серыми точками (для тёмных фонов)
+- `light` — серый круг с синими точками (для градиентных фонов Background)
+
+Back=150px, Play/Pause=90px. Компонент Background автоматически использует `variant="light"` для кнопки назад.
 
 ### Badge
 ```tsx
@@ -183,13 +186,45 @@
 ```
 **Props:** `type` (laptop|selector|smart-watch|mouse-red|mouse-blue|keyboard-stickers|keyboard), `size`
 
+### Background
+```tsx
+<Background theme="cobalt" orientation="landscape" onBack={handleBack}>
+  <YourPageContent />
+</Background>
+
+<Background theme="orange" orientation="portrait" showBackButton={false}>
+  <Content />
+</Background>
+```
+**Props:** `theme` (cobalt|orange), `orientation` (landscape|portrait), `showBackButton`, `onBack`, `children`
+
+Полноэкранная обёртка с градиентным фоном + точечный паттерн + blur. Кнопка "назад" в левом верхнем углу (скрывается через `showBackButton={false}`).
+
+### Menu
+```tsx
+<Menu
+  theme="cobalt"
+  orientation="landscape"
+  items={[
+    { label: 'Описание направления', onClick: () => navigate('/description') },
+    { label: 'Мои задания', onClick: () => navigate('/tasks') },
+    { label: 'Истории яндексоидов', onClick: () => navigate('/stories') },
+    { label: 'Бинго-знакомство', onClick: () => navigate('/bingo') },
+  ]}
+/>
+```
+**Props:** `theme` (cobalt|orange), `orientation` (landscape|portrait), `items` (массив `{ label, onClick }`), `onBack`
+
+Полноэкранное меню навигации. Пункты — pill-кнопки (60px, #F4F4F4), по центру экрана. Использует Background внутри.
+
 ---
 
 ## Ассеты
 
 ```
 /icons/icon-{name}-{color}-{size}.svg     — done, close (s/m), people, clock (xs)
-/icons/iconbtn-{type}.svg                  — back, play, pause (полные SVG с кругом)
+/icons/iconbtn-{type}.svg                  — back, play, pause (синий круг, default)
+/icons/iconbtn-back-light.svg              — back кнопка (серый круг, для фонов)
 /illustrations/illustration-{type}.png     — 7 3D-иллюстраций
 ```
 

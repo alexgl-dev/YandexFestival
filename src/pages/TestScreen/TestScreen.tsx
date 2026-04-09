@@ -12,6 +12,8 @@ import {
   ProgressBar,
   Illustration,
   Container,
+  Background,
+  Menu,
 } from '../../components/ui';
 import styles from './TestScreen.module.css';
 
@@ -306,6 +308,50 @@ export function TestScreen() {
             </span>
           </Container>
           <Container size="l" state="empty" />
+        </div>
+      </div>
+
+      {/* 12. Background + Menu */}
+      <div className={styles.section}>
+        <h2 className={styles.sectionTitle}>Фоны и меню</h2>
+        <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap' }}>
+          <div style={{ transform: 'scale(0.35)', transformOrigin: 'top left', width: 1920 * 0.35, height: 1080 * 0.35 }}>
+            <Background theme="cobalt" orientation="landscape" onBack={() => console.log('back')}>
+              <span style={{ color: 'white', fontSize: 48, fontFamily: 'var(--font-family)' }}>Фон Кобальт</span>
+            </Background>
+          </div>
+          <div style={{ transform: 'scale(0.35)', transformOrigin: 'top left', width: 1920 * 0.35, height: 1080 * 0.35 }}>
+            <Background theme="orange" orientation="landscape" onBack={() => console.log('back')}>
+              <span style={{ color: 'white', fontSize: 48, fontFamily: 'var(--font-family)' }}>Фон Оранжевый</span>
+            </Background>
+          </div>
+        </div>
+        <h2 className={styles.sectionTitle} style={{ marginTop: 32 }}>Меню</h2>
+        <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap' }}>
+          <div style={{ transform: 'scale(0.35)', transformOrigin: 'top left', width: 1920 * 0.35, height: 1080 * 0.35 }}>
+            <Menu
+              theme="cobalt"
+              orientation="landscape"
+              items={[
+                { label: 'Описание направления', onClick: () => console.log('desc') },
+                { label: 'Мои задания', onClick: () => console.log('tasks') },
+                { label: 'Истории яндексоидов', onClick: () => console.log('stories') },
+                { label: 'Бинго-знакомство', onClick: () => console.log('bingo') },
+              ]}
+            />
+          </div>
+          <div style={{ transform: 'scale(0.35)', transformOrigin: 'top left', width: 1920 * 0.35, height: 1080 * 0.35 }}>
+            <Menu
+              theme="orange"
+              orientation="landscape"
+              items={[
+                { label: 'Описание направления', onClick: () => console.log('desc') },
+                { label: 'Мои задания', onClick: () => console.log('tasks') },
+                { label: 'Истории яндексоидов', onClick: () => console.log('stories') },
+                { label: 'Бинго-знакомство', onClick: () => console.log('bingo') },
+              ]}
+            />
+          </div>
         </div>
       </div>
     </div>
