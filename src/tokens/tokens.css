@@ -1,0 +1,140 @@
+/* ============================================
+   Design Tokens — YandexSuperHot UI Kit
+   Extracted from Figma design kit
+   ============================================ */
+
+@font-face {
+  font-family: 'YS Geo';
+  src: url('../assets/fonts/YS Geo-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'YS Geo';
+  src: url('../assets/fonts/YS Geo-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'YS Geo';
+  src: url('../assets/fonts/YS Geo-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  /* === Colors === */
+
+  /* Primitives */
+  --color-blue: #4161FF;
+  --color-blue-dark: #2530A2;
+  --color-blue-pressed: #2D44B9;
+  --color-black: #141414;
+  --color-black-pressed: #242424;
+  --color-white: #FFFFFF;
+  --color-grey-light: #F4F4F4;
+  --color-grey-secondary: #E3E2E0;
+  --color-grey-disabled: #C0C0C0;
+  --color-orange: #FB4E14;
+  --color-red: #FF3300;
+  --color-green: #00FF09;
+  --color-yellow: #FFA600;
+
+  /* Semantic */
+  --color-bg-primary: var(--color-grey-light);
+  --color-bg-surface: var(--color-white);
+  --color-bg-inverse: var(--color-black);
+  --color-bg-brand: var(--color-blue);
+  --color-bg-brand-pressed: var(--color-blue-pressed);
+  --color-bg-disabled: var(--color-grey-disabled);
+  --color-bg-secondary: var(--color-grey-secondary);
+
+  --color-text-primary: var(--color-black);
+  --color-text-inverse: var(--color-white);
+  --color-text-brand: var(--color-blue);
+  --color-text-disabled: var(--color-grey-disabled);
+
+  --color-border-brand: var(--color-blue);
+  --color-border-default: var(--color-grey-secondary);
+
+  --color-accent-orange: var(--color-orange);
+  --color-accent-red: var(--color-red);
+  --color-accent-green: var(--color-green);
+
+  /* === Typography === */
+  --font-family: 'YS Geo', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+
+  --font-size-xs: 24px;
+  --font-size-sm: 28px;
+  --font-size-md: 32px;
+  --font-size-lg: 36px;
+  --font-size-xl: 40px;
+  --font-size-2xl: 44px;
+  --font-size-3xl: 50px;
+  --font-size-4xl: 54px;
+
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 700;
+
+  --letter-spacing-tight: -0.01em;
+  --letter-spacing-normal: 0;
+
+  /* === Spacing === */
+  --spacing-xs: 8px;
+  --spacing-sm: 16px;
+  --spacing-md: 20px;
+  --spacing-lg: 24px;
+  --spacing-xl: 30px;
+  --spacing-2xl: 40px;
+
+  /* === Radius === */
+  --radius-xs: 5px;
+  --radius-sm: 8px;
+  --radius-lg: 32px;
+  --radius-full: 999px;
+
+  /* === Border Widths === */
+  --border-width-sm: 2px;
+  --border-width-md: 4px;
+
+  /* === Additional Font Sizes === */
+  --font-size-2xs: 16px;
+  --font-size-player: 18px;
+  --font-size-list: 34px;
+
+  /* === Letter Spacing === */
+  --letter-spacing-xs: -0.24px;
+  --letter-spacing-sm: -0.4px;
+  --letter-spacing-md: -0.5px;
+
+  /* === Line Heights === */
+  --line-height-tight: 1;
+  --line-height-normal: 1.3;
+  --line-height-relaxed: 1.4;
+
+  /* === Overlay Colors === */
+  --color-overlay-light: rgba(0, 0, 0, 0.05);
+  --color-text-muted: rgba(0, 0, 0, 0.5);
+  --color-bg-brand-translucent: rgba(66, 97, 255, 0.15);
+
+  /* === Icon Sizes === */
+  --size-icon-xs: 30px;
+  --size-icon-s: 44px;
+  --size-icon-m: 80px;
+
+  /* === Component Widths === */
+  --width-content: 870px;
+  --width-player-h: 420px;
+  --height-player-h: 236px;
+  --width-player-v: 540px;
+  --height-player-v: 960px;
+
+  /* === Shadows === */
+  --shadow-card: 0 2px 8px rgba(0, 0, 0, 0.08);
+}

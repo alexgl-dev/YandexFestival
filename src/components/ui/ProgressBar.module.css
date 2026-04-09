@@ -1,0 +1,46 @@
+/* Mini variant */
+.miniTrack {
+  width: 182px;
+  height: 12px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-grey-secondary);
+  overflow: hidden;
+}
+
+.miniFill {
+  height: 100%;
+  border-radius: var(--radius-full);
+  background-color: var(--color-orange);
+  transition: width 0.2s ease;
+}
+
+/* Main variant */
+.mainWrapper {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  width: 1800px;
+}
+
+.mainTrack {
+  flex: 1;
+  height: 64px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-grey-secondary);
+  overflow: hidden;
+}
+
+.mainFill {
+  height: 100%;
+  border-radius: var(--radius-full);
+  background-color: var(--color-orange);
+  transition: width 0.2s ease;
+}
+
+.time {
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-text-primary);
+  white-space: nowrap;
+}

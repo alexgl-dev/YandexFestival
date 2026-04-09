@@ -1,0 +1,98 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-md);
+  border-radius: var(--radius-full);
+  font-family: var(--font-family);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-regular);
+  padding: var(--spacing-md) var(--spacing-xl);
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+  box-sizing: border-box;
+  transition: background-color 0.15s ease;
+  line-height: normal;
+}
+
+/* === Main === */
+.main {
+  background-color: var(--color-black);
+  color: var(--color-white);
+}
+.main.pressed,
+.main:active {
+  background-color: var(--color-black-pressed);
+}
+
+/* === Secondary === */
+.secondary {
+  background-color: var(--color-grey-secondary);
+  color: var(--color-black);
+}
+.secondary.pressed,
+.secondary:active {
+  background-color: var(--color-grey-disabled);
+  color: var(--color-black-pressed);
+}
+
+/* === Outline === */
+.outline {
+  background-color: transparent;
+  color: var(--color-white);
+  border: var(--border-width-md) solid var(--color-blue);
+}
+.outline.pressed,
+.outline:active {
+  background-color: var(--color-blue);
+  color: var(--color-white);
+}
+
+/* === Big === */
+.big {
+  width: 870px;
+  padding: var(--spacing-md) 25px;
+  background-color: transparent;
+  color: var(--color-text-primary);
+  border: var(--border-width-md) solid var(--color-blue);
+  font-family: 'YS Text Web', var(--font-family);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  text-align: center;
+  box-shadow: 0 2.9px 5.8px rgba(36, 36, 36, 0.25);
+}
+.big.pressed,
+.big:active {
+  background-color: var(--color-blue);
+  border-color: var(--color-blue);
+  color: var(--color-white);
+}
+
+/* === Big bottom === */
+.big_bottom {
+  width: 960px;
+  height: 160px;
+  padding: var(--spacing-2xl);
+  background-color: var(--color-white);
+  color: var(--color-black);
+  border: var(--border-width-md) solid var(--color-blue);
+  border-radius: var(--radius-lg) 0 0 0;
+  font-family: var(--font-family);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-sm);
+  justify-content: flex-start;
+}
+.big_bottom.pressed,
+.big_bottom:active {
+  background-color: var(--color-blue);
+  border-color: var(--color-blue);
+  color: var(--color-white);
+}
+
+.icon {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}

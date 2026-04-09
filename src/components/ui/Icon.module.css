@@ -1,0 +1,31 @@
+.circle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+}
+
+.white {
+  background-color: var(--color-white);
+}
+
+.blue {
+  background-color: var(--color-blue);
+}
+
+/* Design uses orange (#FB4E14) for "red" variant */
+.red {
+  background-color: var(--color-orange);
+}
+
+.icon {
+  width: 60%;
+  height: 60%;
+  object-fit: contain;
+}
+
+.flat {
+  flex-shrink: 0;
+  object-fit: contain;
+}

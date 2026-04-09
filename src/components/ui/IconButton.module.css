@@ -1,0 +1,15 @@
+.button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+  background: none;
+}
+
+.icon {
+  width: 100%;
+  height: 100%;
+}

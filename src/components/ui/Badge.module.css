@@ -1,0 +1,33 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+  padding: 15px var(--spacing-xl);
+  border-radius: var(--radius-full);
+  font-family: var(--font-family);
+  font-size: 32px;
+  font-weight: var(--font-weight-regular);
+  letter-spacing: -0.32px;
+  line-height: 1;
+  white-space: nowrap;
+  box-sizing: border-box;
+}
+
+.filled {
+  background-color: var(--color-blue);
+  color: var(--color-white);
+  border: none;
+}
+
+.outline {
+  background-color: var(--color-white);
+  color: var(--color-black);
+  border: var(--border-width-md) solid var(--color-blue);
+}
+
+.icon {
+  display: flex;
+  align-items: center;
+  padding: 0 22px;
+  flex-shrink: 0;
+}

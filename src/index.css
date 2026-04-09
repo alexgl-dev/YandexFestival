@@ -1,0 +1,6 @@
+@import './tokens/tokens.css';
+
+body {
+  margin: 0;
+  font-family: var(--font-family);
+}

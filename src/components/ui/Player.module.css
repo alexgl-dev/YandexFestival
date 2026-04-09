@@ -1,0 +1,109 @@
+.root {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: var(--radius-lg);
+  font-family: var(--font-family);
+  box-sizing: border-box;
+  overflow: hidden;
+  box-shadow: 0 2px 13px rgba(0, 0, 0, 0.25);
+  background-color: var(--color-grey-light);
+}
+
+.horizontal {
+  width: var(--width-player-h);
+  height: var(--height-player-h);
+}
+
+.vertical {
+  width: var(--width-player-v);
+  height: var(--height-player-v);
+}
+
+/* Background image fills entire card */
+.bgImage {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: var(--radius-lg);
+  pointer-events: none;
+}
+
+.bgOverlay {
+  position: absolute;
+  inset: 0;
+  background: var(--color-overlay-light);
+  border-radius: var(--radius-lg);
+  pointer-events: none;
+}
+
+/* Title bar at top */
+.titleBar {
+  position: relative;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  padding: 14px 32px;
+  background: var(--color-bg-brand-translucent);
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  flex-shrink: 0;
+  box-sizing: border-box;
+}
+
+.title {
+  font-size: var(--font-size-player);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-black-pressed);
+  opacity: 0.9;
+  line-height: var(--line-height-relaxed);
+  white-space: nowrap;
+}
+
+/* Centered play/pause button */
+.buttonWrap {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+}
+
+/* Timeline bar at bottom */
+.timeline {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  width: 100%;
+  padding: 0 var(--spacing-md) var(--spacing-xs);
+  box-sizing: border-box;
+  flex-shrink: 0;
+}
+
+.time {
+  font-size: var(--font-size-2xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-black-pressed);
+  opacity: 0.9;
+  line-height: var(--line-height-relaxed);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.track {
+  flex: 1;
+  height: var(--spacing-xs);
+  background: var(--color-overlay-light);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.fill {
+  height: 100%;
+  background-color: var(--color-orange);
+  border-radius: var(--radius-full);
+}
