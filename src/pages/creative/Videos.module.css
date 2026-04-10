@@ -35,3 +35,8 @@
 .item {
   flex-shrink: 0;
 }
+
+.item > * {
+  width: 420px !important;
+  height: 750px !important;
+}
