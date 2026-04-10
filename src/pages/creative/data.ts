@@ -1,0 +1,391 @@
+import type { SectionData } from '../../types/game';
+
+export const creativeSection: SectionData = {
+  id: '001',
+  slug: 'creative',
+  title: 'Креативный трек',
+
+  professions: [
+    {
+      id: 'graphic-designer',
+      title: 'Графический дизайнер',
+      description:
+        'Графический дизайнер создаёт визуальные решения: логотипы, плакаты, афиши, иллюстрации, иконки. Он работает с цветом, формой и композицией, чтобы передать нужное настроение и сделать информацию наглядной.',
+    },
+    {
+      id: 'ux-designer',
+      title: 'UX-дизайнер',
+      description:
+        'UX-дизайнер проектирует удобные интерфейсы. Он изучает, как люди взаимодействуют с приложениями и сайтами, собирает обратную связь и улучшает продукт так, чтобы пользователю было легко и приятно достигать своих целей.',
+    },
+  ],
+
+  description:
+    'Креативный трек — профессиональное направление, объединяющее специалистов, которые создают визуальный облик цифровых продуктов. От логотипов и афиш до интерфейсов приложений — дизайнеры делают мир технологий удобным и красивым.',
+
+  tasks: [
+    // === Task 1: Афиша (choose) ===
+    {
+      id: 'poster',
+      title: 'Афиша',
+      subtitle: 'В центре событий',
+      mechanic: 'choose',
+      profession: 'graphic-designer',
+      duration: 5,
+      mode: 'group',
+      order: 1,
+      isLast: false,
+      feedback: 'instant',
+      intro:
+        'Тебе предстоит выбрать подходящую афишу для каждого события. Обрати внимание на стиль, цвета и настроение — афиша должна соответствовать мероприятию.',
+      steps: [
+        {
+          prompt: 'Какая афиша подходит для открытия кафе ICE CREAM?',
+          options: [
+            {
+              image: '/assets/games/001/poster/step1-a.png',
+              correct: false,
+              explanation: 'TODO: пояснение',
+            },
+            {
+              image: '/assets/games/001/poster/step1-b.png',
+              correct: true,
+              explanation: 'TODO: пояснение',
+            },
+            {
+              image: '/assets/games/001/poster/step1-c.png',
+              correct: false,
+              explanation: 'TODO: пояснение',
+            },
+          ],
+        },
+        {
+          prompt: 'TODO: второе событие',
+          options: [
+            {
+              image: '/assets/games/001/poster/step2-a.png',
+              correct: false,
+              explanation: 'TODO',
+            },
+            {
+              image: '/assets/games/001/poster/step2-b.png',
+              correct: true,
+              explanation: 'TODO',
+            },
+            {
+              image: '/assets/games/001/poster/step2-c.png',
+              correct: false,
+              explanation: 'TODO',
+            },
+          ],
+        },
+        {
+          prompt: 'TODO: третье событие',
+          options: [
+            {
+              image: '/assets/games/001/poster/step3-a.png',
+              correct: false,
+              explanation: 'TODO',
+            },
+            {
+              image: '/assets/games/001/poster/step3-b.png',
+              correct: true,
+              explanation: 'TODO',
+            },
+            {
+              image: '/assets/games/001/poster/step3-c.png',
+              correct: false,
+              explanation: 'TODO',
+            },
+          ],
+        },
+      ],
+      moral:
+        'Важно подбирать подходящий стиль для продукта или проекта. Графический дизайнер не просто рисует красивые картинки — он создаёт визуальный язык, который помогает аудитории понять, о чём идёт речь, ещё до того, как она прочитает текст.',
+    },
+
+    // === Task 2: UX-ревизия (mark) ===
+    {
+      id: 'ux-review',
+      title: 'UX-ревизия: работаем с обратной связью',
+      mechanic: 'mark',
+      profession: 'ux-designer',
+      duration: 5,
+      mode: 'group',
+      order: 2,
+      isLast: false,
+      feedback: 'onComplete',
+      intro:
+        'Тебе предстоит изучить стартовую страницу приложения и набор пользовательских отзывов, а затем отметить на интерфейсе те элементы, которые требуют доработки.',
+      steps: [
+        {
+          image: '/assets/games/001/ux-review/app-mockup.png',
+          hints:
+            'Отзывы пользователей:\n- "Не могу найти свой профиль, меню слишком запутанное"\n- "Кнопка регистрации не работает, приходится перезагружать"\n- "Приложение выглядит красиво, приятные цвета!"\n- "Поиск работает отлично, нашёл всё за секунду"\n- "Не понимаю, как вернуться на главную страницу"',
+          targets: [
+            {
+              area: { x: 90, y: 5, radius: 15 },
+              explanation:
+                'Пользователи жаловались на сложность поиска профиля — вы верно выбрали меню аккаунта',
+            },
+            {
+              area: { x: 50, y: 88, radius: 15 },
+              explanation:
+                "Проблему с кнопкой 'Регистрация' вы не заметили, хотя про неё упоминали в отзыве",
+            },
+            {
+              area: { x: 10, y: 5, radius: 15 },
+              explanation:
+                "Навигация 'назад' отсутствует — пользователи теряются",
+            },
+          ],
+        },
+      ],
+      moral:
+        'UX- и UI-дизайнеры дорабатывают интерфейс на основе пользовательских впечатлений и рекомендаций. Обратная связь — главный инструмент улучшения продукта. Умение слышать пользователя и видеть за его словами конкретные проблемы — ключевой навык UX-дизайнера.',
+    },
+
+    // === Task 3: Найди проблему (find) ===
+    {
+      id: 'find-bug',
+      title: 'Найди проблему в интерфейсе',
+      mechanic: 'find',
+      profession: 'ux-designer',
+      duration: 3,
+      mode: 'solo',
+      order: 3,
+      isLast: false,
+      feedback: 'instant',
+      intro:
+        'Тебе предстоит изучить интерфейс различных приложений и найти, какая важная функция или кнопка на экране отсутствует, из-за чего приложение становится неполноценным для пользователя.',
+      steps: [
+        {
+          prompt: 'Посмотри на экран приложения. Чего не хватает?',
+          image: '/assets/games/001/find-bug/screen1.png',
+          options: [
+            {
+              text: "Кнопка 'Купить'",
+              correct: true,
+              explanation:
+                'Без кнопки покупки пользователь не может оформить заказ — главная цель приложения не достижима',
+            },
+            {
+              text: 'Логотип компании',
+              correct: false,
+              explanation: '',
+              hint: 'Логотип важен для бренда, но без него приложение всё равно работает. Посмотри внимательнее: как пользователь купит товар?',
+            },
+            {
+              text: "Кнопка 'Поделиться'",
+              correct: false,
+              explanation: '',
+              hint: 'Это полезная функция, но не критичная. Ищи то, без чего приложение теряет основной смысл.',
+            },
+          ],
+        },
+        {
+          prompt: 'Что не так в этом интерфейсе?',
+          image: '/assets/games/001/find-bug/screen2.png',
+          options: [
+            {
+              text: 'Поле ввода сообщения',
+              correct: true,
+              explanation:
+                'Без поля ввода пользователь не может отправить сообщение — основная функция мессенджера недоступна',
+            },
+            {
+              text: 'Аватарка собеседника',
+              correct: false,
+              explanation: '',
+              hint: 'Аватарка — приятное дополнение, но общаться можно и без неё. Подумай: как пользователь напишет ответ?',
+            },
+            {
+              text: 'Кнопка видеозвонка',
+              correct: false,
+              explanation: '',
+              hint: 'Видеозвонок — дополнительная функция. Ищи то, без чего мессенджер теряет смысл.',
+            },
+          ],
+        },
+        {
+          prompt: 'Найди недостающий элемент',
+          image: '/assets/games/001/find-bug/screen3.png',
+          options: [
+            {
+              text: 'Кнопки управления воспроизведением',
+              correct: true,
+              explanation:
+                'Без кнопок play/pause/skip пользователь не может управлять музыкой — плеер бесполезен',
+            },
+            {
+              text: 'Обложка альбома',
+              correct: false,
+              explanation: '',
+              hint: 'Обложка — визуальное украшение. Музыка играет и без неё. Как пользователь поставит трек на паузу?',
+            },
+            {
+              text: 'Список рекомендаций',
+              correct: false,
+              explanation: '',
+              hint: 'Рекомендации помогают находить новую музыку, но без них плеер всё равно работает. Ищи более критичную проблему.',
+            },
+          ],
+        },
+      ],
+      moral:
+        'Внимательность к деталям — главный инструмент UX-дизайнера. Даже самая маленькая недоработка может сильно усложнить жизнь пользователю. Замечая и исправляя такие моменты, можно сделать продукт действительно удобным и востребованным. Учись смотреть на интерфейсы глазами обычного пользователя — привычка замечать неудобства — первый шаг к тому, чтобы создавать продукты, которые легко использовать каждому.',
+    },
+
+    // === Task 4: Заказ пиццы (sequence) ===
+    {
+      id: 'pizza-order',
+      title: 'Заказ пиццы',
+      subtitle: 'Помоги заказать пиццу',
+      mechanic: 'sequence',
+      profession: 'ux-designer',
+      duration: 3,
+      mode: 'solo',
+      order: 4,
+      isLast: false,
+      feedback: 'instant',
+      intro:
+        'Выбери и расставь этапы заказа пиццы, убери лишние шаги и собери максимально логичный и короткий пользовательский путь, чтобы оформить заказ без лишних действий.',
+      steps: [
+        {
+          blocks: [
+            { text: 'Открыть приложение', order: 1 },
+            { text: 'Выбрать пиццу', order: 2 },
+            { text: 'Указать адрес доставки', order: 3 },
+            { text: 'Выбрать способ оплаты', order: 4 },
+            { text: 'Подтвердить заказ', order: 5 },
+            {
+              text: 'Ввести промокод',
+              order: null,
+              explanation:
+                'Промокод — необязательный шаг, он усложняет путь пользователя',
+            },
+            {
+              text: 'Оплатить по факсу',
+              order: null,
+              explanation: 'Устаревший способ, его нужно удалить из пути',
+            },
+            {
+              text: 'Позвонить оператору для подтверждения',
+              order: null,
+              explanation:
+                'Лишний шаг — современные приложения не требуют звонка',
+            },
+          ],
+          trash: {
+            enabled: true,
+            label: 'Корзина — перетащи сюда лишние шаги',
+          },
+        },
+      ],
+      moral:
+        'Чем проще и понятнее путь пользователя, тем быстрее он достигает своей цели и тем выше вероятность, что он вернётся снова. UX-дизайнер постоянно ищет способы сократить путь и убрать лишние шаги — каждое лишнее действие снижает конверсию и раздражает пользователя.',
+    },
+
+    // === Task 5: Подбери иконки (categorize) ===
+    {
+      id: 'match-icons',
+      title: 'Подбери иконки',
+      mechanic: 'categorize',
+      profession: 'graphic-designer',
+      duration: 3,
+      mode: 'solo',
+      order: 5,
+      isLast: true,
+      feedback: 'onComplete',
+      intro:
+        'Тебе предстоит распределить набор из 20 иконок по двум категориям: какие подойдут для приложения "Слушать музыку", а какие — для приложения-навигатора "Карты".',
+      steps: [
+        {
+          categories: [
+            {
+              id: 'music',
+              title: 'Слушать музыку',
+              image: '/assets/games/001/match-icons/app-music.png',
+            },
+            {
+              id: 'maps',
+              title: 'Карты (Навигатор)',
+              image: '/assets/games/001/match-icons/app-maps.png',
+            },
+          ],
+          items: [
+            {
+              icon: '/assets/games/001/match-icons/icon-note.png',
+              belongs: ['music'],
+              explanation: 'Нотка — символ музыки',
+            },
+            {
+              icon: '/assets/games/001/match-icons/icon-geolocation.png',
+              belongs: ['maps'],
+              explanation: 'Геолокация — ключевая функция навигатора',
+            },
+            {
+              icon: '/assets/games/001/match-icons/icon-headphones.png',
+              belongs: ['music'],
+              explanation: 'Наушники ассоциируются с прослушиванием',
+            },
+            {
+              icon: '/assets/games/001/match-icons/icon-route.png',
+              belongs: ['maps'],
+              explanation: 'Маршрут — основа навигации',
+            },
+            {
+              icon: '/assets/games/001/match-icons/icon-search.png',
+              belongs: ['music', 'maps'],
+              explanation: 'Поиск — универсальная иконка, подходит обоим',
+            },
+            {
+              icon: '/assets/games/001/match-icons/icon-star.png',
+              belongs: ['music', 'maps'],
+              explanation:
+                'Звёздочка (избранное) — нужна в обоих приложениях',
+            },
+            {
+              icon: '/assets/games/001/match-icons/icon-settings.png',
+              belongs: ['music', 'maps'],
+              explanation: 'Настройки — универсальная иконка',
+            },
+            {
+              icon: '/assets/games/001/match-icons/icon-share.png',
+              belongs: ['music', 'maps'],
+              explanation: 'Поделиться — универсальная иконка',
+            },
+          ],
+        },
+      ],
+      moral:
+        'Графический дизайнер — это тот, кто помогает людям интуитивно находить нужное, делая приложения не только красивыми, но и понятными без слов! Попробуй написать фразу "иконками" и проверь: получится ли у друзей её отгадать.',
+    },
+  ],
+
+  videos: [
+    {
+      profession: 'graphic-designer',
+      title: 'Графический дизайнер',
+      src: '/videos/001/graphic-designer.mp4',
+      subtitles: '/videos/001/graphic-designer.vtt',
+    },
+    {
+      profession: 'ux-designer',
+      title: 'UX-дизайнер',
+      src: '/videos/001/ux-designer.mp4',
+      subtitles: '/videos/001/ux-designer.vtt',
+    },
+  ],
+
+  test: [
+    {
+      prompt: 'TODO: текст вопроса',
+      options: [
+        { text: 'Вариант A', correct: false, explanation: '' },
+        { text: 'Вариант B', correct: true, explanation: '' },
+        { text: 'Вариант C', correct: false, explanation: '' },
+      ],
+    },
+  ],
+};

@@ -1,0 +1,269 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  font-family: var(--font-family);
+  padding: var(--spacing-2xl) var(--spacing-2xl);
+  box-sizing: border-box;
+  gap: var(--spacing-lg);
+}
+
+/* Top bar */
+.topBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  flex-shrink: 0;
+}
+
+.topTitle {
+  font-family: var(--font-family);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-white);
+  margin: 0;
+}
+
+/* Two cards area */
+.columnsArea {
+  display: flex;
+  gap: var(--spacing-lg);
+  flex: 1;
+  min-height: 0;
+  justify-content: center;
+}
+
+/* Each category card — styled like Card size="l" */
+.column {
+  width: 580px;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-grey-light);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  cursor: pointer;
+  transition: background 0.15s, box-shadow 0.15s;
+  padding: var(--spacing-2xl);
+  box-sizing: border-box;
+}
+
+.columnDragOver {
+  box-shadow: inset 0 0 0 var(--border-width-md) var(--color-blue);
+}
+
+.columnTarget {
+  box-shadow: inset 0 0 0 var(--border-width-md) var(--color-blue);
+}
+
+.columnHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-shrink: 0;
+  margin-bottom: var(--spacing-lg);
+}
+
+.columnHeaderLeft {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.columnEmoji {
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+}
+
+.columnTitle {
+  font-family: var(--font-family);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-black);
+}
+
+.columnBody {
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  gap: var(--spacing-sm);
+  overflow-y: auto;
+}
+
+/* Counter badge */
+.counterBadge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  height: 36px;
+  padding: 0 var(--spacing-sm);
+  background: var(--color-blue);
+  border-radius: var(--radius-full);
+  font-family: var(--font-family);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-white);
+}
+
+/* Placed item chips inside category */
+.chip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-sm);
+  background: var(--color-white);
+  border: var(--border-width-sm) solid var(--color-grey-secondary);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  width: 64px;
+}
+
+.chipIcon {
+  width: 36px;
+  height: 36px;
+  object-fit: contain;
+}
+
+.chipLabel {
+  font-family: var(--font-family);
+  font-size: var(--font-size-2xs);
+  color: var(--color-text-muted);
+  text-align: center;
+  line-height: var(--line-height-tight);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+}
+
+.chipCorrect {
+  border-color: var(--color-green);
+  border-width: var(--border-width-md);
+}
+
+.chipWrong {
+  border-color: var(--color-red);
+  border-width: var(--border-width-md);
+}
+
+/* Bottom strip */
+.bottomStrip {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-sm);
+  width: 100%;
+}
+
+.instruction {
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-white);
+  margin: 0;
+  width: calc(580px * 2 + var(--spacing-lg));
+  text-align: left;
+}
+
+.iconStrip {
+  display: flex;
+  gap: var(--spacing-sm);
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* Each icon — white circle */
+.iconCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xs);
+  width: 130px;
+  min-width: 130px;
+  cursor: grab;
+  user-select: none;
+  transition: opacity 0.15s, transform 0.15s;
+}
+
+.iconCard:active {
+  cursor: grabbing;
+}
+
+.iconCircle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 120px;
+  height: 120px;
+  background: var(--color-white);
+  border-radius: var(--radius-full);
+  border: var(--border-width-sm) solid var(--color-grey-secondary);
+  transition: border-color 0.15s;
+}
+
+.iconCardSelected .iconCircle {
+  border-color: var(--color-blue);
+  border-width: var(--border-width-md);
+}
+
+.iconCardDragging {
+  opacity: 0.4;
+  transform: scale(0.9);
+}
+
+.iconCardPlaced {
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.iconImage {
+  width: 72px;
+  height: 72px;
+  object-fit: contain;
+}
+
+.iconEmoji {
+  font-size: var(--font-size-lg);
+  line-height: var(--line-height-tight);
+}
+
+.iconLabel {
+  font-family: var(--font-family);
+  font-size: var(--font-size-2xs);
+  color: var(--color-white);
+  text-align: center;
+  line-height: var(--line-height-tight);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 100%;
+}
+
+/* Footer with check button */
+.footer {
+  display: flex;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+/* Overlay */
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1920px;
+  height: 1080px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+}

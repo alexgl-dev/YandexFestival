@@ -1,0 +1,110 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-xl);
+  width: 100%;
+  padding: var(--spacing-2xl);
+  font-family: var(--font-family);
+}
+
+.prompt {
+  font-family: var(--font-family);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-white);
+  text-align: center;
+  margin: 0;
+  letter-spacing: var(--letter-spacing-tight);
+  line-height: var(--line-height-normal);
+}
+
+.content {
+  display: flex;
+  gap: var(--spacing-xl);
+  align-items: flex-start;
+  justify-content: center;
+  flex: 1;
+  min-height: 0;
+}
+
+.imageContainer {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  flex: 0 0 auto;
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  border-radius: var(--radius-lg);
+  user-select: none;
+  -webkit-user-drag: none;
+  object-fit: contain;
+}
+
+.hintsPanel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  min-width: 0;
+}
+
+.hintsTitle {
+  font-family: var(--font-family);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-white);
+  margin: 0;
+}
+
+.hintsList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.marker {
+  position: absolute;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  border: var(--border-width-md) solid var(--color-blue);
+  background: var(--color-bg-brand-translucent);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.markerCorrect {
+  border-color: var(--color-green);
+  background: rgba(0, 200, 83, 0.2);
+}
+
+.markerWrong {
+  border-color: var(--color-red);
+  background: rgba(255, 51, 0, 0.2);
+}
+
+.footer {
+  position: absolute;
+  bottom: var(--spacing-2xl);
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+}
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1920px;
+  height: 1080px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+}

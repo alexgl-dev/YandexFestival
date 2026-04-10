@@ -25,7 +25,8 @@ export function Menu({
     <Background
       theme={theme}
       orientation={orientation}
-      showBackButton={false}
+      showBackButton={!!onBack}
+      onBack={onBack}
       className={className}
     >
       <nav className={styles.nav}>

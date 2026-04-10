@@ -1,0 +1,376 @@
+/* Shared mockup container */
+.mockup {
+  width: 400px;
+  height: 700px;
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  overflow: visible;
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-family);
+  user-select: none;
+  position: relative;
+  flex-shrink: 0;
+}
+
+/* ============================
+   ShopMockup
+   ============================ */
+
+.shopHeader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-bottom: var(--border-width-sm) solid var(--color-grey-secondary);
+  min-height: 48px;
+}
+
+.shopHeaderTitle {
+  font-size: 18px;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-blue);
+  font-family: var(--font-family);
+  letter-spacing: var(--letter-spacing-tight);
+}
+
+.shopProductImage {
+  width: 100%;
+  height: 220px;
+  background: linear-gradient(135deg, #E8ECFF 0%, #D4DAFF 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 80px;
+}
+
+.shopBody {
+  padding: var(--spacing-sm) var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  flex: 1;
+}
+
+.shopProductName {
+  font-size: 20px;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-black);
+  font-family: var(--font-family);
+  margin: 0;
+}
+
+.shopPrice {
+  font-size: 22px;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-blue);
+  font-family: var(--font-family);
+  margin: 0;
+}
+
+.shopRating {
+  font-size: 14px;
+  color: var(--color-black);
+  font-family: var(--font-family);
+  margin: 0;
+}
+
+.shopRatingMuted {
+  color: var(--color-grey-disabled);
+}
+
+.shopSizeLabel {
+  font-size: 14px;
+  font-weight: var(--font-weight-medium);
+  color: var(--color-black);
+  font-family: var(--font-family);
+  margin: var(--spacing-xs) 0 0 0;
+}
+
+.shopSizes {
+  display: flex;
+  gap: var(--spacing-xs);
+}
+
+.shopSizePill {
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  background: var(--color-grey-light);
+  font-size: 14px;
+  font-family: var(--font-family);
+  color: var(--color-black);
+  font-weight: var(--font-weight-medium);
+}
+
+.shopSizePillActive {
+  background: var(--color-blue);
+  color: var(--color-white);
+}
+
+.shopDescription {
+  font-size: 13px;
+  color: var(--color-grey-disabled);
+  font-family: var(--font-family);
+  margin: var(--spacing-xs) 0 0 0;
+  line-height: var(--line-height-relaxed);
+}
+
+/* No buy button — that's the bug! */
+.shopBottom {
+  padding: var(--spacing-sm) var(--spacing-md) var(--spacing-md);
+}
+
+/* ============================
+   MessengerMockup
+   ============================ */
+
+.messengerHeader {
+  display: flex;
+  align-items: center;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-bottom: var(--border-width-sm) solid var(--color-grey-secondary);
+  min-height: 48px;
+  gap: var(--spacing-sm);
+}
+
+.messengerBackArrow {
+  font-size: 18px;
+  color: var(--color-blue);
+  font-family: var(--font-family);
+}
+
+.messengerAvatar {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-full);
+  background: var(--color-bg-brand-translucent);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  font-family: var(--font-family);
+  color: var(--color-blue);
+  font-weight: var(--font-weight-bold);
+  flex-shrink: 0;
+}
+
+.messengerContactName {
+  font-size: 17px;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-black);
+  font-family: var(--font-family);
+}
+
+.messengerOnline {
+  font-size: 12px;
+  color: var(--color-green);
+  font-family: var(--font-family);
+}
+
+.messengerContactInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.messengerMessages {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md);
+  overflow: visible;
+}
+
+.messageBubble {
+  max-width: 75%;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  font-size: 14px;
+  font-family: var(--font-family);
+  line-height: var(--line-height-normal);
+  position: relative;
+}
+
+.messageLeft {
+  align-self: flex-start;
+  background: var(--color-grey-light);
+  color: var(--color-black);
+  border-bottom-left-radius: var(--radius-xs);
+}
+
+.messageRight {
+  align-self: flex-end;
+  background: var(--color-blue);
+  color: var(--color-white);
+  border-bottom-right-radius: var(--radius-xs);
+}
+
+.messageTime {
+  font-size: 11px;
+  opacity: 0.6;
+  margin-top: 4px;
+  text-align: right;
+}
+
+/* No input field at the bottom — that's the bug! */
+.messengerBottom {
+  height: 52px;
+  border-top: var(--border-width-sm) solid var(--color-grey-secondary);
+}
+
+/* ============================
+   MusicMockup
+   ============================ */
+
+.musicHeader {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-bottom: var(--border-width-sm) solid var(--color-grey-secondary);
+  min-height: 48px;
+}
+
+.musicHeaderTitle {
+  font-size: 18px;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-black);
+  font-family: var(--font-family);
+}
+
+.musicNowPlaying {
+  padding: var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.musicAlbumArt {
+  width: 240px;
+  height: 240px;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(135deg, #FF6B9D 0%, #C44DFF 50%, #4161FF 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 60px;
+}
+
+.musicTrackInfo {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.musicTrackName {
+  font-size: 20px;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-black);
+  font-family: var(--font-family);
+  margin: 0;
+}
+
+.musicArtist {
+  font-size: 14px;
+  color: var(--color-grey-disabled);
+  font-family: var(--font-family);
+  margin: 0;
+}
+
+.musicProgress {
+  width: 100%;
+  padding: 0 var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  box-sizing: border-box;
+}
+
+.musicProgressBar {
+  width: 100%;
+  height: 4px;
+  background: var(--color-grey-secondary);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.musicProgressFill {
+  width: 35%;
+  height: 100%;
+  background: var(--color-blue);
+  border-radius: var(--radius-full);
+}
+
+.musicProgressTimes {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: var(--color-grey-disabled);
+  font-family: var(--font-family);
+}
+
+/* No playback controls — that's the bug! */
+.musicControlsPlaceholder {
+  height: 48px;
+}
+
+.musicUpNext {
+  padding: var(--spacing-xs) var(--spacing-md) var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  flex: 1;
+}
+
+.musicUpNextTitle {
+  font-size: 15px;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-black);
+  font-family: var(--font-family);
+  margin: 0;
+}
+
+.musicTrackRow {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-xs);
+  background: var(--color-grey-light);
+  border-radius: var(--radius-sm);
+}
+
+.musicTrackThumb {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-xs);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  flex-shrink: 0;
+}
+
+.musicTrackRowInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.musicTrackRowName {
+  font-size: 14px;
+  font-weight: var(--font-weight-medium);
+  color: var(--color-black);
+  font-family: var(--font-family);
+  margin: 0;
+}
+
+.musicTrackRowArtist {
+  font-size: 12px;
+  color: var(--color-grey-disabled);
+  font-family: var(--font-family);
+  margin: 0;
+}

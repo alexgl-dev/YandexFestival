@@ -29,16 +29,19 @@
 
 .default {
   background-color: var(--color-grey-light);
+  border: var(--border-width-md) solid transparent;
 }
 
 .disabled {
   background-color: var(--color-grey-light);
+  border: var(--border-width-md) solid transparent;
   opacity: 0.6;
   pointer-events: none;
 }
 
 .flipped {
   background-color: var(--color-blue);
+  border: var(--border-width-md) solid transparent;
 }
 
 .pressed {
