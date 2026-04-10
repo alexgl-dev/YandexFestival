@@ -21,13 +21,13 @@ export function TaskIntro({ task, onStart, onBack }: TaskIntroProps) {
           <div className={styles.badges}>
             <Badge
               label={modeLabel}
-              type="outline"
-              icon={<Icon name="people" color="blue" size="xs" />}
+              type="filled"
+              icon={<Icon name="people" color="white" size="xs" />}
             />
             <Badge
               label={durationLabel}
-              type="outline"
-              icon={<Icon name="clock" color="blue" size="xs" />}
+              type="filled"
+              icon={<Icon name="clock" color="white" size="xs" />}
             />
           </div>
 

@@ -125,3 +125,33 @@
   grid-template-columns: repeat(2, 1fr);
   gap: 24px;
 }
+
+.codeTag {
+  display: block;
+  margin-top: 8px;
+  padding: 6px 12px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: var(--radius-xs);
+  font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+  font-size: 13px;
+  line-height: 1.4;
+  color: var(--color-grey-secondary);
+  white-space: pre-wrap;
+  word-break: break-all;
+  cursor: pointer;
+  transition: background 0.15s;
+  user-select: all;
+}
+
+.codeTag:hover {
+  background: rgba(65, 97, 255, 0.15);
+  border-color: var(--color-blue);
+  color: var(--color-white);
+}
+
+.labeled {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}

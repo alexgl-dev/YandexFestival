@@ -8,28 +8,30 @@
   font-family: var(--font-family);
 }
 
+.content {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+  align-items: flex-start;
+  margin: 0 auto;
+  width: fit-content;
+}
+
 .title {
   font-size: var(--font-size-3xl);
   font-weight: var(--font-weight-bold);
-  color: var(--color-text-inverse);
-  letter-spacing: var(--letter-spacing-tight);
+  color: var(--color-white);
+  letter-spacing: var(--letter-spacing-md);
   line-height: var(--line-height-tight);
   margin: 0;
-  align-self: flex-start;
 }
 
 .grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
   gap: var(--spacing-lg);
-  width: 100%;
+  min-height: 0;
 }
 
 .item {
-  aspect-ratio: 16 / 9;
-}
-
-.item > * {
-  width: 100% !important;
-  height: 100% !important;
+  flex-shrink: 0;
 }

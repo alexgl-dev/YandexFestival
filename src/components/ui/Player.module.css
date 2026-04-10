@@ -107,3 +107,26 @@
   background-color: var(--color-orange);
   border-radius: var(--radius-full);
 }
+
+/* --- Vertical overrides --- */
+
+.vertical .titleBar {
+  padding: 15px var(--spacing-xl);
+}
+
+.vertical .title {
+  font-size: var(--font-size-xs);
+}
+
+.buttonWrapVertical {
+  transform: translate(-50%, -50%) scale(1.5);
+}
+
+.vertical .timeline {
+  gap: 12px;
+  padding: 0 var(--spacing-xl) var(--spacing-md);
+}
+
+.vertical .time {
+  font-size: var(--font-size-player);
+}

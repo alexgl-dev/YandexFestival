@@ -46,10 +46,10 @@ export function Player({
 
       {/* Play/Pause button centered — hidden in fullscreen */}
       {!isFullscreen && (
-        <div className={styles.buttonWrap}>
+        <div className={`${styles.buttonWrap} ${orientation === 'vertical' ? styles.buttonWrapVertical : ''}`}>
           <IconButton
             type={isPlaying ? 'pause' : 'play'}
-            size="sm"
+            size={orientation === 'vertical' ? 'lg' : 'sm'}
             onClick={isPlaying ? onPause : onPlay}
           />
         </div>

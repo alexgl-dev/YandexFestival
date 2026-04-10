@@ -1,4 +1,4 @@
-export type Mechanic = 'choose' | 'find' | 'sequence' | 'categorize' | 'match' | 'label' | 'mark' | 'catch' | 'quiz';
+export type Mechanic = 'choose' | 'find' | 'sequence' | 'categorize' | 'match' | 'label' | 'mark' | 'catch' | 'quiz' | 'bingo';
 export type Mode = 'group' | 'solo';
 export type Feedback = 'instant' | 'onComplete';
 
@@ -111,6 +111,28 @@ export interface QuizQuestion {
   options: TaskOption[];
 }
 
+export interface BingoQuestion {
+  gridLabel: string;        // short label for the grid cell (e.g. "напиток")
+  prompt: string;           // question text
+  options: string[];        // 4 answer options (just text strings)
+  expertAnswer: string;     // the expert's answer for comparison
+}
+
+export interface BingoExpert {
+  name: string;
+  role: string;
+  profession: string;
+}
+
+export interface BingoTest {
+  expert: BingoExpert;
+  gridLabels: string[];     // 8 labels for the 3×3 grid (center = expert role)
+  intro: string;
+  instruction: string;
+  resultText: string;
+  questions: BingoQuestion[];
+}
+
 export interface SectionData {
   id: string;
   slug: string;
@@ -119,5 +141,6 @@ export interface SectionData {
   description: string;
   tasks: Task[];
   videos: Video[];
-  test: QuizQuestion[];
+  test?: QuizQuestion[];      // keep for backwards compat but make optional
+  bingo?: BingoTest;          // new bingo test
 }

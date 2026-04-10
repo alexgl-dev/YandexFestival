@@ -394,22 +394,59 @@ const navigate = useNavigate();
 </div>
 ```
 
-### Тест (Test)
+### Бинго-тест (Test)
+Тест в каждом разделе — это **бинго**: 8 вопросов, сравнение с ответами эксперта, результат в виде сетки 3×3.
+
+**3 фазы (useState, не роутинг):**
+
+**Фаза 1 — Intro:** белая карточка с `bingo.intro` + `bingo.instruction`, кнопка "Начать"
 ```tsx
-// Варианты ответов — через Card size="m", НЕ через Button
-{question.options.map((option, index) => {
-  const letter = String.fromCharCode(65 + index); // A, B, C
-  return (
+<Background theme="cobalt" orientation="landscape" onBack={handleBack}>
+  <div className={styles.wrapper}>
+    <h2 className={styles.title}>Бинго</h2>
+    <div className={styles.card}>  {/* background: white, border-radius: --radius-lg */}
+      <p>{bingo.intro}</p>
+      <p>{bingo.instruction}</p>
+    </div>
+    <Button label="Начать" type="main" onClick={() => setPhase('questions')} />
+  </div>
+</Background>
+```
+
+**Фаза 2 — Вопросы:** по 1 вопросу на экране, варианты как Card size="m" в сетке 2×2
+```tsx
+// Вопрос белым текстом по центру, варианты — Card size="m"
+// Контент центрирован по обеим осям (Background.content делает это)
+// Ширина контента: 80%
+<p className={styles.questionPrompt}>{currentQuestion.prompt}</p>
+<div className={styles.optionsGrid}>  {/* grid 2×2, gap: --spacing-sm, width: 80% */}
+  {question.options.map((option, i) => (
     <Card
-      variant={`Вариант ${letter}`}
-      title={option.text || `Вариант ${letter}`}
+      variant={`Вариант ${String.fromCharCode(65 + i)}`}
+      title={option}
       description=""
       size="m"
-      state={selectedIndex === index ? 'pressed' : selectedIndex !== null ? 'disabled' : 'default'}
-      onClick={() => handleAnswer(index)}
+      state={answers[qi] === option ? 'pressed' : 'default'}
+      onClick={() => handleSelect(qi, option)}
     />
-  );
-})}
+  ))}
+</div>
+// Карточки перебивают хардкод-ширину: .optionsGrid > * { width: 100% !important }
+// Внизу: заголовок "Бинго", счётчик "N / 8", кнопка "Далее"
+// На последнем вопросе: "Посмотреть результат" (только когда все 8 отвечены)
+```
+
+**Фаза 3 — Результат:** сетка 3×3 слева + Card size="m" справа
+```tsx
+// Сетка: 3 колонки × 3 ряда по 200×200px, gap: --spacing-sm
+// Центр = имя + роль эксперта (--color-blue фон)
+// 8 ячеек = gridLabels: совпал → --color-blue, не совпал → --color-orange
+// По тапу — flip-анимация (CSS 3D: perspective, rotateY, backface-visibility)
+// На обороте — ответ эксперта
+// Справа: Card size="m" с variant="Результат", title="Бинго!", description={resultText}
+// Под карточкой: Button "В главное меню"
+// Карточка растягивается по высоте сетки: .resultCard { flex: 1 }
+// Ширина layout: 80%
 ```
 
 ### Стартовый экран задания (TaskIntro)
@@ -422,8 +459,8 @@ const navigate = useNavigate();
 
     <div className={styles.card}>  {/* background: var(--color-white), border-radius: var(--radius-lg), padding: var(--spacing-xl) */}
       <div className={styles.badges}>
-        <Badge label={modeLabel} type="outline" icon={<Icon name="people" color="blue" size="xs" />} />
-        <Badge label={durationLabel} type="outline" icon={<Icon name="clock" color="blue" size="xs" />} />
+        <Badge label={modeLabel} type="filled" icon={<Icon name="people" color="white" size="xs" />} />
+        <Badge label={durationLabel} type="filled" icon={<Icon name="clock" color="white" size="xs" />} />
       </div>
       {task.subtitle && <p className={styles.subtitle}>{task.subtitle}</p>}
       <p className={styles.intro}>{task.intro}</p>  {/* color: var(--color-black) */}
@@ -458,28 +495,26 @@ const [showInstruction, setShowInstruction] = useState(true);
 
 ### Экран результата (TaskResult)
 ```tsx
-// ВАЖНО: НЕ использовать эмодзи (✅❌) — только Icon из дизайн-системы
-// Правильный ответ: <Icon name="done" color="blue" size="s" />
-// Неправильный:     <Icon name="close" color="red" size="s" />
-// Каждый результат: иконка слева + Card size="m" справа (flex row)
-// Правильная карточка: state="pressed", неправильная: state="default"
+// Дизайн результата ИДЕНТИЧЕН PopUp:
+// — Одна карточка 800×500px, фон --color-grey-light, radius-lg
+// — Иконка done/close size="m" сверху-слева
+// — Заголовок "Результаты" (font-size-3xl, medium)
+// — Список ответов (font-size-sm)
+// — Кнопка "Далее" ВНУТРИ карточки (внизу по центру)
+// — НЕ использовать эмодзи — только Icon из дизайн-системы
 
-{results.map(r => (
-  <div className={styles.row}>  {/* display: flex; align-items: center; gap */}
-    <Icon
-      name={r.correct ? 'done' : 'close'}
-      color={r.correct ? 'blue' : 'red'}
-      size="s"
-    />
-    <Card
-      variant=""
-      title={r.answer}
-      description={r.explanation}
-      state={r.correct ? 'pressed' : 'default'}
-      size="m"
-    />
+<div className={styles.card}>  {/* как PopUp: 800px, min-height 500px, justify-content: space-between */}
+  <div className={styles.topContent}>
+    <Icon name={allCorrect ? 'done' : 'close'} color={allCorrect ? 'blue' : 'red'} size="m" />
+    <div className={styles.textBlock}>
+      <h2>Результаты</h2>
+      {results.map(r => (
+        <p>{r.correct ? '● ' : '● '}{r.answer}{r.explanation ? ` — ${r.explanation}` : ''}</p>
+      ))}
+    </div>
   </div>
-))}
+  <Button label="Далее" type="main" onClick={onContinue} />  {/* ВНУТРИ карточки */}
+</div>
 ```
 
 ### Мораль (TaskMoral)
@@ -535,8 +570,9 @@ interface GameProps {
 
 ### Экран результата (TaskResult)
 ```tsx
-// Одна карточка в стиле Card size="l" (580px, --color-grey-light, --radius-lg)
-// Иконка done/close сверху, заголовок "Результаты", список ответов ниже
+// Дизайн ИДЕНТИЧЕН PopUp: карточка 800×500px, --color-grey-light, --radius-lg
+// Кнопка "Далее" ВНУТРИ карточки (внизу по центру), НЕ снаружи
+// Иконка done/close size="m" сверху-слева, заголовок font-size-3xl
 // НЕ использовать state="disabled" с opacity — все карточки непрозрачные
 ```
 
@@ -606,6 +642,16 @@ interface GameProps {
 // При поимке — PopUp с описанием бага
 ```
 
+### `bingo` — Бинго-тест
+```tsx
+// Основная механика тестов во всех разделах
+// 8 вопросов по 1 на экране, варианты — Card size="m" в сетке 2×2
+// Ответы сравниваются с экспертом (нет "правильных" — только совпал/не совпал)
+// Результат — сетка 3×3 с flip-анимацией по тапу
+// Данные: data.bingo (BingoTest), НЕ data.test
+// Подробнее см. секцию "Бинго-тест (Test)" выше
+```
+
 ### `quiz` — Тест
 ```tsx
 // Последовательные вопросы, БЕЗ ProgressBar
@@ -623,7 +669,7 @@ interface GameProps {
 
 ```tsx
 // src/types/game.ts
-export type Mechanic = 'choose' | 'find' | 'sequence' | 'categorize' | 'match' | 'label' | 'mark' | 'catch' | 'quiz';
+export type Mechanic = 'choose' | 'find' | 'sequence' | 'categorize' | 'match' | 'label' | 'mark' | 'catch' | 'bingo' | 'quiz';
 export type Mode = 'group' | 'solo';
 export type Feedback = 'instant' | 'onComplete';
 
@@ -736,6 +782,28 @@ export interface QuizQuestion {
   options: TaskOption[];
 }
 
+export interface BingoQuestion {
+  gridLabel: string;        // short label for grid cell
+  prompt: string;
+  options: string[];        // 4 text options
+  expertAnswer: string;     // expert's answer for comparison
+}
+
+export interface BingoExpert {
+  name: string;
+  role: string;
+  profession: string;
+}
+
+export interface BingoTest {
+  expert: BingoExpert;
+  gridLabels: string[];     // 8 labels for 3×3 grid (center = expert)
+  intro: string;
+  instruction: string;
+  resultText: string;
+  questions: BingoQuestion[];
+}
+
 export interface SectionData {
   id: string;
   slug: string;
@@ -744,7 +812,8 @@ export interface SectionData {
   description: string;
   tasks: Task[];
   videos: Video[];
-  test: QuizQuestion[];
+  test?: QuizQuestion[];    // optional, legacy
+  bingo?: BingoTest;        // bingo test data
 }
 ```
 
@@ -794,7 +863,17 @@ export const sectionData: SectionData = {
     { profession: 'graphic-designer', title: 'Графический дизайнер', src: '/videos/001/graphic-designer.mp4' },
     { profession: 'ux-designer', title: 'UX-дизайнер', src: '/videos/001/ux-designer.mp4' },
   ],
-  test: [],
+  bingo: {
+    expert: { name: 'Аня Козлова', role: 'Графический дизайнер', profession: 'graphic-designer' },
+    gridLabels: ['напиток', 'локация', 'софт скилл', 'инструмент', 'вдохновение', 'суперсила', 'вызов', 'отдых'],
+    intro: 'Это бинго! Ответь на вопросы...',
+    instruction: 'Много ли у вас общего с нашей коллегой Аней?...',
+    resultText: 'Бинго! Синим цветом выделены совпадения...',
+    questions: [
+      { gridLabel: 'напиток', prompt: 'Какой напиток...?', options: ['Кофе', 'Чай', 'Вода', 'Матча-латте'], expertAnswer: 'Матча-латте' },
+      // ... 8 вопросов
+    ],
+  },
 };
 ```
 
