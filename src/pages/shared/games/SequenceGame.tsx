@@ -82,7 +82,7 @@ export function SequenceGame({ task, onComplete, onBack }: GameProps) {
   };
 
   return (
-    <Background theme="cobalt" orientation="landscape" onBack={onBack}>
+    <Background theme="orange" orientation="landscape" onBack={onBack}>
       <div className={styles.page}>
        <div className={styles.columns}>
         <div className={styles.left}>

@@ -13,7 +13,7 @@ export function TaskIntro({ task, onStart, onBack }: TaskIntroProps) {
   const durationLabel = `${task.duration} мин`;
 
   return (
-    <Background theme="cobalt" orientation="landscape" onBack={onBack}>
+    <Background theme="orange" orientation="landscape" onBack={onBack}>
       <div className={styles.wrapper}>
         <h2 className={styles.title}>{task.title}</h2>
 

@@ -16,7 +16,7 @@ export function TaskResult({ results, onContinue }: TaskResultProps) {
   const correctCount = results.filter((r) => r.correct).length;
 
   return (
-    <Background theme="cobalt" orientation="landscape" showBackButton={false}>
+    <Background theme="orange" orientation="landscape" showBackButton={false}>
       <div className={styles.wrapper}>
         <div className={styles.card}>
           <div className={styles.topContent}>

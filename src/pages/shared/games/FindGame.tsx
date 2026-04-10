@@ -92,7 +92,7 @@ export function FindGame({ task, onComplete, onBack }: GameProps) {
   const selectedOption = selected !== null ? options[selected] : null;
 
   return (
-    <Background theme="cobalt" orientation="landscape" onBack={onBack}>
+    <Background theme="orange" orientation="landscape" onBack={onBack}>
       <div className={styles.wrapper}>
         {step.prompt && (
           <p className={styles.prompt}>{step.prompt}</p>

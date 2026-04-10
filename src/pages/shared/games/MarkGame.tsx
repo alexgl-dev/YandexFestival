@@ -149,7 +149,7 @@ export function MarkGame({ task, onComplete, onBack }: GameProps) {
   const canCheck = isUxReview ? selectedZones.size > 0 : markers.length > 0;
 
   return (
-    <Background theme="cobalt" orientation="landscape" onBack={onBack}>
+    <Background theme="orange" orientation="landscape" onBack={onBack}>
       <div className={styles.wrapper}>
 
         <div className={styles.content}>

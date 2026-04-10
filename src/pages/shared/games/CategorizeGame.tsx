@@ -181,7 +181,7 @@ export function CategorizeGame({ task, onComplete, onBack }: GameProps) {
   const lastResult = results[results.length - 1];
 
   return (
-    <Background theme="cobalt" orientation="landscape" onBack={onBack}>
+    <Background theme="orange" orientation="landscape" onBack={onBack}>
       <div className={styles.wrapper}>
         {/* Instruction + Two columns */}
         <p className={styles.instruction}>

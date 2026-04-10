@@ -8,7 +8,7 @@ interface TaskInstructionProps {
 
 export function TaskInstruction({ instruction, onContinue }: TaskInstructionProps) {
   return (
-    <Background theme="cobalt" orientation="landscape" showBackButton={false}>
+    <Background theme="orange" orientation="landscape" showBackButton={false}>
       <div className={styles.wrapper}>
         <PopUp
           title="Инструкция"

@@ -6,7 +6,7 @@ export function CreativeMenu() {
 
   return (
     <Menu
-      theme="cobalt"
+      theme="orange"
       orientation="landscape"
       items={[
         { label: 'Описание направления', onClick: () => navigate('/creative/description') },

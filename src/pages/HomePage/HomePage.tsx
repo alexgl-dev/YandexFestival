@@ -6,7 +6,7 @@ export function HomePage() {
   const navigate = useNavigate();
 
   return (
-    <Background theme="cobalt" orientation="landscape" showBackButton={false}>
+    <Background theme="orange" orientation="landscape" showBackButton={false}>
       <div className={styles.container}>
         <h1 className={styles.title}>YandexSuperHot</h1>
         <p className={styles.subtitle}>Интерактивная выставка</p>

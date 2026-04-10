@@ -13,7 +13,7 @@ export function Profession() {
 
   if (!profession) {
     return (
-      <Background theme="cobalt" orientation="landscape" onBack={() => navigate(`/${data.slug}/description`)}>
+      <Background theme="orange" orientation="landscape" onBack={() => navigate(`/${data.slug}/description`)}>
         <div className={styles.wrapper}>
           <p className={styles.notFound}>Профессия не найдена</p>
         </div>
@@ -25,7 +25,7 @@ export function Profession() {
   const next = profIndex < data.professions.length - 1 ? data.professions[profIndex + 1] : null;
 
   return (
-    <Background theme="cobalt" orientation="landscape" onBack={() => navigate(`/${data.slug}/description`)}>
+    <Background theme="orange" orientation="landscape" onBack={() => navigate(`/${data.slug}/description`)}>
       <div className={styles.wrapper}>
         <h2 className={styles.title}>{profession.title}</h2>
 

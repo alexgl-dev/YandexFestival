@@ -10,7 +10,7 @@ interface TaskMoralProps {
 
 export function TaskMoral({ task, onNext, isLast }: TaskMoralProps) {
   return (
-    <Background theme="cobalt" orientation="landscape" showBackButton={false}>
+    <Background theme="orange" orientation="landscape" showBackButton={false}>
       <PopUp
         icon="done"
         iconColor="blue"

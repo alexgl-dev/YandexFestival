@@ -351,11 +351,11 @@ export function TestScreen() {
         <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap' }}>
           <div className={styles.labeled}>
             <div style={{ transform: 'scale(0.35)', transformOrigin: 'top left', width: 1920 * 0.35, height: 1080 * 0.35 }}>
-              <Background theme="cobalt" orientation="landscape" onBack={() => {}}>
+              <Background theme="orange" orientation="landscape" onBack={() => {}}>
                 <span style={{ color: 'white', fontSize: 48, fontFamily: 'var(--font-family)' }}>Cobalt</span>
               </Background>
             </div>
-            <Code>{'<Background theme="cobalt" orientation="landscape" onBack={...}>{children}</Background>'}</Code>
+            <Code>{'<Background theme="orange" orientation="landscape" onBack={...}>{children}</Background>'}</Code>
           </div>
           <div className={styles.labeled}>
             <div style={{ transform: 'scale(0.35)', transformOrigin: 'top left', width: 1920 * 0.35, height: 1080 * 0.35 }}>
@@ -372,7 +372,7 @@ export function TestScreen() {
           <div className={styles.labeled}>
             <div style={{ transform: 'scale(0.35)', transformOrigin: 'top left', width: 1920 * 0.35, height: 1080 * 0.35 }}>
               <Menu
-                theme="cobalt"
+                theme="orange"
                 orientation="landscape"
                 items={[
                   { label: 'Описание направления' },
@@ -382,7 +382,7 @@ export function TestScreen() {
                 ]}
               />
             </div>
-            <Code>{'<Menu theme="cobalt" items={[{ label: "...", onClick: ... }, ...]} />'}</Code>
+            <Code>{'<Menu theme="orange" items={[{ label: "...", onClick: ... }, ...]} />'}</Code>
           </div>
           <div className={styles.labeled}>
             <div style={{ transform: 'scale(0.35)', transformOrigin: 'top left', width: 1920 * 0.35, height: 1080 * 0.35 }}>

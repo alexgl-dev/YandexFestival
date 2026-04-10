@@ -21,7 +21,7 @@ export function GamePlaceholder({ task, onComplete }: GamePlaceholderProps) {
   };
 
   return (
-    <Background theme="cobalt" orientation="landscape">
+    <Background theme="orange" orientation="landscape">
       <div className={styles.wrapper}>
         <div className={styles.content}>
           <h2 className={styles.title}>{task.title}</h2>
