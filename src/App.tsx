@@ -17,6 +17,14 @@ import { TaskList as DevTaskList } from './pages/development/TaskList';
 import { TaskPage as DevTaskPage } from './pages/development/TaskPage';
 import { Videos as DevVideos } from './pages/development/Videos';
 import { Test as DevTest } from './pages/development/Test';
+import { ManagementLayout } from './pages/management/ManagementLayout';
+import { ManagementMenu } from './pages/management/ManagementMenu';
+import { Description as MgmtDescription } from './pages/management/Description';
+import { Profession as MgmtProfession } from './pages/management/Profession';
+import { TaskList as MgmtTaskList } from './pages/management/TaskList';
+import { TaskPage as MgmtTaskPage } from './pages/management/TaskPage';
+import { Videos as MgmtVideos } from './pages/management/Videos';
+import { Test as MgmtTest } from './pages/management/Test';
 
 function App() {
   return (
@@ -41,6 +49,15 @@ function App() {
           <Route path="tasks/:taskId" element={<DevTaskPage />} />
           <Route path="videos" element={<DevVideos />} />
           <Route path="test" element={<DevTest />} />
+        </Route>
+        <Route path="/management" element={<ManagementLayout />}>
+          <Route index element={<ManagementMenu />} />
+          <Route path="description" element={<MgmtDescription />} />
+          <Route path="description/:professionId" element={<MgmtProfession />} />
+          <Route path="tasks" element={<MgmtTaskList />} />
+          <Route path="tasks/:taskId" element={<MgmtTaskPage />} />
+          <Route path="videos" element={<MgmtVideos />} />
+          <Route path="test" element={<MgmtTest />} />
         </Route>
       </Routes>
     </BrowserRouter>

@@ -21,6 +21,11 @@ export function HomePage() {
             type="main"
             onClick={() => navigate('/development')}
           />
+          <Button
+            label="Менеджмент"
+            type="main"
+            onClick={() => navigate('/management')}
+          />
         </div>
       </div>
     </Background>
