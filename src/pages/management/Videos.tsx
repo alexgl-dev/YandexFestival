@@ -69,7 +69,7 @@ export function Videos() {
                 <Player
                   title={video.title}
                   state={isPlaying ? 'playing' : 'default'}
-                  orientation="horizontal"
+                  orientation="vertical"
                   currentTime={isPlaying ? formatTime(elapsed) : '00:00'}
                   totalTime={formatTime(TOTAL_DURATION)}
                   progress={isPlaying ? (elapsed / TOTAL_DURATION) * 100 : 0}

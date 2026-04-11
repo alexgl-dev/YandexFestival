@@ -29,12 +29,17 @@
 }
 
 .grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
+  flex-direction: column;
   gap: var(--spacing-lg);
   width: 100%;
 }
 
 .item {
-  min-width: 0;
+  width: 100%;
+}
+
+.item > * {
+  width: 100% !important;
+  height: auto !important;
 }

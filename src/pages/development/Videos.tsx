@@ -56,7 +56,7 @@ export function Videos() {
   }, [stopTimer]);
 
   return (
-    <Background theme="cobalt" orientation="landscape" onBack={() => navigate(`/${data.slug}`)}>
+    <Background theme="cobalt" orientation="portrait" onBack={() => navigate(`/${data.slug}`)}>
       <div className={styles.wrapper}>
         <div className={styles.content}>
           <h2 className={styles.title}>Истории яндексоидов</h2>
@@ -69,7 +69,7 @@ export function Videos() {
                 <Player
                   title={video.title}
                   state={isPlaying ? 'playing' : 'default'}
-                  orientation="horizontal"
+                  orientation="vertical"
                   currentTime={isPlaying ? formatTime(elapsed) : '00:00'}
                   totalTime={formatTime(TOTAL_DURATION)}
                   progress={isPlaying ? (elapsed / TOTAL_DURATION) * 100 : 0}
