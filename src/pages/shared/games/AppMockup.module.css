@@ -1,6 +1,6 @@
 .mockup {
-  width: 360px;
-  height: 750px;
+  width: 540px;
+  height: 1125px;
   background: var(--color-grey-light);
   border-radius: var(--radius-lg);
   overflow: hidden;
@@ -22,27 +22,27 @@
 }
 
 .zone:hover {
-  box-shadow: inset 0 0 0 3px var(--color-bg-brand-translucent);
+  box-shadow: inset 0 0 0 4px var(--color-bg-brand-translucent);
 }
 
 .zoneSelected {
-  box-shadow: inset 0 0 0 3px var(--color-blue);
+  box-shadow: inset 0 0 0 4px var(--color-blue);
 }
 
 .zoneCorrect {
-  box-shadow: inset 0 0 0 3px var(--color-green);
+  box-shadow: inset 0 0 0 4px var(--color-green);
 }
 
 .zoneWrong {
-  box-shadow: inset 0 0 0 3px var(--color-red);
+  box-shadow: inset 0 0 0 4px var(--color-red);
 }
 
 .zoneBadge {
   position: absolute;
-  top: 2px;
-  right: 2px;
-  width: 20px;
-  height: 20px;
+  top: 3px;
+  right: 3px;
+  width: 30px;
+  height: 30px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -50,7 +50,7 @@
   color: var(--color-white);
   border-radius: var(--radius-full);
   font-family: var(--font-family);
-  font-size: 11px;
+  font-size: 16px;
   font-weight: var(--font-weight-bold);
   z-index: 1;
 }
@@ -63,15 +63,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 10px 16px;
+  padding: 15px 24px;
   background: var(--color-blue);
   position: relative;
-  min-height: 40px;
+  min-height: 60px;
   border-radius: var(--radius-lg) var(--radius-lg) 0 0;
 }
 
 .headerTitle {
-  font-size: 16px;
+  font-size: 24px;
   font-weight: var(--font-weight-bold);
   color: var(--color-white);
   font-family: var(--font-family);
@@ -79,73 +79,73 @@
 
 .hamburger {
   position: absolute;
-  right: 16px;
+  right: 24px;
   top: 50%;
   transform: translateY(-50%);
   display: flex;
   flex-direction: column;
-  gap: 3px;
+  gap: 5px;
   cursor: pointer;
-  padding: 6px;
+  padding: 9px;
 }
 
 .hamburgerLine {
-  width: 18px;
-  height: 2px;
+  width: 27px;
+  height: 3px;
   background: var(--color-white);
   border-radius: var(--radius-full);
 }
 
 .headerLeft {
   position: absolute;
-  left: 16px;
+  left: 24px;
   top: 50%;
   transform: translateY(-50%);
-  width: 28px;
-  height: 28px;
+  width: 42px;
+  height: 42px;
 }
 
 .headerLeftLabel {
   font-family: var(--font-family);
-  font-size: 14px;
+  font-size: 21px;
   color: var(--color-white);
   opacity: 0.3;
 }
 
 /* Search */
 .searchBar {
-  margin: 8px 12px;
-  padding: 8px 14px;
+  margin: 12px 18px;
+  padding: 12px 21px;
   background: var(--color-white);
   border-radius: var(--radius-lg);
   display: flex;
   align-items: center;
-  gap: 8px;
-  min-height: 36px;
+  gap: 12px;
+  min-height: 54px;
 }
 
-.searchIcon { font-size: 14px; color: var(--color-grey-disabled); }
-.searchText { font-size: 13px; color: var(--color-grey-disabled); font-family: var(--font-family); }
+.searchIcon { font-size: 21px; color: var(--color-grey-disabled); }
+.searchText { font-size: 20px; color: var(--color-grey-disabled); font-family: var(--font-family); }
 
 /* Hero */
 .hero {
-  margin: 4px 12px;
-  padding: 20px 14px;
+  margin: 6px 18px;
+  padding: 30px 21px;
   border-radius: var(--radius-lg);
   background: var(--color-blue);
   color: var(--color-white);
 }
 
 .heroTitle {
-  font-size: 18px;
+  font-size: 27px;
   font-weight: var(--font-weight-bold);
   font-family: var(--font-family);
-  margin: 0 0 4px 0;
+  margin: 0 0 6px 0;
   line-height: 1.2;
 }
 
 .heroSubtitle {
-  font-size: 12px;
+  font-size: 18px;
   font-family: var(--font-family);
   opacity: 0.7;
   margin: 0;
@@ -154,17 +154,17 @@
 /* Category pills */
 .categories {
   display: flex;
-  gap: 6px;
-  padding: 8px 12px;
+  gap: 9px;
+  padding: 12px 18px;
   overflow: hidden;
 }
 
 .pill {
-  padding: 5px 12px;
+  padding: 8px 18px;
   border-radius: var(--radius-full);
   border: 1px solid var(--color-grey-secondary);
   background: var(--color-white);
-  font-size: 12px;
+  font-size: 18px;
   font-family: var(--font-family);
   color: var(--color-black);
   white-space: nowrap;
@@ -179,17 +179,17 @@
 
 /* Section title */
 .sectionTitle {
-  font-size: 14px;
+  font-size: 21px;
   font-weight: var(--font-weight-bold);
   font-family: var(--font-family);
   color: var(--color-black);
   margin: 0;
-  padding: 6px 12px 0;
+  padding: 9px 18px 0;
 }
 
 /* Cards */
 .cardsWrap {
-  padding: 0 12px;
+  padding: 0 18px;
   flex: 1;
   overflow: hidden;
 }
@@ -197,44 +197,44 @@
 .cards {
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  padding-top: 6px;
+  gap: 9px;
+  padding-top: 9px;
 }
 
 .card {
   display: flex;
-  gap: 10px;
-  padding: 10px;
+  gap: 15px;
+  padding: 15px;
   background: var(--color-white);
   border-radius: var(--radius-sm);
   align-items: center;
 }
 
 .cardImage {
-  width: 44px;
-  height: 44px;
+  width: 66px;
+  height: 66px;
   border-radius: var(--radius-xs);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 22px;
+  font-size: 33px;
   flex-shrink: 0;
 }
 
-.cardInfo { display: flex; flex-direction: column; gap: 1px; min-width: 0; }
-.cardName { font-size: 13px; font-weight: var(--font-weight-bold); font-family: var(--font-family); color: var(--color-black); margin: 0; }
-.cardMeta { font-size: 11px; font-family: var(--font-family); color: var(--color-text-muted); margin: 0; }
-.cardRating { font-size: 11px; font-family: var(--font-family); color: var(--color-blue); font-weight: var(--font-weight-bold); margin: 0; }
+.cardInfo { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.cardName { font-size: 20px; font-weight: var(--font-weight-bold); font-family: var(--font-family); color: var(--color-black); margin: 0; }
+.cardMeta { font-size: 16px; font-family: var(--font-family); color: var(--color-text-muted); margin: 0; }
+.cardRating { font-size: 16px; font-family: var(--font-family); color: var(--color-blue); font-weight: var(--font-weight-bold); margin: 0; }
 
 /* Registration — broken */
 .regButton {
-  margin: auto 12px 12px;
-  padding: 10px;
+  margin: auto 18px 18px;
+  padding: 15px;
   border: 1px solid var(--color-grey-secondary);
   border-radius: var(--radius-lg);
   background: var(--color-grey-light);
   color: var(--color-grey-disabled);
-  font-size: 13px;
+  font-size: 20px;
   font-family: var(--font-family);
   font-weight: var(--font-weight-medium);
   text-align: center;

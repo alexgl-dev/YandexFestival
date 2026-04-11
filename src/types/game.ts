@@ -137,6 +137,8 @@ export interface SectionData {
   id: string;
   slug: string;
   title: string;
+  theme: 'cobalt' | 'orange';
+  orientation: 'landscape' | 'portrait';
   professions: Profession[];
   description: string;
   tasks: Task[];

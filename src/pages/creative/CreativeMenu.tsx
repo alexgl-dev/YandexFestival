@@ -7,7 +7,7 @@ export function CreativeMenu() {
   return (
     <Menu
       theme="orange"
-      orientation="landscape"
+      orientation="portrait"
       items={[
         { label: 'Описание направления', onClick: () => navigate('/creative/description') },
         { label: 'Задания', onClick: () => navigate('/creative/tasks') },

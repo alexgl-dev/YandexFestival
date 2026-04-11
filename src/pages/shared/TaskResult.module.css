@@ -4,7 +4,9 @@
   justify-content: center;
   width: 100%;
   height: 100%;
+  padding: 0 var(--spacing-2xl);
   font-family: var(--font-family);
+  box-sizing: border-box;
 }
 
 .card {
@@ -12,9 +14,9 @@
   flex-direction: column;
   align-items: center;
   justify-content: space-between;
-  width: 800px;
+  width: 100%;
   min-height: 500px;
-  max-height: 90vh;
+  max-height: 1600px;
   padding: var(--spacing-2xl);
   overflow-y: auto;
   border-radius: var(--radius-lg);

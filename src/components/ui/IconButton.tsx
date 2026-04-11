@@ -2,9 +2,9 @@ import styles from './IconButton.module.css';
 
 export interface IconButtonProps {
   type: 'back' | 'play' | 'pause';
-  variant?: 'default' | 'light';
+  variant?: 'default' | 'light' | 'orange';
   pressed?: boolean;
-  size?: 'sm' | 'lg';
+  size?: 'sm' | 'md' | 'lg';
   onClick?: () => void;
   className?: string;
 }
@@ -15,8 +15,9 @@ const defaultSize: Record<IconButtonProps['type'], 'sm' | 'lg'> = {
   pause: 'sm',
 };
 
-function getSrc(type: IconButtonProps['type'], variant: 'default' | 'light', pressed?: boolean) {
+function getSrc(type: IconButtonProps['type'], variant: 'default' | 'light' | 'orange', pressed?: boolean) {
   if (type === 'back') {
+    if (variant === 'orange') return '/icons/iconbtn-back-orange.svg';
     if (variant === 'light') return '/icons/iconbtn-back-light.svg';
     return pressed ? '/icons/iconbtn-back-pressed.svg' : '/icons/iconbtn-back.svg';
   }
@@ -25,7 +26,7 @@ function getSrc(type: IconButtonProps['type'], variant: 'default' | 'light', pre
 
 export function IconButton({ type, variant = 'default', pressed, size, onClick, className }: IconButtonProps) {
   const resolvedSize = size ?? defaultSize[type];
-  const px = resolvedSize === 'lg' ? 150 : 90;
+  const px = resolvedSize === 'lg' ? 150 : resolvedSize === 'md' ? 105 : 90;
 
   return (
     <button

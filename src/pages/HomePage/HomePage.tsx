@@ -16,6 +16,11 @@ export function HomePage() {
             type="main"
             onClick={() => navigate('/creative')}
           />
+          <Button
+            label="Разработка"
+            type="main"
+            onClick={() => navigate('/development')}
+          />
         </div>
       </div>
     </Background>

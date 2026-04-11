@@ -51,7 +51,7 @@
 
 /* === Big === */
 .big {
-  width: 870px;
+  width: var(--width-content);
   padding: var(--spacing-md) 25px;
   background-color: transparent;
   color: var(--color-text-primary);

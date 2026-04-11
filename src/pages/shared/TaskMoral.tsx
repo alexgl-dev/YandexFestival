@@ -6,11 +6,13 @@ interface TaskMoralProps {
   onNext: () => void;
   isLast: boolean;
   sectionSlug: string;
+  theme?: 'cobalt' | 'orange';
+  orientation?: 'landscape' | 'portrait';
 }
 
-export function TaskMoral({ task, onNext, isLast }: TaskMoralProps) {
+export function TaskMoral({ task, onNext, isLast, theme = 'orange', orientation = 'portrait' }: TaskMoralProps) {
   return (
-    <Background theme="orange" orientation="landscape" showBackButton={false}>
+    <Background theme={theme} orientation={orientation} showBackButton={false}>
       <PopUp
         icon="done"
         iconColor="blue"

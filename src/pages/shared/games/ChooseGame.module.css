@@ -4,7 +4,9 @@
   align-items: center;
   gap: var(--spacing-xl);
   width: 100%;
-  padding: var(--spacing-2xl);
+  max-width: var(--width-content);
+  margin: 0 auto;
+  padding: var(--spacing-2xl) 0;
   font-family: var(--font-family);
   box-sizing: border-box;
 }
@@ -16,6 +18,7 @@
   color: var(--color-white);
   text-align: center;
   margin: 0;
+  max-width: 80%;
   letter-spacing: var(--letter-spacing-xs);
   line-height: var(--line-height-normal);
 }
@@ -32,8 +35,8 @@
   position: absolute;
   top: 0;
   left: 0;
-  width: 1920px;
-  height: 1080px;
+  width: 1080px;
+  height: 1920px;
   display: flex;
   align-items: center;
   justify-content: center;

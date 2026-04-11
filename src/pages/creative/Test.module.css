@@ -3,10 +3,10 @@
 .wrapper {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-xl);
+  gap: var(--spacing-2xl);
   padding: var(--spacing-2xl);
-  max-width: var(--width-content);
-  margin: 0 auto;
+  width: 100%;
+  box-sizing: border-box;
   font-family: var(--font-family);
 }
 
@@ -63,7 +63,7 @@
 .questionsLayout {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-lg);
+  gap: var(--spacing-2xl);
   padding: var(--spacing-2xl);
   width: 100%;
   box-sizing: border-box;
@@ -87,14 +87,14 @@
   line-height: var(--line-height-normal);
   margin: 0;
   text-align: center;
-  width: 80%;
+  width: 100%;
 }
 
 .optionsGrid {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: var(--spacing-sm);
-  width: 80%;
+  width: 100%;
 }
 
 .optionsGrid > * {
@@ -105,7 +105,7 @@
   display: flex;
   align-items: center;
   gap: var(--spacing-lg);
-  width: 80%;
+  width: 100%;
 }
 
 .bottomRow .title {
@@ -116,11 +116,12 @@
 
 .resultLayout {
   display: flex;
+  flex-direction: column;
+  align-items: center;
   gap: var(--spacing-2xl);
   padding: var(--spacing-2xl);
-  width: 80%;
+  width: 100%;
   box-sizing: border-box;
-  align-items: stretch;
   font-family: var(--font-family);
 }
 
@@ -235,9 +236,9 @@
 .resultSide {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: var(--spacing-lg);
-  flex: 1;
-  min-width: 0;
+  width: 100%;
 }
 
 .resultCard {

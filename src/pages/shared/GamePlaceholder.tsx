@@ -11,9 +11,11 @@ interface ResultItem {
 interface GamePlaceholderProps {
   task: Task;
   onComplete: (results: ResultItem[]) => void;
+  theme?: 'cobalt' | 'orange';
+  orientation?: 'landscape' | 'portrait';
 }
 
-export function GamePlaceholder({ task, onComplete }: GamePlaceholderProps) {
+export function GamePlaceholder({ task, onComplete, theme = 'orange', orientation = 'portrait' }: GamePlaceholderProps) {
   const handleSkip = () => {
     onComplete([
       { answer: 'Демо-ответ', correct: true, explanation: 'Механика в разработке' },
@@ -21,7 +23,7 @@ export function GamePlaceholder({ task, onComplete }: GamePlaceholderProps) {
   };
 
   return (
-    <Background theme="orange" orientation="landscape">
+    <Background theme={theme} orientation={orientation}>
       <div className={styles.wrapper}>
         <div className={styles.content}>
           <h2 className={styles.title}>{task.title}</h2>

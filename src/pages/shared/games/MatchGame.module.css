@@ -1,0 +1,186 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-xl);
+  width: 80%;
+  margin: 0 auto;
+  padding: var(--spacing-2xl) 0;
+  font-family: var(--font-family);
+  box-sizing: border-box;
+}
+
+.prompt {
+  font-family: var(--font-family);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-white);
+  text-align: center;
+  margin: 0;
+  max-width: 80%;
+  letter-spacing: var(--letter-spacing-xs);
+  line-height: var(--line-height-normal);
+}
+
+.columns {
+  display: flex;
+  flex-direction: row;
+  gap: var(--spacing-2xl);
+  width: 100%;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  min-width: 0;
+}
+
+.columnHeading {
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-white);
+  margin: 0 0 var(--spacing-xs) 0;
+  text-align: center;
+}
+
+/* --- Card base --- */
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-sm);
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-md);
+  cursor: pointer;
+  border: var(--border-width-md) solid transparent;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+  font-family: var(--font-family);
+  box-sizing: border-box;
+  user-select: none;
+}
+
+.card:active {
+  opacity: 0.85;
+}
+
+/* --- Card states --- */
+.cardSelected {
+  border-color: var(--color-blue);
+  box-shadow: 0 0 0 var(--border-width-sm) var(--color-blue);
+}
+
+.cardCorrect {
+  border-color: var(--color-green);
+  box-shadow: 0 0 0 var(--border-width-sm) var(--color-green);
+  cursor: default;
+  pointer-events: none;
+}
+
+.cardWrong {
+  border-color: var(--color-red);
+  box-shadow: 0 0 0 var(--border-width-sm) var(--color-red);
+  animation: flashRed 0.6s ease;
+}
+
+@keyframes flashRed {
+  0% { border-color: var(--color-red); }
+  50% { border-color: var(--color-red); }
+  100% { border-color: transparent; }
+}
+
+.cardMatched {
+  opacity: 0.6;
+  cursor: default;
+  pointer-events: none;
+}
+
+/* --- Character card (avatar + description) --- */
+.characterRow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--spacing-sm);
+  width: 100%;
+}
+
+.avatar {
+  width: var(--size-icon-m);
+  height: var(--size-icon-m);
+  border-radius: var(--radius-full);
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.descriptionText {
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-black);
+  line-height: var(--line-height-normal);
+  margin: 0;
+}
+
+.termHighlight {
+  text-decoration: underline;
+  text-decoration-color: var(--color-blue);
+  text-underline-offset: 3px;
+}
+
+/* --- Image card --- */
+.cardImage {
+  width: 100%;
+  max-height: 200px;
+  object-fit: contain;
+  border-radius: var(--radius-sm);
+}
+
+.cardLabel {
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-black);
+  text-align: center;
+  margin: 0;
+}
+
+/* --- Hidden card placeholder --- */
+.hiddenPlaceholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 120px;
+}
+
+/* --- Overlay --- */
+.overlayLandscape {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1920px;
+  height: 1080px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+}
+
+.overlayPortrait {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 1080px;
+  height: 1920px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+}

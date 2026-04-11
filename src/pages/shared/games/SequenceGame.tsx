@@ -13,9 +13,11 @@ interface GameProps {
   task: Task;
   onComplete: (results: GameResult[]) => void;
   onBack: () => void;
+  theme?: 'cobalt' | 'orange';
+  orientation?: 'landscape' | 'portrait';
 }
 
-export function SequenceGame({ task, onComplete, onBack }: GameProps) {
+export function SequenceGame({ task, onComplete, onBack, theme = 'orange', orientation = 'portrait' }: GameProps) {
   const step = task.steps[0];
   const blocks = step?.blocks ?? [];
   const orderedCount = blocks.filter((b) => b.order !== null).length;
@@ -82,7 +84,7 @@ export function SequenceGame({ task, onComplete, onBack }: GameProps) {
   };
 
   return (
-    <Background theme="orange" orientation="landscape" onBack={onBack}>
+    <Background theme={theme} orientation={orientation} onBack={onBack}>
       <div className={styles.page}>
        <div className={styles.columns}>
         <div className={styles.left}>

@@ -10,13 +10,15 @@ interface ResultItem {
 interface TaskResultProps {
   results: ResultItem[];
   onContinue: () => void;
+  theme?: 'cobalt' | 'orange';
+  orientation?: 'landscape' | 'portrait';
 }
 
-export function TaskResult({ results, onContinue }: TaskResultProps) {
+export function TaskResult({ results, onContinue, theme = 'orange', orientation = 'portrait' }: TaskResultProps) {
   const correctCount = results.filter((r) => r.correct).length;
 
   return (
-    <Background theme="orange" orientation="landscape" showBackButton={false}>
+    <Background theme={theme} orientation={orientation} showBackButton={false}>
       <div className={styles.wrapper}>
         <div className={styles.card}>
           <div className={styles.topContent}>

@@ -14,11 +14,13 @@ interface GameProps {
   task: Task;
   onComplete: (results: GameResult[]) => void;
   onBack: () => void;
+  theme?: 'cobalt' | 'orange';
+  orientation?: 'landscape' | 'portrait';
 }
 
 const VARIANT_LABELS = ['Вариант A', 'Вариант B', 'Вариант C', 'Вариант D', 'Вариант E', 'Вариант F'];
 
-export function FindGame({ task, onComplete, onBack }: GameProps) {
+export function FindGame({ task, onComplete, onBack, theme = 'orange', orientation = 'portrait' }: GameProps) {
   const [currentStep, setCurrentStep] = useState(0);
   const [selected, setSelected] = useState<number | null>(null);
   const [disabledOptions, setDisabledOptions] = useState<Set<number>>(new Set());
@@ -92,7 +94,7 @@ export function FindGame({ task, onComplete, onBack }: GameProps) {
   const selectedOption = selected !== null ? options[selected] : null;
 
   return (
-    <Background theme="orange" orientation="landscape" onBack={onBack}>
+    <Background theme={theme} orientation={orientation} onBack={onBack}>
       <div className={styles.wrapper}>
         {step.prompt && (
           <p className={styles.prompt}>{step.prompt}</p>

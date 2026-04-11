@@ -131,10 +131,11 @@
 <IconButton type="play" size="sm" />
 <IconButton type="pause" size="sm" />
 ```
-**Props:** `type` (back|play|pause), `variant` (default|light), `size` (sm|lg), `pressed`, `onClick`
+**Props:** `type` (back|play|pause), `variant` (default|light|orange), `size` (sm|lg), `pressed`, `onClick`
 
 - `default` — синий круг с серыми точками (для тёмных фонов)
 - `light` — серый круг с синими точками (для градиентных фонов Background)
+- `orange` — серый круг с оранжевыми точками (для креативной секции / рыжей темы)
 
 Back=150px, Play/Pause=90px. Компонент Background автоматически использует `variant="light"` для кнопки назад.
 

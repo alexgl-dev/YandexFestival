@@ -3,9 +3,10 @@
   flex-direction: column;
   align-items: center;
   width: 100%;
-  height: 100%;
+  max-width: var(--width-content);
+  margin: 0 auto;
   font-family: var(--font-family);
-  padding: var(--spacing-2xl) var(--spacing-2xl);
+  padding: var(--spacing-2xl) 0;
   box-sizing: border-box;
   gap: var(--spacing-lg);
 }
@@ -30,15 +31,17 @@
 /* Two cards area */
 .columnsArea {
   display: flex;
+  flex-direction: row;
   gap: var(--spacing-lg);
-  flex: 1;
-  min-height: 0;
   justify-content: center;
+  width: 100%;
 }
 
 /* Each category card — styled like Card size="l" */
 .column {
-  width: 580px;
+  flex: 1;
+  min-width: 0;
+  aspect-ratio: 9 / 16;
   display: flex;
   flex-direction: column;
   background: var(--color-grey-light);
@@ -168,7 +171,7 @@
   font-weight: var(--font-weight-medium);
   color: var(--color-white);
   margin: 0;
-  width: calc(580px * 2 + var(--spacing-lg));
+  width: 100%;
   text-align: left;
 }
 
@@ -186,8 +189,8 @@
   align-items: center;
   justify-content: center;
   gap: var(--spacing-xs);
-  width: 130px;
-  min-width: 130px;
+  width: 110px;
+  min-width: 110px;
   cursor: grab;
   user-select: none;
   transition: opacity 0.15s, transform 0.15s;
@@ -201,8 +204,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 120px;
-  height: 120px;
+  width: 90px;
+  height: 90px;
   background: var(--color-white);
   border-radius: var(--radius-full);
   border: var(--border-width-sm) solid var(--color-grey-secondary);
@@ -225,8 +228,8 @@
 }
 
 .iconImage {
-  width: 72px;
-  height: 72px;
+  width: 56px;
+  height: 56px;
   object-fit: contain;
 }
 
@@ -259,8 +262,8 @@
   position: absolute;
   top: 0;
   left: 0;
-  width: 1920px;
-  height: 1080px;
+  width: 1080px;
+  height: 1920px;
   display: flex;
   align-items: center;
   justify-content: center;

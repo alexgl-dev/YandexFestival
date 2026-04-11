@@ -21,7 +21,7 @@
 }
 
 .size_m {
-  width: var(--width-content);
+  width: 100%;
   padding: var(--spacing-2xl);
 }
 

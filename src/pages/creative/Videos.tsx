@@ -56,7 +56,7 @@ export function Videos() {
   }, [stopTimer]);
 
   return (
-    <Background theme="orange" orientation="landscape" onBack={() => navigate(`/${data.slug}`)}>
+    <Background theme="orange" orientation="portrait" onBack={() => navigate(`/${data.slug}`)}>
       <div className={styles.wrapper}>
         <div className={styles.content}>
           <h2 className={styles.title}>Истории яндексоидов</h2>

@@ -6,14 +6,16 @@ interface TaskIntroProps {
   task: Task;
   onStart: () => void;
   onBack: () => void;
+  theme?: 'cobalt' | 'orange';
+  orientation?: 'landscape' | 'portrait';
 }
 
-export function TaskIntro({ task, onStart, onBack }: TaskIntroProps) {
+export function TaskIntro({ task, onStart, onBack, theme = 'orange', orientation = 'portrait' }: TaskIntroProps) {
   const modeLabel = task.mode === 'group' ? 'Групповое' : 'Индивидуальное';
   const durationLabel = `${task.duration} мин`;
 
   return (
-    <Background theme="orange" orientation="landscape" onBack={onBack}>
+    <Background theme={theme} orientation={orientation} onBack={onBack}>
       <div className={styles.wrapper}>
         <h2 className={styles.title}>{task.title}</h2>
 

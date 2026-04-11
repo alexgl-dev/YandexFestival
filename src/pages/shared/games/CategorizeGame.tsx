@@ -13,9 +13,11 @@ interface GameProps {
   task: Task;
   onComplete: (results: GameResult[]) => void;
   onBack: () => void;
+  theme?: 'cobalt' | 'orange';
+  orientation?: 'landscape' | 'portrait';
 }
 
-export function CategorizeGame({ task, onComplete, onBack }: GameProps) {
+export function CategorizeGame({ task, onComplete, onBack, theme = 'orange', orientation = 'portrait' }: GameProps) {
   const steps = task.steps;
   const [currentStep, setCurrentStep] = useState(0);
   const step = steps[currentStep];
@@ -181,7 +183,7 @@ export function CategorizeGame({ task, onComplete, onBack }: GameProps) {
   const lastResult = results[results.length - 1];
 
   return (
-    <Background theme="orange" orientation="landscape" onBack={onBack}>
+    <Background theme={theme} orientation={orientation} onBack={onBack}>
       <div className={styles.wrapper}>
         {/* Instruction + Two columns */}
         <p className={styles.instruction}>

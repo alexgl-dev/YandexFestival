@@ -8,7 +8,7 @@ export function TaskList() {
   const data = useOutletContext<SectionData>();
 
   return (
-    <Background theme="orange" orientation="landscape" onBack={() => navigate(`/${data.slug}`)}>
+    <Background theme="orange" orientation="portrait" onBack={() => navigate(`/${data.slug}`)}>
       <div className={styles.wrapper}>
         <h2 className={styles.title}>Задания</h2>
 

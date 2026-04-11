@@ -4,6 +4,8 @@ export const creativeSection: SectionData = {
   id: '001',
   slug: 'creative',
   title: 'Креативный трек',
+  theme: 'orange',
+  orientation: 'portrait',
 
   professions: [
     {
