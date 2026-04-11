@@ -26,6 +26,11 @@ export function HomePage() {
             type="main"
             onClick={() => navigate('/management')}
           />
+          <Button
+            label="Работа с данными"
+            type="main"
+            onClick={() => navigate('/data')}
+          />
         </div>
       </div>
     </Background>

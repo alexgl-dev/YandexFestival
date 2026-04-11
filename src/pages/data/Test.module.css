@@ -1,0 +1,247 @@
+/* === Shared === */
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2xl);
+  padding: var(--spacing-2xl);
+  width: 100%;
+  box-sizing: border-box;
+  font-family: var(--font-family);
+}
+
+.title {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-white);
+  letter-spacing: var(--letter-spacing-tight);
+  line-height: var(--line-height-tight);
+  margin: 0;
+}
+
+.placeholder {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-white);
+  opacity: 0.7;
+  text-align: center;
+  margin-top: var(--spacing-2xl);
+}
+
+/* === Phase 1: Intro === */
+
+.card {
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.introText {
+  font-family: var(--font-family);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-black);
+  line-height: var(--line-height-normal);
+  margin: 0;
+}
+
+.instructionText {
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-black);
+  line-height: var(--line-height-relaxed);
+  margin: 0;
+  opacity: 0.7;
+}
+
+/* === Phase 2: Questions === */
+
+.questionsLayout {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2xl);
+  padding: var(--spacing-2xl);
+  width: 100%;
+  box-sizing: border-box;
+  font-family: var(--font-family);
+  align-items: center;
+}
+
+.pageCounter {
+  font-family: var(--font-family);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-white);
+  opacity: 0.7;
+}
+
+.questionPrompt {
+  font-family: var(--font-family);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-white);
+  line-height: var(--line-height-normal);
+  margin: 0;
+  text-align: center;
+  width: 100%;
+}
+
+.optionsGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-sm);
+  width: 100%;
+}
+
+.optionsGrid > * {
+  width: 100% !important;
+}
+
+.bottomRow {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+  width: 100%;
+}
+
+.bottomRow .title {
+  margin-right: auto;
+}
+
+/* === Phase 3: Result === */
+
+.resultLayout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-2xl);
+  padding: var(--spacing-2xl);
+  width: 100%;
+  box-sizing: border-box;
+  font-family: var(--font-family);
+}
+
+.gridSide {
+  flex-shrink: 0;
+}
+
+.bingoGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 200px);
+  grid-template-rows: repeat(3, 200px);
+  gap: var(--spacing-sm);
+}
+
+/* --- Flip card cells --- */
+
+.cellWrapper {
+  width: 200px;
+  height: 200px;
+  perspective: 800px;
+  cursor: pointer;
+}
+
+.cellInner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transition: transform 0.6s ease;
+  transform-style: preserve-3d;
+}
+
+.cellFlipped {
+  transform: rotateY(180deg);
+}
+
+.cellFront,
+.cellBack {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: var(--radius-sm);
+  backface-visibility: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-sm);
+  box-sizing: border-box;
+}
+
+.cellLabel {
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-white);
+  text-align: center;
+  line-height: var(--line-height-normal);
+}
+
+.cellBack {
+  background: var(--color-white);
+  transform: rotateY(180deg);
+}
+
+.cellBackText {
+  font-family: var(--font-family);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-black);
+  text-align: center;
+  line-height: var(--line-height-normal);
+}
+
+/* --- Center cell (expert) --- */
+
+.cellCenter {
+  width: 200px;
+  height: 200px;
+  border-radius: var(--radius-sm);
+  background: var(--color-blue);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-sm);
+  box-sizing: border-box;
+}
+
+.cellCenterRole {
+  font-family: var(--font-family);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-white);
+  text-align: center;
+  opacity: 0.8;
+  line-height: var(--line-height-normal);
+}
+
+.cellCenterName {
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-white);
+  text-align: center;
+  line-height: var(--line-height-normal);
+}
+
+/* --- Result right side --- */
+
+.resultSide {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-lg);
+  width: 100%;
+}
+
+.resultCard {
+  width: 100% !important;
+  flex: 1;
+}
