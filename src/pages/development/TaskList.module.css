@@ -3,7 +3,8 @@
   flex-direction: column;
   align-items: stretch;
   gap: var(--spacing-2xl);
-  padding: var(--spacing-2xl);
+  padding: var(--spacing-2xl) 0;
+  width: 100%;
   max-width: 80%;
   margin: 0 auto;
   box-sizing: border-box;
@@ -13,7 +14,7 @@
 .title {
   font-size: var(--font-size-3xl);
   font-weight: var(--font-weight-bold);
-  color: var(--color-white);
+  color: var(--color-text-inverse);
   letter-spacing: var(--letter-spacing-tight);
   line-height: var(--line-height-tight);
   margin: 0;
