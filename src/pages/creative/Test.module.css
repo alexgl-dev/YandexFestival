@@ -131,6 +131,7 @@
   flex-shrink: 0;
 }
 
+/* Bingo grid: fixed 200px cells — intentional design sizing */
 .bingoGrid {
   display: grid;
   grid-template-columns: repeat(3, 200px);
