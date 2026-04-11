@@ -8,6 +8,8 @@
   margin: 0 auto;
   box-sizing: border-box;
   font-family: var(--font-family);
+  flex: 1;
+  min-height: 0;
 }
 
 .content {
@@ -16,6 +18,8 @@
   gap: var(--spacing-xl);
   align-items: flex-start;
   width: 100%;
+  flex: 1;
+  min-height: 0;
 }
 
 .title {
@@ -30,16 +34,24 @@
 
 .grid {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
   gap: var(--spacing-lg);
   width: 100%;
+  justify-content: center;
+  align-items: stretch;
+  flex: 1;
+  min-height: 0;
 }
 
 .item {
-  width: 100%;
+  flex: 1 1 40%;
+  min-width: 0;
+  max-width: 48%;
+  display: flex;
+  justify-content: center;
 }
 
 .item > * {
   width: 100% !important;
-  height: auto !important;
+  height: 100% !important;
 }
