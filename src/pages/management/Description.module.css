@@ -3,7 +3,8 @@
   flex-direction: column;
   gap: var(--spacing-2xl);
   padding: var(--spacing-2xl);
-  width: 100%;
+  max-width: 80%;
+  margin: 0 auto;
   box-sizing: border-box;
   font-family: var(--font-family);
 }
@@ -11,7 +12,7 @@
 .title {
   font-size: var(--font-size-3xl);
   font-weight: var(--font-weight-bold);
-  color: var(--color-text-inverse);
+  color: var(--color-white);
   letter-spacing: var(--letter-spacing-tight);
   line-height: var(--line-height-tight);
   margin: 0;
