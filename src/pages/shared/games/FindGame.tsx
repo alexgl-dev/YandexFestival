@@ -137,7 +137,7 @@ export function FindGame({ task, onComplete, onBack, theme = 'orange', orientati
         </div>
 
         {showPopup && selectedOption && (
-          <div className={styles.overlay}>
+          <div className={`${styles.overlay} ${orientation === 'landscape' ? styles.overlayLandscape : styles.overlayPortrait}`}>
             <PopUp
               icon={selectedOption.correct ? 'done' : 'close'}
               iconColor={selectedOption.correct ? 'blue' : 'red'}

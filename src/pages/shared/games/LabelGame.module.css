@@ -135,30 +135,17 @@
   transition: color 0.15s;
 }
 
-/* Overlay — landscape (1920x1080) */
-.overlayLandscape {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 1920px;
-  height: 1080px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 9999;
-}
-
-/* Overlay — portrait (1080x1920) */
+/* Overlay */
+.overlayLandscape,
 .overlayPortrait {
   position: absolute;
   top: 0;
   left: 0;
-  width: 1080px;
-  height: 1920px;
+  width: 100%;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0, 0, 0, 0.5);
+  background: var(--color-overlay-dark);
   z-index: 9999;
 }

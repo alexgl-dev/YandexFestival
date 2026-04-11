@@ -282,7 +282,7 @@ export function CategorizeGame({ task, onComplete, onBack, theme = 'orange', ori
 
         {/* Popup overlay */}
         {showPopup && lastResult && (
-          <div className={styles.overlay}>
+          <div className={`${styles.overlay} ${orientation === 'landscape' ? styles.overlayLandscape : styles.overlayPortrait}`}>
             <PopUp
               icon={lastResult.correct ? 'done' : 'close'}
               iconColor={lastResult.correct ? 'blue' : 'red'}

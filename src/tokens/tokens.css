@@ -120,6 +120,9 @@
 
   /* === Overlay Colors === */
   --color-overlay-light: rgba(0, 0, 0, 0.05);
+  --color-overlay-dark: rgba(0, 0, 0, 0.5);
+  --color-overlay-green: rgba(0, 200, 83, 0.2);
+  --color-overlay-red: rgba(255, 51, 0, 0.2);
   --color-text-muted: rgba(0, 0, 0, 0.5);
   --color-bg-brand-translucent: rgba(66, 97, 255, 0.15);
 

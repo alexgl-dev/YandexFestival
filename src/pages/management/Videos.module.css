@@ -29,17 +29,15 @@
 
 .grid {
   display: flex;
+  flex-direction: column;
   gap: var(--spacing-lg);
   width: 100%;
-  min-height: 0;
 }
 
 .item {
-  flex: 1;
-  min-width: 0;
+  width: 100%;
 }
 
 .item > * {
   width: 100% !important;
-  height: 870px !important;
 }

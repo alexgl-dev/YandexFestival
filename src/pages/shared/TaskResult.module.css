@@ -3,8 +3,10 @@
   align-items: center;
   justify-content: center;
   width: 100%;
+  max-width: 80%;
+  margin: 0 auto;
   height: 100%;
-  padding: 0 var(--spacing-2xl);
+  padding: 0;
   font-family: var(--font-family);
   box-sizing: border-box;
 }
@@ -16,7 +18,7 @@
   justify-content: space-between;
   width: 100%;
   min-height: 500px;
-  max-height: 1600px;
+  max-height: 900px; /* safe for landscape 1080px canvas with padding */
   padding: var(--spacing-2xl);
   overflow-y: auto;
   border-radius: var(--radius-lg);
@@ -63,7 +65,7 @@
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-regular);
   color: var(--color-black);
-  letter-spacing: -0.28px;
+  letter-spacing: var(--letter-spacing-xs);
   line-height: 1.3;
 }
 

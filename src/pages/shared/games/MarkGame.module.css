@@ -4,7 +4,9 @@
   align-items: center;
   gap: var(--spacing-xl);
   width: 100%;
-  padding: var(--spacing-2xl);
+  max-width: 80%;
+  margin: 0 auto;
+  padding: var(--spacing-2xl) 0;
   font-family: var(--font-family);
   box-sizing: border-box;
 }
@@ -50,7 +52,7 @@
 }
 
 .hintsPanel {
-  width: 540px;
+  width: 100%;
   display: flex;
   flex-direction: column;
   gap: var(--spacing-sm);
@@ -73,11 +75,11 @@
 
 .hintsList > * {
   width: 100% !important;
-  min-height: 60px !important;
+  min-height: 60px;
 }
 
 .hintsList > * > span {
-  font-size: 23px !important;
+  font-size: var(--font-size-xs);
 }
 
 .marker {
@@ -93,12 +95,12 @@
 
 .markerCorrect {
   border-color: var(--color-green);
-  background: rgba(0, 200, 83, 0.2);
+  background: var(--color-overlay-green);
 }
 
 .markerWrong {
   border-color: var(--color-red);
-  background: rgba(255, 51, 0, 0.2);
+  background: var(--color-overlay-red);
 }
 
 .footer {
@@ -109,15 +111,17 @@
   z-index: 10;
 }
 
-.overlay {
+.overlay,
+.overlayLandscape,
+.overlayPortrait {
   position: absolute;
   top: 0;
   left: 0;
-  width: 1080px;
-  height: 1920px;
+  width: 100%;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0, 0, 0, 0.5);
+  background: var(--color-overlay-dark);
   z-index: 9999;
 }

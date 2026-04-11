@@ -123,7 +123,7 @@ export function SequenceGame({ task, onComplete, onBack, theme = 'orange', orien
       )}
 
       {showPopup && checked && (
-        <div className={styles.overlay}>
+        <div className={`${styles.overlay} ${orientation === 'landscape' ? styles.overlayLandscape : styles.overlayPortrait}`}>
           <PopUp
             icon={getResult().correct ? 'done' : 'close'}
             iconColor={getResult().correct ? 'blue' : 'red'}
