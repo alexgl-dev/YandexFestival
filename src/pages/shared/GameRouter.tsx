@@ -6,6 +6,7 @@ import { CodeSequenceGame } from './games/CodeSequenceGame';
 import { CategorizeGame } from './games/CategorizeGame';
 import { DistributeGame } from './games/DistributeGame';
 import { MarkGame } from './games/MarkGame';
+import { ChatSignalsGame } from './games/ChatSignalsGame';
 import { CatchGame } from './games/CatchGame';
 import { LabelGame } from './games/LabelGame';
 import { MatchGame } from './games/MatchGame';
@@ -42,8 +43,14 @@ export function GameRouter({ task, onComplete, onBack, theme = 'orange', orienta
       return <CategorizeGame task={task} onComplete={onComplete} onBack={onBack} theme={theme} orientation={orientation} />;
     case 'distribute':
       return <DistributeGame task={task} onComplete={onComplete} onBack={onBack} theme={theme} orientation={orientation} />;
-    case 'mark':
-      return <MarkGame task={task} onComplete={onComplete} onBack={onBack} theme={theme} orientation={orientation} />;
+    case 'mark': {
+      const hasChat = !!task.steps[0]?.messages?.length;
+      return hasChat ? (
+        <ChatSignalsGame task={task} onComplete={onComplete} onBack={onBack} theme={theme} orientation={orientation} />
+      ) : (
+        <MarkGame task={task} onComplete={onComplete} onBack={onBack} theme={theme} orientation={orientation} />
+      );
+    }
     case 'catch':
       return <CatchGame task={task} onComplete={onComplete} onBack={onBack} theme={theme} orientation={orientation} />;
     case 'label':
