@@ -47,7 +47,6 @@ export function SwipeGame({
 }: GameProps) {
   const step = task.steps[0];
   const objects: CatchObject[] = step?.objects ?? [];
-  const totalTrash = objects.filter(o => o.category === 'trash').length;
 
   const [cards, setCards] = useState<SwipeCard[]>([]);
   const [purityCount, setPurityCount] = useState(0);
