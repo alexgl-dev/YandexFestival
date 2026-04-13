@@ -49,7 +49,7 @@ export function TaskPage() {
       return (
         <TaskIntro
           task={task}
-          onStart={() => setPhase(task.instruction ? 'instruction' : 'game')}
+          onStart={() => setPhase(task.instruction && task.mechanic !== 'label' ? 'instruction' : 'game')}
           onBack={() => navigate(-1)}
           theme={data.theme}
           orientation={data.orientation}

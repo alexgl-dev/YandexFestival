@@ -49,7 +49,12 @@ export function TaskPage() {
       return (
         <TaskIntro
           task={task}
-          onStart={() => setPhase(task.instruction ? 'instruction' : 'game')}
+          onStart={() => {
+            const firstBlock = task.steps[0]?.blocks?.[0];
+            const isCodeSequence = task.mechanic === 'sequence' && !!firstBlock?.code;
+            const skipInstruction = task.mechanic === 'label' || task.mechanic === 'match' || isCodeSequence;
+            setPhase(task.instruction && !skipInstruction ? 'instruction' : 'game');
+          }}
           onBack={() => navigate(-1)}
           theme={data.theme}
           orientation={data.orientation}

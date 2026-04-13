@@ -119,6 +119,17 @@ export function TestScreen() {
             />
             <Code>{'<Card ... state="flipped" size="l" />'}</Code>
           </div>
+          <div className={styles.labeled}>
+            <Card
+              variant="ВАРИАНТ С"
+              title="Не совсем..."
+              description="Этот вариант не подходит для данного события"
+              state="wrong"
+              size="l"
+              onClick={() => {}}
+            />
+            <Code>{'<Card ... state="wrong" size="l" />'}</Code>
+          </div>
         </div>
 
         <h2 className={styles.sectionTitle} style={{ marginTop: 32 }}>Card size="m"</h2>

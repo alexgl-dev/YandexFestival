@@ -124,6 +124,22 @@ export function Test() {
   return (
     <Background theme="orange" orientation="portrait" onBack={handleBack}>
       <div className={styles.resultLayout}>
+        <div className={styles.resultSide}>
+          <Card
+            variant="Результат"
+            title="Бинго!"
+            description={bingo.resultText}
+            size="m"
+            state="default"
+            className={styles.resultCard}
+          />
+          <Button
+            label="В главное меню"
+            type="main"
+            onClick={() => navigate(`/${data.slug}`)}
+          />
+        </div>
+
         <div className={styles.gridSide}>
           <div className={styles.bingoGrid}>
             {Array.from({ length: 9 }).map((_, cellIndex) => {
@@ -166,22 +182,6 @@ export function Test() {
               );
             })}
           </div>
-        </div>
-
-        <div className={styles.resultSide}>
-          <Card
-            variant="Результат"
-            title="Бинго!"
-            description={bingo.resultText}
-            size="m"
-            state="default"
-            className={styles.resultCard}
-          />
-          <Button
-            label="В главное меню"
-            type="main"
-            onClick={() => navigate(`/${data.slug}`)}
-          />
         </div>
       </div>
     </Background>

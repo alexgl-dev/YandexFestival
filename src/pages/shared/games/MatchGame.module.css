@@ -1,3 +1,5 @@
+/* MatchGame */
+
 .wrapper {
   display: flex;
   flex-direction: column;
@@ -9,6 +11,7 @@
   padding: var(--spacing-2xl) 0;
   font-family: var(--font-family);
   box-sizing: border-box;
+  height: 100%;
 }
 
 .prompt {
@@ -19,7 +22,6 @@
   text-align: center;
   margin: 0;
   max-width: 80%;
-  letter-spacing: var(--letter-spacing-xs);
   line-height: var(--line-height-normal);
 }
 
@@ -28,9 +30,11 @@
   flex-direction: row;
   gap: var(--spacing-2xl);
   width: 100%;
+  flex: 1;
+  min-height: 0;
   align-items: flex-start;
-  justify-content: center;
 }
+
 
 .column {
   flex: 1;
@@ -40,21 +44,26 @@
   min-width: 0;
 }
 
-.columnHeading {
-  font-family: var(--font-family);
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-white);
-  margin: 0 0 var(--spacing-xs) 0;
-  text-align: center;
+.columnLeft {
+  align-self: stretch;
+  overflow-y: scroll;
+  padding-bottom: var(--spacing-2xl);
 }
 
-/* --- Card base --- */
+.columnRight {
+  align-self: stretch;
+  overflow-y: scroll;
+  padding-bottom: var(--spacing-2xl);
+}
+
+/* ── Card base ── */
+
 .card {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--spacing-sm);
+  justify-content: center;
   background: var(--color-white);
   border-radius: var(--radius-lg);
   padding: var(--spacing-md);
@@ -70,7 +79,74 @@
   opacity: 0.85;
 }
 
-/* --- Card states --- */
+/* Mockup card: zero padding + transparent bg so the mockup component
+   (which has its own grey rounded container) fills the entire card.
+   Selection/correct/wrong borders still render on the card wrapper. */
+.mockupCard {
+  padding: 0;
+  background: transparent;
+}
+
+/* Code card with a hint button — reserves extra top space so the
+   absolute-positioned .hintBtn sits entirely above the code block
+   with visible breathing room, instead of overlapping its corner. */
+.cardCode {
+  padding-top: 96px;
+}
+
+/* Hidden code fragment — inline black bar (редакция).
+   Sits inline inside a <pre><code> block, preserves the original token's
+   width via monospace font + identical character content. Tapping reveals
+   just that fragment; clicking bubbles are blocked via stopPropagation
+   in the handler so the match-game card click is not triggered. */
+.hiddenChunk {
+  display: inline;
+  font: inherit;
+  font-family: inherit;
+  line-height: inherit;
+  color: transparent;
+  background: var(--color-black);
+  border: none;
+  border-radius: 3px;
+  padding: 0 2px;
+  margin: 0;
+  cursor: pointer;
+  user-select: none;
+  white-space: pre;
+  vertical-align: baseline;
+  transition: background 0.15s ease;
+}
+
+.hiddenChunk:hover {
+  background: #333333;
+}
+
+/* Small "Подсказка" chip in the top-right of a code card.
+   Reveals every hidden fragment in that card at once. */
+.hintBtn {
+  position: absolute;
+  top: var(--spacing-lg);
+  right: var(--spacing-lg);
+  padding: 12px 26px;
+  background: var(--color-blue);
+  color: var(--color-white);
+  border: none;
+  border-radius: 999px;
+  font-family: var(--font-family);
+  font-size: 20px;
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-xs);
+  cursor: pointer;
+  z-index: 2;
+  transition: background 0.15s ease;
+}
+
+.hintBtn:hover {
+  background: var(--color-blue-pressed);
+}
+
+/* ── Card states ── */
+
 .cardSelected {
   border-color: var(--color-blue);
   box-shadow: 0 0 0 var(--border-width-sm) var(--color-blue);
@@ -90,67 +166,135 @@
 }
 
 @keyframes flashRed {
-  0% { border-color: var(--color-red); }
-  50% { border-color: var(--color-red); }
-  100% { border-color: transparent; }
+  0%   { border-color: var(--color-red); box-shadow: 0 0 0 var(--border-width-sm) var(--color-red); }
+  50%  { border-color: var(--color-red); box-shadow: 0 0 0 var(--border-width-sm) var(--color-red); }
+  100% { border-color: transparent; box-shadow: none; }
 }
 
 .cardMatched {
-  opacity: 0.6;
+  opacity: 0.55;
   cursor: default;
   pointer-events: none;
 }
 
-/* --- Character card (avatar + description) --- */
-.characterRow {
+/* ── Compact character card ── */
+
+.charCardContent {
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: var(--spacing-sm);
   width: 100%;
+  gap: var(--spacing-md);
 }
 
-.avatar {
-  width: var(--size-icon-m);
-  height: var(--size-icon-m);
+.compactAvatar {
+  width: 72px;
+  height: 72px;
   border-radius: var(--radius-full);
   object-fit: cover;
   flex-shrink: 0;
 }
 
-.descriptionText {
+.charCardInfo {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  flex: 1;
+  min-width: 0;
+  gap: var(--spacing-sm);
+}
+
+.charCardLabel {
   font-family: var(--font-family);
   font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-regular);
-  color: var(--color-black);
-  line-height: var(--line-height-normal);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  line-height: 1.3;
   margin: 0;
+  flex: 1;
+  min-width: 0;
 }
 
-.termHighlight {
-  text-decoration: underline;
-  text-decoration-color: var(--color-blue);
-  text-underline-offset: 3px;
+.speechBtn {
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-full);
+  background: var(--color-blue);
+  color: var(--color-white);
+  font-family: var(--font-family);
+  font-size: var(--font-size-2xs);
+  font-weight: var(--font-weight-bold);
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.15s;
 }
 
-/* --- Image card --- */
+.speechBtn:hover {
+  background: var(--color-blue-pressed);
+}
+
+/* ── Image / code card ── */
+
 .cardImage {
   width: 100%;
-  max-height: 200px;
+  height: 100%;
   object-fit: contain;
   border-radius: var(--radius-sm);
 }
 
 .cardLabel {
   font-family: var(--font-family);
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
   color: var(--color-black);
   text-align: center;
-  margin: 0;
+  margin: var(--spacing-xs) 0 0 0;
 }
 
-/* --- Hidden card placeholder --- */
+/* ── Code block on right cards ── */
+
+.codeBlock {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 18px;
+  color: var(--color-text-primary);
+  background: var(--color-grey-light);
+  border-radius: var(--radius-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  margin: 0;
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: visible;
+  white-space: pre;
+  line-height: 1.5;
+  box-sizing: border-box;
+  text-align: left;
+}
+
+.codeBlock::-webkit-scrollbar {
+  width: 4px;
+  height: 4px;
+}
+
+.codeBlock::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.codeBlock::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: var(--radius-full);
+}
+
+.codeBlock code {
+  display: block;
+}
+
+/* ── Hidden card placeholder ── */
+
 .hiddenPlaceholder {
   display: flex;
   align-items: center;
@@ -159,17 +303,263 @@
   min-height: 120px;
 }
 
-/* --- Overlay --- */
-.overlayLandscape,
-.overlayPortrait {
+.revealBtn {
+  font-family: var(--font-family);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-blue);
+  background: none;
+  border: var(--border-width-md) solid var(--color-blue);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-sm) var(--spacing-lg);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.revealBtn:hover {
+  background: var(--color-bg-brand-translucent);
+}
+
+/* ── Instruction toggle (floating "?" icon) ── */
+
+.instructionToggle {
+  position: absolute;
+  top: var(--spacing-2xl);
+  right: var(--spacing-2xl);
+  width: 72px;
+  height: 72px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  border: var(--border-width-md) solid var(--color-white);
+  background: transparent;
+  color: var(--color-white);
+  font-family: var(--font-family);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-medium);
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  z-index: 10;
+  transition: background 0.15s, color 0.15s;
+}
+
+.instructionToggle:hover {
+  background: var(--color-white);
+  color: var(--color-black);
+}
+
+/* ── Instruction panel ── */
+
+.instructionPanel {
+  position: relative;
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-2xl);
+  padding-top: calc(var(--spacing-2xl) + var(--spacing-xl));
+  max-width: 1200px;
+  width: 100%;
+  max-height: 90%;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  align-items: center;
+  font-family: var(--font-family);
+  box-sizing: border-box;
+}
+
+.instructionClose {
+  position: absolute;
+  top: var(--spacing-md);
+  right: var(--spacing-md);
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: none;
+  background: transparent;
+  color: var(--color-black);
+  font-family: var(--font-family);
+  font-size: 48px;
+  font-weight: var(--font-weight-regular);
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.15s;
+}
+
+.instructionClose:hover {
+  background: var(--color-grey-light);
+}
+
+.instructionTitle {
+  font-family: var(--font-family);
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-black);
+  margin: 0;
+  text-align: center;
+  letter-spacing: var(--letter-spacing-sm);
+  line-height: var(--line-height-tight);
+}
+
+.instructionBody {
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-black);
+  margin: 0;
+  line-height: var(--line-height-relaxed);
+  white-space: pre-line;
+  text-align: left;
+  width: 100%;
+}
+
+/* ── Overlay base ── */
+
+.overlay {
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
   background: var(--color-overlay-dark);
   z-index: 9999;
+}
+
+.overlayLandscape {
+  width: 1920px;
+  height: 1080px;
+}
+
+.overlayPortrait {
+  width: 1080px;
+  height: 1920px;
+}
+
+/* ── Speech bubble card ── */
+
+.bubbleCard {
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-2xl);
+  max-width: 640px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.4);
+}
+
+.bubbleHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+}
+
+.bubbleAvatar {
+  width: 80px;
+  height: 80px;
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  flex-shrink: 0;
+  background: var(--color-grey-secondary);
+}
+
+.bubbleAvatarImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.bubbleTitle {
+  font-family: var(--font-family);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  line-height: 1.2;
+}
+
+.bubbleCloseBtn {
+  align-self: flex-end;
+  background: var(--color-blue);
+  color: var(--color-white);
+  border: none;
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-sm) var(--spacing-2xl);
+  font-family: var(--font-family);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.bubbleCloseBtn:hover {
+  background: var(--color-blue-pressed);
+}
+
+.bubbleText {
+  font-family: var(--font-family);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-text-primary);
+  line-height: 1.6;
+  margin: 0;
+}
+
+/* ── Tappable term inside bubble ── */
+
+.termBtn {
+  display: inline;
+  font-family: var(--font-family);
+  font-size: inherit;
+  font-weight: var(--font-weight-medium);
+  color: var(--color-blue);
+  background: var(--color-bg-brand-translucent);
+  border: none;
+  border-radius: var(--radius-xs);
+  padding: 2px 6px;
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-color: var(--color-blue);
+  text-underline-offset: 3px;
+  transition: background 0.12s;
+}
+
+.termBtn:hover {
+  background: rgba(65, 97, 255, 0.2);
+}
+
+/* ── Tooltip inside bubble ── */
+
+.tooltipCard {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-sm);
+  background: var(--color-black);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-md) var(--spacing-lg);
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.tooltipText {
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  color: var(--color-white);
+  line-height: 1.5;
+  margin: 0;
+  flex: 1;
+}
+
+.tooltipDismiss {
+  font-size: var(--font-size-xs);
+  color: rgba(255, 255, 255, 0.5);
+  flex-shrink: 0;
+  margin-top: 2px;
 }

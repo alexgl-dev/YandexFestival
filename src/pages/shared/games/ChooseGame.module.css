@@ -23,6 +23,8 @@
   line-height: var(--line-height-normal);
 }
 
+/* === Text-mode card grid (existing Card component layout) === */
+
 .cards {
   display: flex;
   flex-direction: row;
@@ -30,6 +32,8 @@
   justify-content: center;
   flex-wrap: wrap;
 }
+
+/* === Popup overlay (text mode) === */
 
 .overlay {
   position: absolute;
@@ -50,4 +54,81 @@
 .overlayPortrait {
   width: 1080px;
   height: 1920px;
+}
+
+/* === Poster flip cards (image mode) === */
+/* Each card wraps a <Card size="l"> element inside a 3D flip container.
+   Front face: Card state="default" (image)
+   Back face:  Card state="flipped" (correct) or state="wrong" (incorrect) */
+
+.posterCards {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-lg);
+  width: 100%;
+}
+
+.flipCard {
+  cursor: pointer;
+  perspective: 1600px;
+  transition: opacity 0.3s ease;
+  /* Compact Card size_l overrides — shrink vertical footprint so
+     three flip cards stack in the portrait viewport with breathing room. */
+  --card-l-image-height: 160px;
+  --card-l-top-gap: 20px;
+  --card-l-root-gap: 20px;
+  --card-l-padding: 28px;
+}
+
+.flipCardDimmed {
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+/* Grid stack: front + back occupy the same cell → inner sizes itself to the
+   larger of the two Card faces (both are size_l so they match exactly). */
+.flipInner {
+  display: grid;
+  transform-style: preserve-3d;
+  transition: transform 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.flipCardFlipped .flipInner {
+  transform: rotateY(180deg);
+}
+
+.flipFace {
+  grid-area: 1 / 1;
+  display: flex;
+  flex-direction: column;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* Stretch the inner Card to the grid cell height so front and back
+   share identical outer dimensions — the shorter face fills its cell,
+   and Card's `justify-content: space-between` keeps the image pinned
+   to the bottom so nothing visually shifts during the flip. */
+.flipFace > * {
+  flex: 1;
+  min-height: 0;
+}
+
+.flipBack {
+  transform: rotateY(180deg);
+}
+
+/* === Button slot: reserves vertical space so the button can appear
+      without shifting the cards up === */
+
+.buttonSlot {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 80px;
+}
+
+.buttonHidden {
+  visibility: hidden;
 }

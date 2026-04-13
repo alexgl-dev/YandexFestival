@@ -1,0 +1,530 @@
+.page {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+  width: 100%;
+  max-width: 80%;
+  align-self: stretch;
+  margin: 0 auto;
+  padding: var(--spacing-2xl) 0 140px;
+  font-family: var(--font-family);
+  box-sizing: border-box;
+  justify-content: flex-start;
+  overflow: visible;
+}
+
+/* ── Briefing screen (stage 1) ── */
+
+.briefingPage {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: var(--spacing-2xl);
+  width: 100%;
+  max-width: 80%;
+  margin: 0 auto;
+  padding: var(--spacing-2xl) 0;
+  min-height: 100%;
+  font-family: var(--font-family);
+  box-sizing: border-box;
+}
+
+.briefingTopRow {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: var(--spacing-2xl);
+  width: 100%;
+  max-width: 1100px;
+}
+
+.briefingActions {
+  display: flex;
+  justify-content: center;
+}
+
+/* ── Robot (shared) ── */
+
+.robot {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.4s ease;
+}
+
+.robotLarge {
+  width: 280px;
+  height: 280px;
+  animation: float 3s ease-in-out infinite;
+}
+
+.robotMedium {
+  width: 160px;
+  height: 160px;
+}
+
+/* ── Floating robot icon (stage 2) ── */
+
+.floatingRobot {
+  position: absolute;
+  top: var(--spacing-2xl);
+  right: var(--spacing-2xl);
+  width: 120px;
+  height: 120px;
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+  z-index: 50;
+  animation: float 3s ease-in-out infinite;
+}
+
+.floatingRobot:hover {
+  transform: scale(1.05);
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
+}
+
+.robotImg {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 8px 24px rgba(0, 0, 0, 0.35));
+}
+
+.mood_happy .robotImg {
+  animation: bounce 0.6s ease;
+}
+
+.mood_sad .robotImg {
+  animation: shake 0.6s ease;
+}
+
+@keyframes bounce {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-16px); }
+}
+
+@keyframes shake {
+  0%, 100% { transform: rotate(0); }
+  25% { transform: rotate(-8deg); }
+  75% { transform: rotate(8deg); }
+}
+
+.bubble {
+  position: relative;
+  flex: 1;
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl) var(--spacing-2xl);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.25);
+  min-height: 180px;
+}
+
+.bubblePopup {
+  max-width: 720px;
+}
+
+.bubbleTail {
+  position: absolute;
+  top: 48px;
+  left: -18px;
+  width: 0;
+  height: 0;
+  border-top: 14px solid transparent;
+  border-bottom: 14px solid transparent;
+  border-right: 20px solid var(--color-white);
+}
+
+.bubbleText {
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-black);
+  line-height: var(--line-height-relaxed);
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+/* Tappable term */
+.termBtn {
+  display: inline;
+  font-family: var(--font-family);
+  font-size: inherit;
+  font-weight: var(--font-weight-medium);
+  color: var(--color-blue);
+  background: var(--color-bg-brand-translucent);
+  border: none;
+  border-radius: var(--radius-sm);
+  padding: 2px 8px;
+  cursor: pointer;
+  text-decoration: underline;
+  text-decoration-color: var(--color-blue);
+  text-underline-offset: 3px;
+  transition: background 0.12s;
+}
+
+.termBtn:hover {
+  background: rgba(65, 97, 255, 0.2);
+}
+
+/* Tooltip card inside bubble */
+.tooltipCard {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-sm);
+  background: var(--color-black);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-md) var(--spacing-lg);
+  margin-top: var(--spacing-md);
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+}
+
+.tooltipText {
+  font-family: 'Courier New', monospace;
+  font-size: var(--font-size-sm);
+  color: var(--color-white);
+  line-height: 1.5;
+  margin: 0;
+  flex: 1;
+  white-space: pre-wrap;
+}
+
+.tooltipDismiss {
+  font-size: var(--font-size-xs);
+  color: rgba(255, 255, 255, 0.6);
+  flex-shrink: 0;
+}
+
+/* ── Zone labels ── */
+
+.zoneLabel {
+  font-family: var(--font-family);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-white);
+  letter-spacing: var(--letter-spacing-xs);
+  line-height: var(--line-height-normal);
+  margin: 0 0 var(--spacing-md);
+  text-align: center;
+}
+
+/* ── Play area: two columns (pool | slots) ── */
+
+.playArea {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-2xl);
+  width: 100%;
+  align-items: start;
+}
+
+/* ── Available pool (vertical stack with fixed cells) ── */
+
+.poolRow {
+  width: 100%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.pool {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  align-items: center;
+  padding: var(--spacing-md) 0 0;
+}
+
+.poolCell {
+  width: 100%;
+  max-width: 520px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.poolCellEmpty {
+  display: none;
+}
+
+.poolEmpty {
+  display: none;
+}
+
+.poolItem {
+  cursor: grab;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  user-select: none;
+}
+
+.poolItem:active {
+  cursor: grabbing;
+}
+
+.poolItem:hover {
+  transform: translateY(-4px) !important;
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.3);
+}
+
+.poolPos0 { transform: rotate(-2deg) translateX(-12px); }
+.poolPos1 { transform: rotate(1deg) translateX(14px); }
+.poolPos2 { transform: rotate(-1deg) translateX(-6px); }
+
+.poolItemSelected {
+  transform: rotate(0) translateY(-8px) scale(1.03) !important;
+  box-shadow: 0 20px 48px rgba(65, 97, 255, 0.4);
+}
+
+.poolEmpty {
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  color: var(--color-white);
+  opacity: 0.5;
+  margin: 0;
+}
+
+/* ── Slots column ── */
+
+.slotsRow {
+  width: 100%;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.slots {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  align-items: center;
+  padding: var(--spacing-md) 0 0;
+}
+
+.slotWrap {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: var(--spacing-md);
+  width: 100%;
+  max-width: 560px;
+}
+
+.slotIndex {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: var(--color-white);
+  color: var(--color-black);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  flex-shrink: 0;
+  align-self: flex-start;
+  margin-top: var(--spacing-sm);
+}
+
+.slot {
+  flex: 1;
+  min-width: 0;
+  min-height: 140px;
+  border: var(--border-width-md) dashed rgba(255, 255, 255, 0.5);
+  border-radius: var(--radius-lg);
+  background: rgba(255, 255, 255, 0.06);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: border-color 0.2s, background 0.2s;
+  padding: var(--spacing-md);
+  box-sizing: border-box;
+}
+
+.slot:hover {
+  border-color: var(--color-white);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Filled: behave as a naked container — the code card is the visual */
+.slotFilled {
+  border: none;
+  background: transparent;
+  padding: 0;
+}
+
+.slotFilled:hover {
+  background: transparent;
+  border: none;
+}
+
+.slotCorrect {
+  border: var(--border-width-md) solid var(--color-green);
+  border-radius: var(--radius-lg);
+  background: rgba(0, 255, 9, 0.06);
+  padding: var(--spacing-xs, 6px);
+}
+
+.slotWrong {
+  border: var(--border-width-md) solid var(--color-red);
+  border-radius: var(--radius-lg);
+  background: rgba(255, 51, 0, 0.06);
+  padding: var(--spacing-xs, 6px);
+}
+
+.slotPlaceholder {
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  color: var(--color-white);
+  opacity: 0.6;
+}
+
+/* ── Code card (both in pool and slot) ── */
+
+.codeCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  background: var(--color-white);
+  border: var(--border-width-sm, 2px) solid var(--color-grey-secondary);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  width: 100%;
+  max-width: 520px;
+  box-sizing: border-box;
+}
+
+.codeCardCompact {
+  box-shadow: none;
+  width: 100%;
+  padding: var(--spacing-md);
+}
+
+.codeLangLabel {
+  font-family: 'Courier New', 'Menlo', monospace;
+  font-size: var(--font-size-xs);
+  color: #94A3B8;
+  margin: 0;
+  padding-bottom: var(--spacing-xs, 8px);
+  border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+.codePre {
+  width: 100%;
+  margin: 0;
+  font-family: 'Menlo', 'Courier New', monospace;
+  font-size: 18px;
+  line-height: 1.5;
+  color: #1E293B;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  tab-size: 4;
+}
+
+.codePre code {
+  font-family: inherit;
+}
+
+/* Python syntax tokens */
+.tokenKeyword {
+  color: #C026A0;
+  font-weight: 500;
+}
+
+.tokenString {
+  color: #B45309;
+}
+
+.tokenDecorator {
+  color: #9333EA;
+}
+
+.tokenNumber {
+  color: #B45309;
+}
+
+.tokenComment {
+  color: #94A3B8;
+  font-style: italic;
+}
+
+/* ── Actions (floating bar above everything) ── */
+
+.actions {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: var(--spacing-2xl);
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 40;
+}
+
+.actions > * {
+  pointer-events: auto;
+}
+
+/* ── Briefing modal (reopen from floating robot) ── */
+
+.briefingModal {
+  background: transparent;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+  align-items: center;
+  width: 100%;
+  max-width: 960px;
+  padding: var(--spacing-2xl);
+  box-sizing: border-box;
+}
+
+.briefingModalRow {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: var(--spacing-xl);
+  width: 100%;
+}
+
+/* ── Overlay for result popup ── */
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-overlay-dark);
+  z-index: 9999;
+}
+
+.overlayLandscape,
+.overlayPortrait {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-overlay-dark);
+  z-index: 9999;
+}

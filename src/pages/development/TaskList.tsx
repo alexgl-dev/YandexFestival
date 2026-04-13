@@ -13,7 +13,7 @@ export function TaskList() {
         <h2 className={styles.title}>Задания</h2>
 
         <div className={styles.list}>
-          {data.tasks.map((task) => (
+          {data.tasks.filter((task) => !task.hidden).map((task) => (
             <ListItem
               key={task.id}
               title={task.title}

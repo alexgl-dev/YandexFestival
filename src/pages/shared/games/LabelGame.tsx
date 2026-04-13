@@ -1,5 +1,5 @@
-import { useState, useCallback } from 'react';
-import { Background, PopUp } from '../../../components/ui';
+import { useState, useMemo, useCallback } from 'react';
+import { Background, Button, Card, Icon } from '../../../components/ui';
 import type { Task } from '../../../types/game';
 import styles from './LabelGame.module.css';
 
@@ -17,6 +17,35 @@ interface GameProps {
   orientation?: 'landscape' | 'portrait';
 }
 
+interface InstructionItem {
+  feature: string;
+  check: string;
+}
+
+interface ParsedInstruction {
+  title: string;
+  items: InstructionItem[];
+}
+
+function parseInstruction(text?: string): ParsedInstruction {
+  if (!text) return { title: '', items: [] };
+  const lines = text.split('\n').map((l) => l.trim()).filter(Boolean);
+  if (lines.length === 0) return { title: '', items: [] };
+
+  const title = lines[0];
+  const items = lines.slice(1).map((line) => {
+    const numbered = line.match(/^\d+\.\s*(.+)$/);
+    const content = numbered ? numbered[1] : line;
+    const parts = content.split(/\s[—–-]\s/);
+    if (parts.length >= 2) {
+      return { feature: parts[0].trim(), check: parts.slice(1).join(' — ').trim() };
+    }
+    return { feature: '', check: content };
+  });
+
+  return { title, items };
+}
+
 export function LabelGame({
   task,
   onComplete,
@@ -24,120 +53,138 @@ export function LabelGame({
   theme = 'cobalt',
   orientation = 'landscape',
 }: GameProps) {
-  const step = task.steps[0]; // label games use a single step with multiple items
+  const step = task.steps[0];
   const items = step?.items ?? [];
   const labels = step?.labels ?? [];
 
-  const [currentItem, setCurrentItem] = useState(0);
-  const [showPopup, setShowPopup] = useState(false);
-  const [lastResult, setLastResult] = useState<GameResult | null>(null);
-  const [results, setResults] = useState<GameResult[]>([]);
+  const parsedInstruction = useMemo(() => parseInstruction(task.instruction), [task.instruction]);
+  const hasInstruction = parsedInstruction.items.length > 0 || parsedInstruction.title.length > 0;
 
-  const item = items[currentItem];
-  const totalItems = items.length;
-  const isLastItem = currentItem >= totalItems - 1;
+  const [showInstruction, setShowInstruction] = useState(hasInstruction);
+  const [answers, setAnswers] = useState<Record<number, string>>({});
+
+  const allAnswered = items.length > 0 && items.every((_, idx) => answers[idx]);
 
   const handleLabelSelect = useCallback(
-    (labelId: string) => {
-      if (!item || showPopup) return;
-
-      const selectedLabel = labels.find((l) => l.id === labelId);
-      const isCorrect = item.correctLabel === labelId;
-
-      const result: GameResult = {
-        answer: selectedLabel?.title || labelId,
-        correct: isCorrect,
-        explanation: item.explanation,
-      };
-
-      setLastResult(result);
-      setResults((prev) => [...prev, result]);
-      setShowPopup(true);
+    (itemIdx: number, labelId: string) => {
+      setAnswers((prev) => (prev[itemIdx] ? prev : { ...prev, [itemIdx]: labelId }));
     },
-    [item, labels, showPopup],
+    [],
   );
 
-  const handlePopupAction = useCallback(() => {
-    setShowPopup(false);
-
-    if (isLastItem) {
-      onComplete(results);
-    } else {
-      setCurrentItem((prev) => prev + 1);
-      setLastResult(null);
-    }
-  }, [isLastItem, results, onComplete]);
-
-  if (!item) return null;
+  const handleFinish = useCallback(() => {
+    const results: GameResult[] = items.map((item, idx) => {
+      const chosenId = answers[idx];
+      const label = labels.find((l) => l.id === chosenId);
+      return {
+        answer: label?.title ?? '',
+        correct: chosenId === item.correctLabel,
+        explanation: item.explanation,
+      };
+    });
+    onComplete(results);
+  }, [answers, items, labels, onComplete]);
 
   const overlayClass =
     orientation === 'portrait' ? styles.overlayPortrait : styles.overlayLandscape;
 
   return (
     <Background theme={theme} orientation={orientation} onBack={onBack}>
+      {hasInstruction && (
+        <button
+          type="button"
+          className={styles.instructionToggle}
+          onClick={() => setShowInstruction(true)}
+          aria-label="Открыть инструкцию"
+        >
+          ?
+        </button>
+      )}
       <div className={styles.wrapper}>
-        {/* Progress indicator */}
-        <p className={styles.counter}>
-          {currentItem + 1} / {totalItems}
-        </p>
-
-        {/* Prompt */}
         {step?.prompt && <p className={styles.prompt}>{step.prompt}</p>}
 
-        {/* Item content */}
-        <div className={styles.contentArea}>
-          {item.content?.value && (
-            <img
-              src={item.content.value}
-              alt={item.content.description || ''}
-              className={styles.contentImage}
-            />
-          )}
+        <div className={styles.grid}>
+          {items.map((item, idx) => {
+            const chosenId = answers[idx];
+            const answered = Boolean(chosenId);
 
-          {item.content?.description && (
-            <p className={styles.description}>{item.content.description}</p>
-          )}
-        </div>
-
-        {/* Label buttons */}
-        <div className={styles.labelsRow}>
-          {labels.map((label) => {
-            const colorClass =
-              label.color === 'green'
-                ? styles.labelGreen
-                : label.color === 'red'
-                  ? styles.labelRed
-                  : '';
+            const cardTitle = `Письмо №${idx + 1}`;
+            const cardDescription = item.content?.description ?? '';
 
             return (
-              <button
-                key={label.id}
-                className={`${styles.labelButton} ${colorClass}`}
-                onClick={() => handleLabelSelect(label.id)}
-              >
-                {label.icon && (
-                  <img src={label.icon} alt="" className={styles.labelIcon} />
-                )}
-                <span className={styles.labelText}>{label.title}</span>
-              </button>
+              <div key={idx} className={styles.cell}>
+                <Card
+                  variant="ПИСЬМО"
+                  title={cardTitle}
+                  description={cardDescription}
+                  state="default"
+                  size="m"
+                  className={styles.card}
+                />
+                <div className={styles.cellButtons}>
+                  {labels.map((label) => {
+                    const isChosen = chosenId === label.id;
+                    return (
+                      <Button
+                        key={label.id}
+                        label={label.title}
+                        type={isChosen ? 'big' : 'main'}
+                        pressed={isChosen}
+                        icon={
+                          isChosen ? (
+                            <Icon name="done" color="white" size="s" />
+                          ) : undefined
+                        }
+                        onClick={() =>
+                          answered ? undefined : handleLabelSelect(idx, label.id)
+                        }
+                        className={styles.labelBtn}
+                      />
+                    );
+                  })}
+                </div>
+              </div>
             );
           })}
         </div>
 
-        {/* PopUp overlay */}
-        {showPopup && lastResult && (
-          <div className={overlayClass}>
-            <PopUp
-              icon={lastResult.correct ? 'done' : 'close'}
-              iconColor={lastResult.correct ? 'blue' : 'red'}
-              title={lastResult.correct ? 'Верно!' : 'Не совсем...'}
-              description={lastResult.explanation}
-              buttonLabel={isLastItem ? 'Результаты' : 'Дальше'}
-              onButtonClick={handlePopupAction}
+        <div className={styles.finishRow}>
+          <Button
+            label="Готово"
+            type="main"
+            onClick={handleFinish}
+            className={!allAnswered ? styles.finishDisabled : ''}
+          />
+        </div>
+      </div>
+
+      {showInstruction && hasInstruction && (
+        <div className={overlayClass}>
+          <div className={styles.instructionPanel}>
+            <h2 className={styles.instructionTitle}>{parsedInstruction.title}</h2>
+            <ol className={styles.instructionList}>
+              {parsedInstruction.items.map((entry, i) => (
+                <li key={i} className={styles.instructionItem}>
+                  {entry.feature ? (
+                    <>
+                      <span className={styles.instructionFeature}>{entry.feature}</span>
+                      <span className={styles.instructionDash}> — </span>
+                      <span className={styles.instructionCheck}>{entry.check}</span>
+                    </>
+                  ) : (
+                    <span className={styles.instructionCheck}>{entry.check}</span>
+                  )}
+                </li>
+              ))}
+            </ol>
+            <Button
+              label="Закрыть"
+              type="main"
+              onClick={() => setShowInstruction(false)}
             />
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </Background>
   );
 }

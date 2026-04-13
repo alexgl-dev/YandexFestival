@@ -1,4 +1,4 @@
-export type Mechanic = 'choose' | 'find' | 'sequence' | 'categorize' | 'match' | 'label' | 'mark' | 'catch' | 'quiz' | 'bingo';
+export type Mechanic = 'choose' | 'find' | 'sequence' | 'categorize' | 'distribute' | 'match' | 'label' | 'mark' | 'catch' | 'quiz' | 'bingo';
 export type Mode = 'group' | 'solo';
 export type Feedback = 'instant' | 'onComplete';
 
@@ -14,6 +14,10 @@ export interface TaskOption {
   correct: boolean;
   explanation: string;
   hint?: string;
+  name?: string;
+  role?: string;
+  quote?: string;
+  details?: string[];
 }
 
 export interface TaskBlock {
@@ -25,8 +29,8 @@ export interface TaskBlock {
 }
 
 export interface TaskPair {
-  left: { type: string; value?: string; image?: string; avatar?: string; description?: string; label?: string; hidden?: boolean };
-  right: { type: string; value?: string; image?: string; label?: string };
+  left: { type: string; value?: string; image?: string; avatar?: string; description?: string; label?: string; hidden?: boolean; mockupId?: string };
+  right: { type: string; value?: string; image?: string; label?: string; code?: string; hidden?: boolean; mockupId?: string };
   explanation: string;
 }
 
@@ -35,9 +39,12 @@ export interface TaskCategory {
   title: string;
   description?: string;
   image?: string;
+  avatar?: string;
+  color?: string;
 }
 
 export interface TaskItem {
+  title?: string;
   text?: string;
   icon?: string;
   image?: string;
@@ -59,6 +66,16 @@ export interface TaskTarget {
   explanation: string;
 }
 
+export interface ChatMessage {
+  id: string;
+  author: string;
+  role: 'pm' | 'dev' | 'design';
+  time: string;
+  text: string;
+  isProblem?: boolean;
+  explanation?: string;
+}
+
 export interface CatchObject {
   icon: string;
   title: string;
@@ -77,6 +94,7 @@ export interface TaskStep {
   items?: TaskItem[];
   labels?: TaskLabel[];
   targets?: TaskTarget[];
+  messages?: ChatMessage[];
   objects?: CatchObject[];
   trash?: { enabled: boolean; label: string };
   catcher?: { type: string; label: string };
@@ -97,6 +115,7 @@ export interface Task {
   instruction?: string;
   steps: TaskStep[];
   moral: string;
+  hidden?: boolean;
 }
 
 export interface Video {

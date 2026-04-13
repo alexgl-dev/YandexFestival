@@ -17,7 +17,14 @@
   align-items: stretch;
 }
 
-.left,
+.left {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  /* no gap — spacing is handled via blockWrapper margin-bottom */
+  min-width: 0;
+}
+
 .right {
   flex: 1;
   display: flex;
@@ -26,11 +33,33 @@
   min-width: 0;
 }
 
-.left > div,
 .right > div {
   width: 100%;
-  transition: transform 0.3s ease, opacity 0.3s ease;
 }
+
+/* ---- Collapsible wrapper for available blocks ---- */
+
+.blockWrapper {
+  display: grid;
+  grid-template-rows: 1fr;
+  margin-bottom: var(--spacing-sm);
+  transition:
+    grid-template-rows 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    margin-bottom 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* The inner div must have min-height: 0 for grid row collapse to work */
+.blockWrapperInner {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.blockWrapperCollapsing {
+  grid-template-rows: 0fr;
+  margin-bottom: 0;
+}
+
+/* ---- Shared ---- */
 
 .heading {
   font-family: var(--font-family);
@@ -74,4 +103,26 @@
 .overlayPortrait {
   width: 1080px;
   height: 1920px;
+}
+
+/* Flying block clone (rendered via portal on document.body) */
+.flyingBlock {
+  position: fixed;
+  display: flex;
+  align-items: center;
+  padding: var(--spacing-sm) var(--spacing-lg);
+  border-radius: var(--radius-lg);
+  background-color: var(--color-grey-light);
+  box-sizing: border-box;
+  pointer-events: none;
+  z-index: 99999;
+  will-change: transform;
+}
+
+.flyingBlockText {
+  font-family: var(--font-family);
+  font-size: var(--font-size-list);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-text-primary);
+  line-height: 1.2;
 }

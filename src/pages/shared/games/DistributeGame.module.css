@@ -1,0 +1,345 @@
+/* DistributeGame — landscape layout (1920×1080) */
+
+.layout {
+  display: flex;
+  flex-direction: row;
+  width: 80%;
+  height: 100%;
+  margin: 0 auto;
+  padding: var(--spacing-2xl) 0;
+  box-sizing: border-box;
+  gap: var(--spacing-2xl);
+}
+
+/* ══ Left panel — task list ══ */
+
+.taskPanel {
+  width: 380px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+.panelTitle {
+  font-family: var(--font-family);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-white);
+  margin: 0 0 var(--spacing-sm) 0;
+  flex-shrink: 0;
+}
+
+.taskList {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  padding-right: var(--spacing-xs);
+}
+
+.taskList::-webkit-scrollbar {
+  width: 6px;
+}
+.taskList::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: var(--radius-full);
+}
+.taskList::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.35);
+  border-radius: var(--radius-full);
+}
+
+.taskRow {
+  transition: opacity 0.2s ease;
+}
+
+.taskRowPlaced {
+  opacity: 0.4;
+}
+
+/* ══ Right panel — 2×2 grid ══ */
+
+.grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: var(--spacing-xl);
+  height: 100%;
+  min-width: 0;
+}
+
+/* ══ Specialist cell ══ */
+
+.specialistCell {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  min-height: 0;
+}
+
+/* Profile row: avatar + name button */
+.profileRow {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  flex-shrink: 0;
+}
+
+.avatarWrap {
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  background: var(--color-grey-secondary);
+  flex-shrink: 0;
+  border: 3px solid rgba(255, 255, 255, 0.6);
+}
+
+.avatarImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.avatarFallback {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-family);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-white);
+}
+
+.specNameBtn {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  background: rgba(255, 255, 255, 0.15);
+  border: none;
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xs) var(--spacing-md);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.specNameBtn:hover {
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.specName {
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-white);
+  line-height: 1.2;
+}
+
+.infoMark {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.3);
+  color: var(--color-white);
+  font-family: var(--font-family);
+  font-size: var(--font-size-2xs);
+  font-weight: var(--font-weight-bold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ══ Folder card — no background, image fills everything ══ */
+
+.folderCard {
+  flex: 1;
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.12s ease, filter 0.12s ease;
+  min-height: 0;
+}
+
+.folderCardTarget {
+  transform: scale(1.02);
+  filter: brightness(1.08);
+  outline: 4px solid rgba(255, 255, 255, 0.7);
+  outline-offset: -2px;
+}
+
+/* Folder image — always fills the entire card */
+.folderIcon {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+/* Placed tasks — bottom overlay on top of folder image */
+.placedList {
+  position: absolute;
+  bottom: var(--spacing-md);
+  left: var(--spacing-md);
+  right: var(--spacing-md);
+  max-height: 55%;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  overflow-y: auto;
+  z-index: 1;
+}
+
+.placedList::-webkit-scrollbar {
+  width: 4px;
+}
+.placedList::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: var(--radius-full);
+}
+
+.placedChip {
+  background: rgba(255, 255, 255, 0.93);
+  border-radius: var(--radius-sm);
+  padding: 8px var(--spacing-sm);
+  font-family: var(--font-family);
+  font-size: var(--font-size-2xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  line-height: 1.2;
+  border-left: 4px solid transparent;
+  transition: background 0.12s;
+}
+
+.placedChip:hover {
+  background: rgba(255, 255, 255, 1);
+}
+
+.chipCorrect {
+  border-left-color: var(--color-green);
+}
+
+.chipWrong {
+  border-left-color: var(--color-red);
+  background: rgba(255, 220, 210, 0.95);
+}
+
+/* Task count badge */
+.counter {
+  position: absolute;
+  top: var(--spacing-sm);
+  right: var(--spacing-sm);
+  background: rgba(0, 0, 0, 0.45);
+  color: var(--color-white);
+  border-radius: var(--radius-full);
+  padding: 4px 16px;
+  font-family: var(--font-family);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Check button */
+.btnWrap {
+  position: absolute;
+  bottom: var(--spacing-2xl);
+  left: 50%;
+  transform: translateX(-50%);
+}
+
+/* ══ Overlay (shared base) ══ */
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.55);
+  z-index: 9999;
+}
+
+.overlayLandscape {
+  width: 1920px;
+  height: 1080px;
+}
+
+.overlayPortrait {
+  width: 1080px;
+  height: 1920px;
+}
+
+/* ══ Specialist description popup card ══ */
+
+.specPopupCard {
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-2xl);
+  max-width: 640px;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.4);
+}
+
+.specPopupHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+}
+
+.specPopupAvatar {
+  width: 80px;
+  height: 80px;
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  flex-shrink: 0;
+  background: var(--color-grey-secondary);
+}
+
+.specPopupTitle {
+  font-family: var(--font-family);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  line-height: 1.2;
+}
+
+.specPopupText {
+  font-family: var(--font-family);
+  font-size: var(--font-size-md);
+  color: var(--color-text-primary);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.specPopupClose {
+  align-self: flex-end;
+  background: var(--color-blue);
+  color: var(--color-white);
+  border: none;
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-sm) var(--spacing-2xl);
+  font-family: var(--font-family);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.specPopupClose:hover {
+  background: var(--color-blue-pressed);
+}

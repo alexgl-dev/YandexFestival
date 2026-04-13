@@ -11,16 +11,6 @@
   box-sizing: border-box;
 }
 
-/* Progress counter */
-.counter {
-  font-family: var(--font-family);
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
-  color: var(--color-white);
-  margin: 0;
-  opacity: 0.7;
-}
-
 /* Prompt text */
 .prompt {
   font-family: var(--font-family);
@@ -34,108 +24,85 @@
   line-height: var(--line-height-normal);
 }
 
-/* Content area — image + description */
-.contentArea {
-  display: flex;
-  flex-direction: column;
+/* Corner instruction toggle — absolute so it doesn't affect layout */
+.instructionToggle {
+  position: absolute;
+  top: var(--spacing-2xl);
+  right: var(--spacing-2xl);
+  width: 72px;
+  height: 72px;
+  display: inline-flex;
   align-items: center;
-  gap: var(--spacing-lg);
+  justify-content: center;
+  border-radius: 50%;
+  border: var(--border-width-md) solid var(--color-white);
+  background: transparent;
+  color: var(--color-white);
+  font-family: var(--font-family);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-medium);
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  z-index: 10;
+  transition: background 0.15s, color 0.15s;
+}
+
+.instructionToggle:hover {
+  background: var(--color-white);
+  color: var(--color-black);
+}
+
+/* Grid of email cards */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--spacing-2xl);
+  justify-content: center;
+  align-items: stretch;
   width: 100%;
 }
 
-.contentImage {
-  max-width: 100%;
-  max-height: 500px;
-  border-radius: var(--radius-lg);
-  object-fit: contain;
+.cell {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--spacing-lg);
+  height: 100%;
 }
 
-.description {
-  font-family: var(--font-family);
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-regular);
-  color: var(--color-white);
-  text-align: center;
-  margin: 0;
-  line-height: var(--line-height-relaxed);
-  letter-spacing: var(--letter-spacing-xs);
-  max-width: 80%;
+.card {
+  flex: 1;
+  width: 100%;
+  height: 100%;
 }
 
-/* Label buttons row */
-.labelsRow {
+.cellButtons {
   display: flex;
   flex-direction: row;
-  gap: var(--spacing-lg);
-  justify-content: center;
-  flex-wrap: wrap;
+  gap: var(--spacing-md);
+  width: 100%;
 }
 
-/* Individual label button */
-.labelButton {
+.labelBtn {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+/* Finish button row */
+.finishRow {
   display: flex;
-  align-items: center;
-  gap: var(--spacing-sm);
-  padding: var(--spacing-sm) var(--spacing-2xl);
-  border: var(--border-width-md) solid var(--color-grey-secondary);
-  border-radius: var(--radius-full);
-  background: var(--color-white);
-  cursor: pointer;
-  transition: background 0.15s, border-color 0.15s, transform 0.1s;
-  font-family: var(--font-family);
-  min-width: 200px;
   justify-content: center;
+  width: 100%;
+  margin-top: var(--spacing-lg);
 }
 
-.labelButton:active {
-  transform: scale(0.97);
+.finishDisabled {
+  opacity: 0.4;
+  pointer-events: none;
 }
 
-/* Green label (safe) */
-.labelGreen {
-  border-color: var(--color-green);
-  background: var(--color-white);
-}
-
-.labelGreen:hover {
-  background: var(--color-green);
-}
-
-.labelGreen:hover .labelText {
-  color: var(--color-black);
-}
-
-/* Red label (danger) */
-.labelRed {
-  border-color: var(--color-red);
-  background: var(--color-white);
-}
-
-.labelRed:hover {
-  background: var(--color-red);
-}
-
-.labelRed:hover .labelText {
-  color: var(--color-white);
-}
-
-/* Label icon */
-.labelIcon {
-  width: var(--size-icon-xs);
-  height: var(--size-icon-xs);
-  object-fit: contain;
-}
-
-/* Label text */
-.labelText {
-  font-family: var(--font-family);
-  font-size: var(--font-size-lg);
-  font-weight: var(--font-weight-medium);
-  color: var(--color-black);
-  transition: color 0.15s;
-}
-
-/* Overlay */
+/* Instruction overlay */
 .overlayLandscape,
 .overlayPortrait {
   position: absolute;
@@ -148,4 +115,85 @@
   justify-content: center;
   background: var(--color-overlay-dark);
   z-index: 9999;
+  padding: var(--spacing-2xl);
+  box-sizing: border-box;
+}
+
+.instructionPanel {
+  position: relative;
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-2xl);
+  max-width: 1400px;
+  width: 100%;
+  max-height: 90%;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  align-items: center;
+  font-family: var(--font-family);
+  box-sizing: border-box;
+}
+
+.instructionTitle {
+  font-family: var(--font-family);
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-black);
+  margin: 0;
+  text-align: center;
+  letter-spacing: var(--letter-spacing-sm);
+  line-height: var(--line-height-tight);
+}
+
+.instructionList {
+  list-style: none;
+  counter-reset: instruction;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  width: 100%;
+}
+
+.instructionItem {
+  counter-increment: instruction;
+  position: relative;
+  padding-left: calc(var(--spacing-2xl) + var(--spacing-md));
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-relaxed);
+  color: var(--color-black);
+}
+
+.instructionItem::before {
+  content: counter(instruction);
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: var(--spacing-2xl);
+  height: var(--spacing-2xl);
+  border-radius: 50%;
+  background: var(--color-blue);
+  color: var(--color-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+}
+
+.instructionFeature {
+  font-weight: var(--font-weight-medium);
+  color: var(--color-black);
+}
+
+.instructionDash {
+  color: var(--color-text-muted, var(--color-black));
+}
+
+.instructionCheck {
+  color: var(--color-black);
 }

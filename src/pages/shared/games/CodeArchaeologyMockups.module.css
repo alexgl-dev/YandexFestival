@@ -1,0 +1,207 @@
+/* Mockups for the code-archaeology task.
+   Dimensions scaled down from the Figma design (node 11:205) so each mockup
+   fits comfortably inside a MatchGame left-column card while preserving the
+   visual proportions and the design-system colors. */
+
+.container {
+  background: var(--color-grey-light);
+  border-radius: 28px;
+  padding: 28px 40px;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-family);
+  box-sizing: border-box;
+}
+
+/* ── Buy button ─────────────────────────────────────────────────────────── */
+
+.buyButton {
+  background: var(--color-blue);
+  color: var(--color-white);
+  padding: 18px 44px;
+  border-radius: 999px;
+  font-family: var(--font-family);
+  font-size: 32px;
+  font-weight: var(--font-weight-regular);
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* ── Login form ─────────────────────────────────────────────────────────── */
+
+.loginForm {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: flex-start;
+  width: 100%;
+  max-width: 440px;
+}
+
+.input {
+  background: var(--color-white);
+  border: 2px solid transparent;
+  border-radius: 999px;
+  height: 50px;
+  width: 100%;
+  padding: 0 22px;
+  display: flex;
+  align-items: center;
+  color: var(--color-black);
+  font-family: var(--font-family);
+  font-size: 20px;
+  font-weight: var(--font-weight-regular);
+  box-shadow: 0 2px 9.9px rgba(0, 0, 0, 0.05);
+  box-sizing: border-box;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+
+.inputError {
+  border-color: #e31111;
+}
+
+.errorText {
+  color: #e31111;
+  font-family: var(--font-family);
+  font-size: 14px;
+  margin: 0;
+  padding-left: 22px;
+}
+
+.signInBtn {
+  background: var(--color-black);
+  color: var(--color-white);
+  height: 50px;
+  padding: 0 32px;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-family);
+  font-size: 20px;
+  min-width: 200px;
+  box-sizing: border-box;
+}
+
+/* ── Heart animation ────────────────────────────────────────────────────── */
+
+.heartsRow {
+  display: flex;
+  gap: 32px;
+  align-items: center;
+  justify-content: center;
+}
+
+.heartIcon {
+  width: 64px;
+  height: 64px;
+  color: var(--color-blue);
+  flex-shrink: 0;
+}
+
+/* ── Dropdown ───────────────────────────────────────────────────────────── */
+
+.dropdown {
+  background: var(--color-white);
+  border-radius: 28px;
+  box-shadow: 0 2px 9.9px rgba(0, 0, 0, 0.05);
+  width: 100%;
+  max-width: 440px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.dropdownHeader {
+  background: var(--color-blue);
+  color: var(--color-white);
+  padding: 12px 22px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-family: var(--font-family);
+  font-size: 20px;
+  font-weight: var(--font-weight-regular);
+  border-radius: 28px;
+}
+
+.chevron {
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
+}
+
+.dropdownItem {
+  height: 46px;
+  padding: 0 22px;
+  display: flex;
+  align-items: center;
+  color: var(--color-black);
+  font-family: var(--font-family);
+  font-size: 20px;
+}
+
+/* ── Product cards ──────────────────────────────────────────────────────── */
+
+.productCards {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  align-items: stretch;
+}
+
+.productCard {
+  background: var(--color-white);
+  border-radius: 14px;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 200px;
+  box-sizing: border-box;
+}
+
+.productImage {
+  width: 100%;
+  height: 90px;
+  border-radius: 4px;
+  background:
+    repeating-conic-gradient(#e3e2e0 0% 25%, #f4f4f4 25% 50%) 50% / 16px 16px;
+}
+
+.productInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  color: var(--color-black);
+  font-family: var(--font-family);
+}
+
+.productName {
+  font-size: 18px;
+  font-weight: var(--font-weight-medium);
+  margin: 0;
+  letter-spacing: -0.19px;
+  line-height: 1;
+}
+
+.productPrice {
+  font-size: 11px;
+  font-weight: var(--font-weight-regular);
+  margin: 0;
+  letter-spacing: -0.11px;
+  line-height: 1;
+}
+
+.productPrice span {
+  margin-left: 2px;
+}

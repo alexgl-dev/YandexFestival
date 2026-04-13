@@ -44,12 +44,14 @@ export function TaskPage() {
     }
   };
 
+  const skipInstruction = task.id === 'burnout';
+
   switch (phase) {
     case 'intro':
       return (
         <TaskIntro
           task={task}
-          onStart={() => setPhase(task.instruction ? 'instruction' : 'game')}
+          onStart={() => setPhase(task.instruction && !skipInstruction ? 'instruction' : 'game')}
           onBack={() => navigate(-1)}
           theme={data.theme}
           orientation={data.orientation}

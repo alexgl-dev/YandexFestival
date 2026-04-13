@@ -93,9 +93,9 @@
 <Card variant="ВАРИАНТ А" title="Яркий" description="Описание" state="default" size="l" />
 <Card variant="ВАРИАНТ А" title="Заголовок" description="Текст" state="pressed" size="m" />
 ```
-**Props:** `variant`, `title`, `description`, `hint`, `image`, `state` (default|disabled|flipped|pressed), `size` (m|l), `onClick`
+**Props:** `variant`, `title`, `description`, `hint`, `image`, `state` (default|disabled|flipped|wrong|pressed), `size` (m|l), `onClick`
 
-- **L** (580px) — с изображением внизу. Flipped = синий фон + иконка Done
+- **L** (580px) — с изображением внизу. Flipped = синий фон + иконка Done (s). Wrong = белый фон + иконка Close red (m)
 - **M** (870px) — только текст. Pressed = синий бордер + иконка Done
 - **disabled** = точная копия default с opacity 0.6. Передавай тот же `hint` что и в default — он рендерится невидимым (`visibility: hidden`) чтобы сохранить идентичную высоту лейаута
 

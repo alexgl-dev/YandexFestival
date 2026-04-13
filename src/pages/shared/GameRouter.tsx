@@ -2,11 +2,14 @@ import type { Task } from '../../types/game';
 import { ChooseGame } from './games/ChooseGame';
 import { FindGame } from './games/FindGame';
 import { SequenceGame } from './games/SequenceGame';
+import { CodeSequenceGame } from './games/CodeSequenceGame';
 import { CategorizeGame } from './games/CategorizeGame';
+import { DistributeGame } from './games/DistributeGame';
 import { MarkGame } from './games/MarkGame';
 import { CatchGame } from './games/CatchGame';
 import { LabelGame } from './games/LabelGame';
 import { MatchGame } from './games/MatchGame';
+import { BurnoutGame } from './games/BurnoutGame';
 import { GamePlaceholder } from './GamePlaceholder';
 
 interface GameRouterProps {
@@ -22,11 +25,23 @@ export function GameRouter({ task, onComplete, onBack, theme = 'orange', orienta
     case 'choose':
       return <ChooseGame task={task} onComplete={onComplete} onBack={onBack} theme={theme} orientation={orientation} />;
     case 'find':
+      if (task.id === 'burnout') {
+        return <BurnoutGame task={task} onComplete={onComplete} onBack={onBack} theme={theme} orientation={orientation} />;
+      }
       return <FindGame task={task} onComplete={onComplete} onBack={onBack} theme={theme} orientation={orientation} />;
-    case 'sequence':
-      return <SequenceGame task={task} onComplete={onComplete} onBack={onBack} theme={theme} orientation={orientation} />;
+    case 'sequence': {
+      const firstBlock = task.steps[0]?.blocks?.[0];
+      const usesCode = !!firstBlock?.code;
+      return usesCode ? (
+        <CodeSequenceGame task={task} onComplete={onComplete} onBack={onBack} theme={theme} orientation={orientation} />
+      ) : (
+        <SequenceGame task={task} onComplete={onComplete} onBack={onBack} theme={theme} orientation={orientation} />
+      );
+    }
     case 'categorize':
       return <CategorizeGame task={task} onComplete={onComplete} onBack={onBack} theme={theme} orientation={orientation} />;
+    case 'distribute':
+      return <DistributeGame task={task} onComplete={onComplete} onBack={onBack} theme={theme} orientation={orientation} />;
     case 'mark':
       return <MarkGame task={task} onComplete={onComplete} onBack={onBack} theme={theme} orientation={orientation} />;
     case 'catch':
