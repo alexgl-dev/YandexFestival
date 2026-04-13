@@ -1,5 +1,5 @@
-import { useState, useMemo, useCallback } from 'react';
-import { Background, Button, Card, Icon } from '../../../components/ui';
+import { useState, useCallback } from 'react';
+import { Background, Button, Icon, PopUp } from '../../../components/ui';
 import type { Task } from '../../../types/game';
 import styles from './LabelGame.module.css';
 
@@ -17,34 +17,7 @@ interface GameProps {
   orientation?: 'landscape' | 'portrait';
 }
 
-interface InstructionItem {
-  feature: string;
-  check: string;
-}
-
-interface ParsedInstruction {
-  title: string;
-  items: InstructionItem[];
-}
-
-function parseInstruction(text?: string): ParsedInstruction {
-  if (!text) return { title: '', items: [] };
-  const lines = text.split('\n').map((l) => l.trim()).filter(Boolean);
-  if (lines.length === 0) return { title: '', items: [] };
-
-  const title = lines[0];
-  const items = lines.slice(1).map((line) => {
-    const numbered = line.match(/^\d+\.\s*(.+)$/);
-    const content = numbered ? numbered[1] : line;
-    const parts = content.split(/\s[—–-]\s/);
-    if (parts.length >= 2) {
-      return { feature: parts[0].trim(), check: parts.slice(1).join(' — ').trim() };
-    }
-    return { feature: '', check: content };
-  });
-
-  return { title, items };
-}
+type Popup = { kind: 'success' } | { kind: 'error' } | { kind: 'instruction' } | null;
 
 export function LabelGame({
   task,
@@ -56,133 +29,243 @@ export function LabelGame({
   const step = task.steps[0];
   const items = step?.items ?? [];
   const labels = step?.labels ?? [];
+  const image = step?.image;
 
-  const parsedInstruction = useMemo(() => parseInstruction(task.instruction), [task.instruction]);
-  const hasInstruction = parsedInstruction.items.length > 0 || parsedInstruction.title.length > 0;
-
-  const [showInstruction, setShowInstruction] = useState(hasInstruction);
   const [answers, setAnswers] = useState<Record<number, string>>({});
+  const [activeIdx, setActiveIdx] = useState<number | null>(null);
+  const [wrongIdx, setWrongIdx] = useState<Set<number>>(new Set());
+  const [popup, setPopup] = useState<Popup>(task.instruction ? { kind: 'instruction' } : null);
 
-  const allAnswered = items.length > 0 && items.every((_, idx) => answers[idx]);
+  const answeredCount = Object.keys(answers).length;
+  const allAnswered = items.length > 0 && answeredCount === items.length;
 
-  const handleLabelSelect = useCallback(
-    (itemIdx: number, labelId: string) => {
-      setAnswers((prev) => (prev[itemIdx] ? prev : { ...prev, [itemIdx]: labelId }));
+  const handleHotspotClick = useCallback(
+    (idx: number) => {
+      if (popup) return;
+      setActiveIdx((prev) => (prev === idx ? null : idx));
     },
-    [],
+    [popup],
   );
 
-  const handleFinish = useCallback(() => {
-    const results: GameResult[] = items.map((item, idx) => {
-      const chosenId = answers[idx];
-      const label = labels.find((l) => l.id === chosenId);
-      return {
-        answer: label?.title ?? '',
-        correct: chosenId === item.correctLabel,
-        explanation: item.explanation,
-      };
-    });
-    onComplete(results);
-  }, [answers, items, labels, onComplete]);
+  const handlePickLabel = useCallback(
+    (labelId: string) => {
+      if (activeIdx === null) return;
+      setAnswers((prev) => ({ ...prev, [activeIdx]: labelId }));
+      setWrongIdx((prev) => {
+        if (!prev.has(activeIdx)) return prev;
+        const next = new Set(prev);
+        next.delete(activeIdx);
+        return next;
+      });
+      setActiveIdx(null);
+    },
+    [activeIdx],
+  );
 
-  const overlayClass =
-    orientation === 'portrait' ? styles.overlayPortrait : styles.overlayLandscape;
+  const handleClosePicker = useCallback(() => setActiveIdx(null), []);
+
+  const handleSubmit = useCallback(() => {
+    if (!allAnswered) return;
+    const wrong = new Set<number>();
+    items.forEach((item, idx) => {
+      if (answers[idx] !== item.correctLabel) wrong.add(idx);
+    });
+    if (wrong.size === 0) {
+      setPopup({ kind: 'success' });
+    } else {
+      setWrongIdx(wrong);
+      setPopup({ kind: 'error' });
+    }
+  }, [allAnswered, answers, items]);
+
+  const handlePopupAction = useCallback(() => {
+    if (!popup) return;
+    if (popup.kind === 'instruction') {
+      setPopup(null);
+      return;
+    }
+    if (popup.kind === 'success') {
+      const results: GameResult[] = items.map((item, idx) => {
+        const chosenId = answers[idx];
+        const label = labels.find((l) => l.id === chosenId);
+        return {
+          answer: label?.title ?? '',
+          correct: chosenId === item.correctLabel,
+          explanation: item.explanation,
+        };
+      });
+      onComplete(results);
+      return;
+    }
+    setAnswers((prev) => {
+      const next = { ...prev };
+      wrongIdx.forEach((i) => delete next[i]);
+      return next;
+    });
+    setPopup(null);
+  }, [popup, items, answers, labels, onComplete, wrongIdx]);
+
+  const activeItem = activeIdx !== null ? items[activeIdx] : null;
 
   return (
     <Background theme={theme} orientation={orientation} onBack={onBack}>
-      {hasInstruction && (
+      {task.instruction && (
         <button
           type="button"
           className={styles.instructionToggle}
-          onClick={() => setShowInstruction(true)}
+          onClick={() => setPopup({ kind: 'instruction' })}
           aria-label="Открыть инструкцию"
         >
           ?
         </button>
       )}
+
       <div className={styles.wrapper}>
         {step?.prompt && <p className={styles.prompt}>{step.prompt}</p>}
 
-        <div className={styles.grid}>
-          {items.map((item, idx) => {
-            const chosenId = answers[idx];
-            const answered = Boolean(chosenId);
+        <div className={styles.stageContainer}>
+          <div className={styles.stage}>
+          {image && (
+            <img src={image} alt="" className={styles.stageImage} draggable={false} />
+          )}
 
-            const cardTitle = `Письмо №${idx + 1}`;
-            const cardDescription = item.content?.description ?? '';
+          {items.map((item, idx) => {
+            const box = item.box;
+            if (!box) return null;
+            const chosenId = answers[idx];
+            const label = labels.find((l) => l.id === chosenId);
+            const isActive = activeIdx === idx;
+            const isAnswered = !!chosenId;
+            const isWrong = wrongIdx.has(idx);
+
+            const cls = [
+              styles.hotspot,
+              !isAnswered && !isWrong && styles.hotspotIdle,
+              isAnswered && !isWrong && styles.hotspotDone,
+              isActive && styles.hotspotActive,
+              isWrong && styles.hotspotWrong,
+            ]
+              .filter(Boolean)
+              .join(' ');
 
             return (
-              <div key={idx} className={styles.cell}>
-                <Card
-                  variant="ПИСЬМО"
-                  title={cardTitle}
-                  description={cardDescription}
-                  state="default"
-                  size="m"
-                  className={styles.card}
-                />
-                <div className={styles.cellButtons}>
-                  {labels.map((label) => {
-                    const isChosen = chosenId === label.id;
-                    return (
-                      <Button
-                        key={label.id}
-                        label={label.title}
-                        type={isChosen ? 'big' : 'main'}
-                        pressed={isChosen}
-                        icon={
-                          isChosen ? (
-                            <Icon name="done" color="white" size="s" />
-                          ) : undefined
-                        }
-                        onClick={() =>
-                          answered ? undefined : handleLabelSelect(idx, label.id)
-                        }
-                        className={styles.labelBtn}
-                      />
-                    );
-                  })}
-                </div>
-              </div>
+              <button
+                key={idx}
+                type="button"
+                className={cls}
+                style={{
+                  left: `${box.x}%`,
+                  top: `${box.y}%`,
+                  width: `${box.width}%`,
+                  height: `${box.height}%`,
+                }}
+                onClick={() => handleHotspotClick(idx)}
+              >
+                <span className={styles.hotspotNumber}>{idx + 1}</span>
+                {isAnswered && !isWrong && label && (
+                  <span className={styles.hotspotBadge}>
+                    <Icon name="done" color="white" size="s" />
+                    {label.title}
+                  </span>
+                )}
+                {isWrong && (
+                  <span className={styles.hotspotBadgeError}>
+                    <Icon name="close" color="white" size="s" />
+                    Ошибка
+                  </span>
+                )}
+              </button>
             );
           })}
+          </div>
         </div>
 
-        <div className={styles.finishRow}>
+        <div className={styles.footer}>
+          <div className={styles.counter}>
+            Размечено: {answeredCount}/{items.length}
+          </div>
           <Button
             label="Готово"
             type="main"
-            onClick={handleFinish}
+            onClick={handleSubmit}
             className={!allAnswered ? styles.finishDisabled : ''}
           />
         </div>
       </div>
 
-      {showInstruction && hasInstruction && (
-        <div className={overlayClass}>
-          <div className={styles.instructionPanel}>
-            <h2 className={styles.instructionTitle}>{parsedInstruction.title}</h2>
-            <ol className={styles.instructionList}>
-              {parsedInstruction.items.map((entry, i) => (
-                <li key={i} className={styles.instructionItem}>
-                  {entry.feature ? (
-                    <>
-                      <span className={styles.instructionFeature}>{entry.feature}</span>
-                      <span className={styles.instructionDash}> — </span>
-                      <span className={styles.instructionCheck}>{entry.check}</span>
-                    </>
-                  ) : (
-                    <span className={styles.instructionCheck}>{entry.check}</span>
-                  )}
-                </li>
-              ))}
-            </ol>
-            <Button
-              label="Закрыть"
-              type="main"
-              onClick={() => setShowInstruction(false)}
-            />
+      {activeIdx !== null && !popup && (
+        <div className={styles.pickerOverlay} onClick={handleClosePicker}>
+          <div className={styles.picker} onClick={(e) => e.stopPropagation()}>
+            <div className={styles.pickerHeader}>
+              <div className={styles.pickerTitle}>
+                Выбери тег{activeItem?.title ? ` для объекта №${(activeIdx ?? 0) + 1}` : ''}
+              </div>
+              <button
+                type="button"
+                className={styles.pickerClose}
+                onClick={handleClosePicker}
+                aria-label="Закрыть"
+              >
+                <Icon name="close" color="red" size="s" />
+              </button>
+            </div>
+            <div className={styles.pickerOptions}>
+              {labels.map((label) => {
+                const isChosen = activeIdx !== null && answers[activeIdx] === label.id;
+                return (
+                  <Button
+                    key={label.id}
+                    label={label.title}
+                    type={isChosen ? 'big' : 'main'}
+                    pressed={isChosen}
+                    onClick={() => handlePickLabel(label.id)}
+                    className={styles.pickerBtn}
+                  />
+                );
+              })}
+            </div>
           </div>
+        </div>
+      )}
+
+      {popup && popup.kind === 'instruction' && task.instruction && (
+        <div className={styles.overlay}>
+          <div className={styles.instructionPanel}>
+            <h2 className={styles.instructionTitle}>Как играть</h2>
+            <div className={styles.instructionBody}>
+              {task.instruction.split('\n').map((line, i) =>
+                line.trim() ? (
+                  <p key={i} className={styles.instructionLine}>
+                    {line}
+                  </p>
+                ) : (
+                  <div key={i} className={styles.instructionBreak} />
+                ),
+              )}
+            </div>
+            <Button label="Начать" type="main" onClick={handlePopupAction} />
+          </div>
+        </div>
+      )}
+
+      {popup && (popup.kind === 'success' || popup.kind === 'error') && (
+        <div className={styles.overlay}>
+          <PopUp
+            icon={popup.kind === 'success' ? 'done' : 'close'}
+            iconColor={popup.kind === 'success' ? 'blue' : 'red'}
+            title={
+              popup.kind === 'success'
+                ? 'Автопилот запущен'
+                : 'Автопилот не может тронуться'
+            }
+            description={
+              popup.kind === 'success'
+                ? 'Ты только что сделал дорогу немного безопаснее.'
+                : 'Он не понимает, что перед ним. Попробуй ещё раз — посмотри на красные объекты.'
+            }
+            buttonLabel={popup.kind === 'success' ? 'Результаты' : 'Попробовать ещё'}
+            onButtonClick={handlePopupAction}
+          />
         </div>
       )}
     </Background>

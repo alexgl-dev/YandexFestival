@@ -52,6 +52,7 @@ export interface TaskItem {
   content?: { type: string; value: string; description?: string };
   belongs?: string[];
   correctLabel?: string;
+  box?: { x: number; y: number; width: number; height: number };
   explanation: string;
 }
 
@@ -82,6 +83,12 @@ export interface CatchObject {
   title: string;
   description: string;
   category: string;
+  fields?: {
+    name: string;
+    age: string;
+    email: string;
+    city: string;
+  };
 }
 
 export interface TaskStep {

@@ -291,44 +291,44 @@ export function LaunchSequenceGame({
           </p>
         </div>
 
-        {/* Pool */}
+        {/* Pool — always renders all 8 cells to prevent layout shifts */}
         <div className={styles.pool}>
-          {pool.length === 0 ? (
-            <p className={styles.poolEmpty}>Все этапы размещены в таймлайне</p>
-          ) : (
-            pool.map((bIdx) => {
-              const block = blocks[bIdx];
-              const rot = ROTATIONS[bIdx % ROTATIONS.length];
-              const isSel = selected === bIdx;
-              return (
-                <div
-                  key={bIdx}
-                  className={[styles.poolCard, isSel ? styles.poolCardSelected : '']
-                    .filter(Boolean)
-                    .join(' ')}
-                  style={{ transform: `rotate(${rot}deg)` }}
-                  onClick={() => handlePoolTap(bIdx)}
+          {validIndices.map((bIdx) => {
+            const inPool = pool.includes(bIdx);
+            if (!inPool) {
+              return <div key={bIdx} className={styles.poolCardGhost} />;
+            }
+            const block = blocks[bIdx];
+            const rot = ROTATIONS[bIdx % ROTATIONS.length];
+            const isSel = selected === bIdx;
+            return (
+              <div
+                key={bIdx}
+                className={[styles.poolCard, isSel ? styles.poolCardSelected : '']
+                  .filter(Boolean)
+                  .join(' ')}
+                style={{ transform: `rotate(${rot}deg)` }}
+                onClick={() => handlePoolTap(bIdx)}
+              >
+                {block.icon && (
+                  <img
+                    src={block.icon}
+                    alt=""
+                    className={styles.poolIcon}
+                    draggable={false}
+                  />
+                )}
+                <p className={styles.poolTitle}>{block.text}</p>
+                <button
+                  className={styles.infoBtn}
+                  onClick={(e) => handleInfoTap(bIdx, e)}
+                  aria-label="Описание этапа"
                 >
-                  {block.icon && (
-                    <img
-                      src={block.icon}
-                      alt=""
-                      className={styles.poolIcon}
-                      draggable={false}
-                    />
-                  )}
-                  <p className={styles.poolTitle}>{block.text}</p>
-                  <button
-                    className={styles.infoBtn}
-                    onClick={(e) => handleInfoTap(bIdx, e)}
-                    aria-label="Описание этапа"
-                  >
-                    i
-                  </button>
-                </div>
-              );
-            })
-          )}
+                  ?
+                </button>
+              </div>
+            );
+          })}
         </div>
 
         {/* Timeline */}

@@ -1,13 +1,16 @@
 import type { Task } from '../../types/game';
 import { ChooseGame } from './games/ChooseGame';
 import { FindGame } from './games/FindGame';
+import { AnomalyDetectiveGame } from './games/AnomalyDetectiveGame';
 import { SequenceGame } from './games/SequenceGame';
 import { CodeSequenceGame } from './games/CodeSequenceGame';
 import { CategorizeGame } from './games/CategorizeGame';
+import { PlaylistAnatomyGame } from './games/PlaylistAnatomyGame';
 import { DistributeGame } from './games/DistributeGame';
 import { MarkGame } from './games/MarkGame';
 import { ChatSignalsGame } from './games/ChatSignalsGame';
 import { CatchGame } from './games/CatchGame';
+import { SwipeGame } from './games/SwipeGame';
 import { LabelGame } from './games/LabelGame';
 import { MatchGame } from './games/MatchGame';
 import { BurnoutGame } from './games/BurnoutGame';
@@ -30,6 +33,9 @@ export function GameRouter({ task, onComplete, onBack, theme = 'orange', orienta
       if (task.id === 'burnout') {
         return <BurnoutGame task={task} onComplete={onComplete} onBack={onBack} theme={theme} orientation={orientation} />;
       }
+      if (task.id === 'anomaly-detective') {
+        return <AnomalyDetectiveGame task={task} onComplete={onComplete} onBack={onBack} theme={theme} orientation={orientation} />;
+      }
       return <FindGame task={task} onComplete={onComplete} onBack={onBack} theme={theme} orientation={orientation} />;
     case 'sequence': {
       const firstBlock = task.steps[0]?.blocks?.[0];
@@ -41,8 +47,11 @@ export function GameRouter({ task, onComplete, onBack, theme = 'orange', orienta
         return <LaunchSequenceGame task={task} onComplete={onComplete} onBack={onBack} theme={theme} orientation={orientation} />;
       return <SequenceGame task={task} onComplete={onComplete} onBack={onBack} theme={theme} orientation={orientation} />;
     }
-    case 'categorize':
+    case 'categorize': {
+      if (task.id === 'playlist-anatomy')
+        return <PlaylistAnatomyGame task={task} onComplete={onComplete} onBack={onBack} theme={theme} orientation={orientation} />;
       return <CategorizeGame task={task} onComplete={onComplete} onBack={onBack} theme={theme} orientation={orientation} />;
+    }
     case 'distribute':
       return <DistributeGame task={task} onComplete={onComplete} onBack={onBack} theme={theme} orientation={orientation} />;
     case 'mark': {
@@ -53,8 +62,12 @@ export function GameRouter({ task, onComplete, onBack, theme = 'orange', orienta
         <MarkGame task={task} onComplete={onComplete} onBack={onBack} theme={theme} orientation={orientation} />
       );
     }
-    case 'catch':
+    case 'catch': {
+      const hasSwipe = !!task.steps[0]?.trash?.enabled;
+      if (hasSwipe)
+        return <SwipeGame task={task} onComplete={onComplete} onBack={onBack} theme={theme} orientation={orientation} />;
       return <CatchGame task={task} onComplete={onComplete} onBack={onBack} theme={theme} orientation={orientation} />;
+    }
     case 'label':
       return <LabelGame task={task} onComplete={onComplete} onBack={onBack} theme={theme} orientation={orientation} />;
     case 'match':

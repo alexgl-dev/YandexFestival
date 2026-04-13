@@ -1,0 +1,189 @@
+.wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xl);
+  width: 100%;
+  height: 100%;
+  padding: var(--spacing-2xl) var(--spacing-2xl);
+  font-family: var(--font-family);
+  box-sizing: border-box;
+}
+
+.prompt {
+  font-family: var(--font-family);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-white);
+  text-align: center;
+  margin: 0;
+  max-width: 1400px;
+  letter-spacing: var(--letter-spacing-xs);
+  line-height: var(--line-height-normal);
+}
+
+.stage {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  justify-content: center;
+  gap: var(--spacing-xl);
+  width: 80%;
+  max-width: 1536px;
+  min-height: 0;
+}
+
+.graphs {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  flex: 1;
+  min-width: 0;
+  align-items: center;
+}
+
+.graphsStacked {
+  gap: var(--spacing-sm);
+}
+
+.graphCard {
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-2xl);
+  width: 100%;
+  box-shadow: var(--shadow-card);
+  box-sizing: border-box;
+}
+
+.graphCardCompact {
+  padding: var(--spacing-lg) var(--spacing-2xl);
+}
+
+.graphSvg {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.axisCaption {
+  font-family: var(--font-family);
+  font-size: 30px;
+  fill: var(--color-grey-disabled);
+  letter-spacing: -0.3px;
+}
+
+.tickLabel {
+  font-family: var(--font-family);
+  font-size: 34px;
+  fill: var(--color-black);
+  letter-spacing: -0.3px;
+}
+
+.monthLabel {
+  font-family: var(--font-family);
+  font-size: 36px;
+  fill: var(--color-black);
+  letter-spacing: -0.3px;
+}
+
+.gridLine {
+  stroke: var(--color-grey-secondary);
+  stroke-width: 2;
+}
+
+.linePath {
+  fill: none;
+  stroke: var(--color-blue);
+  stroke-width: 6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.peakDot {
+  fill: var(--color-blue);
+}
+
+.decoyDot {
+  fill: var(--color-blue);
+  stroke: var(--color-white);
+  stroke-width: 3;
+}
+
+.decoyDotWrong {
+  fill: var(--color-red);
+  stroke: var(--color-white);
+  stroke-width: 3;
+}
+
+.decoyPulse {
+  fill: none;
+  stroke: var(--color-blue);
+  stroke-width: 3;
+  transform-origin: center;
+  transform-box: fill-box;
+  animation: peakPulse 1.8s ease-out infinite;
+}
+
+.peakPulse {
+  fill: none;
+  stroke: var(--color-blue);
+  stroke-width: 4;
+  transform-origin: center;
+  transform-box: fill-box;
+  animation: peakPulse 1.6s ease-out infinite;
+}
+
+@keyframes peakPulse {
+  0% {
+    transform: scale(0.6);
+    opacity: 0.9;
+  }
+  100% {
+    transform: scale(2.4);
+    opacity: 0;
+  }
+}
+
+.peakHit {
+  fill: transparent;
+  cursor: pointer;
+  pointer-events: all;
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  width: 520px;
+  flex-shrink: 0;
+  justify-content: center;
+}
+
+.options > * {
+  width: 100% !important;
+  padding: var(--spacing-lg) var(--spacing-xl);
+  gap: var(--spacing-sm);
+}
+
+.options :global(.size_m) :global(.header),
+.options :global(div[class*="size_m"]) :global(div[class*="header"]) {
+  margin-bottom: var(--spacing-sm);
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-overlay-dark);
+  z-index: 9999;
+}

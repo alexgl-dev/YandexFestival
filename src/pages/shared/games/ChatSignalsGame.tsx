@@ -165,10 +165,7 @@ export function ChatSignalsGame({
 
         <div className={styles.actions}>
           {!checked && selected.size > 0 && (
-            <>
-              <div className={styles.counter}>Выбрано: {selected.size}</div>
-              <Button label="Проверить" type="main" onClick={handleCheck} />
-            </>
+            <Button label="Проверить" type="main" onClick={handleCheck} />
           )}
         </div>
       </div>

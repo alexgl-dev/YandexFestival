@@ -1,0 +1,334 @@
+/* ── SwipeGame ── */
+
+.wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: var(--font-family);
+  user-select: none;
+  touch-action: none;
+}
+
+/* ── Purity bar ── */
+
+.purityBar {
+  position: absolute;
+  top: var(--spacing-2xl);
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  z-index: 20;
+}
+
+.purityTop {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.purityLabel {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-white);
+  margin: 0;
+  opacity: 0.9;
+  letter-spacing: var(--letter-spacing-xs);
+}
+
+.purityCount {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-white);
+}
+
+.purityTrack {
+  width: 100%;
+  height: 14px;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.purityFill {
+  height: 100%;
+  background: var(--color-green);
+  border-radius: var(--radius-full);
+  transition: width 0.5s ease;
+  min-width: 0;
+}
+
+/* ── Prompt ── */
+
+.prompt {
+  position: absolute;
+  top: 160px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-white);
+  opacity: 0.75;
+  text-align: center;
+  margin: 0;
+  white-space: nowrap;
+  z-index: 10;
+}
+
+/* ── Swipe hints (bottom) ── */
+
+.hintLeft,
+.hintRight {
+  position: absolute;
+  bottom: 80px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-family);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  z-index: 10;
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+.hintLeft {
+  left: var(--spacing-2xl);
+}
+
+.hintRight {
+  right: var(--spacing-2xl);
+}
+
+.hintTrash {
+  color: var(--color-red);
+}
+
+.hintOk {
+  color: var(--color-green);
+}
+
+.hintArrow {
+  font-size: var(--font-size-2xl);
+  line-height: 1;
+}
+
+.hintText {
+  letter-spacing: var(--letter-spacing-xs);
+}
+
+/* ── Falling card ── */
+
+.card {
+  position: absolute;
+  width: 640px;
+  background: var(--color-grey-light);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-2xl);
+  box-sizing: border-box;
+  cursor: grab;
+  will-change: transform;
+  z-index: 10;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  touch-action: none;
+  border: var(--border-width-md) solid transparent;
+}
+
+.card:active {
+  cursor: grabbing;
+}
+
+/* Left drag = red (trash) */
+.card[data-swiping="left"]::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: calc(var(--radius-lg) - 2px);
+  pointer-events: none;
+  background: var(--color-overlay-red);
+  opacity: 0.55;
+}
+
+/* Right drag = green (ok) */
+.card[data-swiping="right"]::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: calc(var(--radius-lg) - 2px);
+  pointer-events: none;
+  background: var(--color-overlay-green);
+  opacity: 0.7;
+}
+
+/* ✕ badge on left swipe (shown on right side) */
+.card[data-swiping="left"] .badgeWrong {
+  opacity: 1;
+  right: var(--spacing-2xl);
+  left: auto;
+}
+
+/* ✓ badge on right swipe (shown on left side) */
+.card[data-swiping="right"] .badgeCorrect {
+  opacity: 1;
+  left: var(--spacing-2xl);
+  right: auto;
+}
+
+/* Exit tints */
+.card[data-result="correct"] {
+  background: rgba(0, 220, 10, 0.12);
+  border-color: var(--color-green);
+}
+
+.card[data-result="correct"] .badgeCorrect {
+  opacity: 1;
+}
+
+.card[data-result="wrong"] {
+  background: rgba(255, 51, 0, 0.12);
+  border-color: var(--color-red);
+}
+
+/* ── Card header ── */
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.cardVariant {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-text-primary);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-xs);
+  line-height: var(--line-height-tight);
+}
+
+.cardNum {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-text-muted);
+  letter-spacing: var(--letter-spacing-xs);
+}
+
+/* ── Avatar + name row ── */
+
+.cardAvatarRow {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.cardAvatar {
+  flex-shrink: 0;
+  width: 72px;
+  height: 72px;
+  border-radius: var(--radius-full);
+  background: var(--color-grey-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.cardName {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  letter-spacing: var(--letter-spacing-sm);
+  line-height: var(--line-height-tight);
+  margin: 0;
+}
+
+/* ── Divider ── */
+
+.cardDivider {
+  width: 100%;
+  height: 1px;
+  background: var(--color-grey-secondary);
+  flex-shrink: 0;
+}
+
+/* ── Data fields ── */
+
+.cardFields {
+  display: flex;
+  gap: var(--spacing-lg);
+  width: 100%;
+}
+
+.cardField {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+  min-width: 0;
+}
+
+.fieldLabel {
+  font-size: var(--font-size-2xs);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-xs);
+  line-height: var(--line-height-tight);
+  white-space: nowrap;
+}
+
+.fieldValue {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  letter-spacing: var(--letter-spacing-xs);
+  line-height: var(--line-height-tight);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* ── Result badges (shown on swipe/exit) ── */
+
+.badgeCorrect,
+.badgeWrong {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 56px;
+  font-weight: var(--font-weight-bold);
+  line-height: 1;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.15s ease;
+}
+
+.badgeCorrect {
+  left: var(--spacing-2xl);
+  color: var(--color-green);
+}
+
+.badgeWrong {
+  right: var(--spacing-2xl);
+  color: var(--color-red);
+}
+
+/* ── Overlay ── */
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-overlay-dark);
+  z-index: 100;
+}
