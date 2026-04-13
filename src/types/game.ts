@@ -26,6 +26,7 @@ export interface TaskBlock {
   description?: string;
   order: number | null;
   explanation?: string;
+  icon?: string;
 }
 
 export interface TaskPair {

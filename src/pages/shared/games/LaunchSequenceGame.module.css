@@ -1,0 +1,563 @@
+/* ── LaunchSequenceGame ── */
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 80%;
+  margin: 0 auto;
+  padding: var(--spacing-xl) 0 var(--spacing-2xl);
+  gap: var(--spacing-xl);
+  font-family: var(--font-family);
+  box-sizing: border-box;
+}
+
+/* ── Top row ── */
+
+.topRow {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.counter {
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-white);
+  opacity: 0.8;
+  margin: 0;
+}
+
+.counterNum {
+  font-weight: var(--font-weight-bold);
+  color: var(--color-white);
+  opacity: 1;
+}
+
+/* ── Card pool ── */
+
+.pool {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--spacing-sm);
+  width: 100%;
+}
+
+.poolEmpty {
+  grid-column: 1 / -1;
+  text-align: center;
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  color: var(--color-white);
+  opacity: 0.5;
+  padding: var(--spacing-2xl) 0;
+  margin: 0;
+}
+
+.poolCard {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-sm) var(--spacing-sm) var(--spacing-md);
+  border: var(--border-width-md) solid transparent;
+  cursor: pointer;
+  user-select: none;
+  gap: var(--spacing-xs);
+  min-height: 180px;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+  will-change: transform;
+}
+
+.poolCard:active {
+  transform: scale(0.96) rotate(0deg) !important;
+  transition: transform 0.1s ease;
+}
+
+.poolCardSelected {
+  border-color: var(--color-blue);
+  box-shadow: 0 0 0 var(--border-width-sm) var(--color-blue),
+    0 8px 28px rgba(65, 97, 255, 0.35);
+}
+
+.poolIcon {
+  width: 80px;
+  height: 80px;
+  object-fit: contain;
+  flex-shrink: 0;
+  pointer-events: none;
+}
+
+.poolTitle {
+  font-family: var(--font-family);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  text-align: center;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.infoBtn {
+  position: absolute;
+  top: var(--spacing-xs);
+  right: var(--spacing-xs);
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-full);
+  background: var(--color-grey-secondary);
+  border: none;
+  font-family: var(--font-family);
+  font-size: var(--font-size-2xs);
+  font-style: italic;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+
+.infoBtn:hover {
+  background: var(--color-grey-disabled);
+}
+
+/* ── Timeline section ── */
+
+.timelineSection {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.timelineHeading {
+  font-family: var(--font-family);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-white);
+  opacity: 0.65;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-sm);
+}
+
+/* ── Timeline row ── */
+
+.timeline {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-end;
+  gap: var(--spacing-xs);
+  width: 100%;
+}
+
+/* ── Individual slot wrapper ── */
+
+.slotWrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.slot {
+  width: 100%;
+  min-height: 130px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xs) 6px;
+  cursor: pointer;
+  box-sizing: border-box;
+  gap: 6px;
+  transition: border-color 0.2s, background 0.2s, transform 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+.slotEmpty {
+  background: rgba(255, 255, 255, 0.1);
+  border: 2px dashed rgba(255, 255, 255, 0.28);
+}
+
+.slotFilled {
+  background: var(--color-white);
+  border: 2px solid transparent;
+}
+
+.slotCorrect {
+  border-color: var(--color-green) !important;
+  box-shadow: 0 0 0 2px var(--color-green);
+}
+
+.slotWrong {
+  border-color: var(--color-red) !important;
+  box-shadow: 0 0 0 2px var(--color-red);
+  animation: shakeSlot 0.5s ease;
+}
+
+@keyframes shakeSlot {
+  0%, 100% { transform: translateX(0); }
+  20%       { transform: translateX(-5px); }
+  40%       { transform: translateX(5px); }
+  60%       { transform: translateX(-5px); }
+  80%       { transform: translateX(5px); }
+}
+
+.slotLit {
+  border-color: var(--color-green) !important;
+  box-shadow: 0 0 0 3px var(--color-green),
+    0 0 24px rgba(0, 255, 9, 0.35);
+  transform: scale(1.04);
+  animation: popIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+@keyframes popIn {
+  0%   { transform: scale(0.9); }
+  60%  { transform: scale(1.07); }
+  100% { transform: scale(1.04); }
+}
+
+.slotIcon {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  pointer-events: none;
+  flex-shrink: 0;
+}
+
+.slotTitle {
+  font-family: var(--font-family);
+  font-size: var(--font-size-player);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  text-align: center;
+  margin: 0;
+  line-height: 1.2;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  word-break: break-word;
+}
+
+.slotPlus {
+  font-size: var(--font-size-xl);
+  color: rgba(255, 255, 255, 0.28);
+  line-height: 1;
+  pointer-events: none;
+}
+
+.slotNumber {
+  font-family: var(--font-family);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-white);
+  opacity: 0.55;
+  line-height: 1;
+}
+
+/* ── Parallel zone ── */
+
+.parallelZone {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  min-width: 0;
+}
+
+.parallelZoneActive .parallelSlots .slot {
+  background: rgba(65, 97, 255, 0.06);
+}
+
+.parallelSlots {
+  display: flex;
+  flex-direction: row;
+  gap: var(--spacing-xs);
+  width: 100%;
+}
+
+/* Slots inside parallelSlots each take equal share */
+.parallelSlots .slotWrapper {
+  flex: 1;
+}
+
+.parallelLabel {
+  font-family: var(--font-family);
+  font-size: var(--font-size-2xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-blue);
+  background: var(--color-bg-brand-translucent);
+  border-radius: var(--radius-full);
+  padding: 4px 14px;
+  white-space: nowrap;
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Duration hint ── */
+
+.durationHint {
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-white);
+  opacity: 0.75;
+  text-align: center;
+  margin: 0;
+  min-height: 40px;
+  line-height: var(--line-height-normal);
+}
+
+/* ── Check button ── */
+
+.btnWrap {
+  margin-top: var(--spacing-xs);
+}
+
+/* ── Overlays ── */
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-overlay-dark);
+  z-index: 9999;
+}
+
+.overlayLandscape {
+  width: 1920px;
+  height: 1080px;
+}
+
+.overlayPortrait {
+  width: 1080px;
+  height: 1920px;
+}
+
+/* ── Description card ── */
+
+.descCard {
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-2xl);
+  width: 80%;
+  max-width: 680px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-lg);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.45);
+}
+
+.descIcon {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.descTitle {
+  font-family: var(--font-family);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  text-align: center;
+  margin: 0;
+  line-height: var(--line-height-tight);
+}
+
+.descBody {
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-text-primary);
+  text-align: center;
+  margin: 0;
+  line-height: var(--line-height-relaxed);
+  white-space: pre-line;
+  opacity: 0.85;
+}
+
+.descBtn {
+  background: var(--color-blue);
+  color: var(--color-white);
+  border: none;
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-sm) var(--spacing-2xl);
+  font-family: var(--font-family);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.descBtn:hover {
+  background: var(--color-blue-pressed);
+}
+
+/* ── Error card ── */
+
+.errorCard {
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-2xl);
+  width: 80%;
+  max-width: 640px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-lg);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.45);
+}
+
+.errorIcon {
+  width: 80px;
+  height: 80px;
+  border-radius: var(--radius-full);
+  background: var(--color-overlay-red);
+  border: var(--border-width-md) solid var(--color-red);
+  color: var(--color-red);
+  font-family: var(--font-family);
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.errorTitle {
+  font-family: var(--font-family);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  text-align: center;
+  margin: 0;
+}
+
+.errorBody {
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-text-primary);
+  text-align: center;
+  margin: 0;
+  line-height: var(--line-height-relaxed);
+  opacity: 0.85;
+}
+
+.retryBtn {
+  background: var(--color-blue);
+  color: var(--color-white);
+  border: none;
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-sm) var(--spacing-2xl);
+  font-family: var(--font-family);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.retryBtn:hover {
+  background: var(--color-blue-pressed);
+}
+
+/* ── Completion card ── */
+
+.completeCard {
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-2xl);
+  width: 80%;
+  max-width: 640px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-lg);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.45);
+}
+
+.completeCheck {
+  width: 96px;
+  height: 96px;
+  border-radius: var(--radius-full);
+  background: var(--color-overlay-green);
+  border: var(--border-width-md) solid var(--color-green);
+  color: var(--color-green);
+  font-size: 52px;
+  font-weight: var(--font-weight-bold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  animation: popIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.completeTitle {
+  font-family: var(--font-family);
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  text-align: center;
+  margin: 0;
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--letter-spacing-sm);
+}
+
+.completeSubtitle {
+  font-family: var(--font-family);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-blue);
+  text-align: center;
+  margin: 0;
+}
+
+.completeStat {
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-text-muted);
+  text-align: center;
+  margin: 0;
+  line-height: var(--line-height-relaxed);
+}
+
+.completeBtn {
+  background: var(--color-blue);
+  color: var(--color-white);
+  border: none;
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-sm) var(--spacing-2xl);
+  font-family: var(--font-family);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.completeBtn:hover {
+  background: var(--color-blue-pressed);
+}

@@ -11,6 +11,7 @@ import { CatchGame } from './games/CatchGame';
 import { LabelGame } from './games/LabelGame';
 import { MatchGame } from './games/MatchGame';
 import { BurnoutGame } from './games/BurnoutGame';
+import { LaunchSequenceGame } from './games/LaunchSequenceGame';
 import { GamePlaceholder } from './GamePlaceholder';
 
 interface GameRouterProps {
@@ -33,11 +34,12 @@ export function GameRouter({ task, onComplete, onBack, theme = 'orange', orienta
     case 'sequence': {
       const firstBlock = task.steps[0]?.blocks?.[0];
       const usesCode = !!firstBlock?.code;
-      return usesCode ? (
-        <CodeSequenceGame task={task} onComplete={onComplete} onBack={onBack} theme={theme} orientation={orientation} />
-      ) : (
-        <SequenceGame task={task} onComplete={onComplete} onBack={onBack} theme={theme} orientation={orientation} />
-      );
+      const usesIcon = !!firstBlock?.icon;
+      if (usesCode)
+        return <CodeSequenceGame task={task} onComplete={onComplete} onBack={onBack} theme={theme} orientation={orientation} />;
+      if (usesIcon)
+        return <LaunchSequenceGame task={task} onComplete={onComplete} onBack={onBack} theme={theme} orientation={orientation} />;
+      return <SequenceGame task={task} onComplete={onComplete} onBack={onBack} theme={theme} orientation={orientation} />;
     }
     case 'categorize':
       return <CategorizeGame task={task} onComplete={onComplete} onBack={onBack} theme={theme} orientation={orientation} />;

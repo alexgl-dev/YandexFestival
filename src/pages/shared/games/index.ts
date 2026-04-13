@@ -8,3 +8,4 @@ export { MatchGame } from './MatchGame';
 export { CatchGame } from './CatchGame';
 export { LabelGame } from './LabelGame';
 export { BurnoutGame } from './BurnoutGame';
+export { LaunchSequenceGame } from './LaunchSequenceGame';
