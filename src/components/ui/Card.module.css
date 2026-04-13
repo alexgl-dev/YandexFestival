@@ -127,7 +127,7 @@
 
 .title {
   margin: 0;
-  font-size: var(--font-size-xl);
+  font-size: var(--card-title-size, var(--font-size-xl));
   font-weight: var(--font-weight-medium);
   color: var(--color-text-primary);
   letter-spacing: var(--letter-spacing-sm);

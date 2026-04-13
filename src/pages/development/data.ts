@@ -203,7 +203,7 @@ export const developmentSection: SectionData = {
               content: {
                 type: 'image',
                 value: '/assets/games/002/security-check/email-1.png',
-                description: 'Письмо от support@bank-security-check.ru: Срочно подтвердите вашу личность, перейдя по ссылке',
+                description: 'support@bank-security-check.ru: Срочно подтвердите вашу личность, перейдя по ссылке',
               },
               correctLabel: 'danger',
               explanation: 'Фишинг! Поддельный домен (bank-security-check.ru вместо bank.ru), создание срочности, запрос персональных данных по ссылке.',
@@ -212,7 +212,7 @@ export const developmentSection: SectionData = {
               content: {
                 type: 'image',
                 value: '/assets/games/002/security-check/email-2.png',
-                description: 'Письмо от коллеги из HR-отдела: Напоминание о корпоративе в пятницу',
+                description: 'коллеги из HR-отдела: Напоминание о корпоративе в пятницу',
               },
               correctLabel: 'safe',
               explanation: 'Обычное внутреннее письмо: знакомый отправитель, корпоративный домен, нет ссылок и вложений.',
@@ -221,7 +221,7 @@ export const developmentSection: SectionData = {
               content: {
                 type: 'image',
                 value: '/assets/games/002/security-check/email-3.png',
-                description: 'Письмо от no-reply@company.ru: Ваш ежемесячный отчёт готов',
+                description: 'no-reply@company.ru: Ваш ежемесячный отчёт готов',
               },
               correctLabel: 'safe',
               explanation: 'Стандартное автоматическое уведомление с корпоративного домена.',
@@ -230,7 +230,7 @@ export const developmentSection: SectionData = {
               content: {
                 type: 'image',
                 value: '/assets/games/002/security-check/email-4.png',
-                description: 'Письмо от admin@g00gle-support.com: Ваш аккаунт будет удалён через 24 часа',
+                description: 'admin@g00gle-support.com: Ваш аккаунт будет удалён через 24 часа',
               },
               correctLabel: 'danger',
               explanation: 'Фишинг! Поддельный домен (g00gle с нулями вместо букв), давление срочностью, угроза удаления аккаунта.',

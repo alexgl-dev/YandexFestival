@@ -199,6 +199,22 @@
   color: var(--color-white);
 }
 
+/* === Card grid mode (items without box) === */
+.cardGrid {
+  flex: 1 1 auto;
+  min-height: 0;
+  display: grid;
+  grid-template-columns: repeat(2, auto);
+  justify-content: center;
+  align-content: center;
+  gap: var(--spacing-lg);
+  --card-l-image-height: 0px;
+  --card-l-root-gap: var(--spacing-md);
+  --card-l-top-gap: var(--spacing-md);
+  --card-l-padding: var(--spacing-xl);
+  --card-title-size: var(--font-size-sm);
+}
+
 /* === Footer with counter + finish button === */
 .footer {
   flex: 0 0 auto;

@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { Background, Button, Icon, PopUp } from '../../../components/ui';
+import { Background, Button, Card, Icon, PopUp } from '../../../components/ui';
 import type { Task } from '../../../types/game';
 import styles from './LabelGame.module.css';
 
@@ -30,6 +30,7 @@ export function LabelGame({
   const items = step?.items ?? [];
   const labels = step?.labels ?? [];
   const image = step?.image;
+  const isCardMode = !image && items.some((i) => !!i.content);
 
   const [answers, setAnswers] = useState<Record<number, string>>({});
   const [activeIdx, setActiveIdx] = useState<number | null>(null);
@@ -123,6 +124,36 @@ export function LabelGame({
       <div className={styles.wrapper}>
         {step?.prompt && <p className={styles.prompt}>{step.prompt}</p>}
 
+        {isCardMode ? (
+          <div className={styles.cardGrid}>
+            {items.map((item, idx) => {
+              const chosenId = answers[idx];
+              const label = labels.find((l) => l.id === chosenId);
+              const isActive = activeIdx === idx;
+              const isAnswered = !!chosenId;
+              const isWrong = wrongIdx.has(idx);
+              const state: 'default' | 'pressed' | 'flipped' | 'wrong' = isWrong
+                ? 'wrong'
+                : isActive
+                  ? 'flipped'
+                  : isAnswered
+                    ? 'pressed'
+                    : 'default';
+              const variantLabel = isAnswered && label ? label.title.toUpperCase() : `ПИСЬМО 0${idx + 1}`;
+              return (
+                <Card
+                  key={idx}
+                  variant={variantLabel}
+                  title={item.content?.description ?? item.title ?? ''}
+                  description=""
+                  size="l"
+                  state={state}
+                  onClick={() => handleHotspotClick(idx)}
+                />
+              );
+            })}
+          </div>
+        ) : (
         <div className={styles.stageContainer}>
           <div className={styles.stage}>
           {image && (
@@ -179,6 +210,7 @@ export function LabelGame({
           })}
           </div>
         </div>
+        )}
 
         <div className={styles.footer}>
           <div className={styles.counter}>
@@ -255,13 +287,21 @@ export function LabelGame({
             iconColor={popup.kind === 'success' ? 'blue' : 'red'}
             title={
               popup.kind === 'success'
-                ? 'Автопилот запущен'
-                : 'Автопилот не может тронуться'
+                ? isCardMode
+                  ? 'Всё верно!'
+                  : 'Автопилот запущен'
+                : isCardMode
+                  ? 'Есть ошибки'
+                  : 'Автопилот не может тронуться'
             }
             description={
               popup.kind === 'success'
-                ? 'Ты только что сделал дорогу немного безопаснее.'
-                : 'Он не понимает, что перед ним. Попробуй ещё раз — посмотри на красные объекты.'
+                ? isCardMode
+                  ? 'Ты правильно классифицировал все объекты.'
+                  : 'Ты только что сделал дорогу немного безопаснее.'
+                : isCardMode
+                  ? 'Попробуй ещё раз — посмотри на красные карточки.'
+                  : 'Он не понимает, что перед ним. Попробуй ещё раз — посмотри на красные объекты.'
             }
             buttonLabel={popup.kind === 'success' ? 'Результаты' : 'Попробовать ещё'}
             onButtonClick={handlePopupAction}
