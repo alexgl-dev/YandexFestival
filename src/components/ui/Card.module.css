@@ -16,7 +16,7 @@
 /* --- Sizes --- */
 
 .size_l {
-  width: 580px;
+  width: var(--card-l-width, 580px);
   padding: var(--card-l-padding, var(--spacing-2xl));
 }
 
@@ -115,6 +115,10 @@
   visibility: hidden;
 }
 
+.iconHidden {
+  visibility: hidden;
+}
+
 /* --- Text block --- */
 
 .textBlock {
@@ -140,7 +144,7 @@
 
 .description {
   margin: 0;
-  font-size: var(--font-size-xs);
+  font-size: var(--card-desc-size, var(--font-size-xs));
   font-weight: var(--font-weight-regular);
   color: var(--color-text-primary);
   letter-spacing: var(--letter-spacing-xs);
@@ -159,6 +163,11 @@
   height: var(--card-l-image-height, 282px);
   border-radius: var(--radius-sm);
   overflow: hidden;
+}
+
+.flipped .imageArea,
+.wrong .imageArea {
+  height: var(--card-l-revealed-image-height, var(--card-l-image-height, 282px));
 }
 
 .image {

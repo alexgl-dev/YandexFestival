@@ -112,31 +112,10 @@ export function DistributeGame({ task, onComplete, onBack, theme = 'cobalt', ori
 
   return (
     <Background theme={theme} orientation={orientation} onBack={onBack}>
-      {/* Dismiss specialist popup on backdrop click */}
       <div className={styles.layout} onClick={() => setActivePopup(null)}>
 
-        {/* ══ LEFT: task list ══ */}
-        <div className={styles.taskPanel} onClick={(e) => e.stopPropagation()}>
-          <p className={styles.panelTitle}>Задачи</p>
-          <div className={styles.taskList}>
-            {items.map((item, idx) => {
-              const isPlaced = placedItemIndices.has(idx);
-              const isSelected = selectedItem === idx;
-              return (
-                <div key={idx} className={`${styles.taskRow} ${isPlaced ? styles.taskRowPlaced : ''}`}>
-                  <ListItem
-                    title={item.title ?? item.text ?? ''}
-                    state={isSelected ? 'pressed' : 'default'}
-                    onClick={() => handleTaskClick(idx)}
-                  />
-                </div>
-              );
-            })}
-          </div>
-        </div>
-
-        {/* ══ RIGHT: 2×2 specialist grid ══ */}
-        <div className={styles.grid} onClick={(e) => e.stopPropagation()}>
+        {/* ══ TOP: 4 folders in one row ══ */}
+        <div className={styles.foldersRow} onClick={(e) => e.stopPropagation()}>
           {categories.map((cat) => {
             const catPlacements = placements[cat.id] ?? [];
             const isTarget = selectedItem !== null && !checked;
@@ -161,17 +140,15 @@ export function DistributeGame({ task, onComplete, onBack, theme = 'cobalt', ori
                   </button>
                 </div>
 
-                {/* Folder card — click to receive task */}
+                {/* Folder card */}
                 <div
                   className={`${styles.folderCard} ${isTarget ? styles.folderCardTarget : ''}`}
                   onClick={() => handleFolderClick(cat.id)}
                 >
-                  {/* Folder image — always full-size background */}
                   {cat.image && (
                     <img src={cat.image} alt="" className={styles.folderIcon} />
                   )}
 
-                  {/* Placed tasks overlay */}
                   {catPlacements.length > 0 && (
                     <div className={styles.placedList}>
                       {catPlacements.map((itemIdx) => {
@@ -198,13 +175,32 @@ export function DistributeGame({ task, onComplete, onBack, theme = 'cobalt', ori
             );
           })}
         </div>
-      </div>
 
-      {!checked && allPlaced && (
-        <div className={styles.btnWrap}>
-          <Button label="Проверить" type="main" onClick={handleCheck} />
+        {/* ══ BOTTOM: task list ══ */}
+        <div className={styles.taskPanel} onClick={(e) => e.stopPropagation()}>
+          <p className={styles.panelTitle}>Задачи</p>
+          <div className={styles.taskList}>
+            {items.map((item, idx) => {
+              const isPlaced = placedItemIndices.has(idx);
+              const isSelected = selectedItem === idx;
+              return (
+                <div key={idx} className={`${styles.taskRow} ${isPlaced ? styles.taskRowPlaced : ''}`}>
+                  <ListItem
+                    title={item.title ?? item.text ?? ''}
+                    state={isSelected ? 'pressed' : 'default'}
+                    onClick={() => handleTaskClick(idx)}
+                  />
+                </div>
+              );
+            })}
+          </div>
+          {!checked && allPlaced && (
+            <div className={styles.btnWrap}>
+              <Button label="Проверить" type="main" onClick={handleCheck} />
+            </div>
+          )}
         </div>
-      )}
+      </div>
 
       {/* ══ Specialist description overlay ══ */}
       {activePopup && (
@@ -235,9 +231,11 @@ export function DistributeGame({ task, onComplete, onBack, theme = 'cobalt', ori
           <PopUp
             icon={currentResult.correct ? 'done' : 'close'}
             iconColor={currentResult.correct ? 'blue' : 'red'}
-            title={currentResult.correct ? 'Верно!' : 'Не совсем...'}
-            description={currentResult.explanation}
-            buttonLabel="Результаты"
+            title={currentResult.correct ? 'Потрясающе!' : 'Ой!'}
+            description={currentResult.correct
+              ? (step.resultCorrect ?? 'Все задачи распределены верно!')
+              : (step.resultWrong ?? currentResult.explanation)}
+            buttonLabel="Далее"
             onButtonClick={() => { setShowResultPopup(false); onComplete([currentResult]); }}
           />
         </div>

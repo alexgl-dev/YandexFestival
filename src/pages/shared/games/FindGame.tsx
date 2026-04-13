@@ -1,6 +1,6 @@
 import { useState, useCallback } from 'react';
 import { Background, Card, PopUp } from '../../../components/ui';
-import { ShopMockup, MessengerMockup, MusicMockup } from './FindBugMockups';
+import { BooksMockup, MessengerMockup, FoodMockup, MarketplaceMockup } from './FindBugMockups';
 import type { Task, TaskOption } from '../../../types/game';
 import styles from './FindGame.module.css';
 
@@ -26,6 +26,10 @@ export function FindGame({ task, onComplete, onBack, theme = 'orange', orientati
   const [disabledOptions, setDisabledOptions] = useState<Set<number>>(new Set());
   const [showPopup, setShowPopup] = useState(false);
   const [results, setResults] = useState<GameResult[]>([]);
+  // tracks number of wrong attempts per step to switch from general hint to specific explanation
+  const [wrongCountPerStep, setWrongCountPerStep] = useState<number[]>(() =>
+    new Array(task.steps.length).fill(0)
+  );
 
   const steps = task.steps;
   const step = steps[currentStep];
@@ -63,7 +67,6 @@ export function FindGame({ task, onComplete, onBack, theme = 'orange', orientati
     if (!option) return;
 
     if (option.correct) {
-      // Advance to next step or complete
       if (isLastStep) {
         onComplete(results);
       } else {
@@ -72,7 +75,12 @@ export function FindGame({ task, onComplete, onBack, theme = 'orange', orientati
         setDisabledOptions(new Set());
       }
     } else {
-      // Wrong answer: disable this option, let user try again
+      // increment wrong count for this step
+      setWrongCountPerStep((prev) => {
+        const next = [...prev];
+        next[currentStep] = (next[currentStep] ?? 0) + 1;
+        return next;
+      });
       setDisabledOptions((prev) => {
         const next = new Set(prev);
         next.add(selected!);
@@ -80,7 +88,7 @@ export function FindGame({ task, onComplete, onBack, theme = 'orange', orientati
       });
       setSelected(null);
     }
-  }, [selected, options, isLastStep, results, onComplete]);
+  }, [selected, options, isLastStep, results, onComplete, currentStep]);
 
   const getCardState = useCallback((index: number, option: TaskOption): 'default' | 'disabled' | 'pressed' => {
     if (disabledOptions.has(index)) return 'disabled';
@@ -89,6 +97,17 @@ export function FindGame({ task, onComplete, onBack, theme = 'orange', orientati
     return 'default';
   }, [selected, disabledOptions]);
 
+  const getPopupDescription = useCallback((option: TaskOption): string => {
+    if (option.correct) return option.explanation;
+    // first wrong attempt: show hint (prefer per-option hint, fallback to step-level);
+    // subsequent wrong attempts: show specific explanation of the clicked option
+    const wrongCount = wrongCountPerStep[currentStep] ?? 0;
+    if (wrongCount === 0) {
+      return option.hint ?? step?.hints ?? option.explanation;
+    }
+    return option.explanation;
+  }, [wrongCountPerStep, currentStep, step]);
+
   if (!step) return null;
 
   const selectedOption = selected !== null ? options[selected] : null;
@@ -96,19 +115,27 @@ export function FindGame({ task, onComplete, onBack, theme = 'orange', orientati
   return (
     <Background theme={theme} orientation={orientation} onBack={onBack}>
       <div className={styles.wrapper}>
-        {step.prompt && (
-          <p className={styles.prompt}>{step.prompt}</p>
-        )}
-
+        {step.prompt && (() => {
+          const lines = step.prompt.split('\n');
+          const [appName, ...rest] = lines;
+          return (
+            <div className={styles.promptBlock}>
+              {appName && <p className={styles.promptAppName}>{appName}</p>}
+              {rest.length > 0 && <p className={styles.prompt}>{rest.join('\n')}</p>}
+            </div>
+          );
+        })()}
 
         <div className={styles.content}>
           <div className={styles.imageColumn}>
             {step.image?.includes('find-bug/screen1') ? (
-              <ShopMockup />
+              <BooksMockup />
             ) : step.image?.includes('find-bug/screen2') ? (
               <MessengerMockup />
             ) : step.image?.includes('find-bug/screen3') ? (
-              <MusicMockup />
+              <FoodMockup />
+            ) : step.image?.includes('find-bug/screen4') ? (
+              <MarketplaceMockup />
             ) : step.image ? (
               <img
                 src={step.image}
@@ -142,8 +169,12 @@ export function FindGame({ task, onComplete, onBack, theme = 'orange', orientati
               icon={selectedOption.correct ? 'done' : 'close'}
               iconColor={selectedOption.correct ? 'blue' : 'red'}
               title={selectedOption.correct ? 'Верно!' : 'Не совсем...'}
-              description={selectedOption.correct ? selectedOption.explanation : (selectedOption.hint || selectedOption.explanation)}
-              buttonLabel={selectedOption.correct && isLastStep ? 'Результаты' : selectedOption.correct ? 'Дальше' : 'Попробовать ещё'}
+              description={getPopupDescription(selectedOption)}
+              buttonLabel={
+                selectedOption.correct
+                  ? (isLastStep ? 'Результаты' : 'Дальше')
+                  : 'Попробуй ещё раз'
+              }
               onButtonClick={handlePopupAction}
             />
           </div>

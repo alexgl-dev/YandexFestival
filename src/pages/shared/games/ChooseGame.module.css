@@ -2,23 +2,23 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--spacing-xl);
+  gap: var(--spacing-md);
   width: 100%;
-  max-width: 80%;
+  max-width: 90%;
   margin: 0 auto;
-  padding: var(--spacing-2xl) 0;
+  padding: var(--spacing-md) 0;
   font-family: var(--font-family);
   box-sizing: border-box;
 }
 
 .prompt {
   font-family: var(--font-family);
-  font-size: var(--font-size-xl);
+  font-size: var(--font-size-lg);
   font-weight: var(--font-weight-medium);
   color: var(--color-white);
   text-align: center;
   margin: 0;
-  max-width: 80%;
+  max-width: 85%;
   letter-spacing: var(--letter-spacing-xs);
   line-height: var(--line-height-normal);
 }
@@ -56,6 +56,34 @@
   height: 1920px;
 }
 
+/* === Event reference image (image mode) === */
+
+.eventImageWrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-xs);
+  width: 100%;
+}
+
+.eventLabel {
+  font-family: var(--font-family);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-xs);
+  text-transform: uppercase;
+  color: var(--color-white);
+  opacity: 0.7;
+}
+
+.eventImage {
+  width: 100%;
+  max-width: 640px;
+  height: 180px;
+  object-fit: cover;
+  border-radius: var(--radius-lg);
+}
+
 /* === Poster flip cards (image mode) === */
 /* Each card wraps a <Card size="l"> element inside a 3D flip container.
    Front face: Card state="default" (image)
@@ -63,9 +91,10 @@
 
 .posterCards {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--spacing-lg);
+  flex-flow: row wrap;
+  justify-content: center;
+  align-items: flex-start;
+  gap: var(--spacing-md);
   width: 100%;
 }
 
@@ -73,12 +102,19 @@
   cursor: pointer;
   perspective: 1600px;
   transition: opacity 0.3s ease;
-  /* Compact Card size_l overrides — shrink vertical footprint so
-     three flip cards stack in the portrait viewport with breathing room. */
-  --card-l-image-height: 160px;
-  --card-l-top-gap: 20px;
-  --card-l-root-gap: 20px;
-  --card-l-padding: 28px;
+  /* Compact Card size_l overrides:
+     - narrow width so 2 cards fit per row (2×460 + 20 gap = 940 < 972 at 90% wrapper)
+     - tall image on front (2:3 aspect for inner width 424 ≈ 636)
+     - tight chrome so header sits directly above image
+     - smaller revealed image on back so long explanations fit in the same cell */
+  --card-l-width: 460px;
+  --card-l-image-height: 636px;
+  --card-l-revealed-image-height: 280px;
+  --card-l-padding: 18px;
+  --card-l-top-gap: 8px;
+  --card-l-root-gap: 6px;
+  /* Shrink description font on the back face so long texts fit. */
+  --card-desc-size: var(--font-size-2xs);
 }
 
 .flipCardDimmed {
@@ -117,18 +153,4 @@
 
 .flipBack {
   transform: rotateY(180deg);
-}
-
-/* === Button slot: reserves vertical space so the button can appear
-      without shifting the cards up === */
-
-.buttonSlot {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 80px;
-}
-
-.buttonHidden {
-  visibility: hidden;
 }

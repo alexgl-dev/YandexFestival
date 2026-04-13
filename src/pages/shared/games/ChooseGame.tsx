@@ -1,5 +1,5 @@
-import { useState, useCallback } from 'react';
-import { Background, Card, PopUp, Button } from '../../../components/ui';
+import { useState, useCallback, useEffect } from 'react';
+import { Background, Card, PopUp } from '../../../components/ui';
 import type { Task, TaskOption } from '../../../types/game';
 import styles from './ChooseGame.module.css';
 
@@ -34,32 +34,58 @@ export function ChooseGame({ task, onComplete, onBack, theme = 'orange', orienta
   // Image mode: options have images — use flip Card mechanic
   const isImageMode = options.length > 0 && options.every(o => !!o.image);
 
+  // In image mode, show popup after flip animation completes
+  useEffect(() => {
+    if (isImageMode && selected !== null && !showPopup) {
+      const timer = setTimeout(() => setShowPopup(true), 750);
+      return () => clearTimeout(timer);
+    }
+  }, [selected, isImageMode, showPopup]);
+
   const handleSelect = useCallback((index: number) => {
     if (selected !== null) return;
     const option = options[index];
     if (!option) return;
 
     setSelected(index);
-    const result: GameResult = {
-      answer: option.text || VARIANT_LABELS[index] || `Вариант ${index + 1}`,
-      correct: option.correct,
-      explanation: option.explanation,
-    };
-    setResults(prev => [...prev, result]);
 
     if (!isImageMode && task.feedback === 'instant') {
+      const result: GameResult = {
+        answer: option.text || VARIANT_LABELS[index] || `Вариант ${index + 1}`,
+        correct: option.correct,
+        explanation: option.explanation,
+      };
+      setResults(prev => [...prev, result]);
       setShowPopup(true);
     }
   }, [selected, options, task.feedback, isImageMode]);
 
-  const handleProceed = useCallback(() => {
-    if (isLastStep) {
-      onComplete(results);
+  const handleImageFeedbackAction = useCallback(() => {
+    if (selected === null) return;
+    const option = options[selected];
+    setShowPopup(false);
+
+    if (option?.correct) {
+      // Record result and advance
+      const result: GameResult = {
+        answer: VARIANT_LABELS[selected] || `Вариант ${selected + 1}`,
+        correct: true,
+        explanation: option.explanation,
+      };
+      const newResults = [...results, result];
+      setResults(newResults);
+
+      if (isLastStep) {
+        onComplete(newResults);
+      } else {
+        setCurrentStep(prev => prev + 1);
+        setSelected(null);
+      }
     } else {
-      setCurrentStep(prev => prev + 1);
+      // Wrong answer — reset so player can try again
       setSelected(null);
     }
-  }, [isLastStep, results, onComplete]);
+  }, [selected, options, results, isLastStep, onComplete]);
 
   const handlePopupAction = useCallback(() => {
     setShowPopup(false);
@@ -89,50 +115,63 @@ export function ChooseGame({ task, onComplete, onBack, theme = 'orange', orienta
         )}
 
         {isImageMode ? (
-          <div className={styles.posterCards}>
-            {options.map((option, index) => {
-              const isSelected = selected === index;
-              const isDimmed = selected !== null && !isSelected;
-              const revealedState: 'flipped' | 'wrong' = option.correct ? 'flipped' : 'wrong';
-              const revealedTitle = option.correct ? 'Верно!' : 'Не совсем...';
-              const variantLabel = VARIANT_LABELS[index] || `Вариант ${index + 1}`;
+          <>
+            {step.image && (
+              <div className={styles.eventImageWrap}>
+                <span className={styles.eventLabel}>Мероприятие</span>
+                <img
+                  src={step.image}
+                  alt="Мероприятие"
+                  className={styles.eventImage}
+                />
+              </div>
+            )}
 
-              return (
-                <div
-                  key={index}
-                  className={[
-                    styles.flipCard,
-                    isSelected ? styles.flipCardFlipped : '',
-                    isDimmed ? styles.flipCardDimmed : '',
-                  ].filter(Boolean).join(' ')}
-                  onClick={() => handleSelect(index)}
-                >
-                  <div className={styles.flipInner}>
-                    <div className={`${styles.flipFace} ${styles.flipFront}`}>
-                      <Card
-                        variant={variantLabel}
-                        title=""
-                        description=""
-                        image={option.image}
-                        state="default"
-                        size="l"
-                      />
-                    </div>
-                    <div className={`${styles.flipFace} ${styles.flipBack}`}>
-                      <Card
-                        variant={variantLabel}
-                        title={revealedTitle}
-                        description={option.explanation}
-                        image={option.image}
-                        state={revealedState}
-                        size="l"
-                      />
+            <div className={styles.posterCards}>
+              {options.map((option, index) => {
+                const isSelected = selected === index;
+                const isDimmed = selected !== null && !isSelected;
+                const revealedState: 'flipped' | 'wrong' = option.correct ? 'flipped' : 'wrong';
+                const revealedTitle = option.correct ? 'Верно!' : 'Не совсем...';
+                const variantLabel = VARIANT_LABELS[index] || `Вариант ${index + 1}`;
+
+                return (
+                  <div
+                    key={index}
+                    className={[
+                      styles.flipCard,
+                      isSelected ? styles.flipCardFlipped : '',
+                      isDimmed ? styles.flipCardDimmed : '',
+                    ].filter(Boolean).join(' ')}
+                    onClick={() => handleSelect(index)}
+                  >
+                    <div className={styles.flipInner}>
+                      <div className={`${styles.flipFace} ${styles.flipFront}`}>
+                        <Card
+                          variant={variantLabel}
+                          title=""
+                          description=""
+                          image={option.image}
+                          state="default"
+                          size="l"
+                        />
+                      </div>
+                      <div className={`${styles.flipFace} ${styles.flipBack}`}>
+                        <Card
+                          variant={variantLabel}
+                          title={revealedTitle}
+                          description=""
+                          image={option.image}
+                          state={revealedState}
+                          size="l"
+                        />
+                      </div>
                     </div>
                   </div>
-                </div>
-              );
-            })}
-          </div>
+                );
+              })}
+            </div>
+          </>
         ) : (
           <div className={styles.cards}>
             {options.map((option, index) => (
@@ -151,16 +190,7 @@ export function ChooseGame({ task, onComplete, onBack, theme = 'orange', orienta
           </div>
         )}
 
-        {isImageMode && (
-          <div className={styles.buttonSlot}>
-            <Button
-              label={isLastStep ? 'Результаты' : 'Дальше'}
-              type="main"
-              onClick={handleProceed}
-              className={selected === null ? styles.buttonHidden : ''}
-            />
-          </div>
-        )}
+        {/* Image mode: no standalone button — popup handles all navigation */}
 
         {!isImageMode && showPopup && selectedOption && (
           <div className={`${styles.overlay} ${orientation === 'landscape' ? styles.overlayLandscape : styles.overlayPortrait}`}>
@@ -171,6 +201,23 @@ export function ChooseGame({ task, onComplete, onBack, theme = 'orange', orienta
               description={selectedOption.explanation}
               buttonLabel={isLastStep ? 'Результаты' : 'Дальше'}
               onButtonClick={handlePopupAction}
+            />
+          </div>
+        )}
+
+        {isImageMode && showPopup && selectedOption && (
+          <div className={`${styles.overlay} ${orientation === 'landscape' ? styles.overlayLandscape : styles.overlayPortrait}`}>
+            <PopUp
+              icon={selectedOption.correct ? 'done' : 'close'}
+              iconColor={selectedOption.correct ? 'blue' : 'red'}
+              title={selectedOption.correct ? 'Верно!' : 'Не совсем...'}
+              description={selectedOption.explanation}
+              buttonLabel={
+                selectedOption.correct
+                  ? isLastStep ? 'Результаты' : 'Дальше'
+                  : 'Попробуй ещё раз'
+              }
+              onButtonClick={handleImageFeedbackAction}
             />
           </div>
         )}

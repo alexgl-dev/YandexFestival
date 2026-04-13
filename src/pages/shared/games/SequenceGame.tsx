@@ -203,6 +203,9 @@ export function SequenceGame({ task, onComplete, onBack, theme = 'orange', orien
   return (
     <Background theme={theme} orientation={orientation} onBack={onBack}>
       <div className={styles.page}>
+        {task.instruction && (
+          <p className={styles.prompt}>{task.instruction}</p>
+        )}
         <div className={styles.columns}>
           <div className={styles.left}>
             <p className={styles.heading}>Доступные шаги</p>
@@ -248,13 +251,13 @@ export function SequenceGame({ task, onComplete, onBack, theme = 'orange', orien
             ))}
           </div>
         </div>
-      </div>
 
-      {!checked && allPlaced && (
-        <div className={styles.btnWrap}>
-          <Button label="Проверить" type="main" onClick={handleCheck} />
-        </div>
-      )}
+        {!checked && allPlaced && (
+          <div className={styles.btnWrap}>
+            <Button label="Проверить" type="main" onClick={handleCheck} />
+          </div>
+        )}
+      </div>
 
       {showPopup && checked && (
         <div className={`${styles.overlay} ${orientation === 'landscape' ? styles.overlayLandscape : styles.overlayPortrait}`}>

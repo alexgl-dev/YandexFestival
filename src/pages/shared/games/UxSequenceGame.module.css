@@ -1,0 +1,476 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 92%;
+  margin: 0 auto;
+  padding: var(--spacing-xl) 0 var(--spacing-2xl);
+  box-sizing: border-box;
+  font-family: var(--font-family);
+  gap: var(--spacing-lg);
+}
+
+/* ── Top row ── */
+
+.topRow {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+}
+
+.title {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-white);
+  letter-spacing: var(--letter-spacing-tight);
+  line-height: var(--line-height-tight);
+  margin: 0;
+}
+
+.errors {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: var(--radius-full);
+  padding: var(--spacing-xs) var(--spacing-md);
+}
+
+.errorsLabel {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-white);
+  opacity: 0.8;
+}
+
+.errorsDots {
+  display: flex;
+  gap: 6px;
+}
+
+.errorDot {
+  width: 14px;
+  height: 14px;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.3);
+  transition: background 0.2s, transform 0.2s;
+}
+
+.errorDotActive {
+  background: var(--color-red);
+  transform: scale(1.1);
+}
+
+/* ── Columns ── */
+
+.columns {
+  display: flex;
+  flex-direction: row;
+  gap: var(--spacing-lg);
+  width: 100%;
+  align-items: flex-start;
+}
+
+.slotsCol {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  min-width: 0;
+}
+
+.poolCol {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.heading {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-white);
+  margin: 0 0 var(--spacing-xs) 0;
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-xs);
+  opacity: 0.85;
+}
+
+/* ── Slots ── */
+
+.slot {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-radius: var(--radius-lg);
+  min-height: 96px;
+  box-sizing: border-box;
+  cursor: pointer;
+  user-select: none;
+  transition: background 0.2s, border-color 0.2s, transform 0.2s;
+}
+
+.slotEmpty {
+  background: rgba(255, 255, 255, 0.08);
+  border: var(--border-width-sm) dashed rgba(255, 255, 255, 0.4);
+}
+
+.slotFilled {
+  background: var(--color-white);
+  border: var(--border-width-sm) solid var(--color-white);
+}
+
+.slotCorrect {
+  background: var(--color-white);
+  border-color: var(--color-blue);
+  box-shadow: 0 0 0 4px var(--color-bg-brand-translucent);
+}
+
+.slotWrong {
+  background: var(--color-white);
+  border-color: var(--color-red);
+  box-shadow: 0 0 0 4px rgba(255, 51, 0, 0.25);
+  animation: shake 0.4s ease-in-out;
+}
+
+.slotSuccess {
+  animation: successPulse 0.6s ease forwards;
+}
+
+.slotStatusIcon {
+  margin-left: auto;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.slotHint {
+  background: rgba(255, 255, 255, 0.15);
+  border: var(--border-width-sm) dashed var(--color-white);
+  animation: hintPulse 1.4s ease-in-out infinite;
+}
+
+.slotNum {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-full);
+  background: var(--color-bg-brand-translucent);
+  color: var(--color-blue);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+  flex-shrink: 0;
+}
+
+.slotFilled .slotNum,
+.slotCorrect .slotNum,
+.slotWrong .slotNum {
+  background: var(--color-bg-brand-translucent);
+  color: var(--color-blue);
+}
+
+.slotEmpty .slotNum,
+.slotHint .slotNum {
+  background: rgba(255, 255, 255, 0.25);
+  color: var(--color-white);
+}
+
+.slotText {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-black);
+  line-height: var(--line-height-normal);
+}
+
+.slotPlaceholder {
+  font-size: var(--font-size-xs);
+  color: var(--color-white);
+  opacity: 0.55;
+  font-style: italic;
+}
+
+.slotHintLabel {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-white);
+  text-decoration: underline;
+}
+
+/* ── Pool blocks ── */
+
+.blockWrapper {
+  display: grid;
+  grid-template-rows: 1fr;
+  margin-bottom: var(--spacing-sm);
+  transition:
+    grid-template-rows 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    margin-bottom 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.blockInner {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.blockWrapperCollapsing {
+  grid-template-rows: 0fr;
+  margin-bottom: 0;
+}
+
+.block {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md) var(--spacing-md) var(--spacing-md) var(--spacing-lg);
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  border: var(--border-width-sm) solid var(--color-white);
+  cursor: pointer;
+  user-select: none;
+  min-height: 96px;
+  box-sizing: border-box;
+  transition: border-color 0.15s, transform 0.15s;
+}
+
+.blockSelected {
+  border-color: var(--color-blue);
+  transform: scale(1.02);
+  box-shadow: 0 0 0 4px var(--color-bg-brand-translucent);
+}
+
+.blockText {
+  flex: 1;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-black);
+  line-height: var(--line-height-normal);
+}
+
+.blockClose {
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  line-height: 0;
+}
+
+/* ── Trashed blocks ── */
+
+.trashHeading {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-white);
+  margin: var(--spacing-sm) 0 var(--spacing-xs);
+  text-transform: uppercase;
+  opacity: 0.7;
+}
+
+.trashedBlock {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: rgba(255, 255, 255, 0.08);
+  border: var(--border-width-sm) dashed rgba(255, 255, 255, 0.3);
+  border-radius: var(--radius-lg);
+  cursor: pointer;
+  user-select: none;
+  margin-bottom: var(--spacing-xs);
+}
+
+.trashedText {
+  flex: 1;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-white);
+  opacity: 0.75;
+  text-decoration: line-through;
+}
+
+.restoreLabel {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-white);
+  opacity: 0.9;
+  flex-shrink: 0;
+}
+
+/* ── Check button ── */
+
+.btnWrap {
+  margin-top: var(--spacing-sm);
+}
+
+/* ── Pizza rolling animation ── */
+
+.pizzaRoll {
+  position: absolute;
+  bottom: 80px;
+  left: 0;
+  width: 100%;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.pizzaEmoji {
+  display: inline-block;
+  font-size: 120px;
+  animation: pizzaRoll 1.8s cubic-bezier(0.25, 0.8, 0.25, 1) forwards;
+}
+
+@keyframes pizzaRoll {
+  0% {
+    transform: translateX(-20%) rotate(0deg);
+  }
+  100% {
+    transform: translateX(120vw) rotate(720deg);
+  }
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-6px); }
+  75% { transform: translateX(6px); }
+}
+
+@keyframes successPulse {
+  0%   { transform: scale(1);    box-shadow: 0 0 0 0 rgba(66, 97, 255, 0); }
+  40%  { transform: scale(1.03); box-shadow: 0 0 0 8px rgba(66, 97, 255, 0.35); }
+  100% { transform: scale(1);    box-shadow: 0 0 0 4px var(--color-bg-brand-translucent); }
+}
+
+@keyframes hintPulse {
+  0%, 100% {
+    background: rgba(255, 255, 255, 0.15);
+    transform: scale(1);
+  }
+  50% {
+    background: rgba(255, 255, 255, 0.28);
+    transform: scale(1.01);
+  }
+}
+
+/* ── Overlay ── */
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+  padding: var(--spacing-2xl);
+  box-sizing: border-box;
+}
+
+.overlayLandscape {
+  width: 1920px;
+  height: 1080px;
+}
+
+.overlayPortrait {
+  width: 1080px;
+  height: 1920px;
+}
+
+/* Hint card */
+
+.hintCard {
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-2xl);
+  width: 80%;
+  max-width: 760px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  align-items: center;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.45);
+}
+
+.hintTopLabel {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-blue);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-xs);
+  margin: 0;
+}
+
+.hintText {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-black);
+  text-align: center;
+  line-height: var(--line-height-tight);
+  margin: 0;
+}
+
+/* Moral failure card */
+
+.moralCard {
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-2xl);
+  width: 80%;
+  max-width: 820px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  align-items: center;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.45);
+}
+
+.moralTitle {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-black);
+  text-align: center;
+  line-height: var(--line-height-tight);
+  margin: 0;
+}
+
+.moralText {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-black);
+  text-align: center;
+  line-height: var(--line-height-relaxed);
+  white-space: pre-line;
+  margin: 0;
+}
+
+/* ── Flying block clone ── */
+
+.flyingBlock {
+  position: fixed;
+  display: flex;
+  align-items: center;
+  padding: var(--spacing-md) var(--spacing-lg);
+  border-radius: var(--radius-lg);
+  background-color: var(--color-white);
+  box-sizing: border-box;
+  pointer-events: none;
+  z-index: 99999;
+  will-change: transform;
+}
+
+.flyingBlockText {
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-black);
+  line-height: var(--line-height-normal);
+}

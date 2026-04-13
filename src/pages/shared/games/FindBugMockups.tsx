@@ -1,157 +1,211 @@
 import styles from './FindBugMockups.module.css';
 
 /* ============================
-   ShopMockup — E-commerce product page
-   Bug: no "Купить" button
+   BooksMockup — Free books app
+   Bug: no search button
    ============================ */
-export function ShopMockup({ className }: { className?: string }) {
+export function BooksMockup({ className }: { className?: string }) {
+  const books = [
+    { emoji: '📗', title: 'Евгений Онегин', author: 'А.С. Пушкин' },
+    { emoji: '📘', title: 'Война и мир', author: 'Л.Н. Толстой' },
+    { emoji: '📕', title: 'Мёртвые души', author: 'Н.В. Гоголь' },
+    { emoji: '📙', title: 'Отцы и дети', author: 'И.С. Тургенев' },
+    { emoji: '📗', title: 'Преступление и наказание', author: 'Ф.М. Достоевский' },
+    { emoji: '📘', title: 'Капитанская дочка', author: 'А.С. Пушкин' },
+    { emoji: '📕', title: 'Анна Каренина', author: 'Л.Н. Толстой' },
+  ];
+
   return (
     <div className={`${styles.mockup} ${className ?? ''}`}>
-      {/* Header */}
-      <div className={styles.shopHeader}>
-        <span className={styles.shopHeaderTitle}>ShopNow</span>
+      {/* Header — NO search icon, that's the bug */}
+      <div className={styles.booksHeader}>
+        <span className={styles.booksLogo}>📚</span>
+        <span className={styles.booksTitle}>Бесплатно. Книги–онлайн</span>
+        {/* search icon intentionally absent */}
       </div>
 
-      {/* Product image */}
-      <div className={styles.shopProductImage}>👟</div>
-
-      {/* Product info */}
-      <div className={styles.shopBody}>
-        <p className={styles.shopProductName}>Кроссовки NeoRun</p>
-        <p className={styles.shopPrice}>4 990 ₽</p>
-        <p className={styles.shopRating}>
-          ⭐ 4.7 <span className={styles.shopRatingMuted}>(128 отзывов)</span>
-        </p>
-
-        <p className={styles.shopSizeLabel}>Размер</p>
-        <div className={styles.shopSizes}>
-          <span className={styles.shopSizePill}>38</span>
-          <span className={styles.shopSizePill}>39</span>
-          <span className={`${styles.shopSizePill} ${styles.shopSizePillActive}`}>40</span>
-          <span className={styles.shopSizePill}>41</span>
-          <span className={styles.shopSizePill}>42</span>
-        </div>
-
-        <p className={styles.shopDescription}>
-          Лёгкие и удобные кроссовки для бега и повседневной носки.
-          Дышащий верх, амортизирующая подошва, стильный дизайн.
-        </p>
+      {/* Category tabs */}
+      <div className={styles.booksTabs}>
+        <span className={`${styles.booksTab} ${styles.booksTabActive}`}>Все</span>
+        <span className={styles.booksTab}>Классика</span>
+        <span className={styles.booksTab}>Современность</span>
+        <span className={styles.booksTab}>Детские</span>
       </div>
 
-      {/* NO BUY BUTTON — this is the problem! */}
-      <div className={styles.shopBottom} />
+      {/* Book list */}
+      <div className={styles.booksList}>
+        {books.map((book, i) => (
+          <div key={i} className={styles.bookRow}>
+            <div className={styles.bookCover}>{book.emoji}</div>
+            <div className={styles.bookInfo}>
+              <p className={styles.bookName}>{book.title}</p>
+              <p className={styles.bookAuthor}>{book.author}</p>
+              <span className={styles.bookFree}>Бесплатно</span>
+            </div>
+            <span className={styles.bookArrow}>›</span>
+          </div>
+        ))}
+      </div>
     </div>
   );
 }
 
 /* ============================
-   MessengerMockup — Chat app
-   Bug: no message input field
+   MessengerMockup — Chat dialog
+   Bug: no back button
    ============================ */
 export function MessengerMockup({ className }: { className?: string }) {
   return (
     <div className={`${styles.mockup} ${className ?? ''}`}>
-      {/* Header */}
+      {/* Header — NO back arrow, that's the bug */}
       <div className={styles.messengerHeader}>
-        <span className={styles.messengerBackArrow}>←</span>
-        <div className={styles.messengerAvatar}>А</div>
+        {/* back button intentionally absent */}
+        <div className={styles.messengerAvatar}>М</div>
         <div className={styles.messengerContactInfo}>
-          <span className={styles.messengerContactName}>Алиса</span>
+          <span className={styles.messengerContactName}>Максим</span>
           <span className={styles.messengerOnline}>в сети</span>
+        </div>
+        <div className={styles.messengerActions}>
+          <span className={styles.messengerActionIcon}>📞</span>
+          <span className={styles.messengerActionIcon}>📷</span>
         </div>
       </div>
 
       {/* Messages */}
       <div className={styles.messengerMessages}>
         <div className={`${styles.messageBubble} ${styles.messageLeft}`}>
-          <span>Привет! Как дела?</span>
+          <span>Привет! Как дела? 😊</span>
           <div className={styles.messageTime}>14:02</div>
         </div>
-
         <div className={`${styles.messageBubble} ${styles.messageRight}`}>
           <span>Всё отлично, спасибо!</span>
           <div className={styles.messageTime}>14:03</div>
         </div>
-
         <div className={`${styles.messageBubble} ${styles.messageLeft}`}>
-          <span>Встретимся завтра в 18:00?</span>
+          <span>Встретимся сегодня вечером?</span>
           <div className={styles.messageTime}>14:05</div>
         </div>
-
         <div className={`${styles.messageBubble} ${styles.messageRight}`}>
-          <span>Да, договорились!</span>
+          <span>Конечно, в 19:00?</span>
           <div className={styles.messageTime}>14:06</div>
+        </div>
+        <div className={`${styles.messageBubble} ${styles.messageLeft}`}>
+          <span>Отлично, договорились!</span>
+          <div className={styles.messageTime}>14:07</div>
         </div>
       </div>
 
-      {/* NO MESSAGE INPUT — this is the problem! */}
-      <div className={styles.messengerBottom} />
+      {/* Message input — present (not the bug) */}
+      <div className={styles.messengerInput}>
+        <div className={styles.messengerInputField}>
+          <span className={styles.messengerInputPlaceholder}>Написать сообщение...</span>
+        </div>
+        <button className={styles.messengerSendBtn}>➤</button>
+      </div>
     </div>
   );
 }
 
 /* ============================
-   MusicMockup — Music player
-   Bug: no playback controls
+   FoodMockup — Food order cart
+   Bug: no "Оформить заказ" button
    ============================ */
-export function MusicMockup({ className }: { className?: string }) {
+export function FoodMockup({ className }: { className?: string }) {
+  const items = [
+    { emoji: '🥤', name: 'Кола 0.5л', qty: 2, price: 298 },
+    { emoji: '🍔', name: 'Двойной бургер', qty: 1, price: 790 },
+    { emoji: '🍌', name: 'Бананы 1 кг', qty: 1, price: 220 },
+    { emoji: '🧃', name: 'Апельсиновый сок', qty: 2, price: 280 },
+    { emoji: '🍟', name: 'Картофель фри', qty: 1, price: 760 },
+  ];
+
   return (
     <div className={`${styles.mockup} ${className ?? ''}`}>
       {/* Header */}
-      <div className={styles.musicHeader}>
-        <span className={styles.musicHeaderTitle}>Музыка</span>
+      <div className={styles.foodHeader}>
+        <span className={styles.foodBackArrow}>←</span>
+        <span className={styles.foodHeaderTitle}>Корзина</span>
+        <span className={styles.foodBadge}>5</span>
       </div>
 
-      {/* Now playing */}
-      <div className={styles.musicNowPlaying}>
-        <div className={styles.musicAlbumArt}>🎵</div>
-        <div className={styles.musicTrackInfo}>
-          <p className={styles.musicTrackName}>Летний вечер</p>
-          <p className={styles.musicArtist}>Тёплые волны</p>
+      {/* Cart items */}
+      <div className={styles.foodItems}>
+        {items.map((item, i) => (
+          <div key={i} className={styles.foodItem}>
+            <div className={styles.foodItemEmoji}>{item.emoji}</div>
+            <div className={styles.foodItemInfo}>
+              <p className={styles.foodItemName}>{item.name}</p>
+              <p className={styles.foodItemPrice}>{item.price} ₽</p>
+            </div>
+            <div className={styles.foodQty}>
+              <span className={styles.foodQtyBtn}>−</span>
+              <span className={styles.foodQtyNum}>{item.qty}</span>
+              <span className={styles.foodQtyBtn}>+</span>
+            </div>
+          </div>
+        ))}
+      </div>
+
+      {/* Add more button */}
+      <div className={styles.foodAddMore}>
+        <span className={styles.foodAddMoreText}>+ Добавить ещё</span>
+      </div>
+
+      {/* Total */}
+      <div className={styles.foodTotal}>
+        <span className={styles.foodTotalLabel}>Итого:</span>
+        <span className={styles.foodTotalPrice}>2 348 ₽</span>
+      </div>
+
+      {/* NO "Оформить заказ" button — that's the bug! */}
+      <div className={styles.foodBottom} />
+    </div>
+  );
+}
+
+/* ============================
+   MarketplaceMockup — "Шоп-стар" product page
+   Bug: no cart icon in header
+   ============================ */
+export function MarketplaceMockup({ className }: { className?: string }) {
+  return (
+    <div className={`${styles.mockup} ${className ?? ''}`}>
+      {/* Header — NO cart icon, that's the bug */}
+      <div className={styles.shopHeader}>
+        <span className={styles.shopMenuIcon}>☰</span>
+        <span className={styles.shopBrand}>Шоп-стар</span>
+        <span className={styles.shopNotify}>🔔</span>
+        {/* cart icon intentionally absent */}
+      </div>
+
+      {/* Product image */}
+      <div className={styles.shopProductImage}>🎧</div>
+
+      {/* Product info */}
+      <div className={styles.shopBody}>
+        <p className={styles.shopProductName}>Наушники Premium BT-500</p>
+        <div className={styles.shopPriceRow}>
+          <span className={styles.shopPrice}>4 990 ₽</span>
+          <span className={styles.shopOldPrice}>6 000 ₽</span>
+        </div>
+        <p className={styles.shopRating}>
+          ⭐ 4.8 <span className={styles.shopRatingMuted}>(256 отзывов)</span>
+        </p>
+        <p className={styles.shopDescription}>
+          Беспроводные наушники с активным шумоподавлением. Время работы 30 часов. Bluetooth 5.0.
+        </p>
+
+        <p className={styles.shopColorLabel}>Цвет</p>
+        <div className={styles.shopColors}>
+          <span className={`${styles.shopColorDot} ${styles.shopColorBlack}`} />
+          <span className={styles.shopColorDot} style={{ background: '#fff', border: '2px solid #ccc' }} />
+          <span className={styles.shopColorDot} style={{ background: '#E53935' }} />
         </div>
       </div>
 
-      {/* Progress bar */}
-      <div className={styles.musicProgress}>
-        <div className={styles.musicProgressBar}>
-          <div className={styles.musicProgressFill} />
-        </div>
-        <div className={styles.musicProgressTimes}>
-          <span>1:12</span>
-          <span>3:28</span>
-        </div>
-      </div>
-
-      {/* NO PLAYBACK CONTROLS — this is the problem! */}
-      <div className={styles.musicControlsPlaceholder} />
-
-      {/* Up next */}
-      <div className={styles.musicUpNext}>
-        <p className={styles.musicUpNextTitle}>Далее</p>
-
-        <div className={styles.musicTrackRow}>
-          <div className={styles.musicTrackThumb} style={{ background: '#D4F5D4' }}>🎶</div>
-          <div className={styles.musicTrackRowInfo}>
-            <p className={styles.musicTrackRowName}>Ночной город</p>
-            <p className={styles.musicTrackRowArtist}>Электро</p>
-          </div>
-        </div>
-
-        <div className={styles.musicTrackRow}>
-          <div className={styles.musicTrackThumb} style={{ background: '#FFE0CC' }}>🎸</div>
-          <div className={styles.musicTrackRowInfo}>
-            <p className={styles.musicTrackRowName}>Дорога домой</p>
-            <p className={styles.musicTrackRowArtist}>Акустика</p>
-          </div>
-        </div>
-
-        <div className={styles.musicTrackRow}>
-          <div className={styles.musicTrackThumb} style={{ background: '#E8ECFF' }}>🎹</div>
-          <div className={styles.musicTrackRowInfo}>
-            <p className={styles.musicTrackRowName}>Утренний кофе</p>
-            <p className={styles.musicTrackRowArtist}>Джаз-бэнд</p>
-          </div>
-        </div>
+      {/* Add to cart button — present but can't view cart */}
+      <div className={styles.shopBtnArea}>
+        <button className={styles.shopAddBtn}>Добавить в корзину</button>
       </div>
     </div>
   );

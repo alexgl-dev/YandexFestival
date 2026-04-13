@@ -1,12 +1,30 @@
 .page {
+  position: relative;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  gap: var(--spacing-xl);
   width: 100%;
   max-width: 80%;
+  height: 100%;
   margin: 0 auto;
-  padding: var(--spacing-2xl) 0;
+  /* Top padding anchors prompt + headings to a stable position.
+     Bottom padding reserves space for the absolute .btnWrap so columns
+     don't overlap the "Проверить" button when it appears. */
+  padding: var(--spacing-2xl) 0 calc(var(--spacing-2xl) * 3);
   box-sizing: border-box;
+}
+
+.prompt {
+  font-family: var(--font-family);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-white);
+  text-align: center;
+  margin: 0;
+  max-width: 85%;
+  letter-spacing: var(--letter-spacing-xs);
+  line-height: var(--line-height-normal);
 }
 
 .columns {
@@ -14,7 +32,25 @@
   flex-direction: row;
   gap: var(--spacing-2xl);
   width: 100%;
-  align-items: stretch;
+  /* Fill the remaining vertical space after the prompt so the container
+     height is constant. Items inside each column anchor to the top via
+     flex-start, so the headings never move when blocks collapse. */
+  flex: 1;
+  min-height: 0;
+  align-items: flex-start;
+}
+
+/* Shrink text inside ListItems used as pool/slot blocks so long strings
+   (e.g. "Позвонить оператору для подтверждения заказа") fit within
+   ListItem's 88px min-height without wrapping awkwardly.
+   ListItem renders the title as the first <span> inside its root <div>. */
+.left div > span:first-child,
+.right div > span:first-child {
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+  overflow-wrap: break-word;
+  word-break: break-word;
+  hyphens: auto;
 }
 
 .left {
@@ -82,6 +118,7 @@
   bottom: var(--spacing-2xl);
   left: 50%;
   transform: translateX(-50%);
+  z-index: 10;
 }
 
 .overlay {
@@ -91,7 +128,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0, 0, 0, 0.5);
+  background: var(--color-overlay-dark);
   z-index: 9999;
 }
 

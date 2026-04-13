@@ -2,10 +2,22 @@ export type Mechanic = 'choose' | 'find' | 'sequence' | 'categorize' | 'distribu
 export type Mode = 'group' | 'solo';
 export type Feedback = 'instant' | 'onComplete';
 
+export interface ProfessionSection {
+  heading: string;
+  text: string;
+}
+
+export interface GlossaryTerm {
+  word: string;
+  definition: string;
+}
+
 export interface Profession {
   id: string;
   title: string;
   description: string;
+  sections?: ProfessionSection[];
+  glossary?: GlossaryTerm[];
 }
 
 export interface TaskOption {
@@ -40,6 +52,7 @@ export interface TaskCategory {
   title: string;
   description?: string;
   image?: string;
+  emoji?: string;
   avatar?: string;
   color?: string;
 }
@@ -47,6 +60,8 @@ export interface TaskCategory {
 export interface TaskItem {
   title?: string;
   text?: string;
+  name?: string;
+  emoji?: string;
   icon?: string;
   image?: string;
   content?: { type: string; value: string; description?: string };
@@ -65,6 +80,14 @@ export interface TaskLabel {
 
 export interface TaskTarget {
   area: { x: number; y: number; radius: number };
+  explanation: string;
+}
+
+export interface UxReview {
+  id: string;
+  text: string;
+  isProblem: boolean;
+  zone: string;
   explanation: string;
 }
 
@@ -102,10 +125,13 @@ export interface TaskStep {
   items?: TaskItem[];
   labels?: TaskLabel[];
   targets?: TaskTarget[];
+  reviews?: UxReview[];
   messages?: ChatMessage[];
   objects?: CatchObject[];
   trash?: { enabled: boolean; label: string };
   catcher?: { type: string; label: string };
+  resultCorrect?: string;
+  resultWrong?: string;
 }
 
 export interface Task {
@@ -123,6 +149,7 @@ export interface Task {
   instruction?: string;
   steps: TaskStep[];
   moral: string;
+  moralFailure?: string;
   hidden?: boolean;
 }
 

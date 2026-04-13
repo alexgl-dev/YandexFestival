@@ -1,0 +1,277 @@
+.mockup {
+  width: 700px;
+  flex-shrink: 0;
+  background: #090a0f;
+  border-radius: 40px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-family);
+  user-select: none;
+  box-shadow: 0 8px 50px rgba(0, 0, 0, 0.5);
+  padding: 26px 0 0;
+}
+
+/* ── Zone base (applied to every clickable) ── */
+.zone {
+  position: relative;
+  transition: outline 0.15s, background-color 0.15s;
+  outline: 4px solid transparent;
+  outline-offset: 4px;
+  border-radius: 14px;
+}
+
+.zoneInteractive {
+  cursor: pointer;
+}
+
+.zoneInteractive:hover {
+  outline-color: rgba(251, 203, 42, 0.45);
+}
+
+.zoneSelected {
+  outline: 4px solid #4161FF !important;
+}
+
+.zoneCorrect {
+  outline: 4px solid #4161FF !important;
+}
+
+.zoneWrong {
+  outline: 4px solid #FF3300 !important;
+}
+
+/* ── Badge ── */
+.badge {
+  position: absolute;
+  top: -14px;
+  right: -14px;
+  width: 34px;
+  height: 34px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 999px;
+  font-size: 16px;
+  font-weight: 700;
+  font-family: var(--font-family);
+  z-index: 10;
+  pointer-events: none;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
+}
+
+.badgeNeutral { background: #4161FF; color: #fff; }
+.badgeBlue    { background: #4161FF; color: #fff; }
+.badgeRed     { background: #FF3300; color: #fff; }
+
+/* ── Top bar ── */
+.topBar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 28px 18px;
+}
+
+.logo {
+  font-family: var(--font-family);
+  font-size: 24px;
+  font-weight: 800;
+  color: #fbcb2a;
+  letter-spacing: 0.8px;
+}
+
+.topRight {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+
+.regBtn {
+  font-family: var(--font-family);
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(255, 255, 255, 0.55);
+  white-space: nowrap;
+  padding: 8px 6px;
+}
+
+.profileCircle {
+  width: 52px;
+  height: 52px;
+  border-radius: 999px;
+  background: #fbcb2a;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.profileIcon {
+  width: 32px;
+  height: 32px;
+}
+
+/* ── Hero (cropped region of the PNG) ── */
+.hero {
+  margin: 4px 24px 0;
+  height: 290px;
+  border-radius: 20px;
+  background-image: url('/assets/games/001/ux-review/cinema-app-mockup.png');
+  background-repeat: no-repeat;
+  background-size: 697px auto;
+  background-position: -22px -86px;
+}
+
+/* ── Dots ── */
+.dots {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  padding: 16px 0 10px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.dotActive {
+  width: 22px;
+  height: 8px;
+  border-radius: 999px;
+  background: #fbcb2a;
+}
+
+/* ── Description bars ── */
+.description {
+  margin: 6px 80px 10px;
+  padding: 6px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  align-items: center;
+}
+
+.descBar {
+  height: 10px;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.22);
+}
+
+/* ── Heading ── */
+.heading {
+  font-family: var(--font-family);
+  font-size: 32px;
+  font-weight: 700;
+  color: #fff;
+  margin: 14px 0 20px;
+  text-align: center;
+  letter-spacing: -0.3px;
+}
+
+/* ── Steps row ── */
+.stepsRow {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  margin: 0 24px 18px;
+}
+
+.stepCard {
+  flex: 1;
+  min-width: 0;
+  background: #1a1b1f;
+  border-radius: 18px;
+  padding: 24px 8px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+  min-height: 158px;
+  justify-content: center;
+}
+
+.stepIcon {
+  width: 60px;
+  height: 60px;
+}
+
+.stepLabel {
+  font-family: var(--font-family);
+  font-size: 17px;
+  font-weight: 600;
+  color: #fff;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.stepLabelPale {
+  font-family: var(--font-family);
+  font-size: 17px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.22);
+  text-align: center;
+  line-height: 1.2;
+}
+
+.arrow {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 32px;
+  font-weight: 300;
+  flex-shrink: 0;
+  line-height: 1;
+  padding: 0 2px;
+}
+
+/* ── Schedule button ── */
+.scheduleBtn {
+  margin: 0 24px 18px;
+  padding: 28px 30px;
+  border-radius: 22px;
+  background: #fbcb2a;
+  color: #090a0f;
+  font-size: 30px;
+  font-weight: 700;
+  font-family: var(--font-family);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 14px;
+}
+
+.scheduleArrow {
+  font-size: 28px;
+  font-weight: 700;
+}
+
+/* ── Promo banner (cropped region of the PNG) ── */
+.promo {
+  margin: 0 24px 18px;
+  height: 175px;
+  border-radius: 22px;
+  background-image: url('/assets/games/001/ux-review/cinema-app-mockup.png');
+  background-repeat: no-repeat;
+  background-size: 697px auto;
+  background-position: -22px -844px;
+}
+
+/* ── Bottom nav ── */
+.bottomNav {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 18px 48px 18px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.navIcon {
+  width: 28px;
+  height: 28px;
+}
+
+.navIconActive {
+  color: #fbcb2a;
+}

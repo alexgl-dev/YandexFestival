@@ -1,7 +1,7 @@
 import { useState, useCallback, useRef } from 'react';
-import { Background, Button, ListItem, PopUp } from '../../../components/ui';
-import type { Task } from '../../../types/game';
-import { AppMockup, PROBLEM_ZONES, ZONES } from './AppMockup';
+import { Background, Button, Icon, ListItem, PopUp } from '../../../components/ui';
+import type { Task, UxReview } from '../../../types/game';
+import { CinemaAppMockup, CINEMA_PROBLEM_ZONES, type CinemaZoneId, type ZoneStatus } from './CinemaAppMockup';
 import styles from './MarkGame.module.css';
 
 interface GameResult {
@@ -23,31 +23,27 @@ interface MarkerPosition {
   y: number;
 }
 
-export function MarkGame({ task, onComplete, onBack, theme = 'orange', orientation = 'portrait' }: GameProps) {
-  const steps = task.steps;
-  const [currentStep, setCurrentStep] = useState(0);
-  const step = steps[currentStep];
-  const targets = step?.targets ?? [];
-  const totalSteps = steps.length;
-  const isLastStep = currentStep >= totalSteps - 1;
-  const isUxReview = step?.image?.includes('ux-review');
+// ─── UX-review game ──────────────────────────────────────────────────────────
 
-  const imageRef = useRef<HTMLDivElement>(null);
-
-  // Zone-based state (for ux-review)
+function UxReviewGame({
+  reviews,
+  onComplete,
+  theme,
+  orientation,
+  onBack,
+}: {
+  reviews: UxReview[];
+  onComplete: (results: GameResult[]) => void;
+  theme: 'cobalt' | 'orange';
+  orientation: 'landscape' | 'portrait';
+  onBack: () => void;
+}) {
   const [selectedZones, setSelectedZones] = useState<Set<string>>(new Set());
-  const [zoneResults, setZoneResults] = useState<Record<string, 'correct' | 'wrong'>>({});
-
-  // Coordinate-based state (for other mark tasks)
-  const [markers, setMarkers] = useState<MarkerPosition[]>([]);
-  const [markerStatus, setMarkerStatus] = useState<('correct' | 'wrong')[]>([]);
-
   const [checked, setChecked] = useState(false);
-  const [showPopup, setShowPopup] = useState(false);
-  const [results, setResults] = useState<GameResult[]>([]);
+  const [zoneResults, setZoneResults] = useState<Record<string, ZoneStatus>>({});
+  const [expandedReviewId, setExpandedReviewId] = useState<string | null>(null);
 
-
-  const handleZoneClick = useCallback((zoneId: string) => {
+  const handleZoneClick = useCallback((zoneId: CinemaZoneId) => {
     if (checked) return;
     setSelectedZones((prev) => {
       const next = new Set(prev);
@@ -57,153 +53,249 @@ export function MarkGame({ task, onComplete, onBack, theme = 'orange', orientati
     });
   }, [checked]);
 
-  const handleImageClick = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-    if (checked || isUxReview) return;
+  const handleCheck = useCallback(() => {
+    setChecked(true);
+    const results: Record<string, ZoneStatus> = {};
+    for (const zone of Array.from(selectedZones)) {
+      results[zone] = CINEMA_PROBLEM_ZONES.has(zone as CinemaZoneId) ? 'correct' : 'wrong';
+    }
+    for (const zone of CINEMA_PROBLEM_ZONES) {
+      if (!selectedZones.has(zone)) results[zone] = 'missed';
+    }
+    setZoneResults(results);
+  }, [selectedZones]);
+
+  const reviewStatus = (r: UxReview): 'correct' | 'wrong' | 'missed' | 'ok' => {
+    if (r.isProblem) return selectedZones.has(r.zone) ? 'correct' : 'missed';
+    return selectedZones.has(r.zone) ? 'wrong' : 'ok';
+  };
+
+  const handleComplete = useCallback(() => {
+    const correctCount = [...CINEMA_PROBLEM_ZONES].filter((z) => selectedZones.has(z)).length;
+    const wrongCount = [...selectedZones].filter((z) => !CINEMA_PROBLEM_ZONES.has(z as CinemaZoneId)).length;
+    const foundAll = correctCount === CINEMA_PROBLEM_ZONES.size && wrongCount === 0;
+    onComplete([{
+      answer: `Найдено ${correctCount} из ${CINEMA_PROBLEM_ZONES.size} проблем`,
+      correct: foundAll,
+      explanation: foundAll
+        ? 'Все проблемные зоны определены верно!'
+        : `Найдено ${correctCount} из ${CINEMA_PROBLEM_ZONES.size} проблем`,
+    }]);
+  }, [selectedZones, onComplete]);
+
+  return (
+    <Background theme={theme} orientation={orientation} onBack={onBack}>
+      <div className={styles.uxWrapper}>
+
+        {/* Mockup */}
+        <CinemaAppMockup
+          selectedZones={selectedZones}
+          zoneResults={checked ? zoneResults : undefined}
+          onZoneClick={checked ? undefined : handleZoneClick}
+        />
+
+        {/* Reviews */}
+        <div className={styles.reviewsSection}>
+          <h2 className={styles.reviewsTitle}>Отзывы пользователей</h2>
+          <div className={styles.reviewsList}>
+            {reviews.map((r) => {
+              const s = checked ? reviewStatus(r) : undefined;
+              const isGood = s === 'correct' || s === 'ok';
+              return (
+                <div key={r.id} className={styles.reviewWrap}>
+                  <div
+                    className={[
+                      styles.reviewItemRow,
+                      s ? styles.reviewItemRowChecked : '',
+                      s ? (isGood ? styles.rowGood : styles.rowBad) : '',
+                    ]
+                      .filter(Boolean)
+                      .join(' ')}
+                  >
+                    <div className={styles.listItemWrap}>
+                      <ListItem title={`«${r.text}»`} state="default" />
+                    </div>
+                    {s && (
+                      <div className={styles.statusGroup}>
+                        <span className={styles.statusIcon}>
+                          {isGood ? (
+                            <Icon name="done" color="blue" size="s" />
+                          ) : (
+                            <Icon name="close" color="red" size="s" />
+                          )}
+                        </span>
+                        <button
+                          type="button"
+                          className={styles.infoBtn}
+                          onClick={() => setExpandedReviewId(r.id)}
+                          aria-label="Показать объяснение"
+                        >
+                          ?
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Footer */}
+        <div className={styles.uxFooter}>
+          {!checked ? (
+            <>
+              <p className={styles.instruction}>
+                Изучи страницу и отзывы. Нажми на те места на стартовой странице, где нужно внести изменения, и отправь задачи в работу.
+              </p>
+              {selectedZones.size > 0 && (
+                <Button label="Отправить в работу" type="main" onClick={handleCheck} />
+              )}
+            </>
+          ) : (
+            <Button label="Далее" type="main" onClick={handleComplete} />
+          )}
+        </div>
+      </div>
+
+      {/* Explanation popup */}
+      {expandedReviewId && (() => {
+        const r = reviews.find((x) => x.id === expandedReviewId);
+        if (!r) return null;
+        const s = reviewStatus(r);
+        const isGood = s === 'correct' || s === 'ok';
+        return (
+          <div
+            className={`${styles.overlay} ${orientation === 'landscape' ? styles.overlayLandscape : styles.overlayPortrait}`}
+            onClick={() => setExpandedReviewId(null)}
+          >
+            <div className={styles.expCard} onClick={(e) => e.stopPropagation()}>
+              <span className={styles.expCardIcon}>
+                {isGood ? (
+                  <Icon name="done" color="blue" size="m" />
+                ) : (
+                  <Icon name="close" color="red" size="m" />
+                )}
+              </span>
+              <p className={styles.expCardQuote}>«{r.text}»</p>
+              <p className={styles.expCardText}>{r.explanation}</p>
+              <Button label="Понятно" type="main" onClick={() => setExpandedReviewId(null)} />
+            </div>
+          </div>
+        );
+      })()}
+    </Background>
+  );
+}
+
+// ─── Main MarkGame ────────────────────────────────────────────────────────────
+
+export function MarkGame({ task, onComplete, onBack, theme = 'orange', orientation = 'portrait' }: GameProps) {
+  const steps = task.steps;
+  const [currentStep, setCurrentStep] = useState(0);
+  const step = steps[currentStep];
+  const targets = step?.targets ?? [];
+  const totalSteps = steps.length;
+  const isLastStep = currentStep >= totalSteps - 1;
+
+  const imageRef = useRef<HTMLDivElement>(null);
+  const [markers, setMarkers] = useState<MarkerPosition[]>([]);
+  const [markerStatus, setMarkerStatus] = useState<('correct' | 'wrong')[]>([]);
+  const [checked, setChecked] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
+  const [results, setResults] = useState<GameResult[]>([]);
+
+  if (step?.reviews) {
+    return (
+      <UxReviewGame
+        reviews={step.reviews}
+        onComplete={onComplete}
+        theme={theme}
+        orientation={orientation}
+        onBack={onBack}
+      />
+    );
+  }
+
+  const handleImageClick = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (checked) return;
     const rect = imageRef.current?.getBoundingClientRect();
     if (!rect) return;
     const x = ((e.clientX - rect.left) / rect.width) * 100;
     const y = ((e.clientY - rect.top) / rect.height) * 100;
     setMarkers((prev) => [...prev, { x, y }]);
-  }, [checked, isUxReview]);
+  };
 
-  const handleCheck = useCallback(() => {
+  const handleCheck = () => {
     setChecked(true);
-
-    if (isUxReview) {
-      // Zone-based check
-      const newZoneResults: Record<string, 'correct' | 'wrong'> = {};
-      let correctCount = 0;
-
-      for (const zoneId of selectedZones) {
-        if (PROBLEM_ZONES.has(zoneId)) {
-          newZoneResults[zoneId] = 'correct';
-          correctCount++;
-        } else {
-          newZoneResults[zoneId] = 'wrong';
-        }
-      }
-      setZoneResults(newZoneResults);
-
-      const foundAll = [...PROBLEM_ZONES].every((z) => selectedZones.has(z));
-      const noWrong = [...selectedZones].every((z) => PROBLEM_ZONES.has(z));
-
-      const problemLabels = ZONES.filter((z) => PROBLEM_ZONES.has(z.id));
-
-      const stepResult: GameResult = {
-        answer: `Найдено ${correctCount} из ${PROBLEM_ZONES.size} проблем`,
-        correct: foundAll && noWrong,
-        explanation: foundAll && noWrong
-          ? 'Все проблемы найдены верно!'
-          : `Проблемные зоны: ${problemLabels.map((z) => z.label).join(', ')}`,
-      };
-
-      setResults((prev) => [...prev, stepResult]);
-    } else {
-      // Coordinate-based check
-      const newStatus = markers.map((marker) => {
-        const hit = targets.some((target) => {
-          const dx = marker.x - target.area.x;
-          const dy = marker.y - target.area.y;
-          return Math.sqrt(dx * dx + dy * dy) <= target.area.radius;
-        });
-        return hit ? 'correct' as const : 'wrong' as const;
+    const newStatus = markers.map((marker) => {
+      const hit = targets.some((target) => {
+        const dx = marker.x - target.area.x;
+        const dy = marker.y - target.area.y;
+        return Math.sqrt(dx * dx + dy * dy) <= target.area.radius;
       });
-      setMarkerStatus(newStatus);
+      return hit ? 'correct' as const : 'wrong' as const;
+    });
+    setMarkerStatus(newStatus);
 
-      const hitTargets = targets.filter((target) =>
-        markers.some((marker) => {
-          const dx = marker.x - target.area.x;
-          const dy = marker.y - target.area.y;
-          return Math.sqrt(dx * dx + dy * dy) <= target.area.radius;
-        })
-      );
+    const hitTargets = targets.filter((target) =>
+      markers.some((marker) => {
+        const dx = marker.x - target.area.x;
+        const dy = marker.y - target.area.y;
+        return Math.sqrt(dx * dx + dy * dy) <= target.area.radius;
+      })
+    );
 
-      const stepResult: GameResult = {
-        answer: `Найдено ${hitTargets.length} из ${targets.length}`,
-        correct: hitTargets.length === targets.length,
-        explanation: targets.map((t) => t.explanation).join('; '),
-      };
-
-      setResults((prev) => [...prev, stepResult]);
-    }
-
+    const stepResult: GameResult = {
+      answer: `Найдено ${hitTargets.length} из ${targets.length}`,
+      correct: hitTargets.length === targets.length,
+      explanation: targets.map((t) => t.explanation).join('; '),
+    };
+    setResults((prev) => [...prev, stepResult]);
     setShowPopup(true);
-  }, [isUxReview, selectedZones, markers, targets]);
+  };
 
-  const handlePopupAction = useCallback(() => {
+  const handlePopupAction = () => {
     setShowPopup(false);
     if (isLastStep) {
       onComplete(results);
     } else {
-      const nextStep = currentStep + 1;
-      setCurrentStep(nextStep);
-      setSelectedZones(new Set());
-      setZoneResults({});
+      setCurrentStep((s) => s + 1);
       setMarkers([]);
       setMarkerStatus([]);
       setChecked(false);
     }
-  }, [isLastStep, currentStep, results, onComplete]);
+  };
 
   if (!step) return null;
-
   const lastResult = results[results.length - 1];
-  const canCheck = isUxReview ? selectedZones.size > 0 : markers.length > 0;
 
   return (
     <Background theme={theme} orientation={orientation} onBack={onBack}>
       <div className={styles.wrapper}>
-
         <div className={styles.content}>
-          {isUxReview ? (
-            <AppMockup
-              selectedZones={selectedZones}
-              zoneResults={checked ? zoneResults : undefined}
-              onZoneClick={handleZoneClick}
-            />
-          ) : (
-            <div className={styles.imageContainer} ref={imageRef} onClick={handleImageClick}>
-              {step.image && (
-                <img
-                  src={step.image}
-                  alt={step.prompt || 'Изображение задания'}
-                  className={styles.image}
+          <div className={styles.imageContainer} ref={imageRef} onClick={handleImageClick}>
+            {step.image && (
+              <img src={step.image} alt={step.prompt || 'Изображение задания'} className={styles.image} />
+            )}
+            {markers.map((marker, i) => {
+              const statusClass = markerStatus[i] === 'correct'
+                ? styles.markerCorrect
+                : markerStatus[i] === 'wrong'
+                  ? styles.markerWrong
+                  : '';
+              return (
+                <div
+                  key={i}
+                  className={`${styles.marker} ${statusClass}`}
+                  style={{ left: `${marker.x}%`, top: `${marker.y}%` }}
                 />
-              )}
-              {markers.map((marker, i) => {
-                const statusClass = markerStatus[i] === 'correct'
-                  ? styles.markerCorrect
-                  : markerStatus[i] === 'wrong'
-                    ? styles.markerWrong
-                    : '';
-                return (
-                  <div
-                    key={i}
-                    className={`${styles.marker} ${statusClass}`}
-                    style={{ left: `${marker.x}%`, top: `${marker.y}%` }}
-                  />
-                );
-              })}
-            </div>
-          )}
-
-          {step.hints && (
-            <div className={styles.hintsPanel}>
-              <h3 className={styles.hintsTitle}>Отзывы пользователей</h3>
-              <div className={styles.hintsList}>
-                {step.hints.split('\n').filter((l) => l.trim().startsWith('-')).map((line, i) => (
-                  <ListItem
-                    key={i}
-                    title={line.trim().replace(/^-\s*/, '').replace(/^"/, '').replace(/"$/, '')}
-                    state="default"
-                  />
-                ))}
-              </div>
-            </div>
-          )}
+              );
+            })}
+          </div>
         </div>
 
-        {!checked && canCheck && (
+        {!checked && markers.length > 0 && (
           <div className={styles.footer}>
             <Button label="Проверить" type="main" onClick={handleCheck} />
           </div>

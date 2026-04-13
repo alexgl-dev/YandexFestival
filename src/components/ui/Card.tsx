@@ -70,10 +70,12 @@ export function Card({
                 <span className={`${styles.hint} ${state !== 'default' ? styles.hintHidden : ''}`}>{hint}</span>
               )}
             </div>
-            <div className={styles.textBlock}>
-              <h3 className={styles.title}>{title}</h3>
-              <p className={styles.description}>{description}</p>
-            </div>
+            {(title || description) && (
+              <div className={styles.textBlock}>
+                {title && <h3 className={styles.title}>{title}</h3>}
+                {description && <p className={styles.description}>{description}</p>}
+              </div>
+            )}
           </div>
           <div className={styles.imageArea}>
             {image ? (
@@ -90,9 +92,9 @@ export function Card({
         <>
           <div className={styles.header}>
             <span className={styles.variant}>{variant}</span>
-            {isPressed && (
+            <span className={isPressed ? undefined : styles.iconHidden}>
               <Icon name="done" color="blue" size="s" />
-            )}
+            </span>
           </div>
           <div className={styles.textBlock}>
             <h3 className={styles.title}>{title}</h3>

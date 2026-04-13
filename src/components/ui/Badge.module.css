@@ -7,7 +7,7 @@
   font-family: var(--font-family);
   font-size: 32px;
   font-weight: var(--font-weight-regular);
-  letter-spacing: -0.32px;
+  letter-spacing: var(--letter-spacing-sm);
   line-height: 1;
   white-space: nowrap;
   box-sizing: border-box;

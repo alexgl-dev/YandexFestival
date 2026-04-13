@@ -1,12 +1,38 @@
+import { useState } from 'react';
 import { useNavigate, useParams, useOutletContext } from 'react-router';
-import { Background, Badge } from '../../components/ui';
-import type { SectionData } from '../../types/game';
+import { Background, Badge, Icon } from '../../components/ui';
+import type { SectionData, GlossaryTerm } from '../../types/game';
 import styles from './Profession.module.css';
+
+function renderWithGlossary(
+  text: string,
+  glossary: GlossaryTerm[],
+  onTap: (term: GlossaryTerm) => void,
+): React.ReactNode {
+  if (!glossary.length) return text;
+
+  const pattern = new RegExp(`(${glossary.map((g) => g.word).join('|')})`, 'gi');
+  const parts = text.split(pattern);
+
+  return parts.map((part, i) => {
+    const term = glossary.find((g) => g.word.toLowerCase() === part.toLowerCase());
+    if (term) {
+      return (
+        <span key={i} className={styles.glossaryWord} onClick={() => onTap(term)}>
+          {part}
+        </span>
+      );
+    }
+    return part;
+  });
+}
 
 export function Profession() {
   const navigate = useNavigate();
   const { professionId } = useParams();
   const data = useOutletContext<SectionData>();
+
+  const [activeTerm, setActiveTerm] = useState<GlossaryTerm | null>(null);
 
   const profIndex = data.professions.findIndex((p) => p.id === professionId);
   const profession = data.professions[profIndex];
@@ -24,14 +50,30 @@ export function Profession() {
   const prev = profIndex > 0 ? data.professions[profIndex - 1] : null;
   const next = profIndex < data.professions.length - 1 ? data.professions[profIndex + 1] : null;
 
+  const glossary = profession.glossary ?? [];
+  const hasSections = profession.sections && profession.sections.length > 0;
+
   return (
     <Background theme="orange" orientation="portrait" onBack={() => navigate(`/${data.slug}/description`)}>
       <div className={styles.wrapper}>
         <h2 className={styles.title}>{profession.title}</h2>
 
-        <div className={styles.card}>
-          <p className={styles.description}>{profession.description}</p>
-        </div>
+        {hasSections ? (
+          <div className={styles.sections}>
+            {profession.sections!.map((section) => (
+              <div key={section.heading} className={styles.sectionCard}>
+                <h3 className={styles.sectionHeading}>{section.heading}</h3>
+                <p className={styles.sectionText}>
+                  {renderWithGlossary(section.text, glossary, setActiveTerm)}
+                </p>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className={styles.card}>
+            <p className={styles.description}>{profession.description}</p>
+          </div>
+        )}
 
         <div className={styles.navigation}>
           {prev && (
@@ -46,6 +88,16 @@ export function Profession() {
           )}
         </div>
       </div>
+
+      {activeTerm && (
+        <div className={styles.overlay} onClick={() => setActiveTerm(null)}>
+          <div className={styles.popup} onClick={(e) => e.stopPropagation()}>
+            <p className={styles.popupWord}>{activeTerm.word}</p>
+            <p className={styles.popupDefinition}>{activeTerm.definition}</p>
+            <span className={styles.popupClose} onClick={() => setActiveTerm(null)}><Icon name="close" color="red" size="s" /></span>
+          </div>
+        </div>
+      )}
     </Background>
   );
 }

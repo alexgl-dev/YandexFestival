@@ -15,6 +15,7 @@ import { LabelGame } from './games/LabelGame';
 import { MatchGame } from './games/MatchGame';
 import { BurnoutGame } from './games/BurnoutGame';
 import { LaunchSequenceGame } from './games/LaunchSequenceGame';
+import { UxSequenceGame } from './games/UxSequenceGame';
 import { GamePlaceholder } from './GamePlaceholder';
 
 interface GameRouterProps {
@@ -45,6 +46,8 @@ export function GameRouter({ task, onComplete, onBack, theme = 'orange', orienta
         return <CodeSequenceGame task={task} onComplete={onComplete} onBack={onBack} theme={theme} orientation={orientation} />;
       if (usesIcon)
         return <LaunchSequenceGame task={task} onComplete={onComplete} onBack={onBack} theme={theme} orientation={orientation} />;
+      if (task.id === 'pizza-order')
+        return <UxSequenceGame task={task} onComplete={onComplete} onBack={onBack} theme={theme} orientation={orientation} />;
       return <SequenceGame task={task} onComplete={onComplete} onBack={onBack} theme={theme} orientation={orientation} />;
     }
     case 'categorize': {
