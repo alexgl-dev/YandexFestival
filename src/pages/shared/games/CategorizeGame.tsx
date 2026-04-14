@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { Background, Button } from '../../../components/ui';
+import { Background, PopUp } from '../../../components/ui';
 import type { Task } from '../../../types/game';
 import styles from './CategorizeGame.module.css';
 
@@ -15,42 +15,6 @@ interface GameProps {
   onBack: () => void;
   theme?: 'cobalt' | 'orange';
   orientation?: 'landscape' | 'portrait';
-}
-
-// ── Tooltip parser ──────────────────────────────────────────────────────────
-interface Segment {
-  text: string;
-  tooltip: string | null;
-}
-
-function parseTooltips(raw: string): Segment[] {
-  const regex = /\[([^\]]+)\]\{tooltip:\s*"([^"]*)"\}/g;
-  const segments: Segment[] = [];
-  let last = 0;
-  let m: RegExpExecArray | null;
-  while ((m = regex.exec(raw)) !== null) {
-    if (m.index > last) segments.push({ text: raw.slice(last, m.index), tooltip: null });
-    segments.push({ text: m[1], tooltip: m[2] });
-    last = m.index + m[0].length;
-  }
-  if (last < raw.length) segments.push({ text: raw.slice(last), tooltip: null });
-  return segments;
-}
-
-function renderTooltips(
-  raw: string,
-  onTooltip: (t: string) => void,
-  wordClass: string,
-): React.ReactNode[] {
-  return parseTooltips(raw).map((seg, i) =>
-    seg.tooltip ? (
-      <span key={i} className={wordClass} onClick={() => onTooltip(seg.tooltip!)}>
-        {seg.text}
-      </span>
-    ) : (
-      <span key={i}>{seg.text}</span>
-    ),
-  );
 }
 
 type Popup =
@@ -70,7 +34,6 @@ export function CategorizeGame({ task, onComplete, onBack, theme = 'cobalt', ori
   const [draggedItem, setDraggedItem] = useState<number | null>(null);
   const [dragOverCategory, setDragOverCategory] = useState<string | null>(null);
   const [popup, setPopup] = useState<Popup>(null);
-  const [wordTooltip, setWordTooltip] = useState<string | null>(null);
 
   const correctCount = Object.keys(correctPlacements).length;
   const allPlaced = items.length > 0 && correctCount === items.length;
@@ -139,7 +102,6 @@ export function CategorizeGame({ task, onComplete, onBack, theme = 'cobalt', ori
   }, [draggedItem, tryPlace]);
 
   const handlePopupDismiss = useCallback(() => {
-    setWordTooltip(null);
     setPopup(null);
     if (allPlaced) {
       const results: GameResult[] = items.map((item) => ({
@@ -156,10 +118,7 @@ export function CategorizeGame({ task, onComplete, onBack, theme = 'cobalt', ori
   return (
     <Background theme={theme} orientation={orientation} onBack={onBack}>
       <div className={styles.wrapper}>
-        <div className={styles.header}>
-          <p className={styles.instruction}>{step.prompt || 'Перетащи карточки в нужную зону'}</p>
-          <span className={styles.counter}>Разложено: {correctCount}/{items.length}</span>
-        </div>
+        <p className={styles.instruction}>{step.prompt || 'Перетащи карточки в нужную зону'}</p>
 
         {/* Drop zones */}
         <div className={styles.columnsArea}>
@@ -183,33 +142,10 @@ export function CategorizeGame({ task, onComplete, onBack, theme = 'cobalt', ori
                 onDragLeave={handleDragLeave}
                 onDrop={(e) => handleDrop(e, cat.id)}
               >
-                <div className={styles.columnHeader}>
-                  <div className={styles.columnTitles}>
-                    <span className={styles.columnTitle}>{cat.title}</span>
-                    <span className={styles.columnDesc}>{cat.description}</span>
-                  </div>
-                  {cat.tooltip && (
-                    <button
-                      type="button"
-                      className={styles.categoryInfoBtn}
-                      onClick={(e) => handleCategoryInfoClick(e, cat.id)}
-                      aria-label={`О группе ${cat.title}`}
-                    >
-                      ?
-                    </button>
-                  )}
-                </div>
-
-                <div className={styles.columnBody}>
-                  {placedIndices.map((itemIdx) => {
-                    const item = items[itemIdx];
-                    return (
-                      <div key={itemIdx} className={styles.chip}>
-                        <span className={styles.chipText}>{item.text}</span>
-                      </div>
-                    );
-                  })}
-                </div>
+                {cat.image && (
+                  <img src={cat.image} alt={cat.title} className={styles.categoryImage} />
+                )}
+                <span className={styles.columnTitle}>{cat.title}</span>
               </div>
             );
           })}
@@ -246,48 +182,34 @@ export function CategorizeGame({ task, onComplete, onBack, theme = 'cobalt', ori
       {/* Popup overlay */}
       {popup && (
         <div className={styles.overlay}>
-          <div className={[
-            styles.popup,
-            popup.kind === 'correct' ? styles.popupCorrect : '',
-            popup.kind === 'wrong' ? styles.popupWrong : '',
-          ].filter(Boolean).join(' ')}>
-
-            {popup.kind === 'correct' && (
-              <>
-                <p className={styles.popupTitle}>Верно!</p>
-                <p className={styles.popupBody}>
-                  {renderTooltips(popup.explanation, setWordTooltip, styles.tooltipWord)}
-                </p>
-                {wordTooltip && (
-                  <div className={styles.wordTooltipBox}>
-                    <p className={styles.wordTooltipText}>{wordTooltip}</p>
-                    <button type="button" className={styles.wordTooltipClose} onClick={() => setWordTooltip(null)}>✕</button>
-                  </div>
-                )}
-                <Button
-                  label={allPlaced ? 'Результаты' : 'Продолжить'}
-                  type="main"
-                  onClick={handlePopupDismiss}
-                />
-              </>
-            )}
-
-            {popup.kind === 'wrong' && (
-              <>
-                <p className={styles.popupTitle}>Не совсем</p>
-                <p className={styles.popupBody}>{popup.hint}</p>
-                <Button label="Попробовать ещё" type="main" onClick={handlePopupDismiss} />
-              </>
-            )}
-
-            {popup.kind === 'category' && (
-              <>
-                <p className={styles.popupTitle}>{popup.title}</p>
-                <p className={styles.popupBody}>{popup.tooltip}</p>
-                <Button label="Понятно" type="main" onClick={handlePopupDismiss} />
-              </>
-            )}
-          </div>
+          {popup.kind === 'correct' && (
+            <PopUp
+              icon="done"
+              iconColor="blue"
+              title="Верно!"
+              description={popup.explanation}
+              buttonLabel={allPlaced ? 'Результаты' : 'Продолжить'}
+              onButtonClick={handlePopupDismiss}
+            />
+          )}
+          {popup.kind === 'wrong' && (
+            <PopUp
+              icon="close"
+              iconColor="red"
+              title="Не совсем"
+              description={popup.hint}
+              buttonLabel="Попробовать ещё"
+              onButtonClick={handlePopupDismiss}
+            />
+          )}
+          {popup.kind === 'category' && (
+            <PopUp
+              title={popup.title}
+              description={popup.tooltip}
+              buttonLabel="Понятно"
+              onButtonClick={handlePopupDismiss}
+            />
+          )}
         </div>
       )}
     </Background>

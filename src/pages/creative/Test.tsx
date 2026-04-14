@@ -175,7 +175,9 @@ export function Test() {
                       <span className={styles.cellLabel}>{label}</span>
                     </div>
                     <div className={styles.cellBack}>
-                      <span className={styles.cellBackText}>{question?.expertAnswer}</span>
+                      <span className={styles.cellBackText}>
+                        {question?.expertComment ?? question?.expertAnswer}
+                      </span>
                     </div>
                   </div>
                 </div>

@@ -1,7 +1,7 @@
 import { useState, useCallback, useRef } from 'react';
 import { Background, Button, Icon, ListItem, PopUp } from '../../../components/ui';
 import type { Task, UxReview } from '../../../types/game';
-import { CinemaAppMockup, CINEMA_PROBLEM_ZONES, type CinemaZoneId, type ZoneStatus } from './CinemaAppMockup';
+import { AppMockup } from './AppMockup';
 import styles from './MarkGame.module.css';
 
 interface GameResult {
@@ -40,10 +40,11 @@ function UxReviewGame({
 }) {
   const [selectedZones, setSelectedZones] = useState<Set<string>>(new Set());
   const [checked, setChecked] = useState(false);
-  const [zoneResults, setZoneResults] = useState<Record<string, ZoneStatus>>({});
   const [expandedReviewId, setExpandedReviewId] = useState<string | null>(null);
 
-  const handleZoneClick = useCallback((zoneId: CinemaZoneId) => {
+  const problemZones = new Set(reviews.filter((r) => r.isProblem).map((r) => r.zone));
+
+  const handleZoneClick = useCallback((zoneId: string) => {
     if (checked) return;
     setSelectedZones((prev) => {
       const next = new Set(prev);
@@ -55,43 +56,43 @@ function UxReviewGame({
 
   const handleCheck = useCallback(() => {
     setChecked(true);
-    const results: Record<string, ZoneStatus> = {};
-    for (const zone of Array.from(selectedZones)) {
-      results[zone] = CINEMA_PROBLEM_ZONES.has(zone as CinemaZoneId) ? 'correct' : 'wrong';
-    }
-    for (const zone of CINEMA_PROBLEM_ZONES) {
-      if (!selectedZones.has(zone)) results[zone] = 'missed';
-    }
-    setZoneResults(results);
-  }, [selectedZones]);
+  }, []);
 
   const reviewStatus = (r: UxReview): 'correct' | 'wrong' | 'missed' | 'ok' => {
-    if (r.isProblem) return selectedZones.has(r.zone) ? 'correct' : 'missed';
-    return selectedZones.has(r.zone) ? 'wrong' : 'ok';
+    const zoneSelected = selectedZones.has(r.zone);
+    if (r.isProblem) return zoneSelected ? 'correct' : 'missed';
+    return zoneSelected ? 'wrong' : 'ok';
   };
 
   const handleComplete = useCallback(() => {
-    const correctCount = [...CINEMA_PROBLEM_ZONES].filter((z) => selectedZones.has(z)).length;
-    const wrongCount = [...selectedZones].filter((z) => !CINEMA_PROBLEM_ZONES.has(z as CinemaZoneId)).length;
-    const foundAll = correctCount === CINEMA_PROBLEM_ZONES.size && wrongCount === 0;
+    const correctCount = [...selectedZones].filter((z) => problemZones.has(z)).length;
+    const wrongCount = [...selectedZones].filter((z) => !problemZones.has(z)).length;
+    const foundAll = correctCount === problemZones.size && wrongCount === 0;
     onComplete([{
-      answer: `Найдено ${correctCount} из ${CINEMA_PROBLEM_ZONES.size} проблем`,
+      answer: `Найдено ${correctCount} из ${problemZones.size} проблем`,
       correct: foundAll,
       explanation: foundAll
         ? 'Все проблемные зоны определены верно!'
-        : `Найдено ${correctCount} из ${CINEMA_PROBLEM_ZONES.size} проблем`,
+        : `Найдено ${correctCount} из ${problemZones.size} проблем`,
     }]);
-  }, [selectedZones, onComplete]);
+  }, [selectedZones, problemZones, onComplete]);
+
+  // After check: each zone gets correct/wrong
+  const zoneResults: Record<string, 'correct' | 'wrong'> = checked
+    ? Object.fromEntries(
+        [...selectedZones].map((z) => [z, problemZones.has(z) ? 'correct' : 'wrong'])
+      )
+    : {};
 
   return (
     <Background theme={theme} orientation={orientation} onBack={onBack}>
       <div className={styles.uxWrapper}>
 
         {/* Mockup */}
-        <CinemaAppMockup
+        <AppMockup
           selectedZones={selectedZones}
           zoneResults={checked ? zoneResults : undefined}
-          onZoneClick={checked ? undefined : handleZoneClick}
+          onZoneClick={handleZoneClick}
         />
 
         {/* Reviews */}
@@ -100,6 +101,7 @@ function UxReviewGame({
           <div className={styles.reviewsList}>
             {reviews.map((r) => {
               const s = checked ? reviewStatus(r) : undefined;
+              const isSelected = selectedZones.has(r.zone);
               const isGood = s === 'correct' || s === 'ok';
               return (
                 <div key={r.id} className={styles.reviewWrap}>
@@ -111,6 +113,7 @@ function UxReviewGame({
                     ]
                       .filter(Boolean)
                       .join(' ')}
+                    onClick={() => handleToggle(r.id)}
                   >
                     <div className={styles.listItemWrap}>
                       <ListItem title={`«${r.text}»`} state="default" />
@@ -127,7 +130,7 @@ function UxReviewGame({
                         <button
                           type="button"
                           className={styles.infoBtn}
-                          onClick={() => setExpandedReviewId(r.id)}
+                          onClick={(e) => { e.stopPropagation(); setExpandedReviewId(r.id); }}
                           aria-label="Показать объяснение"
                         >
                           ?
@@ -144,14 +147,9 @@ function UxReviewGame({
         {/* Footer */}
         <div className={styles.uxFooter}>
           {!checked ? (
-            <>
-              <p className={styles.instruction}>
-                Изучи страницу и отзывы. Нажми на те места на стартовой странице, где нужно внести изменения, и отправь задачи в работу.
-              </p>
-              {selectedZones.size > 0 && (
-                <Button label="Отправить в работу" type="main" onClick={handleCheck} />
-              )}
-            </>
+            selectedZones.size > 0 && (
+              <Button label="Отправить в работу" type="main" onClick={handleCheck} />
+            )
           ) : (
             <Button label="Далее" type="main" onClick={handleComplete} />
           )}

@@ -18,7 +18,7 @@
   color: var(--color-white);
   text-align: center;
   margin: 0;
-  max-width: 85%;
+  max-width: 75%;
   letter-spacing: var(--letter-spacing-xs);
   line-height: var(--line-height-normal);
 }

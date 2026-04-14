@@ -214,6 +214,7 @@ export interface BingoQuestion {
   prompt: string;           // question text
   options: string[];        // 4 answer options (just text strings)
   expertAnswer: string;     // the expert's answer for comparison
+  expertComment?: string;   // text shown on the flipped bingo card back
 }
 
 export interface BingoExpert {

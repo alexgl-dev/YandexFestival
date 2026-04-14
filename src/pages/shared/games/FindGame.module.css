@@ -3,8 +3,8 @@
   flex-direction: column;
   align-items: center;
   gap: var(--spacing-xl);
-  width: 100%;
-  max-width: 80%;
+  width: 90%;
+  max-width: 90%;
   margin: 0 auto;
   padding: var(--spacing-2xl) 0;
   font-family: var(--font-family);
@@ -73,16 +73,24 @@
 
 .optionsColumn {
   width: 100%;
-  max-width: 500px;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: var(--spacing-sm);
+}
+
+.optionsColumn > *:last-child:nth-child(odd) {
+  grid-column: 1 / -1;
+  justify-self: center;
+  width: 50% !important;
+  box-sizing: border-box;
 }
 
 .optionsColumn > * {
   width: 100% !important;
-  padding: var(--spacing-md) var(--spacing-lg);
-  gap: var(--spacing-sm);
+  max-width: 100% !important;
+  min-width: 0 !important;
+  box-sizing: border-box;
+  padding: var(--spacing-md) var(--spacing-lg) !important;
 }
 
 .overlay {

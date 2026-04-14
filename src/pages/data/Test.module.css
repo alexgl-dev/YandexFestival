@@ -137,16 +137,16 @@
 
 .bingoGrid {
   display: grid;
-  grid-template-columns: repeat(3, 200px);
-  grid-template-rows: repeat(3, 200px);
+  grid-template-columns: repeat(3, 280px);
+  grid-template-rows: repeat(3, 280px);
   gap: var(--spacing-sm);
 }
 
 /* --- Flip card cells --- */
 
 .cellWrapper {
-  width: 200px;
-  height: 200px;
+  width: 280px;
+  height: 280px;
   perspective: 800px;
   cursor: pointer;
 }
@@ -181,11 +181,11 @@
 
 .cellLabel {
   font-family: var(--font-family);
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-md);
   font-weight: var(--font-weight-bold);
   color: var(--color-white);
   text-align: center;
-  line-height: var(--line-height-normal);
+  line-height: var(--line-height-tight);
 }
 
 .cellBack {
@@ -195,7 +195,7 @@
 
 .cellBackText {
   font-family: var(--font-family);
-  font-size: var(--font-size-xs);
+  font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
   color: var(--color-black);
   text-align: center;
@@ -205,8 +205,8 @@
 /* --- Center cell (expert) --- */
 
 .cellCenter {
-  width: 200px;
-  height: 200px;
+  width: 280px;
+  height: 280px;
   border-radius: var(--radius-sm);
   background: var(--color-blue);
   display: flex;
@@ -214,27 +214,27 @@
   align-items: center;
   justify-content: center;
   gap: var(--spacing-xs);
-  padding: var(--spacing-sm);
+  padding: var(--spacing-md);
   box-sizing: border-box;
 }
 
 .cellCenterRole {
   font-family: var(--font-family);
-  font-size: var(--font-size-xs);
+  font-size: var(--font-size-sm);
   font-weight: var(--font-weight-regular);
   color: var(--color-white);
   text-align: center;
-  opacity: 0.8;
+  opacity: 0.85;
   line-height: var(--line-height-normal);
 }
 
 .cellCenterName {
   font-family: var(--font-family);
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-md);
   font-weight: var(--font-weight-bold);
   color: var(--color-white);
   text-align: center;
-  line-height: var(--line-height-normal);
+  line-height: var(--line-height-tight);
 }
 
 /* --- Result right side --- */

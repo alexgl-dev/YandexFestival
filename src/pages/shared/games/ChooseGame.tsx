@@ -161,7 +161,6 @@ export function ChooseGame({ task, onComplete, onBack, theme = 'orange', orienta
                           variant={variantLabel}
                           title={revealedTitle}
                           description=""
-                          image={option.image}
                           state={revealedState}
                           size="l"
                         />

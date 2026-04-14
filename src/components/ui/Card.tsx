@@ -50,13 +50,11 @@ export function Card({
               <p className={styles.description}>{description}</p>
             </div>
           </div>
-          <div className={styles.imageArea}>
-            {image ? (
+          {image && (
+            <div className={styles.imageArea}>
               <img src={image} alt={title} className={styles.image} />
-            ) : (
-              <div className={styles.placeholder} />
-            )}
-          </div>
+            </div>
+          )}
         </>
       )}
 

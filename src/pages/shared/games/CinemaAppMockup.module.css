@@ -246,15 +246,15 @@
   font-weight: 700;
 }
 
-/* ── Promo banner (cropped region of the PNG) ── */
+/* ── Promo banner ── */
 .promo {
   margin: 0 24px 18px;
   height: 175px;
   border-radius: 22px;
-  background-image: url('/assets/games/001/ux-review/cinema-app-mockup.png');
+  background-image: url('/assets/games/001/ux-review/promo-banner.png');
   background-repeat: no-repeat;
-  background-size: 697px auto;
-  background-position: -22px -844px;
+  background-size: cover;
+  background-position: center;
 }
 
 /* ── Bottom nav ── */

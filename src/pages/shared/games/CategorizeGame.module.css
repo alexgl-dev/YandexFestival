@@ -4,6 +4,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   width: 100%;
   max-width: 90%;
   margin: 0 auto;
@@ -14,18 +15,6 @@
   height: 100%;
 }
 
-/* ── Header: instruction + counter ── */
-
-.header {
-  display: flex;
-  flex-direction: row;
-  align-items: baseline;
-  justify-content: space-between;
-  width: 100%;
-  gap: var(--spacing-xl);
-  flex-shrink: 0;
-}
-
 .instruction {
   font-family: var(--font-family);
   font-size: var(--font-size-md);
@@ -33,18 +22,8 @@
   color: var(--color-white);
   margin: 0;
   line-height: var(--line-height-tight);
-  flex: 1;
-}
-
-.counter {
-  font-family: var(--font-family);
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
-  color: var(--color-white);
-  opacity: 0.75;
-  letter-spacing: var(--letter-spacing-xs);
-  white-space: nowrap;
-  flex-shrink: 0;
+  text-align: center;
+  width: 100%;
 }
 
 /* ── Three drop zones ── */
@@ -62,41 +41,31 @@
   min-width: 0;
   display: flex;
   flex-direction: column;
-  background: rgba(255, 255, 255, 0.12);
-  border: var(--border-width-sm) solid rgba(255, 255, 255, 0.25);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-md);
+  background: transparent;
+  border: none;
   cursor: pointer;
-  transition: border-color 0.15s, background 0.15s;
+  transition: opacity 0.15s;
   padding: var(--spacing-lg);
   box-sizing: border-box;
   min-height: 280px;
 }
 
+.categoryImage {
+  width: 180px;
+  height: 180px;
+  object-fit: contain;
+  pointer-events: none;
+}
+
 .columnDragOver {
-  border-color: var(--color-white);
-  background: rgba(255, 255, 255, 0.2);
+  opacity: 0.75;
 }
 
 .columnTarget {
-  border-color: rgba(255, 255, 255, 0.6);
-}
-
-.columnHeader {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: var(--spacing-sm);
-  flex-shrink: 0;
-  margin-bottom: var(--spacing-md);
-}
-
-.columnTitles {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-  flex: 1;
-  min-width: 0;
+  opacity: 0.9;
 }
 
 .columnTitle {
@@ -105,65 +74,7 @@
   font-weight: var(--font-weight-medium);
   color: var(--color-white);
   line-height: var(--line-height-tight);
-}
-
-.columnDesc {
-  font-family: var(--font-family);
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-regular);
-  color: rgba(255, 255, 255, 0.65);
-  line-height: var(--line-height-tight);
-  letter-spacing: var(--letter-spacing-xs);
-}
-
-.categoryInfoBtn {
-  flex-shrink: 0;
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  border: var(--border-width-sm) solid rgba(255, 255, 255, 0.5);
-  background: transparent;
-  color: var(--color-white);
-  font-family: var(--font-family);
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background 0.15s;
-  padding: 0;
-}
-
-.categoryInfoBtn:hover {
-  background: rgba(255, 255, 255, 0.2);
-}
-
-.columnBody {
-  flex: 1;
-  display: flex;
-  flex-wrap: wrap;
-  align-content: flex-start;
-  gap: var(--spacing-sm);
-}
-
-/* Chips placed inside a drop zone */
-
-.chip {
-  display: flex;
-  align-items: center;
-  background: rgba(255, 255, 255, 0.2);
-  border: var(--border-width-sm) solid rgba(255, 255, 255, 0.4);
-  border-radius: var(--radius-sm);
-  padding: var(--spacing-xs) var(--spacing-sm);
-}
-
-.chipText {
-  font-family: var(--font-family);
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-regular);
-  color: var(--color-white);
-  line-height: var(--line-height-tight);
+  text-align: center;
 }
 
 /* ── Card tray ── */
@@ -173,7 +84,6 @@
   grid-template-columns: repeat(3, 1fr);
   gap: var(--spacing-md);
   width: 100%;
-  flex: 1;
   align-content: flex-start;
 }
 
@@ -239,90 +149,3 @@
   z-index: 9999;
 }
 
-.popup {
-  position: relative;
-  background: var(--color-white);
-  border-radius: var(--radius-lg);
-  padding: var(--spacing-2xl);
-  max-width: 640px;
-  width: 90%;
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-lg);
-  align-items: flex-start;
-  font-family: var(--font-family);
-  box-sizing: border-box;
-  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.4);
-  border: var(--border-width-md) solid transparent;
-}
-
-.popupCorrect {
-  border-color: var(--color-green);
-  box-shadow: 0 0 0 var(--border-width-sm) var(--color-green), 0 24px 64px rgba(0, 0, 0, 0.4);
-}
-
-.popupWrong {
-  border-color: var(--color-red);
-  box-shadow: 0 0 0 var(--border-width-sm) var(--color-red), 0 24px 64px rgba(0, 0, 0, 0.4);
-}
-
-.popupTitle {
-  font-family: var(--font-family);
-  font-size: var(--font-size-2xl);
-  font-weight: var(--font-weight-medium);
-  color: var(--color-black);
-  margin: 0;
-  letter-spacing: var(--letter-spacing-sm);
-  line-height: var(--line-height-tight);
-}
-
-.popupBody {
-  font-family: var(--font-family);
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-regular);
-  color: var(--color-text-primary);
-  line-height: var(--line-height-relaxed);
-  margin: 0;
-}
-
-/* ── Word tooltip ── */
-
-.tooltipWord {
-  color: var(--color-blue);
-  text-decoration: underline;
-  text-decoration-style: dashed;
-  cursor: pointer;
-}
-
-.wordTooltipBox {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  gap: var(--spacing-sm);
-  background: var(--color-grey-light);
-  border-radius: var(--radius-sm);
-  padding: var(--spacing-md) var(--spacing-lg);
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.wordTooltipText {
-  font-family: var(--font-family);
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-regular);
-  color: var(--color-text-primary);
-  line-height: var(--line-height-relaxed);
-  margin: 0;
-  flex: 1;
-}
-
-.wordTooltipClose {
-  flex-shrink: 0;
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-size: var(--font-size-sm);
-  color: var(--color-text-muted);
-  padding: 0;
-  line-height: 1;
-}

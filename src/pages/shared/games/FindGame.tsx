@@ -1,6 +1,5 @@
 import { useState, useCallback } from 'react';
 import { Background, Card, PopUp } from '../../../components/ui';
-import { BooksMockup, MessengerMockup, FoodMockup, MarketplaceMockup } from './FindBugMockups';
 import type { Task, TaskOption } from '../../../types/game';
 import styles from './FindGame.module.css';
 
@@ -128,15 +127,7 @@ export function FindGame({ task, onComplete, onBack, theme = 'orange', orientati
 
         <div className={styles.content}>
           <div className={styles.imageColumn}>
-            {step.image?.includes('find-bug/screen1') ? (
-              <BooksMockup />
-            ) : step.image?.includes('find-bug/screen2') ? (
-              <MessengerMockup />
-            ) : step.image?.includes('find-bug/screen3') ? (
-              <FoodMockup />
-            ) : step.image?.includes('find-bug/screen4') ? (
-              <MarketplaceMockup />
-            ) : step.image ? (
+            {step.image ? (
               <img
                 src={step.image}
                 alt={step.prompt || 'Изображение задания'}

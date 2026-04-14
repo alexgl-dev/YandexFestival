@@ -1,7 +1,6 @@
 .mockup {
   width: 540px;
-  height: 1125px;
-  background: var(--color-grey-light);
+  background: #090a0f;
   border-radius: var(--radius-lg);
   overflow: hidden;
   display: flex;
@@ -12,231 +11,231 @@
   flex-shrink: 0;
 }
 
-/* Zone selection states */
+/* ── Zone states ─────────────────────────────────────────── */
+
 .zone {
   cursor: pointer;
-  transition: box-shadow 0.2s;
-  border-radius: var(--radius-xs);
   position: relative;
+}
+
+.zone::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  z-index: 10;
+  transition: box-shadow 0.2s;
   box-shadow: inset 0 0 0 0 transparent;
 }
 
-.zone:hover {
-  box-shadow: inset 0 0 0 4px var(--color-bg-brand-translucent);
-}
-
-.zoneSelected {
-  box-shadow: inset 0 0 0 4px var(--color-blue);
-}
-
-.zoneCorrect {
-  box-shadow: inset 0 0 0 4px var(--color-green);
-}
-
-.zoneWrong {
-  box-shadow: inset 0 0 0 4px var(--color-red);
-}
+.zone:hover::after   { box-shadow: inset 0 0 0 3px var(--color-bg-brand-translucent); }
+.zoneSelected::after { box-shadow: inset 0 0 0 3px var(--color-blue); }
+.zoneCorrect::after  { box-shadow: inset 0 0 0 3px var(--color-green); }
+.zoneWrong::after    { box-shadow: inset 0 0 0 3px var(--color-red); }
 
 .zoneBadge {
   position: absolute;
-  top: 3px;
-  right: 3px;
-  width: 30px;
-  height: 30px;
+  top: 4px;
+  right: 4px;
+  width: 24px;
+  height: 24px;
   display: flex;
   align-items: center;
   justify-content: center;
   background: var(--color-blue);
   color: var(--color-white);
   border-radius: var(--radius-full);
-  font-family: var(--font-family);
-  font-size: 16px;
+  font-size: 13px;
   font-weight: var(--font-weight-bold);
-  z-index: 1;
+  font-family: var(--font-family);
+  z-index: 2;
+  pointer-events: none;
 }
 
 .zoneCorrect .zoneBadge { background: var(--color-green); }
-.zoneWrong .zoneBadge { background: var(--color-red); }
+.zoneWrong .zoneBadge   { background: var(--color-red); }
 
-/* Header */
+/* ── Header ──────────────────────────────────────────────── */
+
 .header {
   display: flex;
   align-items: center;
-  justify-content: center;
-  padding: 15px 24px;
-  background: var(--color-blue);
-  position: relative;
-  min-height: 60px;
-  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-}
-
-.headerTitle {
-  font-size: 24px;
-  font-weight: var(--font-weight-bold);
-  color: var(--color-white);
-  font-family: var(--font-family);
-}
-
-.hamburger {
-  position: absolute;
-  right: 24px;
-  top: 50%;
-  transform: translateY(-50%);
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-  cursor: pointer;
-  padding: 9px;
-}
-
-.hamburgerLine {
-  width: 27px;
-  height: 3px;
-  background: var(--color-white);
-  border-radius: var(--radius-full);
-}
-
-.headerLeft {
-  position: absolute;
-  left: 24px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 42px;
-  height: 42px;
-}
-
-.headerLeftLabel {
-  font-family: var(--font-family);
-  font-size: 21px;
-  color: var(--color-white);
-  opacity: 0.3;
-}
-
-/* Search */
-.searchBar {
-  margin: 12px 18px;
-  padding: 12px 21px;
-  background: var(--color-white);
-  border-radius: var(--radius-lg);
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  min-height: 54px;
-}
-
-.searchIcon { font-size: 21px; color: var(--color-grey-disabled); }
-.searchText { font-size: 20px; color: var(--color-grey-disabled); font-family: var(--font-family); }
-
-/* Hero */
-.hero {
-  margin: 6px 18px;
-  padding: 30px 21px;
-  border-radius: var(--radius-lg);
-  background: var(--color-blue);
-  color: var(--color-white);
-}
-
-.heroTitle {
-  font-size: 27px;
-  font-weight: var(--font-weight-bold);
-  font-family: var(--font-family);
-  margin: 0 0 6px 0;
-  line-height: 1.2;
-}
-
-.heroSubtitle {
-  font-size: 18px;
-  font-family: var(--font-family);
-  opacity: 0.7;
-  margin: 0;
-}
-
-/* Category pills */
-.categories {
-  display: flex;
-  gap: 9px;
-  padding: 12px 18px;
-  overflow: hidden;
-}
-
-.pill {
-  padding: 8px 18px;
-  border-radius: var(--radius-full);
-  border: 1px solid var(--color-grey-secondary);
-  background: var(--color-white);
-  font-size: 18px;
-  font-family: var(--font-family);
-  color: var(--color-black);
-  white-space: nowrap;
-  font-weight: var(--font-weight-medium);
-}
-
-.pillActive {
-  background: var(--color-blue);
-  border-color: var(--color-blue);
-  color: var(--color-white);
-}
-
-/* Section title */
-.sectionTitle {
-  font-size: 21px;
-  font-weight: var(--font-weight-bold);
-  font-family: var(--font-family);
-  color: var(--color-black);
-  margin: 0;
-  padding: 9px 18px 0;
-}
-
-/* Cards */
-.cardsWrap {
-  padding: 0 18px;
-  flex: 1;
-  overflow: hidden;
-}
-
-.cards {
-  display: flex;
-  flex-direction: column;
-  gap: 9px;
-  padding-top: 9px;
-}
-
-.card {
-  display: flex;
-  gap: 15px;
-  padding: 15px;
-  background: var(--color-white);
-  border-radius: var(--radius-sm);
-  align-items: center;
-}
-
-.cardImage {
-  width: 66px;
-  height: 66px;
-  border-radius: var(--radius-xs);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 33px;
+  justify-content: space-between;
+  padding: 16px 20px;
   flex-shrink: 0;
 }
 
-.cardInfo { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
-.cardName { font-size: 20px; font-weight: var(--font-weight-bold); font-family: var(--font-family); color: var(--color-black); margin: 0; }
-.cardMeta { font-size: 16px; font-family: var(--font-family); color: var(--color-text-muted); margin: 0; }
-.cardRating { font-size: 16px; font-family: var(--font-family); color: var(--color-blue); font-weight: var(--font-weight-bold); margin: 0; }
+.logo {
+  font-size: 15px;
+  font-weight: var(--font-weight-bold);
+  color: #fbcb2a;
+  letter-spacing: 1.5px;
+}
 
-/* Registration — broken */
-.regButton {
-  margin: auto 18px 18px;
-  padding: 15px;
-  border: 1px solid var(--color-grey-secondary);
-  border-radius: var(--radius-lg);
-  background: var(--color-grey-light);
-  color: var(--color-grey-disabled);
-  font-size: 20px;
+.regBtn {
+  position: relative;
+  background: #ffffff;
+  color: #090a0f;
+  font-size: 11px;
+  font-weight: var(--font-weight-bold);
   font-family: var(--font-family);
-  font-weight: var(--font-weight-medium);
-  text-align: center;
-  opacity: 0.5;
+  padding: 6px 12px;
+  border-radius: 20px;
+  white-space: nowrap;
+  cursor: pointer;
+  border-radius: var(--radius-full);
+}
+
+/* ── Hero block (image + description + dots) ─────────────── */
+
+.heroBlock {
+  position: relative;
+  margin: 0 20px;
+  border-radius: 14px;
+  flex-shrink: 0;
+  cursor: pointer;
+  background: #090a0f;
+}
+
+.heroImg {
+  width: 100%;
+  display: block;
+  border-radius: 14px 14px 0 0;
+  object-fit: cover;
+}
+
+/* ── Description ─────────────────────────────────────────── */
+
+.description {
+  position: relative;
+  padding: 10px 14px 2px;
+  cursor: pointer;
+  border-radius: var(--radius-xs);
+}
+
+.descriptionText {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.3);
+  line-height: 1.5;
+  margin: 0;
+  font-family: var(--font-family);
+}
+
+/* ── Dots ────────────────────────────────────────────────── */
+
+.dots {
+  display: flex;
+  justify-content: center;
+  gap: 5px;
+  padding: 8px 0 10px;
+}
+
+.dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.dotActive {
+  width: 20px;
+  border-radius: 4px;
+  background: #ffffff;
+}
+
+/* ── Profile + title ─────────────────────────────────────── */
+
+.profileRow {
+  position: relative;
+  margin: 0 20px;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.profileImg {
+  width: 100%;
+  display: block;
+  height: auto;
+}
+
+/* ── Purchase steps ──────────────────────────────────────── */
+
+.steps {
+  position: relative;
+  margin: 14px 20px 0;
+  flex-shrink: 0;
+  cursor: pointer;
+  border-radius: var(--radius-xs);
+}
+
+.stepsImg {
+  width: 100%;
+  display: block;
+  object-fit: contain;
+}
+
+/* ── Buttons ─────────────────────────────────────────────── */
+
+.buttons {
+  position: relative;
+  margin: 16px 20px 0;
+  flex-shrink: 0;
+}
+
+.buttonsImg {
+  width: 100%;
+  display: block;
+  object-fit: contain;
+}
+
+.scheduleBtnZone {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  border-radius: 12px 12px 0 0;
+  cursor: pointer;
+}
+
+.paymentBtnZone {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 50%;
+  border-radius: 0 0 12px 12px;
+  cursor: pointer;
+}
+
+/* ── Promo banner ────────────────────────────────────────── */
+
+.promo {
+  position: relative;
+  margin: 16px 20px 0;
+  border-radius: 12px;
+  overflow: hidden;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.promoImg {
+  width: 100%;
+  display: block;
+  object-fit: contain;
+  border-radius: 12px;
+}
+
+/* ── Bottom nav ──────────────────────────────────────────── */
+
+.bottomNav {
+  margin-top: 16px;
+  flex-shrink: 0;
+}
+
+.navImg {
+  width: 100%;
+  display: block;
+  object-fit: contain;
 }

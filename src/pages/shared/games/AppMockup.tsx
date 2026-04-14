@@ -8,16 +8,18 @@ interface AppMockupProps {
 }
 
 export const ZONES = [
-  { id: 'header-left', label: 'Область назад/домой' },
-  { id: 'header-menu', label: 'Гамбургер-меню' },
-  { id: 'search', label: 'Поиск' },
-  { id: 'hero', label: 'Баннер' },
-  { id: 'categories', label: 'Категории' },
-  { id: 'cards', label: 'Карточки ресторанов' },
-  { id: 'reg-button', label: 'Кнопка регистрации' },
+  { id: 'hero-poster',      label: 'Баннер с афишей фильма' },
+  { id: 'purchase-steps',   label: 'Шаги покупки билета' },
+  { id: 'description-text', label: 'Описание фильма' },
+  { id: 'schedule-btn',     label: 'Кнопка «Расписание»' },
+  { id: 'reg-btn',          label: 'Кнопка «Зарегистрироваться»' },
+  { id: 'calendar-dates',   label: 'Шаг с календарём' },
+  { id: 'promo-banner',     label: 'Акционный баннер' },
+  { id: 'payment-btn',      label: 'Кнопка «Оплатить билет»' },
+  { id: 'profile-icon',     label: 'Иконка профиля' },
 ] as const;
 
-export const PROBLEM_ZONES = new Set(['header-left', 'header-menu', 'reg-button']);
+export const PROBLEM_ZONES = new Set(['description-text', 'reg-btn', 'payment-btn', 'profile-icon']);
 
 export function AppMockup({ selectedZones, zoneResults, onZoneClick }: AppMockupProps) {
   const selectedOrder = [...selectedZones];
@@ -30,7 +32,7 @@ export function AppMockup({ selectedZones, zoneResults, onZoneClick }: AppMockup
     return classes.join(' ');
   };
 
-  const zoneBadge = (id: string) => {
+  const badge = (id: string) => {
     const index = selectedOrder.indexOf(id);
     if (index === -1) return null;
     return <span className={styles.zoneBadge}>{index + 1}</span>;
@@ -38,102 +40,107 @@ export function AppMockup({ selectedZones, zoneResults, onZoneClick }: AppMockup
 
   return (
     <div className={styles.mockup}>
-      {/* Header */}
+
+      {/* ── Header ── */}
       <div className={styles.header}>
+        <span className={styles.logo}>CINEMA GO</span>
         <div
-          className={`${styles.headerLeft} ${zoneClass('header-left')}`}
-          onClick={(e) => { e.stopPropagation(); onZoneClick('header-left'); }}
+          className={`${styles.regBtn} ${zoneClass('reg-btn')}`}
+          onClick={(e) => { e.stopPropagation(); onZoneClick('reg-btn'); }}
         >
-          <span className={styles.headerLeftLabel}>?</span>
-          {zoneBadge('header-left')}
+          Зарегистрироваться
+          {badge('reg-btn')}
         </div>
-        <span className={styles.headerTitle}>FoodExpress</span>
+      </div>
+
+      {/* ── Hero poster + description ── */}
+      <div
+        className={`${styles.heroBlock} ${zoneClass('hero-poster')}`}
+        onClick={(e) => { e.stopPropagation(); onZoneClick('hero-poster'); }}
+      >
+        <img
+          src="/assets/games/001/ux-review-hero.png"
+          alt="Афиша фильма"
+          className={styles.heroImg}
+        />
         <div
-          className={`${styles.hamburger} ${zoneClass('header-menu')}`}
-          onClick={(e) => { e.stopPropagation(); onZoneClick('header-menu'); }}
+          className={`${styles.description} ${zoneClass('description-text')}`}
+          onClick={(e) => { e.stopPropagation(); onZoneClick('description-text'); }}
         >
-          <span className={styles.hamburgerLine} />
-          <span className={styles.hamburgerLine} />
-          <span className={styles.hamburgerLine} />
-          {zoneBadge('header-menu')}
+          {badge('description-text')}
+        </div>
+        {badge('hero-poster')}
+      </div>
+
+      {/* ── Profile + title ── */}
+      <div
+        className={`${styles.profileRow} ${zoneClass('profile-icon')}`}
+        onClick={(e) => { e.stopPropagation(); onZoneClick('profile-icon'); }}
+      >
+        <img
+          src="/assets/games/001/ux-review-profile.png"
+          alt="Профиль и заголовок"
+          className={styles.profileImg}
+        />
+        {badge('profile-icon')}
+      </div>
+
+      {/* ── Purchase steps ── */}
+      <div
+        className={`${styles.steps} ${zoneClass('purchase-steps')}`}
+        onClick={(e) => { e.stopPropagation(); onZoneClick('purchase-steps'); }}
+      >
+        <img
+          src="/assets/games/001/ux-review-steps.png"
+          alt="Шаги покупки билета"
+          className={styles.stepsImg}
+        />
+        {badge('purchase-steps')}
+      </div>
+
+      {/* ── Buttons ── */}
+      <div className={styles.buttons}>
+        <img
+          src="/assets/games/001/ux-review-buttons.png"
+          alt="Кнопки"
+          className={styles.buttonsImg}
+        />
+        <div
+          className={`${styles.scheduleBtnZone} ${zoneClass('schedule-btn')}`}
+          onClick={(e) => { e.stopPropagation(); onZoneClick('schedule-btn'); }}
+        >
+          {badge('schedule-btn')}
+        </div>
+        <div
+          className={`${styles.paymentBtnZone} ${zoneClass('payment-btn')}`}
+          onClick={(e) => { e.stopPropagation(); onZoneClick('payment-btn'); }}
+        >
+          {badge('payment-btn')}
         </div>
       </div>
 
-      {/* Search */}
+      {/* ── Promo banner ── */}
       <div
-        className={`${styles.searchBar} ${zoneClass('search')}`}
-        onClick={(e) => { e.stopPropagation(); onZoneClick('search'); }}
+        className={`${styles.promo} ${zoneClass('promo-banner')}`}
+        onClick={(e) => { e.stopPropagation(); onZoneClick('promo-banner'); }}
       >
-        <span className={styles.searchIcon}>🔍</span>
-        <span className={styles.searchText}>Найти ресторан или блюдо...</span>
-        {zoneBadge('search')}
+        <img
+          src="/assets/games/001/ux-review-promo.png"
+          alt="Акция"
+          className={styles.promoImg}
+        />
+        {badge('promo-banner')}
       </div>
 
-      {/* Hero */}
-      <div
-        className={`${styles.hero} ${zoneClass('hero')}`}
-        onClick={(e) => { e.stopPropagation(); onZoneClick('hero'); }}
-      >
-        <p className={styles.heroTitle}>Лучшие рестораны рядом</p>
-        <p className={styles.heroSubtitle}>Доставка от 30 минут</p>
-        {zoneBadge('hero')}
+      {/* ── Bottom nav ── */}
+      <div className={styles.bottomNav}>
+        <img
+          src="/assets/games/001/ux-review-nav.png"
+          alt="Навигация"
+          className={styles.navImg}
+        />
       </div>
 
-      {/* Categories */}
-      <div
-        className={`${styles.categories} ${zoneClass('categories')}`}
-        onClick={(e) => { e.stopPropagation(); onZoneClick('categories'); }}
-      >
-        <span className={`${styles.pill} ${styles.pillActive}`}>Пицца</span>
-        <span className={styles.pill}>Суши</span>
-        <span className={styles.pill}>Бургеры</span>
-        <span className={styles.pill}>Десерты</span>
-        {zoneBadge('categories')}
-      </div>
-
-      {/* Cards */}
-      <div
-        className={`${styles.cardsWrap} ${zoneClass('cards')}`}
-        onClick={(e) => { e.stopPropagation(); onZoneClick('cards'); }}
-      >
-        <p className={styles.sectionTitle}>Популярное</p>
-        <div className={styles.cards}>
-          <div className={styles.card}>
-            <div className={styles.cardImage} style={{ background: '#FFE0CC' }}>🍕</div>
-            <div className={styles.cardInfo}>
-              <p className={styles.cardName}>Pizza Roma</p>
-              <p className={styles.cardMeta}>Итальянская · 25-35 мин</p>
-              <p className={styles.cardRating}>⭐ 4.8</p>
-            </div>
-          </div>
-          <div className={styles.card}>
-            <div className={styles.cardImage} style={{ background: '#D4F5D4' }}>🍣</div>
-            <div className={styles.cardInfo}>
-              <p className={styles.cardName}>Суши Мастер</p>
-              <p className={styles.cardMeta}>Японская · 30-40 мин</p>
-              <p className={styles.cardRating}>⭐ 4.6</p>
-            </div>
-          </div>
-          <div className={styles.card}>
-            <div className={styles.cardImage} style={{ background: '#FFE8D6' }}>🍔</div>
-            <div className={styles.cardInfo}>
-              <p className={styles.cardName}>Burger Lab</p>
-              <p className={styles.cardMeta}>Фастфуд · 15-25 мин</p>
-              <p className={styles.cardRating}>⭐ 4.5</p>
-            </div>
-          </div>
-        </div>
-        {zoneBadge('cards')}
-      </div>
-
-      {/* Registration button — broken */}
-      <div
-        className={`${styles.regButton} ${zoneClass('reg-button')}`}
-        onClick={(e) => { e.stopPropagation(); onZoneClick('reg-button'); }}
-      >
-        Регистрация
-        {zoneBadge('reg-button')}
-      </div>
     </div>
   );
 }
