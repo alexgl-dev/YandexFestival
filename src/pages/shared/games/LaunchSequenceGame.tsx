@@ -372,41 +372,40 @@ export function LaunchSequenceGame({
 
         {/* Pool */}
         <div className={styles.pool}>
-          {validIndices.map((bIdx) => {
+          {validIndices.slice(0, 6).map((bIdx) => {
             const inPool = pool.includes(bIdx);
-            if (!inPool) {
-              return <div key={bIdx} className={styles.poolCardGhost} />;
-            }
+            if (!inPool) return <div key={bIdx} className={styles.poolCardGhost} />;
             const block = blocks[bIdx];
             const rot = ROTATIONS[bIdx % ROTATIONS.length];
             const isSel = selected === bIdx;
             return (
-              <div
-                key={bIdx}
-                className={[styles.poolCardOuter, isSel ? styles.poolCardSelected : '']
-                  .filter(Boolean)
-                  .join(' ')}
-                style={{ transform: `rotate(${rot}deg)` }}
-              >
+              <div key={bIdx} className={[styles.poolCardOuter, isSel ? styles.poolCardSelected : ''].filter(Boolean).join(' ')} style={{ transform: `rotate(${rot}deg)` }}>
                 <div className={styles.poolCard} onClick={() => handlePoolTap(bIdx)}>
-                  <img
-                    src="/assets/games/003/launch/card-shape.svg"
-                    alt=""
-                    className={styles.poolCardBg}
-                    draggable={false}
-                  />
+                  <img src="/assets/games/003/launch/card-shape.svg" alt="" className={styles.poolCardBg} draggable={false} />
                   <p className={styles.poolTitle}>{block.text}</p>
                 </div>
-                <button
-                  className={styles.infoBtn}
-                  onClick={(e) => handleInfoTap(bIdx, e)}
-                  aria-label="Описание этапа"
-                >
-                  ?
-                </button>
+                <button className={styles.infoBtn} onClick={(e) => handleInfoTap(bIdx, e)} aria-label="Описание этапа">?</button>
               </div>
             );
           })}
+          <div className={styles.gridLastRow}>
+            {validIndices.slice(6).map((bIdx) => {
+              const inPool = pool.includes(bIdx);
+              if (!inPool) return <div key={bIdx} className={styles.poolCardGhost} />;
+              const block = blocks[bIdx];
+              const rot = ROTATIONS[bIdx % ROTATIONS.length];
+              const isSel = selected === bIdx;
+              return (
+                <div key={bIdx} className={[styles.poolCardOuter, isSel ? styles.poolCardSelected : ''].filter(Boolean).join(' ')} style={{ transform: `rotate(${rot}deg)` }}>
+                  <div className={styles.poolCard} onClick={() => handlePoolTap(bIdx)}>
+                    <img src="/assets/games/003/launch/card-shape.svg" alt="" className={styles.poolCardBg} draggable={false} />
+                    <p className={styles.poolTitle}>{block.text}</p>
+                  </div>
+                  <button className={styles.infoBtn} onClick={(e) => handleInfoTap(bIdx, e)} aria-label="Описание этапа">?</button>
+                </div>
+              );
+            })}
+          </div>
         </div>
 
         {/* Timeline */}
@@ -436,8 +435,10 @@ export function LaunchSequenceGame({
             </div>
 
             {renderSlot(5)}
-            {renderSlot(6)}
-            {renderSlot(7)}
+            <div className={styles.gridLastRow}>
+              {renderSlot(6)}
+              {renderSlot(7)}
+            </div>
           </div>
 
           <p className={styles.durationHint}>

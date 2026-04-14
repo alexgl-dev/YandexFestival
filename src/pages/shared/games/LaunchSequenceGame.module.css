@@ -147,6 +147,18 @@
   margin: 0;
 }
 
+/* Centered last row — spans all 3 columns, 2 items centered */
+.gridLastRow {
+  grid-column: 1 / -1;
+  display: flex;
+  justify-content: center;
+  gap: var(--spacing-sm);
+}
+
+.gridLastRow > * {
+  flex: 0 0 calc((100% - var(--spacing-sm) * 2) / 3);
+}
+
 /* Ghost placeholder — keeps grid size stable when card is placed in timeline */
 .poolCardGhost {
   aspect-ratio: 377 / 161;
@@ -328,12 +340,12 @@
   position: relative;
   z-index: 1;
   font-family: var(--font-family);
-  font-size: var(--font-size-2xs);
+  font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
   color: var(--color-text-primary);
   text-align: center;
   margin: 0;
-  line-height: 1.2;
+  line-height: 1.1;
   padding: 0 var(--spacing-md);
   word-break: break-word;
 }
