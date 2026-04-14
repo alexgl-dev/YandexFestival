@@ -17,19 +17,19 @@ interface GameProps {
   orientation?: 'landscape' | 'portrait';
 }
 
-const CARD_W = 360;
-const CARD_H = 120;
+const CARD_W = 480;
+const CARD_H = 90;
 
 const HOME_POSITIONS = [
-  { x: 90,   y: 80,  r: -6 },
-  { x: 640,  y: 70,  r: 3  },
-  { x: 1350, y: 80,  r: -4 },
-  { x: 200,  y: 250, r: 5  },
-  { x: 700,  y: 235, r: -7 },
-  { x: 1220, y: 240, r: 4  },
-  { x: 90,   y: 420, r: -3 },
-  { x: 660,  y: 430, r: 6  },
-  { x: 1440, y: 415, r: -5 },
+  { x: 70,   y: 140, r: -6 },
+  { x: 640,  y: 130, r: 3  },
+  { x: 1320, y: 140, r: -4 },
+  { x: 160,  y: 310, r: 5  },
+  { x: 720,  y: 295, r: -7 },
+  { x: 1280, y: 300, r: 4  },
+  { x: 70,   y: 480, r: -3 },
+  { x: 650,  y: 490, r: 6  },
+  { x: 1350, y: 475, r: -5 },
 ];
 
 const ZONE_ORDER = ['content', 'collaboration', 'context'] as const;

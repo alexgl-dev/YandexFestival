@@ -9,7 +9,7 @@
 
 .progressCounter {
   position: absolute;
-  top: 16px;
+  top: 170px;
   right: 24px;
   font-family: var(--font-family);
   font-size: var(--font-size-xs);
@@ -25,10 +25,10 @@
 
 .card {
   position: absolute;
-  width: 360px;
+  width: 480px;
   background: var(--color-grey-light);
   border-radius: var(--radius-lg);
-  padding: var(--spacing-2xl);
+  padding: var(--spacing-md) var(--spacing-2xl);
   cursor: grab;
   will-change: transform;
   box-shadow: 0 4px 24px rgba(0, 0, 0, 0.14);
