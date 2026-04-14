@@ -263,10 +263,6 @@
   border-radius: 50%;
   border: none;
   background: transparent;
-  color: var(--color-black);
-  font-family: var(--font-family);
-  font-size: 48px;
-  font-weight: var(--font-weight-regular);
   line-height: 1;
   cursor: pointer;
   padding: 0;
@@ -278,6 +274,12 @@
 
 .popupClose:hover {
   background: var(--color-grey-light);
+}
+
+.popupAction {
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
 .popupHeader {

@@ -1,16 +1,27 @@
 import { useState } from 'react';
-import { Background, Button, PopUp } from '../../../components/ui';
+import { Background, Button, Icon, PopUp } from '../../../components/ui';
 import type { Task, CalendarCardData } from '../../../types/game';
 import styles from './CalendarGame.module.css';
 
 // ─── Constants ────────────────────────────────────────────────
 const SLOT_HEIGHT = 48;   // px per 30-min slot
 const SLOT_COUNT  = 18;   // 9:00 → 18:00
+const AXIS_WIDTH  = 72;   // must match CSS .timeAxis width
+const COL_GAP     = 30;   // must match CSS .calendarBody gap (--spacing-xl)
 const DAYS = [
-  { id: 'mon', label: 'Пн 14 марта' },
-  { id: 'tue', label: 'Вт 15 марта' },
-  { id: 'wed', label: 'Ср 16 марта' },
+  { id: 'mon', abbr: 'Пн', date: '14 марта' },
+  { id: 'tue', abbr: 'Вт', date: '15 марта' },
+  { id: 'wed', abbr: 'Ср', date: '16 марта' },
 ] as const;
+
+const formatDuration = (slots: number) => {
+  const min = slots * 30;
+  if (min < 60) return `${min} мин`;
+  const h = min / 60;
+  if (h === 1) return '1 час';
+  if (h < 5) return `${h} часа`;
+  return `${h} часов`;
+};
 
 const slotToTime = (slot: number) => {
   const m = 9 * 60 + slot * 30;
@@ -144,17 +155,20 @@ export function CalendarGame({ task, onComplete, onBack, theme = 'orange' }: Pro
                 <div
                   key={card.id}
                   className={`${styles.poolCard} ${selected ? styles.poolCardSelected : ''} ${checked && ok ? styles.poolCardCorrect : ''} ${checked && ok === false ? styles.poolCardWrong : ''}`}
-                  onClick={() => !checked && setSelectedId(selected ? null : card.id)}
+                  onClick={() => {
+                    if (selected) {
+                      setSelectedId(null);
+                    } else {
+                      setSelectedId(checked ? null : card.id);
+                      setTooltipCard(card);
+                    }
+                  }}
                 >
-                  <div className={styles.poolCardHeader}>
-                    <span className={styles.poolCardDuration}>{slotToTime(0)}–{slotToTime(0)}</span>
-                    <button
-                      className={styles.infoBtn}
-                      onClick={e => { e.stopPropagation(); setTooltipCard(card); }}
-                    >?</button>
-                  </div>
                   <p className={styles.poolCardTitle}>{card.title}</p>
-                  <span className={styles.durationBadge}>{card.durationSlots * 30} мин</span>
+                  <div className={styles.poolCardDurationRow}>
+                    <Icon name="clock" color="blue" size="xs" />
+                    <span className={styles.poolCardDurationText}>{formatDuration(card.durationSlots)}</span>
+                  </div>
                   {checked && ok === false && placements[card.id] && (
                     <p className={styles.wrongNote}>{card.wrongExplanation}</p>
                   )}
@@ -171,12 +185,32 @@ export function CalendarGame({ task, onComplete, onBack, theme = 'orange' }: Pro
           <div className={styles.calendarHeader}>
             <div className={styles.timeAxisHead} />
             {DAYS.map(d => (
-              <div key={d.id} className={styles.dayHeader}>{d.label}</div>
+              <div key={d.id} className={styles.dayHeader}>
+                <span className={styles.dayHeaderAbbr}>{d.abbr}</span>
+                <span className={styles.dayHeaderDate}>{d.date}</span>
+              </div>
             ))}
           </div>
 
           {/* Calendar body */}
           <div className={styles.calendarBody}>
+
+            {/* Hour lines overlay — single continuous lines spanning all day columns */}
+            <div
+              className={styles.hourLinesOverlay}
+              style={{ left: AXIS_WIDTH + COL_GAP }}
+            >
+              {Array.from({ length: SLOT_COUNT + 1 }, (_, i) => {
+                if (i % 2 !== 0) return null;
+                return (
+                  <div
+                    key={i}
+                    className={styles.hourLine}
+                    style={{ top: i * SLOT_HEIGHT }}
+                  />
+                );
+              })}
+            </div>
 
             {/* Time axis */}
             <div className={styles.timeAxis}>
@@ -276,11 +310,6 @@ export function CalendarGame({ task, onComplete, onBack, theme = 'orange' }: Pro
                           }}
                           onClick={e => handlePlacedCardClick(card.id, e)}
                         >
-                          <button
-                            className={styles.infoBtn}
-                            style={{ position: 'absolute', top: 4, right: 4 }}
-                            onClick={e2 => { e2.stopPropagation(); setTooltipCard(card); }}
-                          >?</button>
                           <span className={styles.cardTitle}>{card.title}</span>
                           <span className={styles.cardTime}>
                             {slotToTime(p.startSlot)}–{slotToTime(p.startSlot + card.durationSlots)}
@@ -308,8 +337,16 @@ export function CalendarGame({ task, onComplete, onBack, theme = 'orange' }: Pro
         <div className={styles.overlay} onClick={() => setTooltipCard(null)}>
           <div className={styles.tooltipCard} onClick={e => e.stopPropagation()}>
             <p className={styles.tooltipTitle}>{tooltipCard.title}</p>
+            {!tooltipCard.isAnchor && (
+              <div className={styles.tooltipDuration}>
+                <Icon name="clock" color="blue" size="xs" />
+                <span>{formatDuration(tooltipCard.durationSlots)}</span>
+              </div>
+            )}
             <p className={styles.tooltipText}>{tooltipCard.tooltip}</p>
-            <button className={styles.tooltipClose} onClick={() => setTooltipCard(null)}>Понятно</button>
+            <button className={styles.tooltipClose} onClick={() => setTooltipCard(null)}>
+              {tooltipCard.isAnchor ? 'Понятно' : (selectedId === tooltipCard.id ? 'Выбрано — разместить' : 'Понятно')}
+            </button>
           </div>
         </div>
       )}

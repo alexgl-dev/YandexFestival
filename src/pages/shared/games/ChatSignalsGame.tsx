@@ -21,6 +21,7 @@ const roleAvatarClass: Record<ChatMessage['role'], string> = {
   pm: styles.avatarPm,
   dev: styles.avatarDev,
   design: styles.avatarDesign,
+  qa: styles.avatarQa,
 };
 
 function initials(name: string): string {
@@ -123,15 +124,14 @@ export function ChatSignalsGame({
         <div className={styles.chat}>
           <div className={styles.chatHeader}>
             <div className={styles.chatAvatars}>
-              <div className={`${styles.avatar} ${styles.avatarSmall} ${styles.avatarPm}`}>А</div>
-              <div className={`${styles.avatar} ${styles.avatarSmall} ${styles.avatarDev}`}>М</div>
-              <div className={`${styles.avatar} ${styles.avatarSmall} ${styles.avatarDesign}`}>
-                Л
-              </div>
+              <div className={`${styles.avatar} ${styles.avatarSmall} ${styles.avatarQa}`}>Д</div>
+              <div className={`${styles.avatar} ${styles.avatarSmall} ${styles.avatarPm}`}>С</div>
+              <div className={`${styles.avatar} ${styles.avatarSmall} ${styles.avatarDev}`}>И</div>
+              <div className={`${styles.avatar} ${styles.avatarSmall} ${styles.avatarDesign}`}>М</div>
             </div>
             <div className={styles.chatTitleBlock}>
-              <p className={styles.chatTitle}>Карточка товара · команда</p>
-              <p className={styles.chatSub}>Аня, Миша, Лена · сегодня</p>
+              <p className={styles.chatTitle}>Корзина · команда</p>
+              <p className={styles.chatSub}>Денис, Саша, Игорь, Марина · сегодня</p>
             </div>
           </div>
 

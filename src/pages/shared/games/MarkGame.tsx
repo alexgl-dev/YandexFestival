@@ -101,7 +101,6 @@ function UxReviewGame({
           <div className={styles.reviewsList}>
             {reviews.map((r) => {
               const s = checked ? reviewStatus(r) : undefined;
-              const isSelected = selectedZones.has(r.zone);
               const isGood = s === 'correct' || s === 'ok';
               return (
                 <div key={r.id} className={styles.reviewWrap}>
@@ -113,7 +112,7 @@ function UxReviewGame({
                     ]
                       .filter(Boolean)
                       .join(' ')}
-                    onClick={() => handleToggle(r.id)}
+                    onClick={() => {}}
                   >
                     <div className={styles.listItemWrap}>
                       <ListItem title={`«${r.text}»`} state="default" />

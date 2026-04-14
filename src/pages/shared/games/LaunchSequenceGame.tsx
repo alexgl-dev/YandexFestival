@@ -334,16 +334,16 @@ export function LaunchSequenceGame({
         >
           {block ? (
             <>
-              {block.icon && (
-                <img src={block.icon} alt="" className={styles.slotIcon} draggable={false} />
-              )}
+              <img src="/assets/games/003/launch/card-shape.svg" alt="" className={styles.slotBg} draggable={false} />
               <p className={styles.slotTitle}>{block.text}</p>
             </>
           ) : (
-            <span className={styles.slotPlus}>+</span>
+            <>
+              <img src="/assets/games/003/launch/slot-shape.svg" alt="" className={styles.slotBg} draggable={false} />
+              <span className={styles.slotNumber}>{sIdx + 1}</span>
+            </>
           )}
         </div>
-        <span className={styles.slotNumber}>{sIdx + 1}</span>
       </div>
     );
   };
@@ -383,21 +383,20 @@ export function LaunchSequenceGame({
             return (
               <div
                 key={bIdx}
-                className={[styles.poolCard, isSel ? styles.poolCardSelected : '']
+                className={[styles.poolCardOuter, isSel ? styles.poolCardSelected : '']
                   .filter(Boolean)
                   .join(' ')}
                 style={{ transform: `rotate(${rot}deg)` }}
-                onClick={() => handlePoolTap(bIdx)}
               >
-                {block.icon && (
+                <div className={styles.poolCard} onClick={() => handlePoolTap(bIdx)}>
                   <img
-                    src={block.icon}
+                    src="/assets/games/003/launch/card-shape.svg"
                     alt=""
-                    className={styles.poolIcon}
+                    className={styles.poolCardBg}
                     draggable={false}
                   />
-                )}
-                <p className={styles.poolTitle}>{block.text}</p>
+                  <p className={styles.poolTitle}>{block.text}</p>
+                </div>
                 <button
                   className={styles.infoBtn}
                   onClick={(e) => handleInfoTap(bIdx, e)}
@@ -414,7 +413,7 @@ export function LaunchSequenceGame({
         <div className={styles.timelineSection}>
           <p className={styles.timelineHeading}>Таймлайн проекта</p>
 
-          <div className={styles.timeline}>
+          <div className={styles.slotsGrid}>
             {renderSlot(0)}
             {renderSlot(1)}
             {renderSlot(2)}

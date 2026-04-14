@@ -167,8 +167,7 @@ export function BurnoutGame({
                 <span className={styles.visitedBadge}>
                   {isCorrect && <Icon name="done" color="blue" size="s" />}
                   {isWrong && <Icon name="close" color="red" size="s" />}
-                  {!isCorrect && !isWrong && isVisited && <Icon name="done" color="blue" size="s" />}
-                  {!isCorrect && !isWrong && !isVisited && (
+                  {!isCorrect && !isWrong && (
                     <span className={styles.questionMark}>?</span>
                   )}
                 </span>
@@ -199,7 +198,7 @@ export function BurnoutGame({
                 onClick={handleClose}
                 aria-label="Закрыть"
               >
-                ×
+                <Icon name="close" color="red" size="s" />
               </button>
             )}
 
@@ -227,11 +226,13 @@ export function BurnoutGame({
             )}
 
             {popupState === 'default' && (
-              <Button
-                label="Это он / она"
-                type="main"
-                onClick={() => handleChoose(popupIndex)}
-              />
+              <div className={styles.popupAction}>
+                <Button
+                  label="Это он / она"
+                  type="main"
+                  onClick={() => handleChoose(popupIndex)}
+                />
+              </div>
             )}
 
             {popupState === 'correct' && (

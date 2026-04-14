@@ -118,7 +118,7 @@ export interface UxReview {
 export interface ChatMessage {
   id: string;
   author: string;
-  role: 'pm' | 'dev' | 'design';
+  role: 'pm' | 'dev' | 'design' | 'qa';
   time: string;
   text: string;
   isProblem?: boolean;

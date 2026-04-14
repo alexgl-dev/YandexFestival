@@ -65,13 +65,6 @@ export function CategorizeGame({ task, onComplete, onBack, theme = 'cobalt', ori
     }
   }, [popup, selectedItem, tryPlace]);
 
-  const handleCategoryInfoClick = useCallback((e: React.MouseEvent, categoryId: string) => {
-    e.stopPropagation();
-    const cat = categories.find((c) => c.id === categoryId);
-    if (!cat?.tooltip) return;
-    setPopup({ kind: 'category', tooltip: cat.tooltip, title: cat.title });
-  }, [categories]);
-
   const handleDragStart = useCallback((itemIndex: number) => {
     if (popup) return;
     setDraggedItem(itemIndex);
@@ -123,9 +116,6 @@ export function CategorizeGame({ task, onComplete, onBack, theme = 'cobalt', ori
         {/* Drop zones */}
         <div className={styles.columnsArea}>
           {categories.map((cat) => {
-            const placedIndices = Object.entries(correctPlacements)
-              .filter(([, cid]) => cid === cat.id)
-              .map(([idx]) => Number(idx));
             const isDragOver = dragOverCategory === cat.id;
             const isTarget = selectedItem !== null;
 

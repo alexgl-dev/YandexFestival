@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Background, Card } from '../../../components/ui';
+import { Background } from '../../../components/ui';
 import type { CatchObject, GlossaryTerm, Task } from '../../../types/game';
 import styles from './BacklogGame.module.css';
 
@@ -19,7 +19,33 @@ interface GameProps {
 
 // Layout constants (all positions are in px within the fixed Background frame).
 const FALL_DURATION = 7000; // ms — how long a card takes to fall from top to bottom
-const CARD_HEIGHT = 300; // approx, used to offset spawn above top edge
+const CARD_HEIGHT = 440; // approx, used to offset spawn above top edge
+
+const STICKER_IMAGES = [
+  '/assets/games/backlog/sticker-1.png',
+  '/assets/games/backlog/sticker-2.png',
+  '/assets/games/backlog/sticker-3.png',
+];
+
+function StickerCard({ title, variantIndex }: {
+  title: string;
+  variantIndex: number;
+}) {
+  const isDark = variantIndex % 3 === 2;
+  return (
+    <div className={styles.stickerWrap}>
+      <img
+        src={STICKER_IMAGES[variantIndex % 3]}
+        className={styles.stickerImg}
+        alt=""
+        draggable={false}
+      />
+      <div className={styles.stickerContent}>
+        <p className={`${styles.stickerTitle} ${isDark ? styles.stickerTitleDark : ''}`}>{title}</p>
+      </div>
+    </div>
+  );
+}
 const SWIPE_THRESHOLD_X = 180; // px horizontal drag to commit trash
 const POPUP_AUTO_DISMISS = 5000; // ms
 
@@ -284,15 +310,20 @@ export function BacklogGame({
             onPointerUp={handlePointerUp}
             onPointerCancel={handlePointerUp}
           >
-            <Card
-              variant={`ФИЧА ${String(card.index + 1).padStart(2, '0')}/${String(objects.length).padStart(2, '0')}`}
+            <StickerCard
               title={card.object.title}
-              description={card.object.description}
-              size="l"
-              state="default"
+              variantIndex={card.index}
             />
           </div>
         )}
+
+        {/* Basket icon at bottom */}
+        <img
+          src="/assets/games/backlog/basket.png"
+          className={styles.basketIcon}
+          alt="Корзина"
+          draggable={false}
+        />
 
         {/* Swipe hint under card */}
         {card && !popup && (

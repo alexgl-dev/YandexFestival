@@ -64,7 +64,7 @@
 
 .chatTitle {
   font-family: var(--font-family);
-  font-size: var(--font-size-xs);
+  font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
   color: var(--color-black);
   margin: 0;
@@ -73,7 +73,7 @@
 
 .chatSub {
   font-family: var(--font-family);
-  font-size: var(--font-size-2xs);
+  font-size: var(--font-size-xs);
   color: var(--color-text-muted);
   margin: 4px 0 0;
   line-height: var(--line-height-tight);
@@ -135,7 +135,7 @@
 
 .messageAuthor {
   font-family: var(--font-family);
-  font-size: var(--font-size-2xs);
+  font-size: var(--font-size-xs);
   font-weight: var(--font-weight-medium);
   color: var(--color-black);
   line-height: var(--line-height-tight);
@@ -143,7 +143,7 @@
 
 .messageTime {
   font-family: var(--font-family);
-  font-size: var(--font-size-2xs);
+  font-size: var(--font-size-player);
   color: var(--color-text-muted);
   line-height: var(--line-height-tight);
 }
@@ -239,14 +239,14 @@
 /* ── Avatar ── */
 
 .avatar {
-  width: 48px;
-  height: 48px;
+  width: 65px;
+  height: 65px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   font-family: var(--font-family);
-  font-size: var(--font-size-xs);
+  font-size: var(--font-size-xl);
   font-weight: var(--font-weight-medium);
   color: var(--color-white);
   flex-shrink: 0;
@@ -255,21 +255,25 @@
 }
 
 .avatarSmall {
-  width: 40px;
-  height: 40px;
-  font-size: var(--font-size-2xs);
+  width: 44px;
+  height: 44px;
+  font-size: var(--font-size-xs);
 }
 
 .avatarPm {
-  background: var(--color-blue);
+  background: #2D9B5E;
 }
 
 .avatarDev {
-  background: var(--color-orange);
+  background: var(--color-blue);
 }
 
 .avatarDesign {
-  background: var(--color-black);
+  background: #C53D8A;
+}
+
+.avatarQa {
+  background: var(--color-orange);
 }
 
 /* ── Actions ── */
