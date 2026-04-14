@@ -1,5 +1,5 @@
-import { useState, useCallback } from 'react';
-import { Background, Button, ListItem, PopUp } from '../../../components/ui';
+import { useState } from 'react';
+import { Background, PopUp } from '../../../components/ui';
 import type { Task, TaskCategory } from '../../../types/game';
 import styles from './DistributeGame.module.css';
 
@@ -17,96 +17,53 @@ interface GameProps {
   orientation?: 'landscape' | 'portrait';
 }
 
+type DropFeedback = { correct: boolean } | null;
+
 export function DistributeGame({ task, onComplete, onBack, theme = 'cobalt', orientation = 'landscape' }: GameProps) {
   const step = task.steps[0];
   const categories = step?.categories ?? [];
   const items = step?.items ?? [];
 
+  const correctText = step?.resultCorrect ?? 'Потрясающе! Твоё чутьё в области профессий, связанных с разработкой, на высоте!';
+  const wrongText = step?.resultWrong ?? 'Ой! Это задача другого специалиста! Попробуй ещё раз, даже если наугад!';
+
+  const [currentIdx, setCurrentIdx] = useState(0);
   const [placements, setPlacements] = useState<Record<string, number[]>>(() =>
     Object.fromEntries(categories.map((c) => [c.id, []]))
   );
-  const [selectedItem, setSelectedItem] = useState<number | null>(null);
   const [activePopup, setActivePopup] = useState<TaskCategory | null>(null);
-  const [checked, setChecked] = useState(false);
-  const [showResultPopup, setShowResultPopup] = useState(false);
-  const [itemStatus, setItemStatus] = useState<Record<string, Record<number, 'correct' | 'wrong'>>>({});
+  const [dropFeedback, setDropFeedback] = useState<DropFeedback>(null);
 
-  const placedItemIndices = new Set<number>();
-  for (const indices of Object.values(placements)) {
-    for (const idx of indices) placedItemIndices.add(idx);
-  }
-  const allPlaced = items.length > 0 && items.every((_, i) => placedItemIndices.has(i));
+  const currentItem = items[currentIdx] ?? null;
+  const isDone = currentIdx >= items.length;
 
-  const handleTaskClick = useCallback((idx: number) => {
-    if (checked) return;
-    setSelectedItem((prev) => (prev === idx ? null : idx));
-    setActivePopup(null);
-  }, [checked]);
+  const handleFolderClick = (categoryId: string) => {
+    if (!currentItem || dropFeedback || activePopup) return;
+    const isCorrect = (currentItem.belongs ?? []).includes(categoryId);
 
-  const handleFolderClick = useCallback((categoryId: string) => {
-    if (checked || selectedItem === null) return;
-    setPlacements((prev) => {
-      const next: Record<string, number[]> = {};
-      for (const [catId, indices] of Object.entries(prev)) {
-        next[catId] = indices.filter((i) => i !== selectedItem);
-      }
-      next[categoryId] = [...(next[categoryId] ?? []), selectedItem];
-      return next;
-    });
-    setSelectedItem(null);
-  }, [checked, selectedItem]);
+    if (isCorrect) {
+      setPlacements((prev) => ({
+        ...prev,
+        [categoryId]: [...(prev[categoryId] ?? []), currentIdx],
+      }));
+    }
+    setDropFeedback({ correct: isCorrect });
+  };
 
-  const handleRemoveFromFolder = useCallback((categoryId: string, itemIdx: number) => {
-    if (checked) return;
-    setPlacements((prev) => ({
-      ...prev,
-      [categoryId]: (prev[categoryId] ?? []).filter((i) => i !== itemIdx),
-    }));
-  }, [checked]);
+  const handleFeedbackDismiss = () => {
+    const wasCorrect = dropFeedback?.correct === true;
+    setDropFeedback(null);
 
-  const handleCheck = useCallback(() => {
-    if (!allPlaced) return;
-    setChecked(true);
-
-    const newItemStatus: Record<string, Record<number, 'correct' | 'wrong'>> = {};
-    for (const [catId, itemIndices] of Object.entries(placements)) {
-      newItemStatus[catId] = {};
-      for (const idx of itemIndices) {
-        const item = items[idx];
-        const isCorrect = (item.belongs ?? []).includes(catId);
-        newItemStatus[catId][idx] = isCorrect ? 'correct' : 'wrong';
+    if (wasCorrect) {
+      const next = currentIdx + 1;
+      if (next >= items.length) {
+        onComplete([{ correct: true, answer: '', explanation: correctText }]);
+      } else {
+        setCurrentIdx(next);
       }
     }
-
-    setItemStatus(newItemStatus);
-    setShowResultPopup(true);
-  }, [allPlaced, placements, items]);
-
-  const currentResult: GameResult | null = checked ? (() => {
-    let allCorrect = true;
-    for (const [catId, itemIndices] of Object.entries(placements)) {
-      for (const idx of itemIndices) {
-        if (!(items[idx].belongs ?? []).includes(catId)) { allCorrect = false; break; }
-      }
-    }
-    return {
-      correct: allCorrect,
-      answer: '',
-      explanation: allCorrect
-        ? 'Все задачи распределены верно!'
-        : items
-            .map((item) => {
-              for (const [catId, idxs] of Object.entries(placements)) {
-                if (idxs.includes(items.indexOf(item)) && !(item.belongs ?? []).includes(catId)) {
-                  return item.explanation;
-                }
-              }
-              return null;
-            })
-            .filter(Boolean)
-            .join(' '),
-    };
-  })() : null;
+    // wrong: same task stays, player picks another folder
+  };
 
   if (!step) return null;
 
@@ -114,11 +71,11 @@ export function DistributeGame({ task, onComplete, onBack, theme = 'cobalt', ori
     <Background theme={theme} orientation={orientation} onBack={onBack}>
       <div className={styles.layout} onClick={() => setActivePopup(null)}>
 
-        {/* ══ TOP: 4 folders in one row ══ */}
-        <div className={styles.foldersRow} onClick={(e) => e.stopPropagation()}>
+        {/* ══ TOP: 2×2 folder grid ══ */}
+        <div className={styles.foldersGrid} onClick={(e) => e.stopPropagation()}>
           {categories.map((cat) => {
             const catPlacements = placements[cat.id] ?? [];
-            const isTarget = selectedItem !== null && !checked;
+            const isTarget = !!currentItem && !dropFeedback && !activePopup;
 
             return (
               <div key={cat.id} className={styles.specialistCell}>
@@ -153,13 +110,8 @@ export function DistributeGame({ task, onComplete, onBack, theme = 'cobalt', ori
                     <div className={styles.placedList}>
                       {catPlacements.map((itemIdx) => {
                         const item = items[itemIdx];
-                        const status = itemStatus[cat.id]?.[itemIdx];
                         return (
-                          <div
-                            key={itemIdx}
-                            className={`${styles.placedChip} ${status === 'correct' ? styles.chipCorrect : status === 'wrong' ? styles.chipWrong : ''}`}
-                            onClick={(e) => { e.stopPropagation(); handleRemoveFromFolder(cat.id, itemIdx); }}
-                          >
+                          <div key={itemIdx} className={`${styles.placedChip} ${styles.chipCorrect}`}>
                             {item.title ?? item.text ?? ''}
                           </div>
                         );
@@ -176,33 +128,18 @@ export function DistributeGame({ task, onComplete, onBack, theme = 'cobalt', ori
           })}
         </div>
 
-        {/* ══ BOTTOM: task list ══ */}
-        <div className={styles.taskPanel} onClick={(e) => e.stopPropagation()}>
-          <p className={styles.panelTitle}>Задачи</p>
-          <div className={styles.taskList}>
-            {items.map((item, idx) => {
-              const isPlaced = placedItemIndices.has(idx);
-              const isSelected = selectedItem === idx;
-              return (
-                <div key={idx} className={`${styles.taskRow} ${isPlaced ? styles.taskRowPlaced : ''}`}>
-                  <ListItem
-                    title={item.title ?? item.text ?? ''}
-                    state={isSelected ? 'pressed' : 'default'}
-                    onClick={() => handleTaskClick(idx)}
-                  />
-                </div>
-              );
-            })}
-          </div>
-          {!checked && allPlaced && (
-            <div className={styles.btnWrap}>
-              <Button label="Проверить" type="main" onClick={handleCheck} />
+        {/* ══ BOTTOM: current task card ══ */}
+        {!isDone && currentItem && (
+          <div className={styles.taskArea} onClick={(e) => e.stopPropagation()}>
+            <p className={styles.taskCounter}>{currentIdx + 1} / {items.length}</p>
+            <div className={styles.taskCard}>
+              <p className={styles.taskText}>{currentItem.text ?? currentItem.title ?? ''}</p>
             </div>
-          )}
-        </div>
+          </div>
+        )}
       </div>
 
-      {/* ══ Specialist description overlay ══ */}
+      {/* ══ Specialist info overlay ══ */}
       {activePopup && (
         <div
           className={`${styles.overlay} ${orientation === 'landscape' ? styles.overlayLandscape : styles.overlayPortrait}`}
@@ -225,18 +162,16 @@ export function DistributeGame({ task, onComplete, onBack, theme = 'cobalt', ori
         </div>
       )}
 
-      {/* ══ Result overlay ══ */}
-      {showResultPopup && currentResult && (
+      {/* ══ Per-drop feedback popup ══ */}
+      {dropFeedback && (
         <div className={`${styles.overlay} ${orientation === 'landscape' ? styles.overlayLandscape : styles.overlayPortrait}`}>
           <PopUp
-            icon={currentResult.correct ? 'done' : 'close'}
-            iconColor={currentResult.correct ? 'blue' : 'red'}
-            title={currentResult.correct ? 'Потрясающе!' : 'Ой!'}
-            description={currentResult.correct
-              ? (step.resultCorrect ?? 'Все задачи распределены верно!')
-              : (step.resultWrong ?? currentResult.explanation)}
-            buttonLabel="Далее"
-            onButtonClick={() => { setShowResultPopup(false); onComplete([currentResult]); }}
+            icon={dropFeedback.correct ? 'done' : 'close'}
+            iconColor={dropFeedback.correct ? 'blue' : 'red'}
+            title={dropFeedback.correct ? 'Потрясающе!' : 'Ой!'}
+            description={dropFeedback.correct ? correctText : wrongText}
+            buttonLabel={dropFeedback.correct ? 'Дальше' : 'Попробуй ещё раз'}
+            onButtonClick={handleFeedbackDismiss}
           />
         </div>
       )}

@@ -1,10 +1,10 @@
 .wrapper {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-2xl);
-  padding: var(--spacing-2xl) 0;
+  gap: var(--spacing-lg);
+  padding: var(--spacing-xl) 0;
   width: 100%;
-  max-width: 80%;
+  max-width: 75%;
   margin: 0 auto;
   box-sizing: border-box;
   font-family: var(--font-family);
@@ -20,6 +20,7 @@
   align-self: flex-start;
 }
 
+/* Fallback: plain description */
 .card {
   background: var(--color-white);
   border-radius: var(--radius-lg);
@@ -34,6 +35,49 @@
   margin: 0;
 }
 
+/* Sections (2×2 grid) */
+.sections {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--spacing-md);
+}
+
+.sectionCard {
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.sectionHeading {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-muted);
+  letter-spacing: var(--letter-spacing-xs);
+  line-height: var(--line-height-tight);
+  margin: 0;
+  text-transform: uppercase;
+}
+
+.sectionText {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-black);
+  line-height: var(--line-height-relaxed);
+  margin: 0;
+}
+
+/* Inline glossary word */
+.glossaryWord {
+  cursor: pointer;
+  border-bottom: var(--border-width-sm) dashed var(--color-orange);
+  color: inherit;
+  font: inherit;
+}
+
+/* Navigation */
 .notFound {
   font-size: var(--font-size-lg);
   font-weight: var(--font-weight-medium);
@@ -47,4 +91,63 @@
 
 .navLink {
   cursor: pointer;
+}
+
+/* Popup overlay */
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-2xl);
+  box-sizing: border-box;
+  z-index: 100;
+  animation: fadeIn 0.15s ease-out;
+}
+
+.popup {
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  width: 100%;
+  max-width: 680px;
+  position: relative;
+  animation: slideUp 0.2s ease-out;
+}
+
+.popupWord {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-black);
+  letter-spacing: var(--letter-spacing-tight);
+  line-height: var(--line-height-tight);
+  margin: 0 0 var(--spacing-sm);
+}
+
+.popupDefinition {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-black);
+  line-height: var(--line-height-relaxed);
+  margin: 0;
+}
+
+.popupClose {
+  position: absolute;
+  top: var(--spacing-md);
+  right: var(--spacing-md);
+  cursor: pointer;
+  line-height: 0;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { transform: scale(0.95); opacity: 0; }
+  to   { transform: scale(1);    opacity: 1; }
 }

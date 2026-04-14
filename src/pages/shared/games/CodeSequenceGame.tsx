@@ -442,8 +442,10 @@ export function CodeSequenceGame({
           <PopUp
             icon={getResult().correct ? 'done' : 'close'}
             iconColor={getResult().correct ? 'blue' : 'red'}
-            title={getResult().correct ? 'Спасибо за помощь!' : 'Не совсем...'}
-            description={getResult().explanation}
+            title={getResult().correct ? 'Потрясающе!' : 'Ой!'}
+            description={getResult().correct
+              ? 'Благодаря тебе робот спасён! И никто не останется голодным ;-)'
+              : 'Сейчас не получилось, но ты совсем близко к правильной цепочке. Попробуй что-то поменять!'}
             buttonLabel="Далее"
             onButtonClick={() => {
               setShowPopup(false);

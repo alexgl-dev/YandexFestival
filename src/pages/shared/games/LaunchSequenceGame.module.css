@@ -18,10 +18,20 @@
 .topRow {
   width: 100%;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
+  align-items: center;
 }
 
 .counter {
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-white);
+  opacity: 0.8;
+  margin: 0;
+}
+
+.attemptCounter {
   font-family: var(--font-family);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
@@ -34,6 +44,87 @@
   font-weight: var(--font-weight-bold);
   color: var(--color-white);
   opacity: 1;
+}
+
+/* ── Prompt with inline tooltips ── */
+
+.prompt {
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-white);
+  text-align: center;
+  margin: 0;
+  line-height: var(--line-height-relaxed);
+  max-width: 85%;
+  opacity: 0.9;
+}
+
+.tooltipWord {
+  text-decoration: underline;
+  text-decoration-style: dashed;
+  text-underline-offset: 3px;
+  cursor: pointer;
+  color: var(--color-white);
+  font-weight: var(--font-weight-bold);
+}
+
+/* ── Word tooltip box (inside description popup) ── */
+
+.wordTooltipBox {
+  position: relative;
+  background: var(--color-grey-light);
+  border-radius: var(--radius-sm);
+  padding: var(--spacing-md) var(--spacing-lg);
+  width: 100%;
+  box-sizing: border-box;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--spacing-sm);
+}
+
+.wordTooltipText {
+  font-family: var(--font-family);
+  font-size: var(--font-size-xs);
+  color: var(--color-text-primary);
+  margin: 0;
+  line-height: var(--line-height-relaxed);
+  flex: 1;
+}
+
+.wordTooltipClose {
+  background: none;
+  border: none;
+  font-size: var(--font-size-sm);
+  color: var(--color-grey-disabled);
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+/* ── Standalone word tooltip card (from prompt) ── */
+
+.wordTooltipCard {
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-2xl);
+  width: 80%;
+  max-width: 560px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-lg);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.45);
+}
+
+.wordTooltipCardText {
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-primary);
+  text-align: center;
+  margin: 0;
+  line-height: var(--line-height-relaxed);
 }
 
 /* ── Card pool ── */
@@ -489,6 +580,81 @@
 
 .retryBtn:hover {
   background: var(--color-blue-pressed);
+}
+
+/* ── Error attempts hint ── */
+
+.errorAttempts {
+  font-family: var(--font-family);
+  font-size: var(--font-size-xs);
+  color: var(--color-grey-disabled);
+  text-align: center;
+  margin: 0;
+}
+
+/* ── Failure card (3 wrong attempts) ── */
+
+.failedCard {
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-2xl);
+  width: 80%;
+  max-width: 640px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-lg);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.45);
+}
+
+.failedIcon {
+  width: 80px;
+  height: 80px;
+  border-radius: var(--radius-full);
+  background: var(--color-overlay-red);
+  border: var(--border-width-md) solid var(--color-red);
+  color: var(--color-red);
+  font-family: var(--font-family);
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.failedTitle {
+  font-family: var(--font-family);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  text-align: center;
+  margin: 0;
+  line-height: var(--line-height-normal);
+}
+
+.failedBody {
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-primary);
+  text-align: center;
+  margin: 0;
+  line-height: var(--line-height-relaxed);
+  opacity: 0.75;
+}
+
+/* ── Completion question ── */
+
+.completeQuestion {
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  text-align: center;
+  margin: 0;
+  line-height: var(--line-height-relaxed);
+  opacity: 0.75;
+  font-style: italic;
 }
 
 /* ── Completion card ── */

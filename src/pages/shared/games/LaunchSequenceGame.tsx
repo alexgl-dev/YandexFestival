@@ -23,6 +23,48 @@ const PARALLEL_ORDERS = [4, 5];
 // Slight rotation per block index for the scattered look
 const ROTATIONS = [-2, 3, -4, 2, -1, 4, -3, 1];
 
+const MAX_ATTEMPTS = 3;
+
+// ── Tooltip parser ──────────────────────────────────────────────────────────
+type Segment =
+  | { type: 'text'; value: string }
+  | { type: 'tip'; text: string; tip: string };
+
+function parseTooltips(raw: string): Segment[] {
+  const regex = /\[([^\]]+)\]\{tooltip:\s*"([^"]*)"\}/g;
+  const segments: Segment[] = [];
+  let last = 0;
+  let m: RegExpExecArray | null;
+  while ((m = regex.exec(raw)) !== null) {
+    if (m.index > last) segments.push({ type: 'text', value: raw.slice(last, m.index) });
+    segments.push({ type: 'tip', text: m[1], tip: m[2] });
+    last = regex.lastIndex;
+  }
+  if (last < raw.length) segments.push({ type: 'text', value: raw.slice(last) });
+  return segments;
+}
+
+function renderTooltips(
+  raw: string,
+  onTip: (tip: string) => void,
+  className: string,
+): React.ReactNode {
+  return parseTooltips(raw).map((seg, i) =>
+    seg.type === 'text' ? (
+      <span key={i}>{seg.value}</span>
+    ) : (
+      <span
+        key={i}
+        className={className}
+        onClick={(e) => { e.stopPropagation(); onTip(seg.tip); }}
+      >
+        {seg.text}
+      </span>
+    ),
+  );
+}
+// ────────────────────────────────────────────────────────────────────────────
+
 function isBlockCorrect(
   blockOrder: number,
   slotIdx: number,
@@ -92,6 +134,7 @@ export function LaunchSequenceGame({
   );
   const [selected, setSelected] = useState<number | null>(null);
   const [descriptionFor, setDescriptionFor] = useState<number | null>(null);
+  const [wordTooltip, setWordTooltip] = useState<string | null>(null);
   const [checked, setChecked] = useState(false);
   const [slotResults, setSlotResults] = useState<('correct' | 'wrong' | null)[]>(() =>
     Array(slotCount).fill(null),
@@ -101,6 +144,8 @@ export function LaunchSequenceGame({
   const [litSlots, setLitSlots] = useState<Set<number>>(new Set());
   const [animating, setAnimating] = useState(false);
   const [showComplete, setShowComplete] = useState(false);
+  const [attemptCount, setAttemptCount] = useState(0);
+  const [showFailed, setShowFailed] = useState(false);
   const timersRef = useRef<ReturnType<typeof setTimeout>[]>([]);
 
   useEffect(() => () => timersRef.current.forEach(clearTimeout), []);
@@ -172,7 +217,6 @@ export function LaunchSequenceGame({
   const runAnimation = useCallback(
     (_currentSlots: (number | null)[]) => {
       setAnimating(true);
-      // Build animation sequence: parallel slots 3+4 light up together
       const sequence: number[][] = [];
       for (let i = 0; i < slotCount; i++) {
         if (i === 3) {
@@ -199,6 +243,27 @@ export function LaunchSequenceGame({
     [slotCount],
   );
 
+  // Full board reset (called after any wrong answer)
+  const doReset = useCallback(
+    (resetAttempts: boolean) => {
+      timersRef.current.forEach(clearTimeout);
+      timersRef.current = [];
+      setShowError(false);
+      setShowFailed(false);
+      setChecked(false);
+      setSlotResults(Array(slotCount).fill(null));
+      setErrorMsg('');
+      setSlots(Array(slotCount).fill(null));
+      setPool([...validIndices].sort(() => Math.random() - 0.5));
+      setSelected(null);
+      setLitSlots(new Set());
+      setAnimating(false);
+      setShowComplete(false);
+      if (resetAttempts) setAttemptCount(0);
+    },
+    [slotCount, validIndices],
+  );
+
   const handleCheck = useCallback(() => {
     if (!allPlaced || checked || animating) return;
     setChecked(true);
@@ -216,18 +281,20 @@ export function LaunchSequenceGame({
       const t = setTimeout(() => runAnimation(slots), 350);
       timersRef.current.push(t);
     } else {
-      setErrorMsg(buildErrorMessage(blocks, slots));
-      const t = setTimeout(() => setShowError(true), 700);
-      timersRef.current.push(t);
-    }
-  }, [allPlaced, checked, animating, slots, blocks, runAnimation]);
+      const newCount = attemptCount + 1;
+      setAttemptCount(newCount);
 
-  const handleRetry = useCallback(() => {
-    setShowError(false);
-    setChecked(false);
-    setSlotResults(Array(slotCount).fill(null));
-    setErrorMsg('');
-  }, [slotCount]);
+      if (newCount >= MAX_ATTEMPTS) {
+        // After 3 failures show the failure moral popup
+        const t = setTimeout(() => setShowFailed(true), 700);
+        timersRef.current.push(t);
+      } else {
+        setErrorMsg(buildErrorMessage(blocks, slots));
+        const t = setTimeout(() => setShowError(true), 700);
+        timersRef.current.push(t);
+      }
+    }
+  }, [allPlaced, checked, animating, slots, blocks, runAnimation, attemptCount]);
 
   const handleComplete = useCallback(() => {
     onComplete([
@@ -244,7 +311,7 @@ export function LaunchSequenceGame({
   const overlayClass =
     orientation === 'landscape' ? styles.overlayLandscape : styles.overlayPortrait;
 
-  // Render a single slot (used both standalone and inside parallel zone)
+  // Render a single slot
   const renderSlot = (sIdx: number) => {
     const bIdx = slots[sIdx];
     const block = bIdx !== null ? blocks[bIdx] : null;
@@ -281,17 +348,29 @@ export function LaunchSequenceGame({
     );
   };
 
+  const prompt = step?.prompt ?? '';
+
   return (
     <Background theme={theme} orientation={orientation} onBack={onBack}>
       <div className={styles.wrapper}>
-        {/* Counter */}
+        {/* Top row: placed counter + attempt counter */}
         <div className={styles.topRow}>
           <p className={styles.counter}>
             Размещено: <span className={styles.counterNum}>{placedCount}</span> из {slotCount}
           </p>
+          <p className={styles.attemptCounter}>
+            Ошибки: <span className={styles.counterNum}>{attemptCount}</span>/{MAX_ATTEMPTS}
+          </p>
         </div>
 
-        {/* Pool — always renders all 8 cells to prevent layout shifts */}
+        {/* Prompt with inline tooltips */}
+        {prompt && (
+          <p className={styles.prompt}>
+            {renderTooltips(prompt, setWordTooltip, styles.tooltipWord)}
+          </p>
+        )}
+
+        {/* Pool */}
         <div className={styles.pool}>
           {validIndices.map((bIdx) => {
             const inPool = pool.includes(bIdx);
@@ -336,12 +415,10 @@ export function LaunchSequenceGame({
           <p className={styles.timelineHeading}>Таймлайн проекта</p>
 
           <div className={styles.timeline}>
-            {/* Slots 0–2 */}
             {renderSlot(0)}
             {renderSlot(1)}
             {renderSlot(2)}
 
-            {/* Parallel zone: slots 3 & 4 */}
             <div
               className={[
                 styles.parallelZone,
@@ -359,13 +436,11 @@ export function LaunchSequenceGame({
               </div>
             </div>
 
-            {/* Slots 5–7 */}
             {renderSlot(5)}
             {renderSlot(6)}
             {renderSlot(7)}
           </div>
 
-          {/* Duration hint */}
           <p className={styles.durationHint}>
             {animating || showComplete
               ? 'Продукт запускается за 4 месяца!'
@@ -375,7 +450,6 @@ export function LaunchSequenceGame({
           </p>
         </div>
 
-        {/* Check button */}
         {allPlaced && !checked && !animating && (
           <div className={styles.btnWrap}>
             <Button label="Проверить" type="main" onClick={handleCheck} />
@@ -385,8 +459,11 @@ export function LaunchSequenceGame({
 
       {/* Description popup */}
       {descriptionFor !== null && (
-        <div className={`${styles.overlay} ${overlayClass}`}>
-          <div className={styles.descCard}>
+        <div
+          className={`${styles.overlay} ${overlayClass}`}
+          onClick={() => { setDescriptionFor(null); setWordTooltip(null); }}
+        >
+          <div className={styles.descCard} onClick={(e) => e.stopPropagation()}>
             {blocks[descriptionFor]?.icon && (
               <img
                 src={blocks[descriptionFor].icon}
@@ -396,11 +473,41 @@ export function LaunchSequenceGame({
               />
             )}
             <h3 className={styles.descTitle}>{blocks[descriptionFor]?.text}</h3>
-            <p className={styles.descBody}>{blocks[descriptionFor]?.description}</p>
+            <p className={styles.descBody}>
+              {renderTooltips(
+                blocks[descriptionFor]?.description ?? '',
+                setWordTooltip,
+                styles.tooltipWord,
+              )}
+            </p>
+
+            {/* Inline word tooltip */}
+            {wordTooltip && (
+              <div className={styles.wordTooltipBox}>
+                <p className={styles.wordTooltipText}>{wordTooltip}</p>
+                <button className={styles.wordTooltipClose} onClick={() => setWordTooltip(null)}>✕</button>
+              </div>
+            )}
+
             <button
               className={styles.descBtn}
-              onClick={() => setDescriptionFor(null)}
+              onClick={() => { setDescriptionFor(null); setWordTooltip(null); }}
             >
+              Понятно
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Word tooltip from prompt (outside description popup) */}
+      {wordTooltip && descriptionFor === null && (
+        <div
+          className={`${styles.overlay} ${overlayClass}`}
+          onClick={() => setWordTooltip(null)}
+        >
+          <div className={styles.wordTooltipCard} onClick={(e) => e.stopPropagation()}>
+            <p className={styles.wordTooltipCardText}>{wordTooltip}</p>
+            <button className={styles.descBtn} onClick={() => setWordTooltip(null)}>
               Понятно
             </button>
           </div>
@@ -414,8 +521,27 @@ export function LaunchSequenceGame({
             <div className={styles.errorIcon}>!</div>
             <h3 className={styles.errorTitle}>Не совсем...</h3>
             <p className={styles.errorBody}>{errorMsg}</p>
-            <button className={styles.retryBtn} onClick={handleRetry}>
+            <p className={styles.errorAttempts}>
+              Осталось попыток: {MAX_ATTEMPTS - attemptCount}
+            </p>
+            <button className={styles.retryBtn} onClick={() => doReset(false)}>
               Попробовать снова
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Failure popup (after MAX_ATTEMPTS wrong answers) */}
+      {showFailed && (
+        <div className={`${styles.overlay} ${overlayClass}`}>
+          <div className={styles.failedCard}>
+            <div className={styles.failedIcon}>✕</div>
+            <h2 className={styles.failedTitle}>Правильный запуск экономит время и деньги, но ошибки случаются — для этого и стоит учиться.</h2>
+            <p className={styles.failedBody}>
+              Если бы тебе пришлось запускать видеоблог, из каких этапов состоял бы твой запуск?
+            </p>
+            <button className={styles.retryBtn} onClick={() => doReset(true)}>
+              Попробовать ещё раз
             </button>
           </div>
         </div>
@@ -426,12 +552,12 @@ export function LaunchSequenceGame({
         <div className={`${styles.overlay} ${overlayClass}`}>
           <div className={styles.completeCard}>
             <div className={styles.completeCheck}>✓</div>
-            <h2 className={styles.completeTitle}>Поздравляем!</h2>
-            <p className={styles.completeSubtitle}>Продукт запущен за 4 месяца</p>
+            <h2 className={styles.completeTitle}>Продукт запущен за 4 месяца!</h2>
             <p className={styles.completeStat}>
-              Средний продукт проходит этот путь за 4–6 месяцев. Самая частая
-              ошибка менеджеров — пропустить исследование пользователей и сразу
-              перейти к разработке.
+              Проджект-менеджер не пишет код и не рисует дизайн. Он выстраивает порядок, в котором работает вся команда. Правильная последовательность экономит месяцы работы и миллионы рублей.
+            </p>
+            <p className={styles.completeQuestion}>
+              Если бы тебе пришлось запускать видеоблог, из каких этапов состоял бы твой запуск?
             </p>
             <button className={styles.completeBtn} onClick={handleComplete}>
               Далее

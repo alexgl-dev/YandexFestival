@@ -12,3 +12,5 @@ export { LaunchSequenceGame } from './LaunchSequenceGame';
 export { AnomalyDetectiveGame } from './AnomalyDetectiveGame';
 export { SwipeGame } from './SwipeGame';
 export { PlaylistAnatomyGame } from './PlaylistAnatomyGame';
+export { CalendarGame } from './CalendarGame';
+export { FactorXGame } from './FactorXGame';

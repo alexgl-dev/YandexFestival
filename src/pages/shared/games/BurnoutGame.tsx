@@ -130,6 +130,10 @@ export function BurnoutGame({
       <div className={styles.wrapper}>
         {step.prompt && <h2 className={styles.prompt}>{step.prompt}</h2>}
 
+        <div className={styles.counter}>
+          Изучено: {visited.size}/{options.length}
+        </div>
+
         <div className={styles.grid}>
           {options.map((option, index) => {
             const state = cardStates[index] ?? 'default';
@@ -145,6 +149,7 @@ export function BurnoutGame({
 
             const cellClasses = [
               styles.cell,
+              isVisited && !isCorrect && !isWrong ? styles.cellVisited : '',
               isCorrect ? styles.cellCorrect : '',
               isWrong ? styles.cellWrong : '',
               isLockedElsewhere ? styles.cellDimmed : '',
@@ -159,21 +164,14 @@ export function BurnoutGame({
                 className={cellClasses}
                 onClick={() => handleOpen(index)}
               >
-                {isVisited && !isCorrect && !isWrong && (
-                  <span className={styles.visitedBadge}>
-                    <Icon name="done" color="blue" size="s" />
-                  </span>
-                )}
-                {isCorrect && (
-                  <span className={styles.visitedBadge}>
-                    <Icon name="done" color="blue" size="s" />
-                  </span>
-                )}
-                {isWrong && (
-                  <span className={styles.visitedBadge}>
-                    <Icon name="close" color="red" size="s" />
-                  </span>
-                )}
+                <span className={styles.visitedBadge}>
+                  {isCorrect && <Icon name="done" color="blue" size="s" />}
+                  {isWrong && <Icon name="close" color="red" size="s" />}
+                  {!isCorrect && !isWrong && isVisited && <Icon name="done" color="blue" size="s" />}
+                  {!isCorrect && !isWrong && !isVisited && (
+                    <span className={styles.questionMark}>?</span>
+                  )}
+                </span>
                 <span className={styles.role}>{role}</span>
                 <span className={styles.name}>{name}</span>
                 {quote && <span className={styles.quote}>«{quote}»</span>}

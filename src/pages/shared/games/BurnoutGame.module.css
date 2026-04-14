@@ -55,6 +55,18 @@
   color: var(--color-black);
 }
 
+/* ── Visited counter ── */
+
+.counter {
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-white);
+  opacity: 0.75;
+  letter-spacing: var(--letter-spacing-xs);
+  align-self: flex-start;
+}
+
 /* ── Grid: 2 columns, 4 rows ── */
 
 .grid {
@@ -110,6 +122,10 @@
   border-color: var(--color-red);
 }
 
+.cellVisited {
+  background: var(--color-grey-light);
+}
+
 .cellDimmed {
   opacity: 0.45;
   pointer-events: none;
@@ -124,6 +140,23 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+}
+
+/* ── Question mark badge (unvisited) ── */
+
+.questionMark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--color-grey-secondary);
+  color: var(--color-grey-disabled);
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  line-height: 1;
 }
 
 /* ── Collapsed card text ── */

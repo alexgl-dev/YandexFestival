@@ -1,4 +1,4 @@
-export type Mechanic = 'choose' | 'find' | 'sequence' | 'categorize' | 'distribute' | 'match' | 'label' | 'mark' | 'catch' | 'quiz' | 'bingo';
+export type Mechanic = 'choose' | 'find' | 'sequence' | 'categorize' | 'distribute' | 'match' | 'label' | 'mark' | 'catch' | 'quiz' | 'bingo' | 'calendar';
 export type Mode = 'group' | 'solo';
 export type Feedback = 'instant' | 'onComplete';
 
@@ -55,6 +55,28 @@ export interface TaskCategory {
   emoji?: string;
   avatar?: string;
   color?: string;
+  tooltip?: string;
+}
+
+export interface EmailField {
+  value: string;
+  note?: string;
+  suspicious?: boolean;
+}
+
+export interface EmailBlock {
+  type: 'text' | 'link' | 'attachment';
+  text: string;
+  href?: string;
+  note?: string;
+  suspicious?: boolean;
+}
+
+export interface EmailContent {
+  from: EmailField;
+  to: EmailField;
+  subject: EmailField;
+  body: EmailBlock[];
 }
 
 export interface TaskItem {
@@ -65,10 +87,12 @@ export interface TaskItem {
   icon?: string;
   image?: string;
   content?: { type: string; value: string; description?: string };
+  email?: EmailContent;
   belongs?: string[];
   correctLabel?: string;
   box?: { x: number; y: number; width: number; height: number };
   explanation: string;
+  wrongHint?: string;
 }
 
 export interface TaskLabel {
@@ -106,12 +130,31 @@ export interface CatchObject {
   title: string;
   description: string;
   category: string;
+  emoji?: string;
+  correctComment?: string;
+  wrongComment?: string;
+  glossary?: GlossaryTerm[];
   fields?: {
     name: string;
     age: string;
     email: string;
     city: string;
   };
+}
+
+export interface CalendarCardData {
+  id: string;
+  title: string;
+  durationSlots: number; // 30-min units: 1=30min, 2=1hr, 4=2hr, 6=3hr
+  tooltip: string;
+  isAnchor?: boolean;
+  anchorDay?: string;         // 'mon' | 'tue' | 'wed'
+  anchorStartSlot?: number;   // index from 0 (9:00=0, 9:30=1, ...)
+  validDays?: string[];
+  minStartSlot?: number;
+  maxStartSlot?: number;
+  exactStartSlot?: number;
+  wrongExplanation?: string;
 }
 
 export interface TaskStep {
@@ -132,6 +175,7 @@ export interface TaskStep {
   catcher?: { type: string; label: string };
   resultCorrect?: string;
   resultWrong?: string;
+  calendarCards?: CalendarCardData[];
 }
 
 export interface Task {

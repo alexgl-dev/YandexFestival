@@ -11,11 +11,16 @@ import { MarkGame } from './games/MarkGame';
 import { ChatSignalsGame } from './games/ChatSignalsGame';
 import { CatchGame } from './games/CatchGame';
 import { SwipeGame } from './games/SwipeGame';
+import { BacklogGame } from './games/BacklogGame';
+import { DatasetSanitizerGame } from './games/DatasetSanitizerGame';
 import { LabelGame } from './games/LabelGame';
+import { SecurityCheckGame } from './games/SecurityCheckGame';
 import { MatchGame } from './games/MatchGame';
 import { BurnoutGame } from './games/BurnoutGame';
 import { LaunchSequenceGame } from './games/LaunchSequenceGame';
 import { UxSequenceGame } from './games/UxSequenceGame';
+import { CalendarGame } from './games/CalendarGame';
+import { FactorXGame } from './games/FactorXGame';
 import { GamePlaceholder } from './GamePlaceholder';
 
 interface GameRouterProps {
@@ -29,6 +34,8 @@ interface GameRouterProps {
 export function GameRouter({ task, onComplete, onBack, theme = 'orange', orientation = 'portrait' }: GameRouterProps) {
   switch (task.mechanic) {
     case 'choose':
+      if (task.id === 'factor-x')
+        return <FactorXGame task={task} onComplete={onComplete} onBack={onBack} theme={theme} orientation={orientation} />;
       return <ChooseGame task={task} onComplete={onComplete} onBack={onBack} theme={theme} orientation={orientation} />;
     case 'find':
       if (task.id === 'burnout') {
@@ -66,15 +73,26 @@ export function GameRouter({ task, onComplete, onBack, theme = 'orange', orienta
       );
     }
     case 'catch': {
+      if (task.id === 'backlog') {
+        return <BacklogGame task={task} onComplete={onComplete} onBack={onBack} theme={theme} orientation={orientation} />;
+      }
+      if (task.id === 'dataset-sanitizers') {
+        return <DatasetSanitizerGame task={task} onComplete={onComplete} onBack={onBack} theme={theme} orientation={orientation} />;
+      }
       const hasSwipe = !!task.steps[0]?.trash?.enabled;
       if (hasSwipe)
         return <SwipeGame task={task} onComplete={onComplete} onBack={onBack} theme={theme} orientation={orientation} />;
       return <CatchGame task={task} onComplete={onComplete} onBack={onBack} theme={theme} orientation={orientation} />;
     }
     case 'label':
+      if (task.id === 'security-check') {
+        return <SecurityCheckGame task={task} onComplete={onComplete} onBack={onBack} theme={theme} orientation={orientation} />;
+      }
       return <LabelGame task={task} onComplete={onComplete} onBack={onBack} theme={theme} orientation={orientation} />;
     case 'match':
       return <MatchGame task={task} onComplete={onComplete} onBack={onBack} theme={theme} orientation={orientation} />;
+    case 'calendar':
+      return <CalendarGame task={task} onComplete={onComplete} onBack={onBack} theme={theme} />;
     default:
       return <GamePlaceholder task={task} onComplete={onComplete} theme={theme} orientation={orientation} />;
   }

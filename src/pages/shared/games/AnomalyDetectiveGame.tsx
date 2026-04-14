@@ -20,22 +20,62 @@ interface GameProps {
 type Phase = 'find' | 'explain' | 'reveal';
 type Popup =
   | { kind: 'peak' }
+  | { kind: 'extra' }
   | { kind: 'decoy'; monthIndex: number }
   | { kind: 'wrong'; option: TaskOption }
   | { kind: 'wow'; option: TaskOption }
   | { kind: 'success'; option: TaskOption }
   | null;
 
+// ── Tooltip parser ──────────────────────────────────────────────────────────
+interface Segment {
+  text: string;
+  tooltip: string | null;
+}
+
+function parseTooltips(raw: string): Segment[] {
+  const regex = /\[([^\]]+)\]\{tooltip:\s*"([^"]*)"\}/g;
+  const segments: Segment[] = [];
+  let last = 0;
+  let m: RegExpExecArray | null;
+  while ((m = regex.exec(raw)) !== null) {
+    if (m.index > last) segments.push({ text: raw.slice(last, m.index), tooltip: null });
+    segments.push({ text: m[1], tooltip: m[2] });
+    last = m.index + m[0].length;
+  }
+  if (last < raw.length) segments.push({ text: raw.slice(last), tooltip: null });
+  return segments;
+}
+
+function renderTooltips(
+  raw: string,
+  onTooltip: (t: string) => void,
+  wordClass: string,
+): React.ReactNode[] {
+  return parseTooltips(raw).map((seg, i) =>
+    seg.tooltip ? (
+      <span key={i} className={wordClass} onClick={() => onTooltip(seg.tooltip!)}>
+        {seg.text}
+      </span>
+    ) : (
+      <span key={i}>{seg.text}</span>
+    ),
+  );
+}
+
 const MONTHS = ['Январь', 'Февраль', 'Март', 'Апрель', 'Май', 'Июнь'];
 const PEAK_INDEX = 3;
 
-const VIEWS = [34000, 37500, 33000, 46000, 36000, 31000];
-const MENTIONS = [100, 200, 150, 14500, 300, 120];
+const VIEWS = [4200, 3800, 4500, 47219, 4100, 3600];
+const MENTIONS = [280, 340, 250, 180000, 42000, 6500];
 
 const VIEWS_TICKS = [0, 10000, 20000, 30000, 40000, 50000];
-const MENTIONS_TICKS = [0, 3000, 6000, 9000, 12000, 15000];
+const MENTIONS_TICKS = [0, 45000, 90000, 135000, 180000];
 
 const VARIANT_LABELS = ['Вариант A', 'Вариант B', 'Вариант C'];
+
+const VIEWS_TITLE = 'Просмотры фильма «Минута длиною в час» (2003), январь — июнь';
+const MENTIONS_TITLE = 'Упоминания фильма «Секунда длиною в час» в социальных сетях, январь — июнь';
 
 interface GraphCardProps {
   title: string;
@@ -62,7 +102,7 @@ function GraphCard({
 }: GraphCardProps) {
   const WIDTH = 1540;
   const HEIGHT = compact ? 360 : 720;
-  const PAD_TOP = compact ? 60 : 90;
+  const PAD_TOP = compact ? 40 : 60;
   const PAD_BOTTOM = compact ? 70 : 90;
   const PAD_LEFT = 190;
   const PAD_RIGHT = 70;
@@ -84,9 +124,10 @@ function GraphCard({
 
   return (
     <div className={`${styles.graphCard} ${compact ? styles.graphCardCompact : ''}`}>
+      <p className={styles.graphTitle}>{title}</p>
       <svg viewBox={`0 0 ${WIDTH} ${HEIGHT}`} className={styles.graphSvg}>
         <defs>
-          <filter id={`glow-${title}`} x="-200%" y="-200%" width="500%" height="500%">
+          <filter id={`glow-${title.slice(0, 8)}`} x="-200%" y="-200%" width="500%" height="500%">
             <feGaussianBlur stdDeviation="14" result="blur" />
             <feMerge>
               <feMergeNode in="blur" />
@@ -94,14 +135,6 @@ function GraphCard({
             </feMerge>
           </filter>
         </defs>
-
-        <text
-          x={PAD_LEFT - 115}
-          y={PAD_TOP - 40}
-          className={styles.axisCaption}
-        >
-          {title}
-        </text>
 
         {ticks.map((t) => {
           const y = yFor(t);
@@ -160,7 +193,7 @@ function GraphCard({
                 cy={yFor(v)}
                 r={compact ? 10 : 14}
                 className={isWrong ? styles.decoyDotWrong : styles.decoyDot}
-                filter={isWrong ? `url(#glow-${title})` : undefined}
+                filter={isWrong ? `url(#glow-${title.slice(0, 8)})` : undefined}
               />
             </g>
           );
@@ -181,7 +214,7 @@ function GraphCard({
             cy={peakY}
             r={compact ? 10 : 14}
             className={styles.peakDot}
-            filter={`url(#glow-${title})`}
+            filter={`url(#glow-${title.slice(0, 8)})`}
           />
         )}
 
@@ -233,6 +266,7 @@ export function AnomalyDetectiveGame({
   const [wrongPoints, setWrongPoints] = useState<Set<number>>(new Set());
   const [popup, setPopup] = useState<Popup>(null);
   const [results, setResults] = useState<GameResult[]>([]);
+  const [wordTooltip, setWordTooltip] = useState<string | null>(null);
 
   const handlePeakTap = useCallback(() => {
     setPopup({ kind: 'peak' });
@@ -249,8 +283,7 @@ export function AnomalyDetectiveGame({
   }, []);
 
   const handleRequestExtra = useCallback(() => {
-    setRequestedExtra(true);
-    setShowMentions(true);
+    setPopup({ kind: 'extra' });
   }, []);
 
   const handleOptionClick = useCallback(
@@ -283,6 +316,14 @@ export function AnomalyDetectiveGame({
       return;
     }
 
+    if (popup.kind === 'extra') {
+      setRequestedExtra(true);
+      setShowMentions(true);
+      setPhase('reveal');
+      setPopup(null);
+      return;
+    }
+
     if (popup.kind === 'decoy') {
       setPopup(null);
       return;
@@ -300,7 +341,7 @@ export function AnomalyDetectiveGame({
     }
 
     if (popup.kind === 'wow') {
-      // First beat: reveal the second graph, stay in reveal phase
+      setWordTooltip(null);
       setShowMentions(true);
       setRequestedExtra(true);
       setPhase('reveal');
@@ -335,15 +376,29 @@ export function AnomalyDetectiveGame({
     return 'default';
   };
 
+  const WOW_DESCRIPTION =
+    'Проверим её с помощью дополнительных данных. Хороший аналитик всегда [верифицирует]{tooltip: "Верифицировать — проверять гипотезу с помощью дополнительных данных или фактов, чтобы подтвердить или опровергнуть её."} [гипотезу]{tooltip: "Гипотеза — предположение, которое ещё не доказано, но кажется правдоподобным и требует проверки."}.';
+
   const popupProps = (() => {
     if (!popup) return null;
     if (popup.kind === 'peak') {
       return {
         icon: 'done' as const,
         iconColor: 'blue' as const,
-        title: 'Аномалия найдена',
-        description: 'Резкий пик просмотров в апреле. Как ты это объяснишь?',
+        title: '14 апреля',
+        description:
+          '47 219 просмотров за сутки. Это в 11 раз больше нормы, обычный показатель для этого фильма — около 4000 просмотров в день.\n\nКак это можно объяснить?',
         buttonLabel: 'Выбрать объяснение',
+      };
+    }
+    if (popup.kind === 'extra') {
+      return {
+        icon: 'done' as const,
+        iconColor: 'blue' as const,
+        title: 'Хорошее чутьё!',
+        description:
+          'Аналитик никогда не делает выводы на основе одного источника. Загружаю дополнительные данные...',
+        buttonLabel: 'Смотреть',
       };
     }
     if (popup.kind === 'decoy') {
@@ -352,7 +407,7 @@ export function AnomalyDetectiveGame({
         iconColor: 'red' as const,
         title: 'Не совсем',
         description:
-          'Это обычный месяц — значения в пределах нормы. Ищи точку, которая резко выбивается из ряда.',
+          'Здесь всё в пределах нормы. Поищи там, где данные ведут себя неожиданно.',
         buttonLabel: 'Попробовать ещё',
       };
     }
@@ -366,14 +421,7 @@ export function AnomalyDetectiveGame({
       };
     }
     if (popup.kind === 'wow') {
-      return {
-        icon: 'done' as const,
-        iconColor: 'blue' as const,
-        title: 'Проверим',
-        description:
-          'Запросим данные об упоминаниях фильма в соцсетях и посмотрим, совпадут ли пики.',
-        buttonLabel: 'Сверить графики',
-      };
+      return null; // rendered inline below
     }
     return {
       icon: 'done' as const,
@@ -391,8 +439,13 @@ export function AnomalyDetectiveGame({
 
         <div className={styles.stage}>
           <div className={`${styles.graphs} ${showMentions ? styles.graphsStacked : ''}`}>
+            {phase === 'find' && (
+              <div className={styles.alertBadge}>
+                🔔 Обнаружена аномалия
+              </div>
+            )}
             <GraphCard
-              title="Просмотры"
+              title={VIEWS_TITLE}
               data={VIEWS}
               ticks={VIEWS_TICKS}
               peakHighlighted
@@ -403,13 +456,18 @@ export function AnomalyDetectiveGame({
               compact={showMentions}
             />
             {showMentions && (
-              <GraphCard
-                title="Упоминания в соцсетях"
-                data={MENTIONS}
-                ticks={MENTIONS_TICKS}
-                peakHighlighted
-                compact
-              />
+              <>
+                <GraphCard
+                  title={MENTIONS_TITLE}
+                  data={MENTIONS}
+                  ticks={MENTIONS_TICKS}
+                  peakHighlighted
+                  compact
+                />
+                <p className={styles.graphHint}>
+                  Сравни оба графика. Когда именно начался рост? Как долго он длился? Это поможет понять причину.
+                </p>
+              </>
             )}
           </div>
 
@@ -433,7 +491,7 @@ export function AnomalyDetectiveGame({
         {!requestedExtra && phase !== 'find' && (
           <div className={styles.actions}>
             <Button
-              label="Запросить дополнительные данные"
+              label="🔍 Запросить дополнительные данные"
               type="secondary"
               onClick={handleRequestExtra}
             />
@@ -451,6 +509,36 @@ export function AnomalyDetectiveGame({
             buttonLabel={popupProps.buttonLabel}
             onButtonClick={handlePopupAction}
           />
+        </div>
+      )}
+
+      {popup?.kind === 'wow' && (
+        <div className={styles.overlay} onClick={() => { if (!wordTooltip) {} }}>
+          <div className={styles.wowPopup}>
+            <div className={styles.wowHeader}>
+              <span className={styles.wowTitle}>Интересная версия</span>
+            </div>
+            <p className={styles.wowDescription}>
+              {renderTooltips(WOW_DESCRIPTION, setWordTooltip, styles.tooltipWord)}
+            </p>
+            {wordTooltip && (
+              <div className={styles.wordTooltipBox}>
+                <p className={styles.wordTooltipText}>{wordTooltip}</p>
+                <button
+                  type="button"
+                  className={styles.wordTooltipClose}
+                  onClick={() => setWordTooltip(null)}
+                >
+                  ✕
+                </button>
+              </div>
+            )}
+            <Button
+              label="Сверить графики"
+              type="main"
+              onClick={handlePopupAction}
+            />
+          </div>
         </div>
       )}
     </Background>

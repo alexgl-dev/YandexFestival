@@ -1,0 +1,301 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-lg);
+  width: 100%;
+  max-width: 85%;
+  height: 100%;
+  margin: 0 auto;
+  padding: var(--spacing-xl) 0;
+  box-sizing: border-box;
+  font-family: var(--font-family);
+}
+
+.counter {
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-white);
+  letter-spacing: var(--letter-spacing-xs);
+  text-transform: uppercase;
+  opacity: 0.85;
+}
+
+/* ── Instruction toggle (floating ?) ─────────────────────────── */
+
+.instructionToggle {
+  position: absolute;
+  top: var(--spacing-2xl);
+  right: var(--spacing-2xl);
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-full);
+  background: var(--color-white);
+  color: var(--color-black);
+  border: var(--border-width-md) solid var(--color-black);
+  font-family: var(--font-family);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+  z-index: 50;
+}
+
+/* ── Email card ──────────────────────────────────────────────── */
+
+.emailCard {
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  width: 100%;
+  max-width: 1200px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  box-sizing: border-box;
+}
+
+.emailHeader {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  padding-bottom: var(--spacing-md);
+  border-bottom: var(--border-width-sm) solid var(--color-grey-secondary);
+}
+
+.emailRow {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: var(--spacing-sm);
+  font-family: var(--font-family);
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-normal);
+  color: var(--color-black);
+}
+
+.rowLabel {
+  flex-shrink: 0;
+  width: 140px;
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-xs);
+  font-size: var(--font-size-2xs);
+  padding-top: 4px;
+}
+
+.valueText {
+  flex: 1;
+  min-width: 0;
+  color: var(--color-black);
+  word-break: break-word;
+}
+
+.emailBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  padding-top: var(--spacing-xs);
+}
+
+.emailBlock {
+  font-family: var(--font-family);
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-relaxed);
+  color: var(--color-black);
+}
+
+.paragraph {
+  display: inline;
+  word-break: break-word;
+}
+
+/* ── Notable / tappable elements ─────────────────────────────── */
+
+.notable {
+  position: relative;
+  cursor: pointer;
+  border-radius: var(--radius-xs);
+  padding: 2px 6px;
+  transition: background-color 0.15s ease;
+}
+
+.notableInfo {
+  background-color: var(--color-bg-brand-translucent);
+  outline: var(--border-width-sm) dashed var(--color-blue);
+}
+
+.notableSuspicious {
+  background-color: var(--color-overlay-red);
+  outline: var(--border-width-sm) dashed var(--color-red);
+}
+
+.notableActive {
+  filter: brightness(1.05);
+}
+
+.noteMark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  margin-left: var(--spacing-xs);
+  border-radius: var(--radius-full);
+  background: var(--color-black);
+  color: var(--color-white);
+  font-family: var(--font-family);
+  font-size: var(--font-size-2xs);
+  font-weight: var(--font-weight-bold);
+  vertical-align: middle;
+}
+
+.noteTooltip {
+  position: absolute;
+  left: 0;
+  top: calc(100% + var(--spacing-xs));
+  z-index: 10;
+  display: block;
+  max-width: 480px;
+  min-width: 280px;
+  padding: var(--spacing-md) var(--spacing-lg);
+  background: var(--color-black);
+  color: var(--color-white);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-family);
+  font-size: var(--font-size-2xs);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--line-height-relaxed);
+  letter-spacing: var(--letter-spacing-xs);
+  box-shadow: var(--shadow-card);
+  cursor: default;
+  white-space: normal;
+}
+
+/* ── Link / attachment blocks ───────────────────────────────── */
+
+.link {
+  display: inline-block;
+  font-weight: var(--font-weight-medium);
+  text-decoration: underline;
+  word-break: break-all;
+}
+
+.linkSafe {
+  color: var(--color-blue);
+}
+
+.linkSuspicious {
+  color: var(--color-red);
+}
+
+.attachment {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: var(--color-grey-light);
+  border: var(--border-width-sm) solid var(--color-grey-secondary);
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  font-family: var(--font-family);
+  font-size: var(--font-size-2xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-black);
+}
+
+.attachmentSuspicious {
+  border-color: var(--color-red);
+  background: var(--color-overlay-red);
+}
+
+.attachmentIcon {
+  display: inline-flex;
+  align-items: center;
+}
+
+.attachmentName {
+  word-break: break-all;
+}
+
+/* ── Verdict buttons row ─────────────────────────────────────── */
+
+.verdictRow {
+  display: flex;
+  flex-direction: row;
+  gap: var(--spacing-lg);
+  justify-content: center;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+.btnSafe :global(.root),
+.btnSafe {
+  --btn-accent: var(--color-accent-green);
+}
+
+.btnDanger :global(.root),
+.btnDanger {
+  --btn-accent: var(--color-red);
+}
+
+/* ── Popup overlays ──────────────────────────────────────────── */
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-overlay-dark);
+  z-index: 9999;
+  padding: var(--spacing-2xl);
+  box-sizing: border-box;
+}
+
+.instructionPanel {
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-2xl);
+  max-width: 960px;
+  width: 100%;
+  max-height: 90%;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  box-sizing: border-box;
+}
+
+.instructionTitle {
+  margin: 0;
+  font-family: var(--font-family);
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-black);
+  letter-spacing: var(--letter-spacing-tight);
+  line-height: var(--line-height-tight);
+}
+
+.instructionBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.instructionLine {
+  margin: 0;
+  font-family: var(--font-family);
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-relaxed);
+  color: var(--color-black);
+}
+
+.instructionBreak {
+  height: var(--spacing-xs);
+}

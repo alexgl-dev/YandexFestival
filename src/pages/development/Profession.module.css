@@ -4,7 +4,7 @@
   gap: var(--spacing-lg);
   padding: var(--spacing-xl) 0;
   width: 100%;
-  max-width: 85%;
+  max-width: 75%;
   margin: 0 auto;
   box-sizing: border-box;
   font-family: var(--font-family);

@@ -1,0 +1,414 @@
+/* CalendarGame — landscape 1920×1080 */
+
+.layout {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 100%;
+  padding: 24px 48px 24px 48px;
+  gap: 28px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+/* ══ LEFT: task pool ══ */
+
+.pool {
+  width: 260px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  height: 100%;
+  overflow: hidden;
+}
+
+.poolTitle {
+  font-family: var(--font-family);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-white);
+  margin: 0;
+  flex-shrink: 0;
+}
+
+.poolList {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  padding-right: 4px;
+}
+
+.poolList::-webkit-scrollbar { width: 4px; }
+.poolList::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.35);
+  border-radius: var(--radius-full);
+}
+
+.poolCard {
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-sm) var(--spacing-md);
+  cursor: pointer;
+  border: 3px solid transparent;
+  transition: border-color 0.15s, box-shadow 0.15s;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  position: relative;
+  user-select: none;
+}
+
+.poolCard:hover {
+  box-shadow: 0 4px 16px rgba(0,0,0,0.2);
+}
+
+.poolCardSelected {
+  border-color: var(--color-blue);
+  box-shadow: 0 0 0 2px var(--color-blue);
+}
+
+.poolCardCorrect {
+  border-color: var(--color-green);
+}
+
+.poolCardWrong {
+  border-color: var(--color-red);
+}
+
+.poolCardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.poolCardDuration {
+  display: none; /* duration shown via badge */
+}
+
+.poolCardTitle {
+  font-family: var(--font-family);
+  font-size: var(--font-size-2xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  margin: 0;
+  line-height: 1.3;
+}
+
+.durationBadge {
+  font-family: var(--font-family);
+  font-size: 10px;
+  font-weight: var(--font-weight-regular);
+  color: var(--color-text-muted);
+  align-self: flex-start;
+}
+
+.wrongNote {
+  font-family: var(--font-family);
+  font-size: 10px;
+  color: var(--color-red);
+  margin: 4px 0 0;
+  line-height: 1.3;
+}
+
+.infoBtn {
+  width: 20px;
+  height: 20px;
+  border-radius: var(--radius-full);
+  background: rgba(0,0,0,0.1);
+  border: none;
+  cursor: pointer;
+  font-family: var(--font-family);
+  font-size: 11px;
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: background 0.15s;
+}
+
+.infoBtn:hover {
+  background: rgba(0,0,0,0.2);
+}
+
+/* ══ RIGHT: calendar ══ */
+
+.calendarArea {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: var(--spacing-xs);
+}
+
+.calendarHeader {
+  display: flex;
+  flex-direction: row;
+  flex-shrink: 0;
+}
+
+.timeAxisHead {
+  width: 54px;
+  flex-shrink: 0;
+}
+
+.dayHeader {
+  flex: 1;
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-white);
+  text-align: center;
+  padding: var(--spacing-xs) 0;
+  background: rgba(255,255,255,0.12);
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+}
+
+.dayHeader + .dayHeader {
+  margin-left: 4px;
+}
+
+.calendarBody {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: row;
+  overflow-y: auto;
+  position: relative;
+}
+
+.calendarBody::-webkit-scrollbar { width: 6px; }
+.calendarBody::-webkit-scrollbar-thumb {
+  background: rgba(255,255,255,0.3);
+  border-radius: var(--radius-full);
+}
+
+/* Time axis */
+.timeAxis {
+  width: 54px;
+  flex-shrink: 0;
+  position: relative;
+  height: calc(18 * 48px);
+}
+
+.timeLabel {
+  position: absolute;
+  right: 8px;
+  transform: translateY(-50%);
+  font-family: var(--font-family);
+  font-size: 11px;
+  color: rgba(255,255,255,0.6);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* Day columns */
+.dayColumn {
+  flex: 1;
+  position: relative;
+  height: calc(18 * 48px);
+  cursor: default;
+  margin-left: 4px;
+}
+
+.dayColumnTarget {
+  cursor: crosshair;
+}
+
+/* Slot lines */
+.slot {
+  position: absolute;
+  left: 0;
+  right: 0;
+  box-sizing: border-box;
+  pointer-events: none;
+}
+
+.slotHour {
+  border-top: 1px solid rgba(255,255,255,0.25);
+  background: rgba(255,255,255,0.03);
+}
+
+.slotHalf {
+  border-top: 1px dashed rgba(255,255,255,0.1);
+}
+
+.slotConflict {
+  background: rgba(255, 51, 0, 0.25) !important;
+}
+
+/* Ghost preview while hovering */
+.previewCard {
+  position: absolute;
+  left: 2px;
+  right: 2px;
+  border-radius: var(--radius-sm);
+  background: rgba(65, 97, 255, 0.35);
+  border: 2px dashed rgba(65, 97, 255, 0.8);
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  padding: 4px 8px;
+  font-family: var(--font-family);
+  font-size: 11px;
+  color: var(--color-white);
+  z-index: 3;
+}
+
+/* Anchor cards */
+.anchorCard {
+  position: absolute;
+  left: 2px;
+  right: 2px;
+  border-radius: var(--radius-sm);
+  background: rgba(120, 120, 140, 0.55);
+  border: 2px solid rgba(255,255,255,0.3);
+  padding: 4px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  cursor: pointer;
+  z-index: 2;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.anchorCard:hover {
+  background: rgba(140, 140, 160, 0.7);
+}
+
+.lockIcon {
+  font-size: 11px;
+  flex-shrink: 0;
+}
+
+/* Placed task cards */
+.placedCard {
+  position: absolute;
+  left: 2px;
+  right: 2px;
+  border-radius: var(--radius-sm);
+  background: var(--color-blue);
+  padding: 4px 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  cursor: pointer;
+  z-index: 2;
+  box-sizing: border-box;
+  overflow: hidden;
+  transition: background 0.2s;
+}
+
+.placedCard:hover {
+  filter: brightness(1.1);
+}
+
+.placedCorrect {
+  background: var(--color-green) !important;
+}
+
+.placedWrong {
+  background: var(--color-red) !important;
+}
+
+.cardTitle {
+  font-family: var(--font-family);
+  font-size: 11px;
+  font-weight: var(--font-weight-medium);
+  color: var(--color-white);
+  line-height: 1.2;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.cardTime {
+  font-family: var(--font-family);
+  font-size: 10px;
+  color: rgba(255,255,255,0.75);
+  flex-shrink: 0;
+}
+
+.removeHint {
+  position: absolute;
+  bottom: 4px;
+  right: 6px;
+  font-size: 10px;
+  color: rgba(255,255,255,0.5);
+  pointer-events: none;
+}
+
+/* Check button */
+.checkWrap {
+  flex-shrink: 0;
+  display: flex;
+  justify-content: center;
+  padding-top: var(--spacing-sm);
+}
+
+/* ══ Overlay ══ */
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.55);
+  z-index: 9999;
+}
+
+/* Tooltip card */
+.tooltipCard {
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-2xl);
+  max-width: 520px;
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  box-shadow: 0 24px 64px rgba(0,0,0,0.4);
+}
+
+.tooltipTitle {
+  font-family: var(--font-family);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  margin: 0;
+  line-height: 1.2;
+}
+
+.tooltipText {
+  font-family: var(--font-family);
+  font-size: var(--font-size-md);
+  color: var(--color-text-primary);
+  margin: 0;
+  line-height: 1.5;
+}
+
+.tooltipClose {
+  align-self: flex-end;
+  background: var(--color-blue);
+  color: var(--color-white);
+  border: none;
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-sm) var(--spacing-2xl);
+  font-family: var(--font-family);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.tooltipClose:hover {
+  background: var(--color-blue-pressed);
+}

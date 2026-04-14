@@ -48,30 +48,62 @@
   gap: var(--spacing-sm);
 }
 
+.alertBadge {
+  align-self: flex-end;
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-white);
+  background: rgba(255, 255, 255, 0.15);
+  border: var(--border-width-sm) solid rgba(255, 255, 255, 0.4);
+  border-radius: var(--radius-sm);
+  padding: var(--spacing-xs) var(--spacing-md);
+  letter-spacing: var(--letter-spacing-xs);
+}
+
 .graphCard {
   background: var(--color-white);
   border-radius: var(--radius-lg);
-  padding: var(--spacing-2xl);
+  padding: var(--spacing-xl) var(--spacing-2xl) var(--spacing-xl);
   width: 100%;
   box-shadow: var(--shadow-card);
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
 }
 
 .graphCardCompact {
-  padding: var(--spacing-lg) var(--spacing-2xl);
+  padding: var(--spacing-md) var(--spacing-2xl);
+}
+
+.graphTitle {
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-muted);
+  margin: 0;
+  letter-spacing: var(--letter-spacing-xs);
+  line-height: var(--line-height-tight);
+}
+
+.graphHint {
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-white);
+  opacity: 0.8;
+  margin: 0;
+  text-align: center;
+  letter-spacing: var(--letter-spacing-xs);
+  line-height: var(--line-height-normal);
+  padding: 0 var(--spacing-md);
 }
 
 .graphSvg {
   display: block;
   width: 100%;
   height: auto;
-}
-
-.axisCaption {
-  font-family: var(--font-family);
-  font-size: 30px;
-  fill: var(--color-grey-disabled);
-  letter-spacing: -0.3px;
 }
 
 .tickLabel {
@@ -186,4 +218,88 @@
   justify-content: center;
   background: var(--color-overlay-dark);
   z-index: 9999;
+}
+
+/* ── Wow popup ── */
+
+.wowPopup {
+  position: relative;
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-2xl);
+  max-width: 640px;
+  width: 90%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  align-items: flex-start;
+  font-family: var(--font-family);
+  box-sizing: border-box;
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.4);
+}
+
+.wowHeader {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.wowTitle {
+  font-family: var(--font-family);
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-black);
+  letter-spacing: var(--letter-spacing-sm);
+  line-height: var(--line-height-tight);
+}
+
+.wowDescription {
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-text-primary);
+  line-height: var(--line-height-relaxed);
+  margin: 0;
+}
+
+/* ── Word tooltip ── */
+
+.tooltipWord {
+  color: var(--color-blue);
+  text-decoration: underline;
+  text-decoration-style: dashed;
+  cursor: pointer;
+}
+
+.wordTooltipBox {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: var(--spacing-sm);
+  background: var(--color-grey-light);
+  border-radius: var(--radius-sm);
+  padding: var(--spacing-md) var(--spacing-lg);
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.wordTooltipText {
+  font-family: var(--font-family);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-text-primary);
+  line-height: var(--line-height-relaxed);
+  margin: 0;
+  flex: 1;
+}
+
+.wordTooltipClose {
+  flex-shrink: 0;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
+  padding: 0;
+  line-height: 1;
 }
