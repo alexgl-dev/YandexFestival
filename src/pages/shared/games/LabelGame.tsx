@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { Background, Button, Card, Icon, PopUp } from '../../../components/ui';
+import { Background, Button, Card, Icon, InfoButton, PopUp } from '../../../components/ui';
 import type { Task } from '../../../types/game';
 import styles from './LabelGame.module.css';
 
@@ -111,14 +111,12 @@ export function LabelGame({
   return (
     <Background theme={theme} orientation={orientation} onBack={onBack}>
       {task.instruction && (
-        <button
-          type="button"
+        <InfoButton
+          size="md"
+          variant="ghost"
           className={styles.instructionToggle}
           onClick={() => setPopup({ kind: 'instruction' })}
-          aria-label="Открыть инструкцию"
-        >
-          ?
-        </button>
+        />
       )}
 
       <div className={styles.wrapper}>

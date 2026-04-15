@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Background, Button, PopUp } from '../../../components/ui';
+import { Background, PopUp } from '../../../components/ui';
 import type { Task } from '../../../types/game';
 import styles from './FactorXGame.module.css';
 
@@ -182,23 +182,14 @@ export function FactorXGame({ task, onComplete, onBack, theme = 'cobalt' }: Prop
       {/* ── Explanation popup ── */}
       {popup && (
         <div className={styles.overlay}>
-          <div className={styles.explanationCard}>
-            {popup.timedOut && (
-              <p className={styles.timeoutNote}>
-                Время вышло — модель приняла решение сама. Так тоже бывает.
-              </p>
-            )}
-            <p className={styles.factorNamePopup}>{popup.factorName}</p>
-            <p className={`${styles.verdict} ${popup.playerCorrect ? styles.verdictCorrect : styles.verdictWrong}`}>
-              {popup.correctVote}
-            </p>
-            <p className={styles.explanationText}>{popup.explanation}</p>
-            <Button
-              label={isLast ? 'Результаты' : 'Дальше'}
-              type="main"
-              onClick={handleNext}
-            />
-          </div>
+          <PopUp
+            icon={popup.playerCorrect ? 'done' : 'close'}
+            iconColor={popup.playerCorrect ? 'blue' : 'red'}
+            title={popup.playerCorrect ? 'Верно!' : 'Не совсем...'}
+            description={`${popup.timedOut ? 'Время вышло — модель приняла решение сама.\n\n' : ''}${popup.explanation}`}
+            buttonLabel={isLast ? 'Результаты' : 'Дальше'}
+            onButtonClick={handleNext}
+          />
         </div>
       )}
 

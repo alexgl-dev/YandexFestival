@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
-import { Background, Button } from '../../../components/ui';
+import { Background, Button, InfoButton } from '../../../components/ui';
 import type { Task, TaskBlock } from '../../../types/game';
 import styles from './LaunchSequenceGame.module.css';
 
@@ -384,7 +384,7 @@ export function LaunchSequenceGame({
                   <img src="/assets/games/003/launch/card-shape.svg" alt="" className={styles.poolCardBg} draggable={false} />
                   <p className={styles.poolTitle}>{block.text}</p>
                 </div>
-                <button className={styles.infoBtn} onClick={(e) => handleInfoTap(bIdx, e)} aria-label="Описание этапа">?</button>
+                <InfoButton size="sm" variant="dark" className={styles.infoBtn} onClick={(e) => handleInfoTap(bIdx, e)} />
               </div>
             );
           })}
@@ -401,7 +401,7 @@ export function LaunchSequenceGame({
                     <img src="/assets/games/003/launch/card-shape.svg" alt="" className={styles.poolCardBg} draggable={false} />
                     <p className={styles.poolTitle}>{block.text}</p>
                   </div>
-                  <button className={styles.infoBtn} onClick={(e) => handleInfoTap(bIdx, e)} aria-label="Описание этапа">?</button>
+                  <InfoButton size="sm" variant="dark" className={styles.infoBtn} onClick={(e) => handleInfoTap(bIdx, e)} />
                 </div>
               );
             })}

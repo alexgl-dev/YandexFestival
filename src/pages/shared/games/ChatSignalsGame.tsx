@@ -1,5 +1,5 @@
 import { useState, useCallback, useMemo } from 'react';
-import { Background, Button } from '../../../components/ui';
+import { Background, Button, Card } from '../../../components/ui';
 import type { Task, ChatMessage } from '../../../types/game';
 import styles from './ChatSignalsGame.module.css';
 
@@ -22,6 +22,13 @@ const roleAvatarClass: Record<ChatMessage['role'], string> = {
   dev: styles.avatarDev,
   design: styles.avatarDesign,
   qa: styles.avatarQa,
+};
+
+const roleLabel: Record<ChatMessage['role'], string> = {
+  pm: 'Product Manager',
+  dev: 'Разработчик',
+  design: 'Дизайнер',
+  qa: 'Тестировщик',
 };
 
 function initials(name: string): string {
@@ -178,12 +185,14 @@ export function ChatSignalsGame({
             </h2>
             <div className={styles.resultList}>
               {problemMessages.map((m) => (
-                <div key={m.id} className={styles.resultItem}>
-                  <p className={styles.resultItemQuote}>
-                    {m.author}, {m.time} — «{m.text}»
-                  </p>
-                  <p className={styles.resultItemExplanation}>{m.explanation}</p>
-                </div>
+                <Card
+                  key={m.id}
+                  variant={`${m.author} · ${roleLabel[m.role]}`}
+                  title={`«${m.text}»`}
+                  description={m.explanation ?? ''}
+                  state="pressed"
+                  size="m"
+                />
               ))}
             </div>
             <div className={styles.resultActions}>

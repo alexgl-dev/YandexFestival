@@ -4,6 +4,7 @@ import {
   Card,
   Icon,
   IconButton,
+  InfoButton,
   Badge,
   ListItem,
   Player,
@@ -278,6 +279,37 @@ export function TestScreen() {
           <div className={styles.labeled}>
             <IconButton type="pause" size="sm" onClick={() => {}} />
             <Code>{'<IconButton type="pause" size="sm" />'}</Code>
+          </div>
+        </div>
+      </div>
+
+      {/* 9b. InfoButton */}
+      <div className={styles.section}>
+        <h2 className={styles.sectionTitle}>InfoButton</h2>
+        <div className={styles.iconButtonsRow}>
+          <div className={styles.labeled}>
+            <InfoButton size="sm" variant="dark" onClick={() => {}} />
+            <Code>{'<InfoButton size="sm" variant="dark" />'}</Code>
+          </div>
+          <div className={styles.labeled}>
+            <InfoButton size="md" variant="dark" onClick={() => {}} />
+            <Code>{'<InfoButton size="md" variant="dark" />'}</Code>
+          </div>
+          <div className={styles.labeled}>
+            <InfoButton size="lg" variant="dark" onClick={() => {}} />
+            <Code>{'<InfoButton size="lg" variant="dark" />'}</Code>
+          </div>
+          <div className={styles.labeled} style={{ background: '#4161FF', padding: 16, borderRadius: 16 }}>
+            <InfoButton size="sm" variant="ghost" onClick={() => {}} />
+            <Code>{'<InfoButton size="sm" variant="ghost" />'}</Code>
+          </div>
+          <div className={styles.labeled} style={{ background: '#4161FF', padding: 16, borderRadius: 16 }}>
+            <InfoButton size="md" variant="ghost" onClick={() => {}} />
+            <Code>{'<InfoButton size="md" variant="ghost" />'}</Code>
+          </div>
+          <div className={styles.labeled} style={{ background: '#4161FF', padding: 16, borderRadius: 16 }}>
+            <InfoButton size="lg" variant="ghost" onClick={() => {}} />
+            <Code>{'<InfoButton size="lg" variant="ghost" />'}</Code>
           </div>
         </div>
       </div>

@@ -139,7 +139,7 @@ export function CalendarGame({ task, onComplete, onBack, theme = 'orange' }: Pro
   if (!step) return null;
 
   return (
-    <Background theme={theme} orientation="landscape" onBack={onBack}>
+    <Background theme={theme} orientation="portrait" onBack={onBack}>
       <div className={styles.layout}>
 
         {/* ══ LEFT: task pool ══ */}
@@ -180,6 +180,9 @@ export function CalendarGame({ task, onComplete, onBack, theme = 'orange' }: Pro
 
         {/* ══ RIGHT: calendar ══ */}
         <div className={styles.calendarArea}>
+
+          {/* Scroll wrapper — headers + body scroll together horizontally */}
+          <div className={styles.calendarScrollWrapper}>
 
           {/* Day headers */}
           <div className={styles.calendarHeader}>
@@ -322,6 +325,8 @@ export function CalendarGame({ task, onComplete, onBack, theme = 'orange' }: Pro
               );
             })}
           </div>
+
+          </div>{/* end calendarScrollWrapper */}
 
           {/* Check button */}
           {!checked && allPlaced && (

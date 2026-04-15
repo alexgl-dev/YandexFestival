@@ -31,28 +31,7 @@
   position: absolute;
   top: var(--spacing-2xl);
   right: var(--spacing-2xl);
-  width: 72px;
-  height: 72px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 50%;
-  border: var(--border-width-md) solid var(--color-white);
-  background: transparent;
-  color: var(--color-white);
-  font-family: var(--font-family);
-  font-size: var(--font-size-xl);
-  font-weight: var(--font-weight-medium);
-  line-height: 1;
-  cursor: pointer;
-  padding: 0;
   z-index: 10;
-  transition: background 0.15s, color 0.15s;
-}
-
-.instructionToggle:hover {
-  background: var(--color-white);
-  color: var(--color-black);
 }
 
 /* ── Visited counter ── */
@@ -220,46 +199,97 @@
   height: 1920px;
 }
 
-/* ── Profile popup ── */
+/* ── Profile popup (default state) ── */
 
-.popup {
+.infoPopup {
   position: relative;
-  background: var(--color-white);
+  background: var(--color-grey-light);
   border-radius: var(--radius-lg);
+  width: var(--width-content);
+  min-height: 600px;
+  max-height: 90vh;
+  overflow-y: auto;
   padding: var(--spacing-2xl);
   padding-top: calc(var(--spacing-2xl) + var(--spacing-xl));
-  max-width: 900px;
-  width: 100%;
-  max-height: 90%;
-  overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: var(--spacing-xl);
-  align-items: flex-start;
-  font-family: var(--font-family);
   box-sizing: border-box;
-  border: var(--border-width-md) solid transparent;
-  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.4);
+  font-family: var(--font-family);
 }
 
-.popupCorrect {
-  border-color: var(--color-green);
-  box-shadow: 0 0 0 var(--border-width-sm) var(--color-green),
-    0 24px 64px rgba(0, 0, 0, 0.4);
+.infoHeader {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
 }
 
-.popupWrong {
-  border-color: var(--color-red);
-  box-shadow: 0 0 0 var(--border-width-sm) var(--color-red),
-    0 24px 64px rgba(0, 0, 0, 0.4);
+.infoRole {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  letter-spacing: var(--letter-spacing-xs);
+  line-height: var(--line-height-tight);
+}
+
+.infoName {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  letter-spacing: var(--letter-spacing-md);
+  line-height: 1;
+  margin: 0;
+}
+
+.infoQuote {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-text-primary);
+  line-height: var(--line-height-normal);
+  font-style: italic;
+  margin: 0;
+}
+
+.infoDetails {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  flex: 1;
+}
+
+.infoDetailItem {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-text-primary);
+  line-height: var(--line-height-relaxed);
+}
+
+.detailIcon {
+  width: 80px;
+  height: 80px;
+  flex-shrink: 0;
+  object-fit: contain;
+}
+
+.infoAction {
+  display: flex;
+  justify-content: center;
+  margin-top: auto;
 }
 
 .popupClose {
   position: absolute;
   top: var(--spacing-md);
   right: var(--spacing-md);
-  width: 64px;
-  height: 64px;
+  width: 88px;
+  height: 88px;
   border-radius: 50%;
   border: none;
   background: transparent;
@@ -270,128 +300,13 @@
   align-items: center;
   justify-content: center;
   transition: background 0.15s;
+  z-index: 1;
 }
 
 .popupClose:hover {
-  background: var(--color-grey-light);
+  background: var(--color-grey-secondary);
 }
 
-.popupAction {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-}
-
-.popupHeader {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-xs);
-  width: 100%;
-}
-
-.popupRole {
-  font-family: var(--font-family);
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-regular);
-  color: var(--color-text-muted);
-  text-transform: uppercase;
-  letter-spacing: var(--letter-spacing-xs);
-  line-height: var(--line-height-tight);
-}
-
-.popupName {
-  font-family: var(--font-family);
-  font-size: var(--font-size-3xl);
-  font-weight: var(--font-weight-medium);
-  color: var(--color-black);
-  letter-spacing: var(--letter-spacing-sm);
-  line-height: var(--line-height-tight);
-  margin: 0;
-}
-
-.popupQuote {
-  font-family: var(--font-family);
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-regular);
-  color: var(--color-text-primary);
-  letter-spacing: var(--letter-spacing-xs);
-  line-height: var(--line-height-normal);
-  font-style: italic;
-  margin: 0;
-  padding: var(--spacing-md) var(--spacing-lg);
-  background: var(--color-grey-light);
-  border-radius: var(--radius-sm);
-  width: 100%;
-  box-sizing: border-box;
-}
-
-.popupDetails {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-sm);
-  width: 100%;
-}
-
-.popupDetailItem {
-  position: relative;
-  padding-left: calc(var(--spacing-lg) + var(--spacing-xs));
-  font-family: var(--font-family);
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-regular);
-  color: var(--color-text-primary);
-  line-height: var(--line-height-relaxed);
-}
-
-.popupDetailItem::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 14px;
-  width: 10px;
-  height: 10px;
-  border-radius: 50%;
-  background: var(--color-blue);
-}
-
-/* ── Feedback blocks ── */
-
-.feedbackCorrect {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  gap: var(--spacing-md);
-  width: 100%;
-  padding: var(--spacing-lg);
-  border-radius: var(--radius-sm);
-  background: var(--color-bg-brand-translucent);
-  box-sizing: border-box;
-}
-
-.feedbackWrong {
-  display: flex;
-  flex-direction: row;
-  align-items: flex-start;
-  gap: var(--spacing-md);
-  width: 100%;
-  padding: var(--spacing-lg);
-  border-radius: var(--radius-sm);
-  background: var(--color-grey-light);
-  box-sizing: border-box;
-}
-
-.feedbackText {
-  font-family: var(--font-family);
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-regular);
-  color: var(--color-text-primary);
-  line-height: var(--line-height-relaxed);
-  margin: 0;
-  flex: 1;
-  min-width: 0;
-}
 
 /* ── Instruction panel ── */
 

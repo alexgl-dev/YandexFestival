@@ -1,6 +1,7 @@
 import { useNavigate, useOutletContext } from 'react-router';
 import { Background } from '../../components/ui';
 import type { SectionData } from '../../types/game';
+import { BingoGame } from '../shared/games/BingoGame';
 import styles from './Test.module.css';
 
 export function Test() {
@@ -8,6 +9,16 @@ export function Test() {
   const data = useOutletContext<SectionData>();
 
   const handleBack = () => navigate(`/${data.slug}`);
+
+  if (data.bingo) {
+    return (
+      <BingoGame
+        bingo={data.bingo}
+        onBack={handleBack}
+        theme={data.theme}
+      />
+    );
+  }
 
   return (
     <Background theme="cobalt" orientation="landscape" onBack={handleBack}>

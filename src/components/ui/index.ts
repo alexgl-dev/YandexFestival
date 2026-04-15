@@ -4,6 +4,7 @@ export { CheckList } from './CheckList';
 export { Badge } from './Badge';
 export { ProgressBar } from './ProgressBar';
 export { IconButton } from './IconButton';
+export { InfoButton } from './InfoButton';
 export { Button } from './Button';
 
 // Molecules

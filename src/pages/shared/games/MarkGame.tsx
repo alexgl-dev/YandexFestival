@@ -1,5 +1,5 @@
 import { useState, useCallback, useRef } from 'react';
-import { Background, Button, Icon, ListItem, PopUp } from '../../../components/ui';
+import { Background, Button, Icon, InfoButton, ListItem, PopUp } from '../../../components/ui';
 import type { Task, UxReview } from '../../../types/game';
 import { AppMockup } from './AppMockup';
 import styles from './MarkGame.module.css';
@@ -126,14 +126,11 @@ function UxReviewGame({
                             <Icon name="close" color="red" size="s" />
                           )}
                         </span>
-                        <button
-                          type="button"
-                          className={styles.infoBtn}
+                        <InfoButton
+                          size="sm"
+                          variant="dark"
                           onClick={(e) => { e.stopPropagation(); setExpandedReviewId(r.id); }}
-                          aria-label="Показать объяснение"
-                        >
-                          ?
-                        </button>
+                        />
                       </div>
                     )}
                   </div>

@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Background, PopUp } from '../../../components/ui';
+import { Background, InfoButton, PopUp } from '../../../components/ui';
 import type { CatchObject, Task } from '../../../types/game';
 import styles from './DatasetSanitizerGame.module.css';
 
@@ -360,14 +360,12 @@ export function DatasetSanitizerGame({
         </div>
 
         {/* ── Glossary ? button (top-right) ── */}
-        <button
-          type="button"
+        <InfoButton
+          size="md"
+          variant="ghost"
           className={styles.glossaryBtn}
           onClick={() => setShowGlossary(true)}
-          aria-label="Словарь терминов"
-        >
-          ?
-        </button>
+        />
 
         {/* ── Falling cards ── */}
         {cards.map((card) => (

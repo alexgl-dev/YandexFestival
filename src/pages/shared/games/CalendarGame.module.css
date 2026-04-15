@@ -1,12 +1,17 @@
-/* CalendarGame — landscape 1920×1080 */
+/* CalendarGame — portrait 1080×1920 */
+
+/* Day column width — wide enough so 3 cols require horizontal scroll */
+:root {
+  --cal-col-width: 340px;
+}
 
 .layout {
   display: flex;
-  flex-direction: row;
-  width: calc(100% - 220px);
-  height: calc(100% - 80px);
+  flex-direction: column;
+  width: calc(100% - 120px);
+  height: calc(100% - 120px);
   padding: var(--spacing-2xl);
-  gap: var(--spacing-2xl);
+  gap: var(--spacing-lg);
   box-sizing: border-box;
   overflow: hidden;
   background: rgba(227, 226, 224, 0.25);
@@ -14,16 +19,13 @@
   border-radius: var(--radius-lg);
 }
 
-/* ══ LEFT: task pool ══ */
+/* ══ TOP: task pool ══ */
 
 .pool {
-  width: 325px;
   flex-shrink: 0;
   display: flex;
   flex-direction: column;
   gap: var(--spacing-sm);
-  height: 100%;
-  overflow: hidden;
 }
 
 .poolTitle {
@@ -33,22 +35,12 @@
   color: var(--color-white);
   letter-spacing: var(--letter-spacing-xs);
   margin: 0;
-  flex-shrink: 0;
 }
 
 .poolList {
-  flex: 1;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   gap: 12px;
-  padding-right: 4px;
-}
-
-.poolList::-webkit-scrollbar { width: 4px; }
-.poolList::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.35);
-  border-radius: var(--radius-full);
 }
 
 .poolCard {
@@ -61,7 +53,6 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
-  flex-shrink: 0;
   user-select: none;
 }
 
@@ -113,31 +104,56 @@
   line-height: var(--line-height-normal);
 }
 
-/* ══ RIGHT: calendar ══ */
+/* ══ BOTTOM: calendar ══ */
 
 .calendarArea {
   flex: 1;
-  min-width: 0;
+  min-height: 0;
   display: flex;
   flex-direction: column;
-  height: 100%;
   gap: var(--spacing-sm);
 }
+
+/* Single horizontal scroll wrapper — header + body scroll together */
+.calendarScrollWrapper {
+  flex: 1;
+  min-height: 0;
+  overflow-x: auto;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+}
+
+.calendarScrollWrapper::-webkit-scrollbar { height: 6px; width: 6px; }
+.calendarScrollWrapper::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: var(--radius-full);
+}
+
+/* ── Headers ── */
 
 .calendarHeader {
   display: flex;
   flex-direction: row;
-  flex-shrink: 0;
   gap: var(--spacing-xl);
+  flex-shrink: 0;
+  /* min-width prevents header from collapsing smaller than body */
+  min-width: calc(var(--cal-axis-width, 72px) + var(--spacing-xl) + 3 * var(--cal-col-width) + 2 * var(--spacing-xl));
 }
 
 .timeAxisHead {
   width: 72px;
   flex-shrink: 0;
+  position: sticky;
+  left: 0;
+  z-index: 3;
+  background: rgba(210, 180, 160, 0.3);
+  backdrop-filter: blur(10px);
 }
 
 .dayHeader {
-  flex: 1;
+  width: var(--cal-col-width);
+  flex-shrink: 0;
   display: flex;
   gap: 12px;
   align-items: baseline;
@@ -163,20 +179,15 @@
   line-height: var(--line-height-tight);
 }
 
+/* ── Calendar body ── */
+
 .calendarBody {
-  flex: 1;
-  min-height: 0;
   display: flex;
   flex-direction: row;
   gap: var(--spacing-xl);
-  overflow-y: auto;
   position: relative;
-}
-
-.calendarBody::-webkit-scrollbar { width: 6px; }
-.calendarBody::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.3);
-  border-radius: var(--radius-full);
+  flex-shrink: 0;
+  min-width: calc(var(--cal-axis-width, 72px) + var(--spacing-xl) + 3 * var(--cal-col-width) + 2 * var(--spacing-xl));
 }
 
 /* ── Time axis ── */
@@ -184,8 +195,12 @@
 .timeAxis {
   width: 72px;
   flex-shrink: 0;
-  position: relative;
+  position: sticky;
+  left: 0;
+  z-index: 3;
   height: calc(18 * 48px);
+  background: rgba(210, 180, 160, 0.3);
+  backdrop-filter: blur(10px);
 }
 
 .timeLabel {
@@ -204,7 +219,8 @@
 /* ── Day columns ── */
 
 .dayColumn {
-  flex: 1;
+  width: var(--cal-col-width);
+  flex-shrink: 0;
   position: relative;
   height: calc(18 * 48px);
   cursor: default;
@@ -215,7 +231,7 @@
   cursor: crosshair;
 }
 
-/* Hour lines overlay — renders continuous lines across all day columns */
+/* Hour lines overlay — single continuous lines spanning all day columns */
 
 .hourLinesOverlay {
   position: absolute;
@@ -390,8 +406,8 @@
   background: var(--color-white);
   border-radius: var(--radius-lg);
   padding: var(--spacing-2xl);
-  max-width: 560px;
-  width: 90%;
+  max-width: 640px;
+  width: 85%;
   display: flex;
   flex-direction: column;
   gap: var(--spacing-lg);
@@ -439,7 +455,7 @@
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-bold);
   cursor: pointer;
-  transition: background 0.15s;
+  transition: filter 0.15s;
 }
 
 .tooltipClose:hover {

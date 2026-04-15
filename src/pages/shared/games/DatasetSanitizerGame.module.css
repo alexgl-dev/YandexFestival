@@ -48,16 +48,6 @@
   position: absolute;
   top: var(--spacing-2xl);
   right: var(--spacing-2xl);
-  width: 72px;
-  height: 72px;
-  border-radius: var(--radius-full);
-  background: var(--color-white);
-  color: var(--color-black);
-  border: var(--border-width-md) solid var(--color-black);
-  font-family: var(--font-family);
-  font-size: var(--font-size-xl);
-  font-weight: var(--font-weight-bold);
-  cursor: pointer;
   z-index: 20;
 }
 

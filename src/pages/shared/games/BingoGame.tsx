@@ -1,34 +1,21 @@
 import { useState } from 'react';
-import { useNavigate, useOutletContext } from 'react-router';
-import { Background, Button, Card } from '../../components/ui';
-
-import type { SectionData } from '../../types/game';
-import styles from './Test.module.css';
+import { Background, Button, Card } from '../../../components/ui';
+import type { BingoTest } from '../../../types/game';
+import styles from './BingoGame.module.css';
 
 type Phase = 'intro' | 'questions' | 'result';
 
-export function Test() {
-  const navigate = useNavigate();
-  const data = useOutletContext<SectionData>();
-  const bingo = data.bingo;
+interface BingoGameProps {
+  bingo: BingoTest;
+  onBack: () => void;
+  theme?: 'cobalt' | 'orange';
+}
 
+export function BingoGame({ bingo, onBack, theme = 'cobalt' }: BingoGameProps) {
   const [phase, setPhase] = useState<Phase>('intro');
   const [answers, setAnswers] = useState<Record<number, string>>({});
   const [flipped, setFlipped] = useState<Record<number, boolean>>({});
   const [questionIndex, setQuestionIndex] = useState(0);
-
-  const handleBack = () => navigate(`/${data.slug}`);
-
-  if (!bingo) {
-    return (
-      <Background theme="orange" orientation="portrait" onBack={handleBack}>
-        <div className={styles.wrapper}>
-          <h2 className={styles.title}>Бинго</h2>
-          <p className={styles.placeholder}>Бинго в разработке</p>
-        </div>
-      </Background>
-    );
-  }
 
   const totalQuestions = bingo.questions.length;
   const currentQuestion = bingo.questions[questionIndex];
@@ -52,20 +39,22 @@ export function Test() {
     setFlipped((prev) => ({ ...prev, [cellIndex]: !prev[cellIndex] }));
   };
 
+  // cellIndex 0-3 → question 0-3, cellIndex 4 = center, cellIndex 5-8 → question 4-7
   const getCellData = (cellIndex: number) => {
     if (cellIndex === 4) return null;
-    const labelIndex = cellIndex < 4 ? cellIndex : cellIndex - 1;
-    const question = bingo.questions[labelIndex];
-    const label = bingo.gridLabels[labelIndex];
-    const userAnswer = answers[labelIndex];
+    const qIndex = cellIndex < 4 ? cellIndex : cellIndex - 1;
+    const question = bingo.questions[qIndex];
+    const userAnswer = answers[qIndex];
     const isMatch = userAnswer === question?.expertAnswer;
-    return { label, question, isMatch };
+    return { question, isMatch, qIndex };
   };
 
-  // PHASE 1: INTRO
+  const handleBack = onBack;
+
+  // ── PHASE 1: Intro ────────────────────────────────────────────────────────
   if (phase === 'intro') {
     return (
-      <Background theme="orange" orientation="portrait" onBack={handleBack}>
+      <Background theme={theme} orientation="landscape" onBack={handleBack}>
         <div className={styles.wrapper}>
           <h2 className={styles.title}>Бинго</h2>
           <div className={styles.card}>
@@ -78,10 +67,10 @@ export function Test() {
     );
   }
 
-  // PHASE 2: QUESTIONS (1 per page)
+  // ── PHASE 2: Questions ────────────────────────────────────────────────────
   if (phase === 'questions') {
     return (
-      <Background theme="orange" orientation="portrait" onBack={handleBack}>
+      <Background theme={theme} orientation="landscape" onBack={handleBack}>
         <div className={styles.questionsLayout}>
           <p className={styles.questionPrompt}>{currentQuestion.prompt}</p>
 
@@ -120,29 +109,25 @@ export function Test() {
     );
   }
 
-  // PHASE 3: RESULT
-  return (
-    <Background theme="orange" orientation="portrait" onBack={handleBack}>
-      <div className={styles.resultLayout}>
-        <div className={styles.resultSide}>
-          <Card
-            variant="Результат"
-            title="Бинго!"
-            description={bingo.resultText}
-            size="m"
-            state="default"
-            className={styles.resultCard}
-          />
-          <Button
-            label="В главное меню"
-            type="main"
-            onClick={() => navigate(`/${data.slug}`)}
-          />
-        </div>
+  // ── PHASE 3: Result ───────────────────────────────────────────────────────
+  // Find the last flipped cell to show its text in the right panel
+  const lastFlippedCell = Object.entries(flipped)
+    .filter(([, v]) => v)
+    .map(([k]) => Number(k))
+    .at(-1);
 
+  const flippedCellData =
+    lastFlippedCell !== undefined ? getCellData(lastFlippedCell) : null;
+
+  return (
+    <Background theme={theme} orientation="landscape" onBack={handleBack}>
+      <div className={styles.resultLayout}>
+
+        {/* Left — bingo grid */}
         <div className={styles.gridSide}>
           <div className={styles.bingoGrid}>
             {Array.from({ length: 9 }).map((_, cellIndex) => {
+              // Center cell = expert
               if (cellIndex === 4) {
                 return (
                   <div key={cellIndex} className={styles.cellCenter}>
@@ -154,7 +139,7 @@ export function Test() {
 
               const cellData = getCellData(cellIndex);
               if (!cellData) return null;
-              const { label, question, isMatch } = cellData;
+              const { question, isMatch } = cellData;
               const isFlipped = flipped[cellIndex] ?? false;
 
               return (
@@ -169,14 +154,14 @@ export function Test() {
                       style={{
                         backgroundColor: isMatch
                           ? 'var(--color-blue)'
-                          : 'var(--color-orange)',
+                          : 'var(--color-red)',
                       }}
                     >
-                      <span className={styles.cellLabel}>{label}</span>
+                      <span className={styles.cellLabel}>{question?.gridLabel}</span>
                     </div>
                     <div className={styles.cellBack}>
                       <span className={styles.cellBackText}>
-                        {question?.expertComment ?? question?.expertAnswer}
+                        {question?.expertAnswer}
                       </span>
                     </div>
                   </div>
@@ -185,6 +170,35 @@ export function Test() {
             })}
           </div>
         </div>
+
+        {/* Right — result text / flipped card expert answer */}
+        <div className={styles.resultSide}>
+          {flippedCellData ? (
+            <Card
+              variant={flippedCellData.isMatch ? 'Совпадение!' : 'Не совпало'}
+              title={flippedCellData.question?.gridLabel ?? ''}
+              description={flippedCellData.question?.expertComment ?? flippedCellData.question?.expertAnswer ?? ''}
+              size="m"
+              state="default"
+              className={styles.resultCard}
+            />
+          ) : (
+            <Card
+              variant="Результат"
+              title="Бинго!"
+              description={bingo.resultText}
+              size="m"
+              state="default"
+              className={styles.resultCard}
+            />
+          )}
+          <Button
+            label="В главное меню"
+            type="main"
+            onClick={onBack}
+          />
+        </div>
+
       </div>
     </Background>
   );

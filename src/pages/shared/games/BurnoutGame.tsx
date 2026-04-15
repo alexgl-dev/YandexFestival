@@ -1,7 +1,23 @@
 import { useState, useCallback } from 'react';
-import { Background, Button, Icon } from '../../../components/ui';
+import { Background, Button, Icon, InfoButton, PopUp } from '../../../components/ui';
 import type { Task, TaskOption } from '../../../types/game';
 import styles from './BurnoutGame.module.css';
+
+const DETAIL_ICONS: Record<string, string> = {
+  '📋': '/icons/burnout-tasks.png',
+  '🏖': '/icons/burnout-vacation.png',
+  '🕐': '/icons/burnout-clock.png',
+  '📅': '/icons/burnout-calendar.png',
+  '💬': '/icons/burnout-chat.png',
+};
+
+function parseDetail(line: string): { icon: string | null; text: string } {
+  const first = [...line][0] ?? '';
+  if (DETAIL_ICONS[first]) {
+    return { icon: DETAIL_ICONS[first], text: line.slice(first.length).trimStart() };
+  }
+  return { icon: null, text: line };
+}
 
 interface GameResult {
   answer: string;
@@ -118,14 +134,12 @@ export function BurnoutGame({
   return (
     <Background theme={theme} orientation={orientation} onBack={onBack}>
       {hasInstruction && (
-        <button
-          type="button"
+        <InfoButton
+          size="md"
+          variant="ghost"
           className={styles.instructionToggle}
           onClick={() => setShowInstruction(true)}
-          aria-label="Открыть инструкцию"
-        >
-          ?
-        </button>
+        />
       )}
       <div className={styles.wrapper}>
         {step.prompt && <h2 className={styles.prompt}>{step.prompt}</h2>}
@@ -182,91 +196,73 @@ export function BurnoutGame({
 
       {popupOption && popupIndex !== null && (
         <div className={overlayClass}>
-          <div
-            className={[
-              styles.popup,
-              popupState === 'correct' ? styles.popupCorrect : '',
-              popupState === 'wrong' ? styles.popupWrong : '',
-            ]
-              .filter(Boolean)
-              .join(' ')}
-          >
-            {popupState === 'default' && (
+          {popupState === 'default' && (
+            <div className={styles.infoPopup}>
               <button
                 type="button"
                 className={styles.popupClose}
                 onClick={handleClose}
                 aria-label="Закрыть"
               >
-                <Icon name="close" color="red" size="s" />
+                <Icon name="close" color="red" size="m" />
               </button>
-            )}
 
-            <div className={styles.popupHeader}>
-              <span className={styles.popupRole}>
-                {getProfileRole(popupOption)}
-              </span>
-              <h3 className={styles.popupName}>
-                {getProfileName(popupOption, popupIndex)}
-              </h3>
-            </div>
+              <div className={styles.infoHeader}>
+                <span className={styles.infoRole}>{getProfileRole(popupOption)}</span>
+                <h3 className={styles.infoName}>{getProfileName(popupOption, popupIndex)}</h3>
+              </div>
 
-            {popupOption.quote && (
-              <p className={styles.popupQuote}>«{popupOption.quote}»</p>
-            )}
+              {popupOption.quote && (
+                <p className={styles.infoQuote}>«{popupOption.quote}»</p>
+              )}
 
-            {popupOption.details && popupOption.details.length > 0 && (
-              <ul className={styles.popupDetails}>
-                {popupOption.details.map((line, i) => (
-                  <li key={i} className={styles.popupDetailItem}>
-                    {line}
-                  </li>
-                ))}
-              </ul>
-            )}
+              {popupOption.details && popupOption.details.length > 0 && (
+                <ul className={styles.infoDetails}>
+                  {popupOption.details.map((line, i) => {
+                    const { icon, text } = parseDetail(line);
+                    return (
+                      <li key={i} className={styles.infoDetailItem}>
+                        {icon ? (
+                          <img src={icon} className={styles.detailIcon} alt="" />
+                        ) : null}
+                        <span>{text}</span>
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
 
-            {popupState === 'default' && (
-              <div className={styles.popupAction}>
+              <div className={styles.infoAction}>
                 <Button
                   label="Это он / она"
                   type="main"
                   onClick={() => handleChoose(popupIndex)}
                 />
               </div>
-            )}
+            </div>
+          )}
 
-            {popupState === 'correct' && (
-              <>
-                <div className={styles.feedbackCorrect}>
-                  <Icon name="done" color="white" size="s" />
-                  <p className={styles.feedbackText}>
-                    {popupOption.explanation}
-                  </p>
-                </div>
-                <Button
-                  label="Результаты"
-                  type="main"
-                  onClick={handleFinish}
-                />
-              </>
-            )}
+          {popupState === 'correct' && (
+            <PopUp
+              icon="done"
+              iconColor="blue"
+              title={getProfileName(popupOption, popupIndex)}
+              description={popupOption.explanation}
+              buttonLabel="Результаты"
+              onButtonClick={handleFinish}
+            />
+          )}
 
-            {popupState === 'wrong' && (
-              <>
-                <div className={styles.feedbackWrong}>
-                  <Icon name="close" color="red" size="s" />
-                  <p className={styles.feedbackText}>
-                    {popupOption.explanation}
-                  </p>
-                </div>
-                <Button
-                  label="Попробовать ещё раз"
-                  type="main"
-                  onClick={() => handleRetry(popupIndex)}
-                />
-              </>
-            )}
-          </div>
+          {popupState === 'wrong' && (
+            <PopUp
+              icon="close"
+              iconColor="red"
+              title={getProfileName(popupOption, popupIndex)}
+              description={popupOption.explanation}
+              buttonLabel="Попробовать снова"
+              onButtonClick={() => handleRetry(popupIndex)}
+            />
+          )}
         </div>
       )}
 

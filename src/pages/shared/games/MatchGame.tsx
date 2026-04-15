@@ -1,5 +1,5 @@
 import { useState, useCallback, useMemo, useRef } from 'react';
-import { Background, PopUp } from '../../../components/ui';
+import { Background, InfoButton, PopUp } from '../../../components/ui';
 import type { Task, TaskPair } from '../../../types/game';
 import { CodeArchaeologyMockup } from './CodeArchaeologyMockups';
 import styles from './MatchGame.module.css';
@@ -370,14 +370,12 @@ export function MatchGame({
   return (
     <Background theme={theme} orientation={orientation} onBack={onBack}>
       {hasInstruction && (
-        <button
-          type="button"
+        <InfoButton
+          size="md"
+          variant="ghost"
           className={styles.instructionToggle}
           onClick={() => setShowInstruction(true)}
-          aria-label="Открыть инструкцию"
-        >
-          ?
-        </button>
+        />
       )}
       <div className={styles.wrapper}>
         {step?.prompt && <p className={styles.prompt}>{step.prompt}</p>}
@@ -437,25 +435,13 @@ export function MatchGame({
 
       {/* ── Instruction overlay ── */}
       {showInstruction && hasInstruction && (
-        <div
-          className={`${styles.overlay} ${overlayDimClass}`}
-          onClick={() => setShowInstruction(false)}
-        >
-          <div
-            className={styles.instructionPanel}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              type="button"
-              className={styles.instructionClose}
-              onClick={() => setShowInstruction(false)}
-              aria-label="Закрыть инструкцию"
-            >
-              ×
-            </button>
-            <h2 className={styles.instructionTitle}>Инструкция</h2>
-            <p className={styles.instructionBody}>{task.instruction}</p>
-          </div>
+        <div className={`${styles.overlay} ${overlayDimClass}`}>
+          <PopUp
+            title="Инструкция"
+            description={task.instruction ?? ''}
+            buttonLabel="Понятно!"
+            onButtonClick={() => setShowInstruction(false)}
+          />
         </div>
       )}
 

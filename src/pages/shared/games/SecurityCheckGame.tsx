@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { Background, Button, Icon, PopUp } from '../../../components/ui';
+import { Background, Button, Icon, InfoButton, PopUp } from '../../../components/ui';
 import type { EmailBlock, EmailContent, EmailField, Task } from '../../../types/game';
 import styles from './SecurityCheckGame.module.css';
 
@@ -89,14 +89,12 @@ export function SecurityCheckGame({
   return (
     <Background theme={theme} orientation={orientation} onBack={onBack}>
       {task.instruction && (
-        <button
-          type="button"
+        <InfoButton
+          size="md"
+          variant="ghost"
           className={styles.instructionToggle}
           onClick={() => setPopup({ kind: 'instruction' })}
-          aria-label="Открыть инструкцию"
-        >
-          ?
-        </button>
+        />
       )}
 
       <div className={styles.wrapper}>

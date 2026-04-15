@@ -439,11 +439,6 @@ export function AnomalyDetectiveGame({
 
         <div className={styles.stage}>
           <div className={`${styles.graphs} ${showMentions ? styles.graphsStacked : ''}`}>
-            {phase === 'find' && (
-              <div className={styles.alertBadge}>
-                🔔 Обнаружена аномалия
-              </div>
-            )}
             <GraphCard
               title={VIEWS_TITLE}
               data={VIEWS}

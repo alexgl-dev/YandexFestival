@@ -107,19 +107,6 @@ export function DistributeGame({ task, onComplete, onBack, theme = 'cobalt', ori
                   )}
 
                   {catPlacements.length > 0 && (
-                    <div className={styles.placedList}>
-                      {catPlacements.map((itemIdx) => {
-                        const item = items[itemIdx];
-                        return (
-                          <div key={itemIdx} className={`${styles.placedChip} ${styles.chipCorrect}`}>
-                            {item.title ?? item.text ?? ''}
-                          </div>
-                        );
-                      })}
-                    </div>
-                  )}
-
-                  {catPlacements.length > 0 && (
                     <div className={styles.counter}>{catPlacements.length}</div>
                   )}
                 </div>

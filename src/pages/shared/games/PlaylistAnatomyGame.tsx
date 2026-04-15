@@ -21,23 +21,23 @@ const CARD_W = 480;
 const CARD_H = 90;
 
 const HOME_POSITIONS = [
-  { x: 70,   y: 140, r: -6 },
-  { x: 640,  y: 130, r: 3  },
-  { x: 1320, y: 140, r: -4 },
-  { x: 160,  y: 310, r: 5  },
-  { x: 720,  y: 295, r: -7 },
-  { x: 1280, y: 300, r: 4  },
-  { x: 70,   y: 480, r: -3 },
-  { x: 650,  y: 490, r: 6  },
-  { x: 1350, y: 475, r: -5 },
+  { x: 1260, y: 270, r: 1  },
+  { x: 1260, y: 70,  r: -1 },
+  { x: 720,  y: 470, r: 2  },
+  { x: 720,  y: 270, r: -2 },
+  { x: 180,  y: 70,  r: -2 },
+  { x: 1260, y: 470, r: -1 },
+  { x: 180,  y: 270, r: 2  },
+  { x: 180,  y: 470, r: -2 },
+  { x: 720,  y: 70,  r: 1  },
 ];
 
 const ZONE_ORDER = ['content', 'collaboration', 'context'] as const;
 
 const ZONES = [
-  { id: 'content',       x: 30,   y: 610, w: 580, h: 430 },
-  { id: 'collaboration', x: 670,  y: 610, w: 580, h: 430 },
-  { id: 'context',       x: 1310, y: 610, w: 580, h: 430 },
+  { id: 'content',       x: 30,   y: 660, w: 617, h: 380 },
+  { id: 'collaboration', x: 647,  y: 660, w: 617, h: 380 },
+  { id: 'context',       x: 1264, y: 660, w: 626, h: 380 },
 ] as const;
 
 interface DragState {
@@ -237,11 +237,6 @@ export function PlaylistAnatomyGame({ task, onComplete, onBack, theme = 'cobalt'
         onPointerUp={handlePointerUp}
         onPointerCancel={handlePointerUp}
       >
-        {/* Progress counter */}
-        <div className={styles.progressCounter}>
-          Разложено: {totalPlaced}/{items.length}
-        </div>
-
         {/* Cards cloud */}
         {items.map((item, idx) => (
           <div
@@ -256,20 +251,23 @@ export function PlaylistAnatomyGame({ task, onComplete, onBack, theme = 'cobalt'
         ))}
 
         {/* Category zones */}
-        {ZONE_ORDER.map((zoneId) => {
+        {ZONE_ORDER.map((zoneId, zoneIndex) => {
           const zone = ZONES.find((z) => z.id === zoneId)!;
           const cat = categories.find((c) => c.id === zoneId);
           const chips = placements[zoneId] || [];
           const isDragOver = dragOverZone === zoneId;
+          const posClass = zoneIndex === 0 ? styles.zoneFirst : zoneIndex === ZONE_ORDER.length - 1 ? styles.zoneLast : styles.zoneMiddle;
 
           return (
             <div
               key={zoneId}
-              className={`${styles.zone} ${isDragOver ? styles.zoneDragOver : ''}`}
+              className={`${styles.zone} ${posClass} ${isDragOver ? styles.zoneDragOver : ''}`}
               style={{ left: zone.x, top: zone.y, width: zone.w, height: zone.h }}
             >
               <div className={styles.zoneHeader}>
-                <span className={styles.zoneVariant}>Зона</span>
+                {cat?.image && (
+                  <img src={cat.image} alt="" className={styles.zoneIcon} />
+                )}
                 <div className={styles.zoneTextBlock}>
                   <span className={styles.zoneTitle}>{cat?.title ?? zoneId}</span>
                   {cat?.description && (

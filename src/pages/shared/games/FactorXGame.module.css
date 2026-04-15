@@ -17,6 +17,8 @@
   align-items: center;
   gap: var(--spacing-lg);
   flex-shrink: 0;
+  width: 75%;
+  align-self: center;
 }
 
 .accuracyLabelLeft,
@@ -52,6 +54,8 @@
   align-items: center;
   justify-content: space-between;
   flex-shrink: 0;
+  width: 75%;
+  align-self: center;
 }
 
 .stepCounter {

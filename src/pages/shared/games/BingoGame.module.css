@@ -21,15 +21,6 @@
   margin: 0;
 }
 
-.placeholder {
-  font-size: var(--font-size-lg);
-  font-weight: var(--font-weight-regular);
-  color: var(--color-white);
-  opacity: 0.7;
-  text-align: center;
-  margin-top: var(--spacing-2xl);
-}
-
 /* === Phase 1: Intro === */
 
 .card {
@@ -116,7 +107,7 @@
   margin-right: auto;
 }
 
-/* === Phase 3: Result === */
+/* === Phase 3: Result — landscape two-column layout === */
 
 .resultLayout {
   display: flex;
@@ -136,6 +127,7 @@
   flex-shrink: 0;
 }
 
+/* 3×3 grid: square cells via aspect-ratio, fixed column width */
 .bingoGrid {
   display: grid;
   grid-template-columns: repeat(3, 280px);
@@ -238,18 +230,18 @@
   line-height: var(--line-height-tight);
 }
 
-/* --- Result right side --- */
+/* --- Right panel --- */
 
 .resultSide {
+  flex: 1;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
   gap: var(--spacing-lg);
-  width: 100%;
+  min-width: 0;
 }
 
 .resultCard {
   width: 100% !important;
-  flex: 1;
 }

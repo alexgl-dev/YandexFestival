@@ -225,26 +225,7 @@
   position: absolute;
   top: -16px;
   right: -16px;
-  width: 44px;
-  height: 44px;
-  border-radius: var(--radius-full);
-  background: var(--color-grey-secondary);
-  border: none;
-  font-family: var(--font-family);
-  font-size: var(--font-size-xs);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-text-primary);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  transition: background 0.15s;
   z-index: 10;
-}
-
-.infoBtn:hover {
-  background: var(--color-grey-disabled);
 }
 
 /* ── Timeline section ── */
