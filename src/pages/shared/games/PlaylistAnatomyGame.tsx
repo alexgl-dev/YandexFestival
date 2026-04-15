@@ -225,9 +225,6 @@ export function PlaylistAnatomyGame({ task, onComplete, onBack, theme = 'cobalt'
     onComplete(results);
   }
 
-  // Total placed count
-  const totalPlaced = Object.values(placements).reduce((sum, arr) => sum + arr.length, 0);
-
   return (
     <Background theme={theme} orientation={orientation} onBack={onBack}>
       <div
