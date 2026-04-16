@@ -1,17 +1,10 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { Background, Button, Icon, InfoButton, PopUp } from '../../../components/ui';
 import type { Task, CalendarCardData } from '../../../types/game';
-import styles from './CalendarGame.module.css';
+import styles from './CalendarGamePortrait.module.css';
 
-const SLOT_HEIGHT = 48;
-const SLOT_COUNT  = 18;
-const PADDING_V   = 40;
-
-const DAYS = [
-  { id: 'mon', abbr: 'Пн', date: '14 марта' },
-  { id: 'tue', abbr: 'Вт', date: '15 марта' },
-  { id: 'wed', abbr: 'Ср', date: '16 марта' },
-] as const;
+const SLOT_COUNT = 18;    // 9:00 → 18:00
+const PADDING_V  = 48;    // space before 9:00 and after 18:00
 
 const formatDuration = (slots: number) => {
   const min = slots * 30;
@@ -27,7 +20,11 @@ const slotToTime = (slot: number) => {
   return `${String(Math.floor(m / 60)).padStart(2, '0')}:${String(m % 60).padStart(2, '0')}`;
 };
 
-const colHeight = SLOT_COUNT * SLOT_HEIGHT + 2 * PADDING_V;
+const DAYS = [
+  { id: 'mon', abbr: 'Пн', date: '14 марта' },
+  { id: 'tue', abbr: 'Вт', date: '15 марта' },
+  { id: 'wed', abbr: 'Ср', date: '16 марта' },
+] as const;
 
 function getOccupied(
   day: string,
@@ -66,7 +63,7 @@ interface Props {
 
 type Placement = { day: string; startSlot: number };
 
-export function CalendarGame({ task, onComplete, onBack, theme = 'orange' }: Props) {
+export function CalendarGamePortrait({ task, onComplete, onBack, theme = 'orange' }: Props) {
   const step = task.steps[0];
   const allCards: CalendarCardData[] = step?.calendarCards ?? [];
   const taskCards = allCards.filter(c => !c.isAnchor);
@@ -80,6 +77,24 @@ export function CalendarGame({ task, onComplete, onBack, theme = 'orange' }: Pro
   const [results, setResults] = useState<Record<string, boolean>>({});
   const [showResult, setShowResult] = useState(false);
 
+  // ── Proportional slot height ──
+  const bodyRef = useRef<HTMLDivElement>(null);
+  const [slotH, setSlotH] = useState(56);
+
+  useEffect(() => {
+    const el = bodyRef.current;
+    if (!el) return;
+    const update = () => {
+      const h = el.clientHeight;
+      if (h > 0) setSlotH((h - PADDING_V * 2) / SLOT_COUNT);
+    };
+    update();
+    const obs = new ResizeObserver(update);
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, []);
+
+  const colH = SLOT_COUNT * slotH + PADDING_V * 2;
   const allPlaced = taskCards.every(c => placements[c.id]);
 
   const hideDragImage = (e: React.DragEvent) => {
@@ -89,13 +104,12 @@ export function CalendarGame({ task, onComplete, onBack, theme = 'orange' }: Pro
     e.dataTransfer.setDragImage(canvas, 0, 0);
   };
 
-  const getSlotFromEvent = (e: React.DragEvent<HTMLDivElement>, durationSlots: number) => {
+  const getSlotFromDrag = (e: React.DragEvent<HTMLDivElement>, durationSlots: number) => {
     const el = e.currentTarget;
     const rect = el.getBoundingClientRect();
-    // convert viewport coords → layout coords (accounts for CSS transform scale)
     const toLayout = el.offsetHeight / rect.height;
     const relY = (e.clientY - rect.top) * toLayout - PADDING_V;
-    return Math.min(Math.max(0, Math.round(relY / SLOT_HEIGHT)), SLOT_COUNT - durationSlots);
+    return Math.min(Math.max(0, Math.round(relY / slotH)), SLOT_COUNT - durationSlots);
   };
 
   const handleDrop = (day: string, e: React.DragEvent<HTMLDivElement>) => {
@@ -103,7 +117,7 @@ export function CalendarGame({ task, onComplete, onBack, theme = 'orange' }: Pro
     if (!draggingId || checked) return;
     const card = taskCards.find(c => c.id === draggingId);
     if (!card) return;
-    const slot = getSlotFromEvent(e, card.durationSlots);
+    const slot = getSlotFromDrag(e, card.durationSlots);
     const occupied = getOccupied(day, placements, allCards, draggingId);
     const hasConflict = Array.from({ length: card.durationSlots }, (_, i) => slot + i).some(s => occupied.has(s));
     if (hasConflict) {
@@ -139,10 +153,10 @@ export function CalendarGame({ task, onComplete, onBack, theme = 'orange' }: Pro
   if (!step) return null;
 
   return (
-    <Background theme={theme} orientation="landscape" onBack={onBack}>
+    <Background theme={theme} orientation="portrait" onBack={onBack}>
       <div className={styles.layout}>
 
-        {/* ══ LEFT: task pool ══ */}
+        {/* ══ LEFT: fixed task pool ══ */}
         <div className={styles.pool}>
           <p className={styles.poolTitle}>Задачи</p>
           <div className={styles.poolList}>
@@ -178,14 +192,35 @@ export function CalendarGame({ task, onComplete, onBack, theme = 'orange' }: Pro
               );
             })}
           </div>
+
+          {!checked && allPlaced && (
+            <div className={styles.checkWrap}>
+              <Button label="Проверить" type="main" onClick={handleCheck} />
+            </div>
+          )}
         </div>
 
-        {/* ══ RIGHT: calendar ══ */}
+        {/* ══ RIGHT: horizontally scrollable calendar ══ */}
         <div className={styles.calendarArea}>
-          <div className={styles.calendarScrollWrapper}>
 
+          {/* Fixed time axis */}
+          <div className={styles.timeAxisWrapper}>
+            <div className={styles.dayHeaderSpacer} />
+            <div className={styles.timeAxis} style={{ height: colH }}>
+              {Array.from({ length: SLOT_COUNT + 1 }, (_, i) => {
+                if (i % 2 !== 0) return null;
+                return (
+                  <div key={i} className={styles.timeLabel} style={{ top: PADDING_V + i * slotH }}>
+                    {slotToTime(i)}
+                  </div>
+                );
+              })}
+            </div>
+          </div>
+
+          {/* Scrollable day columns */}
+          <div className={styles.daysScroll}>
             <div className={styles.calendarHeader}>
-              <div className={styles.timeAxisHead} />
               {DAYS.map(d => (
                 <div key={d.id} className={styles.dayHeader}>
                   <span className={styles.dayHeaderAbbr}>{d.abbr}</span>
@@ -194,19 +229,8 @@ export function CalendarGame({ task, onComplete, onBack, theme = 'orange' }: Pro
               ))}
             </div>
 
-            <div className={styles.calendarBody}>
-
-              <div className={styles.timeAxis} style={{ height: colHeight }}>
-                {Array.from({ length: SLOT_COUNT + 1 }, (_, i) => {
-                  if (i % 2 !== 0) return null;
-                  return (
-                    <div key={i} className={styles.timeLabel} style={{ top: PADDING_V + i * SLOT_HEIGHT }}>
-                      {slotToTime(i)}
-                    </div>
-                  );
-                })}
-              </div>
-
+            {/* Body — ref for height measurement */}
+            <div className={styles.calendarBody} ref={bodyRef}>
               {DAYS.map(day => {
                 const occupied = getOccupied(day.id, placements, allCards, draggingId ?? '');
                 const draggingCard = draggingId ? taskCards.find(c => c.id === draggingId) : null;
@@ -222,13 +246,13 @@ export function CalendarGame({ task, onComplete, onBack, theme = 'orange' }: Pro
                   <div
                     key={day.id}
                     className={`${styles.dayColumn} ${draggingId && !checked ? styles.dayColumnTarget : ''}`}
-                    style={{ height: colHeight }}
+                    style={{ height: colH }}
                     onDragOver={e => {
                       e.preventDefault();
                       if (!draggingId || checked) return;
                       const card = taskCards.find(c => c.id === draggingId);
                       if (!card) return;
-                      setHoverSlot({ day: day.id, slot: getSlotFromEvent(e, card.durationSlots) });
+                      setHoverSlot({ day: day.id, slot: getSlotFromDrag(e, card.durationSlots) });
                     }}
                     onDragLeave={() => setHoverSlot(null)}
                     onDrop={e => handleDrop(day.id, e)}
@@ -237,14 +261,14 @@ export function CalendarGame({ task, onComplete, onBack, theme = 'orange' }: Pro
                       <div
                         key={i}
                         className={`${styles.slot} ${i % 2 === 0 ? styles.slotHour : styles.slotHalf} ${conflict?.day === day.id && conflict.slot === i ? styles.slotConflict : ''}`}
-                        style={{ top: PADDING_V + i * SLOT_HEIGHT, height: i < SLOT_COUNT ? SLOT_HEIGHT : 0 }}
+                        style={{ top: PADDING_V + i * slotH, height: i < SLOT_COUNT ? slotH : 0 }}
                       />
                     ))}
 
                     {previewSlots.length > 0 && (
                       <div
                         className={styles.previewCard}
-                        style={{ top: PADDING_V + previewSlots[0] * SLOT_HEIGHT + 2, height: previewSlots.length * SLOT_HEIGHT - 4 }}
+                        style={{ top: PADDING_V + previewSlots[0] * slotH + 2, height: previewSlots.length * slotH - 4 }}
                       >
                         {draggingCard?.title}
                       </div>
@@ -254,7 +278,7 @@ export function CalendarGame({ task, onComplete, onBack, theme = 'orange' }: Pro
                       <div
                         key={card.id}
                         className={styles.anchorCard}
-                        style={{ top: PADDING_V + (card.anchorStartSlot ?? 0) * SLOT_HEIGHT + 2, height: card.durationSlots * SLOT_HEIGHT - 4 }}
+                        style={{ top: PADDING_V + (card.anchorStartSlot ?? 0) * slotH + 2, height: card.durationSlots * slotH - 4 }}
                         onClick={e => { e.stopPropagation(); setTooltipCard(card); }}
                       >
                         <span className={styles.lockIcon}>🔒</span>
@@ -271,7 +295,7 @@ export function CalendarGame({ task, onComplete, onBack, theme = 'orange' }: Pro
                           key={card.id}
                           draggable={!checked}
                           className={`${styles.placedCard} ${ok === true ? styles.placedCorrect : ok === false ? styles.placedWrong : ''} ${draggingId === card.id ? styles.placedDragging : ''}`}
-                          style={{ top: PADDING_V + p.startSlot * SLOT_HEIGHT + 2, height: card.durationSlots * SLOT_HEIGHT - 4 }}
+                          style={{ top: PADDING_V + p.startSlot * slotH + 2, height: card.durationSlots * slotH - 4 }}
                           onDragStart={e => { e.stopPropagation(); setDraggingId(card.id); hideDragImage(e); }}
                           onDragEnd={() => { setDraggingId(null); setHoverSlot(null); }}
                           onClick={e => handlePlacedCardClick(card.id, e)}
@@ -286,14 +310,8 @@ export function CalendarGame({ task, onComplete, onBack, theme = 'orange' }: Pro
                 );
               })}
             </div>
-
           </div>
 
-          {!checked && allPlaced && (
-            <div className={styles.checkWrap}>
-              <Button label="Проверить" type="main" onClick={handleCheck} />
-            </div>
-          )}
         </div>
       </div>
 
@@ -308,7 +326,9 @@ export function CalendarGame({ task, onComplete, onBack, theme = 'orange' }: Pro
               </div>
             )}
             <p className={styles.tooltipText}>{tooltipCard.tooltip}</p>
-            <button className={styles.tooltipClose} onClick={() => setTooltipCard(null)}>Понятно</button>
+            <button className={styles.tooltipClose} onClick={() => setTooltipCard(null)}>
+              Понятно
+            </button>
           </div>
         </div>
       )}

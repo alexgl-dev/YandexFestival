@@ -1,32 +1,34 @@
-/* CalendarGame — landscape 1920×1080 */
+/* CalendarGamePortrait — portrait 1080×1920 */
 
 :root {
-  --cal-col-width: 326px;
-  --cal-axis-width: 82px;
+  --cal-p-col-width: 304px;
+  --cal-p-axis-width: 130px;
+  --cal-p-pool-width: 340px;
 }
 
 .layout {
   display: flex;
   flex-direction: row;
-  width: fit-content;
-  max-height: calc(100% - 120px);
-  padding: var(--spacing-2xl);
+  width: calc(100% - 80px);
+  height: calc(100% - 100px);
   gap: var(--spacing-xl);
   box-sizing: border-box;
   overflow: hidden;
-  background: rgba(227, 226, 224, 0.3);
-  backdrop-filter: blur(22px);
-  border-radius: var(--radius-lg);
 }
 
-/* ══ LEFT: task pool ══ */
+/* ══ LEFT: fixed task pool ══ */
 
 .pool {
+  width: var(--cal-p-pool-width);
   flex-shrink: 0;
-  width: 325px;
   display: flex;
   flex-direction: column;
   gap: var(--spacing-sm);
+  background: rgba(227, 226, 224, 0.25);
+  backdrop-filter: blur(22px);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-2xl) var(--spacing-lg);
+  box-sizing: border-box;
   overflow: hidden;
 }
 
@@ -73,26 +75,14 @@
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
 }
 
-.poolCardDragging {
-  opacity: 0.4;
-}
+.poolCardDragging  { opacity: 0.4; }
+.poolCardCorrect   { border-color: var(--color-green); }
+.poolCardWrong     { border-color: var(--color-red); }
 
 .poolCardHeader {
   display: flex;
   align-items: flex-start;
   gap: var(--spacing-xs);
-}
-
-.poolCardSelected {
-  border-color: var(--color-blue);
-}
-
-.poolCardCorrect {
-  border-color: var(--color-green);
-}
-
-.poolCardWrong {
-  border-color: var(--color-red);
 }
 
 .poolCardTitle {
@@ -128,55 +118,77 @@
   line-height: var(--line-height-normal);
 }
 
-/* ══ RIGHT: calendar ══ */
+.checkWrap {
+  flex-shrink: 0;
+  padding-top: var(--spacing-sm);
+}
+
+/* ══ RIGHT: scrollable calendar ══ */
 
 .calendarArea {
-  flex-shrink: 0;
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-sm);
-  overflow: hidden;
-}
-
-/* Single horizontal scroll wrapper — header + body scroll together */
-.calendarScrollWrapper {
   flex: 1;
-  min-height: 0;
-  overflow-x: auto;
-  overflow-y: auto;
+  min-width: 0;
+  background: rgba(227, 226, 224, 0.25);
+  backdrop-filter: blur(22px);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-2xl) var(--spacing-lg);
+  box-sizing: border-box;
+  overflow: hidden;
+  display: flex;
+  flex-direction: row;
+  gap: var(--spacing-2xl);
+}
+
+/* Fixed time axis column */
+.timeAxisWrapper {
+  flex-shrink: 0;
+  width: var(--cal-p-axis-width);
   display: flex;
   flex-direction: column;
 }
 
-.calendarScrollWrapper::-webkit-scrollbar { display: none; }
-.calendarScrollWrapper { scrollbar-width: none; }
+.dayHeaderSpacer {
+  flex-shrink: 0;
+  height: 44px; /* matches day header row height */
+}
+
+/* Scrollable days section */
+.daysScroll {
+  flex: 1;
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  display: flex;
+  flex-direction: column;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+
+.daysScroll::-webkit-scrollbar { height: 5px; }
+.daysScroll::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.3);
+  border-radius: var(--radius-full);
+}
 
 /* ── Headers ── */
 
 .calendarHeader {
   display: flex;
   flex-direction: row;
-  gap: var(--spacing-xl);
+  gap: var(--spacing-2xl);
   flex-shrink: 0;
-  min-width: calc(var(--cal-axis-width) + var(--spacing-xl) + 3 * var(--cal-col-width) + 2 * var(--spacing-xl));
-}
-
-.timeAxisHead {
-  width: var(--cal-axis-width);
-  flex-shrink: 0;
-  position: sticky;
-  left: 0;
-  z-index: 3;
+  min-width: calc(3 * var(--cal-p-col-width) + 2 * var(--spacing-2xl));
 }
 
 .dayHeader {
-  width: var(--cal-col-width);
+  width: var(--cal-p-col-width);
   flex-shrink: 0;
   display: flex;
   gap: 12px;
   align-items: baseline;
   justify-content: center;
   padding: var(--spacing-xs) 0 var(--spacing-sm);
+  scroll-snap-align: start;
 }
 
 .dayHeaderAbbr {
@@ -202,27 +214,27 @@
 .calendarBody {
   display: flex;
   flex-direction: row;
-  gap: var(--spacing-xl);
+  gap: var(--spacing-2xl);
   position: relative;
-  flex-shrink: 0;
-  min-width: calc(var(--cal-axis-width) + var(--spacing-xl) + 3 * var(--cal-col-width) + 2 * var(--spacing-xl));
+  flex: 1;
+  min-height: 0;
+  min-width: calc(3 * var(--cal-p-col-width) + 2 * var(--spacing-2xl));
 }
 
 /* ── Time axis ── */
 
 .timeAxis {
-  width: var(--cal-axis-width);
+  width: var(--cal-p-axis-width);
   flex-shrink: 0;
-  position: sticky;
-  left: 0;
-  z-index: 3;
+  position: relative;
   /* height set via inline style */
 }
 
 .timeLabel {
   position: absolute;
-  left: 0;
+  right: 0;
   transform: translateY(-50%);
+  text-align: right;
   font-family: var(--font-family);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-bold);
@@ -235,36 +247,15 @@
 /* ── Day columns ── */
 
 .dayColumn {
-  width: var(--cal-col-width);
+  width: var(--cal-p-col-width);
   flex-shrink: 0;
   position: relative;
   /* height set via inline style */
   cursor: default;
+  scroll-snap-align: start;
 }
 
-.dayColumnTarget {
-  cursor: crosshair;
-}
-
-/* Hour lines overlay — single continuous lines spanning all day columns */
-
-.hourLinesOverlay {
-  position: absolute;
-  right: 0;
-  top: 0;
-  pointer-events: none;
-  z-index: 1;
-}
-
-.hourLine {
-  position: absolute;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: rgba(255, 255, 255, 0.35);
-}
-
-/* Slot rendering — invisible, used only for click/hover detection */
+.dayColumnTarget { cursor: crosshair; }
 
 .slot {
   position: absolute;
@@ -286,11 +277,11 @@
   background: rgba(255, 51, 0, 0.2) !important;
 }
 
-/* Ghost preview while hovering */
+/* Ghost preview */
 .previewCard {
   position: absolute;
-  left: 4px;
-  right: 4px;
+  left: 0;
+  right: 0;
   box-sizing: border-box;
   border-radius: var(--radius-sm);
   background: rgba(65, 97, 255, 0.3);
@@ -307,11 +298,11 @@
   overflow: hidden;
 }
 
-/* Anchor cards (pre-placed, locked) */
+/* Anchor cards */
 .anchorCard {
   position: absolute;
-  left: 4px;
-  right: 4px;
+  left: 0;
+  right: 0;
   border-radius: var(--radius-sm);
   background: rgba(255, 255, 255, 0.18);
   border: 1.5px solid rgba(255, 255, 255, 0.4);
@@ -325,21 +316,14 @@
   overflow: hidden;
 }
 
-.anchorCard:hover {
-  background: rgba(255, 255, 255, 0.25);
-}
+.anchorCard:hover { background: rgba(255, 255, 255, 0.25); }
+.lockIcon { font-size: 14px; flex-shrink: 0; line-height: 1; }
 
-.lockIcon {
-  font-size: 14px;
-  flex-shrink: 0;
-  line-height: 1;
-}
-
-/* Placed task cards */
+/* Placed cards */
 .placedCard {
   position: absolute;
-  left: 4px;
-  right: 4px;
+  left: 0;
+  right: 0;
   border-radius: var(--radius-sm);
   background: var(--color-blue);
   padding: var(--spacing-xs) var(--spacing-sm);
@@ -353,21 +337,11 @@
   transition: filter 0.15s, opacity 0.15s;
 }
 
-.placedDragging {
-  opacity: 0.3;
-}
+.placedDragging { opacity: 0.3; }
 
-.placedCard:hover {
-  filter: brightness(1.08);
-}
-
-.placedCorrect {
-  background: var(--color-green) !important;
-}
-
-.placedWrong {
-  background: var(--color-red) !important;
-}
+.placedCard:hover   { filter: brightness(1.08); }
+.placedCorrect      { background: var(--color-green) !important; }
+.placedWrong        { background: var(--color-red) !important; }
 
 .cardTitle {
   font-family: var(--font-family);
@@ -401,14 +375,6 @@
   line-height: 1;
 }
 
-/* Check button */
-.checkWrap {
-  flex-shrink: 0;
-  display: flex;
-  justify-content: center;
-  padding-top: var(--spacing-sm);
-}
-
 /* ══ Overlay ══ */
 
 .overlay {
@@ -421,7 +387,6 @@
   z-index: 9999;
 }
 
-/* Tooltip card */
 .tooltipCard {
   background: var(--color-white);
   border-radius: var(--radius-lg);
@@ -478,6 +443,4 @@
   transition: filter 0.15s;
 }
 
-.tooltipClose:hover {
-  filter: brightness(1.1);
-}
+.tooltipClose:hover { filter: brightness(1.1); }

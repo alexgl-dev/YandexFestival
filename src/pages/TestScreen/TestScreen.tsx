@@ -16,7 +16,33 @@ import {
   Background,
   Menu,
 } from '../../components/ui';
+import { CalendarGame } from '../shared/games/CalendarGame';
+import { CalendarGamePortrait } from '../shared/games/CalendarGamePortrait';
+import type { Task } from '../../types/game';
 import styles from './TestScreen.module.css';
+
+const CALENDAR_MOCK_TASK: Task = {
+  id: 'preview',
+  title: 'Календарь',
+  mechanic: 'calendar' as never,
+  profession: 'management',
+  duration: 5,
+  mode: 'group' as never,
+  order: 1,
+  isLast: false,
+  feedback: {} as never,
+  intro: '',
+  moral: '',
+  steps: [{
+    calendarCards: [
+      { id: 'c1', title: 'Созвон с разработчиком Петей', durationSlots: 1, tooltip: '30 минут', validDays: ['mon'] },
+      { id: 'c2', title: 'Подготовка презентации для хурала', durationSlots: 6, tooltip: '3 часа', validDays: ['mon', 'tue'] },
+      { id: 'c3', title: 'Встреча с дизайнером Светой', durationSlots: 2, tooltip: '1 час', validDays: ['tue'] },
+      { id: 'c4', title: 'Бронирование переговорки для технического теста', durationSlots: 4, tooltip: '2 часа', validDays: ['wed'] },
+      { id: 'c5', title: 'Инструктаж для стажёра', durationSlots: 2, tooltip: '1 час', validDays: ['mon', 'tue', 'wed'] },
+    ],
+  }],
+};
 
 function Code({ children }: { children: string }) {
   return <code className={styles.codeTag}>{children}</code>;
@@ -388,7 +414,39 @@ export function TestScreen() {
         </div>
       </div>
 
-      {/* 14. Background + Menu */}
+      {/* 14. CalendarGame */}
+      <div className={styles.section}>
+        <h2 className={styles.sectionTitle}>CalendarGame</h2>
+        <div className={styles.labeled}>
+          <div style={{ transform: 'scale(0.5)', transformOrigin: 'top left', width: 1920 * 0.5, height: 1080 * 0.5 }}>
+            <CalendarGame
+              task={CALENDAR_MOCK_TASK}
+              theme="orange"
+              onComplete={() => {}}
+              onBack={() => {}}
+            />
+          </div>
+          <Code>{'<CalendarGame task={task} theme="orange" onComplete={...} onBack={...} />'}</Code>
+        </div>
+      </div>
+
+      {/* 14b. CalendarGamePortrait */}
+      <div className={styles.section}>
+        <h2 className={styles.sectionTitle}>CalendarGamePortrait (9:16)</h2>
+        <div className={styles.labeled}>
+          <div style={{ transform: 'scale(0.35)', transformOrigin: 'top left', width: 1080 * 0.35, height: 1920 * 0.35 }}>
+            <CalendarGamePortrait
+              task={CALENDAR_MOCK_TASK}
+              theme="orange"
+              onComplete={() => {}}
+              onBack={() => {}}
+            />
+          </div>
+          <Code>{'<CalendarGamePortrait task={task} theme="orange" onComplete={...} onBack={...} />'}</Code>
+        </div>
+      </div>
+
+      {/* 15. Background + Menu */}
       <div className={styles.section}>
         <h2 className={styles.sectionTitle}>Background</h2>
         <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap' }}>
