@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { Background, Button, Icon, InfoButton, PopUp } from '../../../components/ui';
+import { Background, Button, Icon, IconButton, InfoButton, PopUp } from '../../../components/ui';
 import type { Task, CalendarCardData } from '../../../types/game';
 import styles from './CalendarGamePortrait.module.css';
 
@@ -153,7 +153,8 @@ export function CalendarGamePortrait({ task, onComplete, onBack, theme = 'orange
   if (!step) return null;
 
   return (
-    <Background theme={theme} orientation="portrait" onBack={onBack}>
+    <Background theme={theme} orientation="portrait" showBackButton={false}>
+      <div className={styles.wrapper}>
       <div className={styles.layout}>
 
         {/* ══ LEFT: fixed task pool ══ */}
@@ -281,7 +282,6 @@ export function CalendarGamePortrait({ task, onComplete, onBack, theme = 'orange
                         style={{ top: PADDING_V + (card.anchorStartSlot ?? 0) * slotH + 2, height: card.durationSlots * slotH - 4 }}
                         onClick={e => { e.stopPropagation(); setTooltipCard(card); }}
                       >
-                        <span className={styles.lockIcon}>🔒</span>
                         <span className={styles.cardTitle}>{card.title}</span>
                         <span className={styles.cardTime}>{slotToTime(card.anchorStartSlot ?? 0)}–{slotToTime((card.anchorStartSlot ?? 0) + card.durationSlots)}</span>
                       </div>
@@ -313,6 +313,11 @@ export function CalendarGamePortrait({ task, onComplete, onBack, theme = 'orange
           </div>
 
         </div>
+      </div>
+      </div>
+
+      <div className={styles.backRow}>
+        <IconButton type="back" variant="orange" size="md" onClick={onBack} />
       </div>
 
       {tooltipCard && (

@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { Background, PopUp } from '../../../components/ui';
+import { Background, InfoButton, PopUp } from '../../../components/ui';
 import type { Task } from '../../../types/game';
 import styles from './CategorizeGame.module.css';
 
@@ -21,7 +21,10 @@ type Popup =
   | { kind: 'correct'; explanation: string }
   | { kind: 'wrong'; hint: string }
   | { kind: 'category'; tooltip: string; title: string }
+  | { kind: 'info'; title: string; description: string }
   | null;
+
+const ROTATIONS = [-2.5, 1.8, -1.2, 2.2, -1.8, 0.8, -2.2, 1.5, -0.8, 2.8, -1.5, 0.6, -2, 1.2, -0.5];
 
 export function CategorizeGame({ task, onComplete, onBack, theme = 'cobalt', orientation = 'landscape' }: GameProps) {
   const step = task.steps[0];
@@ -34,6 +37,8 @@ export function CategorizeGame({ task, onComplete, onBack, theme = 'cobalt', ori
   const [draggedItem, setDraggedItem] = useState<number | null>(null);
   const [dragOverCategory, setDragOverCategory] = useState<string | null>(null);
   const [popup, setPopup] = useState<Popup>(null);
+  const [exitingItems, setExitingItems] = useState<Set<number>>(new Set());
+  const [removedItems, setRemovedItems] = useState<Set<number>>(new Set());
 
   const correctCount = Object.keys(correctPlacements).length;
   const allPlaced = items.length > 0 && correctCount === items.length;
@@ -44,6 +49,11 @@ export function CategorizeGame({ task, onComplete, onBack, theme = 'cobalt', ori
     if (!item) return;
 
     if (item.belongs?.includes(categoryId)) {
+      setExitingItems((prev) => new Set(prev).add(itemIndex));
+      setTimeout(() => {
+        setExitingItems((prev) => { const s = new Set(prev); s.delete(itemIndex); return s; });
+        setRemovedItems((prev) => new Set(prev).add(itemIndex));
+      }, 320);
       setCorrectPlacements((prev) => ({ ...prev, [itemIndex]: categoryId }));
       setPopup({ kind: 'correct', explanation: item.explanation });
     } else {
@@ -144,10 +154,14 @@ export function CategorizeGame({ task, onComplete, onBack, theme = 'cobalt', ori
         {/* Card tray */}
         <div className={styles.tray}>
           {items.map((item, idx) => {
+            if (removedItems.has(idx)) return null;
             const isPlaced = correctPlacements[idx] !== undefined;
+            const isExiting = exitingItems.has(idx);
             const isSelected = selectedItem === idx;
             const isDragging = draggedItem === idx;
 
+            const label = item.name || item.text || '';
+            const rot = ROTATIONS[idx % ROTATIONS.length];
             return (
               <div
                 key={idx}
@@ -155,14 +169,31 @@ export function CategorizeGame({ task, onComplete, onBack, theme = 'cobalt', ori
                   styles.card,
                   isSelected ? styles.cardSelected : '',
                   isDragging ? styles.cardDragging : '',
-                  isPlaced ? styles.cardPlaced : '',
+                  isPlaced && !isExiting ? styles.cardPlaced : '',
+                  isExiting ? styles.cardExiting : '',
                 ].filter(Boolean).join(' ')}
+                style={{ ['--rot' as string]: `${rot}deg` }}
                 draggable={!isPlaced}
                 onClick={() => !isPlaced && handleItemClick(idx)}
                 onDragStart={() => handleDragStart(idx)}
                 onDragEnd={handleDragEnd}
               >
-                <span className={styles.cardText}>{item.text}</span>
+                <InfoButton
+                  size="sm"
+                  variant="dark"
+                  className={styles.cardInfo}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    if (popup) return;
+                    setPopup({ kind: 'info', title: label, description: item.explanation });
+                  }}
+                />
+                {item.image ? (
+                  <img src={item.image} alt={label} className={styles.cardIcon} draggable={false} />
+                ) : item.emoji ? (
+                  <span className={styles.cardEmoji}>{item.emoji}</span>
+                ) : null}
+                <span className={styles.cardText}>{label}</span>
               </div>
             );
           })}
@@ -196,6 +227,14 @@ export function CategorizeGame({ task, onComplete, onBack, theme = 'cobalt', ori
             <PopUp
               title={popup.title}
               description={popup.tooltip}
+              buttonLabel="Понятно"
+              onButtonClick={handlePopupDismiss}
+            />
+          )}
+          {popup.kind === 'info' && (
+            <PopUp
+              title={popup.title}
+              description={popup.description}
               buttonLabel="Понятно"
               onButtonClick={handlePopupDismiss}
             />

@@ -123,6 +123,10 @@ export interface ChatMessage {
   text: string;
   isProblem?: boolean;
   explanation?: string;
+  tooltip?: string;
+  signalMeaning?: string;
+  signalConsequence?: string;
+  signalAction?: string;
 }
 
 export interface CatchObject {
@@ -155,6 +159,7 @@ export interface CalendarCardData {
   maxStartSlot?: number;
   exactStartSlot?: number;
   wrongExplanation?: string;
+  glossary?: { word: string; definition: string }[];
 }
 
 export interface TaskStep {
@@ -190,6 +195,7 @@ export interface Task {
   isLast: boolean;
   feedback: Feedback;
   intro: string;
+  introTooltips?: GlossaryTerm[];
   instruction?: string;
   steps: TaskStep[];
   moral: string;

@@ -61,6 +61,16 @@ interface ActiveCard {
   pointerId: number | null;
 }
 
+interface Decision {
+  index: number;
+  title: string;
+  emoji: string;
+  userChoice: 'trash' | 'backlog';
+  correctChoice: 'trash' | 'backlog';
+  correct: boolean;
+  comment: string;
+}
+
 type Popup =
   | { kind: 'comment'; correct: boolean; comment: string; glossary?: GlossaryTerm[] }
   | { kind: 'final'; correctCount: number; total: number }
@@ -82,6 +92,7 @@ export function BacklogGame({
   const [cardTranslateX, setCardTranslateX] = useState(0);
   const [popup, setPopup] = useState<Popup>(null);
   const [results, setResults] = useState<GameResult[]>([]);
+  const [decisions, setDecisions] = useState<Decision[]>([]);
   const [correctCount, setCorrectCount] = useState(0);
   const [activeGlossary, setActiveGlossary] = useState<GlossaryTerm | null>(null);
 
@@ -133,7 +144,18 @@ export function BacklogGame({
         explanation: comment,
       };
 
+      const decision: Decision = {
+        index: card.index,
+        title: card.object.title,
+        emoji: card.object.emoji ?? '',
+        userChoice: bucket,
+        correctChoice: isTrash ? 'trash' : 'backlog',
+        correct,
+        comment: card.object.wrongComment ?? card.object.correctComment ?? card.object.description ?? '',
+      };
+
       setResults((prev) => [...prev, result]);
+      setDecisions((prev) => [...prev, decision]);
       if (correct) setCorrectCount((c) => c + 1);
       setCard((prev) => (prev ? { ...prev, phase: bucket === 'trash' ? 'trashing' : 'keeping' } : prev));
       setPopup({
@@ -345,7 +367,7 @@ export function BacklogGame({
             <button className={styles.commentClose} onClick={handlePopupDismiss}>
               Дальше
             </button>
-            <p className={styles.commentHint}>или дождись автопродолжения…</p>
+            {/* <p className={styles.commentHint}>или дождись автопродолжения…</p> */}
           </div>
         </div>
       )}
@@ -369,6 +391,7 @@ export function BacklogGame({
           <FinalCard
             correctCount={popup.correctCount}
             total={popup.total}
+            decisions={decisions}
             onContinue={() => onComplete(results)}
           />
         </div>
@@ -381,10 +404,12 @@ export function BacklogGame({
 function FinalCard({
   correctCount,
   total,
+  decisions,
   onContinue,
 }: {
   correctCount: number;
   total: number;
+  decisions: Decision[];
   onContinue: () => void;
 }) {
   let title: string;
@@ -412,6 +437,9 @@ function FinalCard({
     iconGlyph = '!';
   }
 
+  const wrongDecisions = decisions.filter((d) => !d.correct);
+  const choiceLabel = (c: 'trash' | 'backlog') => (c === 'trash' ? 'в корзину' : 'оставить в бэклоге');
+
   return (
     <div className={styles.finalCard}>
       <div className={[styles.commentIcon, styles[iconCls]].join(' ')}>{iconGlyph}</div>
@@ -420,6 +448,29 @@ function FinalCard({
         Верных решений: <strong>{correctCount}</strong> из {total}
       </p>
       <p className={styles.finalText}>{text}</p>
+
+      {wrongDecisions.length > 0 && (
+        <div className={styles.mistakesList}>
+          <h3 className={styles.mistakesHeading}>Спорные решения</h3>
+          {wrongDecisions.map((d) => (
+            <div key={d.index} className={styles.mistakeItem}>
+              <p className={styles.mistakeTitle}>
+                {d.emoji && <span className={styles.mistakeEmoji}>{d.emoji}</span>}
+                {d.title}
+              </p>
+              <p className={styles.mistakeChoice}>
+                <span className={styles.choiceUser}>
+                  ты: <s>{choiceLabel(d.userChoice)}</s>
+                </span>
+                <span className={styles.choiceArrow}>→</span>
+                <span className={styles.choiceCorrect}>верно: {choiceLabel(d.correctChoice)}</span>
+              </p>
+              <p className={styles.mistakeComment}>{d.comment}</p>
+            </div>
+          ))}
+        </div>
+      )}
+
       <button className={styles.commentClose} onClick={onContinue}>
         Результаты
       </button>

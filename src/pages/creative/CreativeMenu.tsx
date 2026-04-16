@@ -10,7 +10,7 @@ export function CreativeMenu() {
       orientation="portrait"
       items={[
         { label: 'Описание направления', onClick: () => navigate('/creative/description') },
-        { label: 'Задания', onClick: () => navigate('/creative/tasks') },
+        { label: 'Задачи на день', onClick: () => navigate('/creative/tasks') },
         { label: 'Истории яндексоидов', onClick: () => navigate('/creative/videos') },
         { label: 'Тест', onClick: () => navigate('/creative/test') },
       ]}

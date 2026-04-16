@@ -42,7 +42,7 @@
   --color-grey-disabled: #C0C0C0;
   --color-orange: #FB4E14;
   --color-red: #FF3300;
-  --color-green: #00FF09;
+  --color-green: #40B551;
   --color-yellow: #FFA600;
 
   /* Semantic */
@@ -121,7 +121,7 @@
   /* === Overlay Colors === */
   --color-overlay-light: rgba(0, 0, 0, 0.05);
   --color-overlay-dark: rgba(0, 0, 0, 0.5);
-  --color-overlay-green: rgba(0, 200, 83, 0.2);
+  --color-overlay-green: rgba(64, 181, 81, 0.2);
   --color-overlay-red: rgba(255, 51, 0, 0.2);
   --color-text-muted: rgba(0, 0, 0, 0.5);
   --color-bg-brand-translucent: rgba(66, 97, 255, 0.15);

@@ -1,5 +1,5 @@
-import { useState, useCallback, useMemo } from 'react';
-import { Background, Button, Card } from '../../../components/ui';
+import { useState, useCallback, useMemo, useEffect, useRef } from 'react';
+import { Background, Button, InfoButton } from '../../../components/ui';
 import type { Task, ChatMessage } from '../../../types/game';
 import styles from './ChatSignalsGame.module.css';
 
@@ -17,6 +17,8 @@ interface GameProps {
   orientation?: 'landscape' | 'portrait';
 }
 
+const TOTAL_SECONDS = 4 * 60;
+
 const roleAvatarClass: Record<ChatMessage['role'], string> = {
   pm: styles.avatarPm,
   dev: styles.avatarDev,
@@ -24,109 +26,122 @@ const roleAvatarClass: Record<ChatMessage['role'], string> = {
   qa: styles.avatarQa,
 };
 
-const roleLabel: Record<ChatMessage['role'], string> = {
-  pm: 'Product Manager',
-  dev: 'Разработчик',
-  design: 'Дизайнер',
-  qa: 'Тестировщик',
+const avatarLetters: Record<string, string> = {
+  'Саша (PM)': 'С',
+  'Игорь': 'И',
+  'Марина': 'М',
+  'Денис': 'Д',
 };
 
-function initials(name: string): string {
-  return name.trim().charAt(0).toUpperCase();
+function formatTime(s: number): string {
+  return `${Math.floor(s / 60).toString().padStart(2, '0')}:${(s % 60).toString().padStart(2, '0')}`;
 }
 
-export function ChatSignalsGame({
-  task,
-  onComplete,
-  onBack,
-  theme = 'cobalt',
-  orientation = 'landscape',
-}: GameProps) {
+export function ChatSignalsGame({ task, onComplete, onBack, theme = 'orange', orientation = 'portrait' }: GameProps) {
   const step = task.steps[0];
   const messages: ChatMessage[] = useMemo(() => step?.messages ?? [], [step]);
-  const problemIds = useMemo(
-    () => new Set(messages.filter((m) => m.isProblem).map((m) => m.id)),
-    [messages],
-  );
+  const problemIds = useMemo(() => new Set(messages.filter((m) => m.isProblem).map((m) => m.id)), [messages]);
+  const total = problemIds.size;
 
   const [selected, setSelected] = useState<Set<string>>(new Set());
-  const [checked, setChecked] = useState(false);
-  const [showResult, setShowResult] = useState(false);
+  const [done, setDone] = useState(false);
+  const [flashWrong, setFlashWrong] = useState<string | null>(null);
+  const [toast, setToast] = useState<string | null>(null);
+  const [tooltipMsg, setTooltipMsg] = useState<ChatMessage | null>(null);
+  const [secondsLeft, setSecondsLeft] = useState(TOTAL_SECONDS);
+  const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
-  const toggleSelect = useCallback(
-    (id: string) => {
-      if (checked) return;
+  const finish = useCallback(() => {
+    if (timerRef.current) clearInterval(timerRef.current);
+    setDone(true);
+  }, []);
+
+  useEffect(() => {
+    timerRef.current = setInterval(() => {
+      setSecondsLeft((prev) => {
+        if (prev <= 1) { clearInterval(timerRef.current!); setDone(true); return 0; }
+        return prev - 1;
+      });
+    }, 1000);
+    return () => { if (timerRef.current) clearInterval(timerRef.current); };
+  }, []);
+
+  const handleTap = useCallback((msg: ChatMessage) => {
+    if (done) return;
+    if (msg.isProblem) {
       setSelected((prev) => {
         const next = new Set(prev);
-        if (next.has(id)) next.delete(id);
-        else next.add(id);
+        if (next.has(msg.id)) {
+          next.delete(msg.id);
+          return next;
+        }
+        next.add(msg.id);
+        setToast('Сигнал пойман 🎯');
+        setTimeout(() => setToast(null), 1800);
+        if (next.size === total) setTimeout(finish, 900);
         return next;
       });
-    },
-    [checked],
-  );
+    } else {
+      setFlashWrong(msg.id);
+      setTimeout(() => setFlashWrong(null), 400);
+    }
+  }, [done, total, finish]);
 
-  const handleCheck = useCallback(() => {
-    setChecked(true);
-    setShowResult(true);
+  const handleTooltipOpen = useCallback((e: React.MouseEvent, msg: ChatMessage) => {
+    e.stopPropagation();
+    setTooltipMsg(msg);
   }, []);
 
   const buildResult = useCallback((): GameResult => {
-    const correctHits = [...selected].filter((id) => problemIds.has(id));
-    const foundAll = correctHits.length === problemIds.size;
-    const noExtras = [...selected].every((id) => problemIds.has(id));
-    const correct = foundAll && noExtras;
+    const hits = [...selected].filter((id) => problemIds.has(id));
+    const correct = hits.length === total && [...selected].every((id) => problemIds.has(id));
     return {
       correct,
-      answer: `Найдено ${correctHits.length} из ${problemIds.size}`,
+      answer: `Найдено ${hits.length} из ${total}`,
       explanation: correct
         ? 'Все три сигнала пойманы!'
-        : 'Проблемные сигналы: ' +
-          messages
-            .filter((m) => m.isProblem)
-            .map((m) => `«${m.text.slice(0, 50)}${m.text.length > 50 ? '…' : ''}»`)
-            .join('; '),
+        : messages.filter((m) => m.isProblem).map((m) => `«${m.text.slice(0, 50)}…»`).join('; '),
     };
-  }, [selected, problemIds, messages]);
+  }, [selected, problemIds, messages, total]);
 
-  const handleFinish = useCallback(() => {
-    setShowResult(false);
-    onComplete([buildResult()]);
-  }, [buildResult, onComplete]);
+  const foundCount = [...selected].filter((id) => problemIds.has(id)).length;
 
-  const overlayDimClass =
-    orientation === 'portrait' ? styles.overlayPortrait : styles.overlayLandscape;
+  const getResultTitle = () => {
+    if (foundCount === 3) return 'Отлично! Ты читаешь между строк.';
+    if (foundCount >= 1) return 'Тебе удалось кое-что заметить, но риски остались.';
+    return 'К сожалению, ты не заметил проблемы вовремя.';
+  };
 
   const getBubbleClass = (msg: ChatMessage): string => {
-    const classes: string[] = [styles.bubble];
-    const isSelected = selected.has(msg.id);
-    if (!checked) {
-      if (isSelected) classes.push(styles.bubbleSelected);
+    const cls = [styles.bubble];
+    if (done) {
+      cls.push(styles.bubbleLocked);
+      const sel = selected.has(msg.id);
+      if (msg.isProblem && sel) cls.push(styles.bubbleCorrect);
+      else if (msg.isProblem && !sel) cls.push(styles.bubbleMissed);
+      else if (!msg.isProblem && sel) cls.push(styles.bubbleWrong);
     } else {
-      classes.push(styles.bubbleLocked);
-      if (isSelected && msg.isProblem) classes.push(styles.bubbleCorrect);
-      else if (isSelected && !msg.isProblem) classes.push(styles.bubbleWrong);
-      else if (!isSelected && msg.isProblem) classes.push(styles.bubbleMissed);
+      if (selected.has(msg.id)) cls.push(styles.bubbleSignal);
+      if (flashWrong === msg.id) cls.push(styles.bubbleFlash);
     }
-    return classes.join(' ');
+    return cls.join(' ');
   };
-
-  const getBubbleMark = (msg: ChatMessage): { label: string; cls: string } | null => {
-    if (!checked) return null;
-    const isSelected = selected.has(msg.id);
-    if (isSelected && msg.isProblem) return { label: '✓', cls: styles.markCorrect };
-    if (isSelected && !msg.isProblem) return { label: '✕', cls: styles.markWrong };
-    if (!isSelected && msg.isProblem) return { label: '!', cls: styles.markMissed };
-    return null;
-  };
-
-  const problemMessages = messages.filter((m) => m.isProblem);
-  const result = buildResult();
 
   return (
     <Background theme={theme} orientation={orientation} onBack={onBack}>
       <div className={styles.page}>
-        <p className={styles.prompt}>{step?.prompt ?? 'Найди проблемные сообщения'}</p>
+        <div className={styles.gameHeader}>
+          <div className={styles.timerPill}>
+            <span>⏱</span>
+            <span className={`${styles.timerValue} ${secondsLeft <= 30 ? styles.timerUrgent : ''}`}>
+              {formatTime(secondsLeft)}
+            </span>
+          </div>
+          <div className={styles.counterPill}>
+            <span>🚩</span>
+            <span>Сигналов найдено: {foundCount}/{total}</span>
+          </div>
+        </div>
 
         <div className={styles.chat}>
           <div className={styles.chatHeader}>
@@ -137,31 +152,34 @@ export function ChatSignalsGame({
               <div className={`${styles.avatar} ${styles.avatarSmall} ${styles.avatarDesign}`}>М</div>
             </div>
             <div className={styles.chatTitleBlock}>
-              <p className={styles.chatTitle}>Корзина · команда</p>
+              <p className={styles.chatTitle}>💬 Чат</p>
               <p className={styles.chatSub}>Денис, Саша, Игорь, Марина · сегодня</p>
             </div>
           </div>
 
           <div className={styles.chatBody}>
             {messages.map((msg) => {
-              const mark = getBubbleMark(msg);
+              const isPm = msg.role === 'pm';
               return (
-                <div key={msg.id} className={styles.messageRow}>
+                <div key={msg.id} className={`${styles.messageRow} ${isPm ? styles.messageRowPm : ''}`}>
                   <div className={`${styles.avatar} ${roleAvatarClass[msg.role]}`}>
-                    {initials(msg.author)}
+                    {avatarLetters[msg.author] ?? msg.author.charAt(0).toUpperCase()}
                   </div>
                   <div className={styles.messageBody}>
-                    <div className={styles.messageMeta}>
+                    <div className={`${styles.messageMeta} ${isPm ? styles.messageMetaPm : ''}`}>
                       <span className={styles.messageAuthor}>{msg.author}</span>
                       <span className={styles.messageTime}>{msg.time}</span>
                     </div>
-                    <div
-                      className={getBubbleClass(msg)}
-                      onClick={() => toggleSelect(msg.id)}
-                      role="button"
-                    >
+                    <div className={getBubbleClass(msg)} onClick={() => handleTap(msg)} role="button">
                       {msg.text}
-                      {mark && <span className={`${styles.bubbleMark} ${mark.cls}`}>{mark.label}</span>}
+                      {msg.tooltip && !done && (
+                        <InfoButton
+                          size="sm"
+                          variant="dark"
+                          className={styles.tooltipBtn}
+                          onClick={(e) => handleTooltipOpen(e, msg)}
+                        />
+                      )}
                     </div>
                   </div>
                 </div>
@@ -169,34 +187,54 @@ export function ChatSignalsGame({
             })}
           </div>
         </div>
-
-        <div className={styles.actions}>
-          {!checked && selected.size > 0 && (
-            <Button label="Проверить" type="main" onClick={handleCheck} />
-          )}
-        </div>
       </div>
 
-      {showResult && (
-        <div className={`${styles.overlay} ${overlayDimClass}`}>
+      {toast && <div className={styles.toast}>{toast}</div>}
+
+      {tooltipMsg && (
+        <div className={styles.overlay} onClick={() => setTooltipMsg(null)}>
+          <div className={styles.tooltipCard} onClick={(e) => e.stopPropagation()}>
+            <p className={styles.tooltipText}>{tooltipMsg.tooltip}</p>
+            <Button label="Понятно" type="main" onClick={() => setTooltipMsg(null)} />
+          </div>
+        </div>
+      )}
+
+      {done && (
+        <div className={styles.overlay}>
           <div className={styles.resultCard}>
-            <h2 className={styles.resultTitle}>
-              {result.correct ? 'Все три сигнала пойманы!' : 'Вот что стояло за сообщениями'}
-            </h2>
+            <h2 className={styles.resultTitle}>{getResultTitle()}</h2>
             <div className={styles.resultList}>
-              {problemMessages.map((m) => (
-                <Card
-                  key={m.id}
-                  variant={`${m.author} · ${roleLabel[m.role]}`}
-                  title={`«${m.text}»`}
-                  description={m.explanation ?? ''}
-                  state="pressed"
-                  size="m"
-                />
-              ))}
+              {messages.filter((m) => m.isProblem).map((m) => {
+                const found = selected.has(m.id);
+                return (
+                  <div key={m.id} className={`${styles.signalCard} ${found ? styles.signalFound : styles.signalMissed}`}>
+                    {!found && <span className={styles.missedBadge}>Пропущено</span>}
+                    <p className={styles.signalQuote}>«{m.text}»</p>
+                    {m.signalMeaning && (
+                      <div className={styles.signalRow}>
+                        <span className={styles.signalLabel}>Что имелось в виду:</span>
+                        <span className={styles.signalText}>{m.signalMeaning}</span>
+                      </div>
+                    )}
+                    {m.signalConsequence && (
+                      <div className={styles.signalRow}>
+                        <span className={styles.signalLabel}>Что случится:</span>
+                        <span className={styles.signalText}>{m.signalConsequence}</span>
+                      </div>
+                    )}
+                    {m.signalAction && (
+                      <div className={styles.signalRow}>
+                        <span className={styles.signalLabel}>Что делать PM:</span>
+                        <span className={styles.signalText}>{m.signalAction}</span>
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
             </div>
             <div className={styles.resultActions}>
-              <Button label="Далее" type="main" onClick={handleFinish} />
+              <Button label="Далее" type="main" onClick={() => onComplete([buildResult()])} />
             </div>
           </div>
         </div>

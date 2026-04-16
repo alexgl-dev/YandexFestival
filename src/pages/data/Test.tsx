@@ -86,12 +86,12 @@ export function Test() {
           <p className={styles.questionPrompt}>{currentQuestion.prompt}</p>
 
           <div className={styles.optionsGrid}>
-            {currentQuestion.options.map((option, i) => {
-              const letter = String.fromCharCode(65 + i);
+            {currentQuestion.options.map((option) => {
+              
               return (
                 <Card
                   key={option}
-                  variant={`Вариант ${letter}`}
+                  variant=""
                   title={option}
                   description=""
                   size="m"
@@ -130,8 +130,9 @@ export function Test() {
               if (cellIndex === 4) {
                 return (
                   <div key={cellIndex} className={styles.cellCenter}>
-                    <span className={styles.cellCenterRole}>{bingo.expert.role}</span>
+                    <span className={styles.cellCenterBadge}>Эксперт</span>
                     <span className={styles.cellCenterName}>{bingo.expert.name}</span>
+                    <span className={styles.cellCenterRole}>{bingo.expert.role}</span>
                   </div>
                 );
               }

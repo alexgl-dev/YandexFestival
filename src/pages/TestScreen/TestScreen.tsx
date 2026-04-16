@@ -477,7 +477,7 @@ export function TestScreen() {
                 orientation="landscape"
                 items={[
                   { label: 'Описание направления' },
-                  { label: 'Мои задания' },
+                  { label: 'Задачи на' },
                   { label: 'Истории яндексоидов' },
                   { label: 'Бинго-знакомство' },
                 ]}
@@ -492,7 +492,7 @@ export function TestScreen() {
                 orientation="landscape"
                 items={[
                   { label: 'Описание направления' },
-                  { label: 'Мои задания' },
+                  { label: 'Задачи на день' },
                   { label: 'Истории яндексоидов' },
                   { label: 'Бинго-знакомство' },
                 ]}

@@ -270,7 +270,7 @@ export function MarkGame({ task, onComplete, onBack, theme = 'orange', orientati
         <div className={styles.content}>
           <div className={styles.imageContainer} ref={imageRef} onClick={handleImageClick}>
             {step.image && (
-              <img src={step.image} alt={step.prompt || 'Изображение задания'} className={styles.image} />
+              <img src={step.image} alt={step.prompt || 'Изображение Задачи на день'} className={styles.image} />
             )}
             {markers.map((marker, i) => {
               const statusClass = markerStatus[i] === 'correct'

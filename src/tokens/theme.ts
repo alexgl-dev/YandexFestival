@@ -12,7 +12,7 @@ export const colors = {
   greyDisabled: '#C0C0C0',
   orange: '#FB4E14',
   red: '#FF3300',
-  green: '#00FF09',
+  green: '#40B551',
   yellow: '#FFA600',
 } as const;
 

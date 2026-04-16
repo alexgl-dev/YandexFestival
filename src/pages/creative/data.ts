@@ -443,32 +443,33 @@ export const creativeSection: SectionData = {
             // === Музыка (5) ===
             {
               name: 'Эквалайзер',
-              emoji: '🎚️',
+              image: '/assets/games/001/match-icons/icon-equalizer.png',
               belongs: ['music'],
               explanation:
-                'Регулирует громкость разных зон частотного диапазона — элемент музыкального приложения.',
+                'Вертикальные полосы разной высоты, двигающиеся в такт музыке. Регулирует громкость разных зон частотного диапазона.',
             },
             {
               name: 'Добавить',
-              emoji: '🎵',
+              image: '/assets/games/001/match-icons/icon-add.png',
               belongs: ['music'],
-              explanation: 'Нота с плюсиком — добавляет трек в плейлист.',
+              explanation: 'Нотка с плюсиком — добавляет трек в плейлист.',
             },
             {
               name: 'Перемешать',
-              emoji: '🔀',
+              image: '/assets/games/001/match-icons/icon-shuffle.png',
               belongs: ['music'],
-              explanation: 'Перемешивает треки в плейлисте.',
+              explanation:
+                'Две скрещивающиеся стрелки с нотой внутри — перемешивает треки в плейлисте.',
             },
             {
               name: 'Виниловая пластинка',
-              emoji: '💿',
+              image: '/assets/games/001/match-icons/icon-vinyl.png',
               belongs: ['music'],
               explanation: 'Позволяет слушать музыку в стиле винила.',
             },
             {
               name: 'Микрофон',
-              emoji: '🎤',
+              image: '/assets/games/001/match-icons/icon-microphone.png',
               belongs: ['music'],
               explanation: 'Отображает текст песни — караоке-режим.',
             },
@@ -476,63 +477,66 @@ export const creativeSection: SectionData = {
             // === Навигатор (5) ===
             {
               name: 'Заправка',
-              emoji: '⛽',
+              image: '/assets/games/001/match-icons/icon-gas.png',
               belongs: ['maps'],
-              explanation: 'Показывает ближайшие заправки на маршруте.',
+              explanation:
+                'Пистолет с каплей топлива — показывает ближайшие заправки на маршруте.',
             },
             {
               name: 'Радар камер',
-              emoji: '📷',
+              image: '/assets/games/001/match-icons/icon-radar.png',
               belongs: ['maps'],
-              explanation: 'Предупреждает о камерах фото- и видеофиксации.',
+              explanation:
+                'Камера в треугольнике — предупреждает о камерах фото- и видеофиксации.',
             },
             {
               name: 'Светофор',
-              emoji: '🚦',
+              image: '/assets/games/001/match-icons/icon-traffic-light.png',
               belongs: ['maps'],
               explanation: 'Показывает светофоры на маршруте.',
             },
             {
               name: 'Геолокация',
-              emoji: '📍',
+              image: '/assets/games/001/match-icons/icon-geolocation.png',
               belongs: ['maps'],
-              explanation: 'Отмечает место на карте — основа навигатора.',
+              explanation: 'Красная перевёрнутая капля — отмечает место на карте.',
             },
             {
               name: 'Пункт питания',
-              emoji: '🍴',
+              image: '/assets/games/001/match-icons/icon-food.png',
               belongs: ['maps'],
-              explanation: 'Показывает кафе и рестораны по пути.',
+              explanation: 'Нож и вилка — показывает кафе и рестораны по пути.',
             },
 
             // === Универсальные (5) — подходят обоим ===
             {
               name: 'Поиск',
-              emoji: '🔍',
+              image: '/assets/games/001/match-icons/icon-search.png',
               belongs: ['music', 'maps'],
               explanation: 'Поиск трека или адреса — универсальная иконка.',
             },
             {
               name: 'Избранное',
-              emoji: '❤️',
+              image: '/assets/games/001/match-icons/icon-favorite.png',
               belongs: ['music', 'maps'],
               explanation: 'Любимые песни или сохранённые места — подходит обоим.',
             },
             {
               name: 'Загрузка',
-              emoji: '📶',
+              image: '/assets/games/001/match-icons/icon-loading.png',
               belongs: ['music', 'maps'],
               explanation: 'Буферизация аудио или загрузка карты — универсально.',
             },
             {
               name: 'Настройки',
-              emoji: '⚙️',
+              image: '/assets/games/001/match-icons/icon-settings.png',
               belongs: ['music', 'maps'],
-              explanation: 'Качество звука или параметры маршрута — есть в каждом приложении.',
+              explanation:
+                'Качество звука или параметры маршрута — есть в каждом приложении.',
             },
             {
               name: 'Скачать',
-              emoji: '📥',
+              image: '/assets/games/001/match-icons/icon-download.png',
               belongs: ['music', 'maps'],
               explanation: 'Скачать трек или карту офлайн — подходит обоим.',
             },
@@ -540,32 +544,32 @@ export const creativeSection: SectionData = {
             // === Неподходящие (5) — в корзину ===
             {
               name: 'Пробирка',
-              emoji: '🧪',
+              image: '/assets/games/001/match-icons/icon-flask.png',
               belongs: ['trash'],
               explanation:
                 'Иконка для научных и медицинских приложений — не подходит ни музыке, ни навигатору.',
             },
             {
               name: 'Корзина покупок',
-              emoji: '🛒',
+              image: '/assets/games/001/match-icons/icon-cart.png',
               belongs: ['trash'],
               explanation: 'Элемент интернет-магазина или маркетплейса.',
             },
             {
               name: 'Стетоскоп',
-              emoji: '🩺',
+              image: '/assets/games/001/match-icons/icon-stethoscope.png',
               belongs: ['trash'],
               explanation: 'Иконка медицинского приложения.',
             },
             {
               name: 'Линейка с угольником',
-              emoji: '📐',
+              image: '/assets/games/001/match-icons/icon-ruler.png',
               belongs: ['trash'],
               explanation: 'Инструмент для чертёжных приложений.',
             },
             {
               name: 'Росток',
-              emoji: '🌱',
+              image: '/assets/games/001/match-icons/icon-sprout.png',
               belongs: ['trash'],
               explanation: 'Элемент экологических и садоводческих приложений.',
             },

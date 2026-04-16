@@ -25,6 +25,60 @@ const ROTATIONS = [-2, 3, -4, 2, -1, 4, -3, 1];
 
 const MAX_ATTEMPTS = 3;
 
+// Abstract hints for empty slots by slot index (0-based)
+const SLOT_HINTS: string[] = [
+  'Перед тем как что-то делать, нужно понять, для кого мы это делаем и зачем.',
+  'Стало понятно, кто твой пользователь? Значит, пора описать, что именно нужно сделать.',
+  'Задача поставлена. Пора нарисовать, как это будет выглядеть.',
+  'Время оживить макет кодом.',
+  'Пока разработчики дописывают, маркетинг готовит запуск.',
+  'Код написан? Перед тем как показывать пользователю, нужно проверить, всё ли работает.',
+  'Всё протестировано и исправлено. Вперёд!',
+  'Продукт живёт. Теперь нужно послушать тех, кто им пользуется.',
+];
+
+// Fixed error messages by attempt number (1st, 2nd)
+const ATTEMPT_HINTS: string[] = [
+  'Не совсем. Попробуй зайти с другой стороны: подумай не о том, что удобнее делать, а о том, что невозможно сделать без предыдущего шага. Логика запуска — это цепочка зависимостей. Найди её.',
+  'Упс. Кажется, некоторые этапы оказались не на своих местах. Не забывай тапать на карточки с этапами и пустые ячейки, чтобы разобраться.',
+];
+
+// Correct-sequence explanation shown after 3 failures
+const CORRECT_STEPS: { title: string; body: string }[] = [
+  {
+    title: 'Шаг 1. Исследование пользователей',
+    body: 'Всё начинается с вопроса «Для кого?». Прежде чем придумывать продукт, нужно понять, кто им будет пользоваться и какую проблему он решает. Команда, которая пропускает этот шаг, рискует сделать продукт, который никому не нужен.',
+  },
+  {
+    title: 'Шаг 2. Постановка задачи',
+    body: 'Теперь, когда понятно «Для кого?», нужно ответить на вопрос «Что именно делаем?». Здесь фиксируются цели, требования и критерии успеха. Без этого шага разработчики, дизайнеры и маркетологи будут двигаться в разные стороны.',
+  },
+  {
+    title: 'Шаг 3. Дизайн и прототип',
+    body: 'Задача описана — пора нарисовать, как это будет выглядеть. Дизайнеры делают черновые макеты, команда их обсуждает и правит. Гораздо дешевле переделать картинку, чем переписывать готовый код.',
+  },
+  {
+    title: 'Шаг 4. Разработка',
+    body: 'Макет утверждён — разработчики начинают писать код. Это самый долгий этап. Именно поэтому важно, чтобы к его началу все решения уже были приняты: переделки на этом этапе стоят дорого.',
+  },
+  {
+    title: 'Шаг 5. Подготовка маркетинговой кампании',
+    body: 'Отдел маркетинга готовит материалы, продумывает стратегию запуска. К моменту релиза всё должно быть готово одновременно: и продукт, и его продвижение.',
+  },
+  {
+    title: 'Шаг 6. Тестирование',
+    body: 'Код написан, но выпускать продукт ещё рано. Тестировщики проверяют каждую функцию, ищут баги и неудобства. Лучше найти проблему сейчас, чем получить гневные отзывы от пользователей после релиза.',
+  },
+  {
+    title: 'Шаг 7. Релиз',
+    body: 'Всё проверено, всё готово. Продукт выходит к пользователям. Команда в этот момент не расслабляется — следит за тем, чтобы при запуске ничего не сломалось.',
+  },
+  {
+    title: 'Шаг 8. Сбор обратной связи',
+    body: 'Релиз — это не финал, а начало следующего цикла. Пользователи начинают писать отзывы, аналитики смотрят на цифры, команда собирает всё это и планирует следующую версию приложения. Хороший продукт никогда не бывает «окончательно готов».',
+  },
+];
+
 // ── Tooltip parser ──────────────────────────────────────────────────────────
 type Segment =
   | { type: 'text'; value: string }
@@ -85,33 +139,6 @@ function isBlockCorrect(
   return false;
 }
 
-function buildErrorMessage(blocks: TaskBlock[], slots: (number | null)[]): string {
-  const orderToSlot: Record<number, number> = {};
-  slots.forEach((bIdx, sIdx) => {
-    if (bIdx !== null && blocks[bIdx].order !== null) {
-      orderToSlot[blocks[bIdx].order!] = sIdx + 1;
-    }
-  });
-
-  const dev = orderToSlot[4];
-  const design = orderToSlot[3];
-  const research = orderToSlot[1];
-  const taskSet = orderToSlot[2];
-  const release = orderToSlot[7];
-  const testing = orderToSlot[6];
-
-  if (dev && design && dev < design)
-    return 'Команда написала код — но под что? Дизайн ещё не был готов. Пришлось переделывать всё с нуля. Потеряно 3 недели.';
-  if (taskSet && research && taskSet < research)
-    return 'Техзадание написано до исследования пользователей. Оказалось — не та проблема, не те люди. Вся работа в мусор.';
-  if (release && testing && release < testing)
-    return 'Продукт вышел без тестирования. Пользователи нашли 47 критических багов. Пришлось срочно откатывать релиз.';
-  if (research && research > 2)
-    return 'Исследование пользователей — это самый первый шаг. Без него непонятно, что вообще нужно делать.';
-
-  return 'Этапы перепутаны. В реальном проекте такая ошибка стоит месяцы работы и миллионы рублей.';
-}
-
 export function LaunchSequenceGame({
   task,
   onComplete,
@@ -129,11 +156,15 @@ export function LaunchSequenceGame({
   const [pool, setPool] = useState<number[]>(() =>
     [...validIndices].sort(() => Math.random() - 0.5),
   );
+  const [displayOrder] = useState<number[]>(() =>
+    [...validIndices].sort(() => Math.random() - 0.5),
+  );
   const [slots, setSlots] = useState<(number | null)[]>(() =>
     Array(slotCount).fill(null),
   );
   const [selected, setSelected] = useState<number | null>(null);
   const [descriptionFor, setDescriptionFor] = useState<number | null>(null);
+  const [slotHintFor, setSlotHintFor] = useState<number | null>(null);
   const [wordTooltip, setWordTooltip] = useState<string | null>(null);
   const [checked, setChecked] = useState(false);
   const [slotResults, setSlotResults] = useState<('correct' | 'wrong' | null)[]>(() =>
@@ -209,6 +240,9 @@ export function LaunchSequenceGame({
           return n;
         });
         setPool((p) => [...p, bIdx]);
+      } else {
+        // Empty slot, no card selected — show an abstract hint for this stage
+        setSlotHintFor(sIdx);
       }
     },
     [checked, descriptionFor, animating, selected, slots],
@@ -256,6 +290,7 @@ export function LaunchSequenceGame({
       setSlots(Array(slotCount).fill(null));
       setPool([...validIndices].sort(() => Math.random() - 0.5));
       setSelected(null);
+      setSlotHintFor(null);
       setLitSlots(new Set());
       setAnimating(false);
       setShowComplete(false);
@@ -289,7 +324,7 @@ export function LaunchSequenceGame({
         const t = setTimeout(() => setShowFailed(true), 700);
         timersRef.current.push(t);
       } else {
-        setErrorMsg(buildErrorMessage(blocks, slots));
+        setErrorMsg(ATTEMPT_HINTS[newCount - 1] ?? ATTEMPT_HINTS[ATTEMPT_HINTS.length - 1]);
         const t = setTimeout(() => setShowError(true), 700);
         timersRef.current.push(t);
       }
@@ -372,7 +407,7 @@ export function LaunchSequenceGame({
 
         {/* Pool */}
         <div className={styles.pool}>
-          {validIndices.slice(0, 6).map((bIdx) => {
+          {displayOrder.slice(0, 6).map((bIdx) => {
             const inPool = pool.includes(bIdx);
             if (!inPool) return <div key={bIdx} className={styles.poolCardGhost} />;
             const block = blocks[bIdx];
@@ -389,7 +424,7 @@ export function LaunchSequenceGame({
             );
           })}
           <div className={styles.gridLastRow}>
-            {validIndices.slice(6).map((bIdx) => {
+            {displayOrder.slice(6).map((bIdx) => {
               const inPool = pool.includes(bIdx);
               if (!inPool) return <div key={bIdx} className={styles.poolCardGhost} />;
               const block = blocks[bIdx];
@@ -425,9 +460,9 @@ export function LaunchSequenceGame({
                 .filter(Boolean)
                 .join(' ')}
             >
-              {parallelActive && (
+              {/* {parallelActive && (
                 <span className={styles.parallelLabel}>параллельно</span>
-              )}
+              )} */}
               <div className={styles.parallelSlots}>
                 {renderSlot(3)}
                 {renderSlot(4)}
@@ -464,14 +499,6 @@ export function LaunchSequenceGame({
           onClick={() => { setDescriptionFor(null); setWordTooltip(null); }}
         >
           <div className={styles.descCard} onClick={(e) => e.stopPropagation()}>
-            {blocks[descriptionFor]?.icon && (
-              <img
-                src={blocks[descriptionFor].icon}
-                alt=""
-                className={styles.descIcon}
-                draggable={false}
-              />
-            )}
             <h3 className={styles.descTitle}>{blocks[descriptionFor]?.text}</h3>
             <p className={styles.descBody}>
               {renderTooltips(
@@ -493,6 +520,22 @@ export function LaunchSequenceGame({
               className={styles.descBtn}
               onClick={() => { setDescriptionFor(null); setWordTooltip(null); }}
             >
+              Понятно
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Slot hint popup (tapped an empty slot without a selected card) */}
+      {slotHintFor !== null && (
+        <div
+          className={`${styles.overlay} ${overlayClass}`}
+          onClick={() => setSlotHintFor(null)}
+        >
+          <div className={styles.descCard} onClick={(e) => e.stopPropagation()}>
+            <h3 className={styles.descTitle}>Шаг {slotHintFor + 1}</h3>
+            <p className={styles.descBody}>{SLOT_HINTS[slotHintFor]}</p>
+            <button className={styles.descBtn} onClick={() => setSlotHintFor(null)}>
               Понятно
             </button>
           </div>
@@ -535,10 +578,22 @@ export function LaunchSequenceGame({
       {showFailed && (
         <div className={`${styles.overlay} ${overlayClass}`}>
           <div className={styles.failedCard}>
-            <div className={styles.failedIcon}>✕</div>
-            <h2 className={styles.failedTitle}>Правильный запуск экономит время и деньги, но ошибки случаются — для этого и стоит учиться.</h2>
+            <h2 className={styles.failedHeading}>
+              А вот как стоило расставить этапы, по мнению реальных проджект-менеджеров.
+            </h2>
+            <div className={styles.correctStepsList}>
+              {CORRECT_STEPS.map((s) => (
+                <div key={s.title} className={styles.correctStepItem}>
+                  <p className={styles.correctStepTitle}>{s.title}</p>
+                  <p className={styles.correctStepBody}>{s.body}</p>
+                </div>
+              ))}
+            </div>
+            <p className={styles.failedMoral}>
+              Правильный запуск экономит время и деньги, но ошибки случаются — для этого и стоит учиться.
+            </p>
             <p className={styles.failedBody}>
-              Если бы тебе пришлось запускать видеоблог, из каких этапов состоял бы твой запуск?
+              А если бы тебе пришлось запускать видеоблог, из каких этапов состоял бы твой запуск?
             </p>
             <button className={styles.retryBtn} onClick={() => doReset(true)}>
               Попробовать ещё раз
@@ -552,12 +607,9 @@ export function LaunchSequenceGame({
         <div className={`${styles.overlay} ${overlayClass}`}>
           <div className={styles.completeCard}>
             <div className={styles.completeCheck}>✓</div>
-            <h2 className={styles.completeTitle}>Продукт запущен за 4 месяца!</h2>
+            <h2 className={styles.completeTitle}>Поздравляем!</h2>
             <p className={styles.completeStat}>
-              Проджект-менеджер не пишет код и не рисует дизайн. Он выстраивает порядок, в котором работает вся команда. Правильная последовательность экономит месяцы работы и миллионы рублей.
-            </p>
-            <p className={styles.completeQuestion}>
-              Если бы тебе пришлось запускать видеоблог, из каких этапов состоял бы твой запуск?
+              Тебе удалось правильно расставить все этапы. Продукт запущен за 4 месяца.
             </p>
             <button className={styles.completeBtn} onClick={handleComplete}>
               Далее

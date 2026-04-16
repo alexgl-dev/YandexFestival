@@ -10,7 +10,7 @@ export function DevelopmentMenu() {
       orientation="landscape"
       items={[
         { label: 'Описание направления', onClick: () => navigate('/development/description') },
-        { label: 'Задания', onClick: () => navigate('/development/tasks') },
+        { label: 'Задачи на день', onClick: () => navigate('/development/tasks') },
         { label: 'Истории яндексоидов', onClick: () => navigate('/development/videos') },
         { label: 'Тест', onClick: () => navigate('/development/test') },
       ]}

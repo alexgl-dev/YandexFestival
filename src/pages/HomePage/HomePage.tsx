@@ -31,6 +31,11 @@ export function HomePage() {
             type="main"
             onClick={() => navigate('/data')}
           />
+          <Button
+            label="Календари"
+            type="main"
+            onClick={() => navigate('/calendars')}
+          />
         </div>
       </div>
     </Background>

@@ -1,3 +1,4 @@
+import type { ReactNode } from 'react';
 import styles from './PopUp.module.css';
 import { Icon } from './Icon';
 import { Button } from './Button';
@@ -6,9 +7,11 @@ export interface PopUpProps {
   icon?: 'close' | 'done';
   iconColor?: 'blue' | 'red';
   title: string;
-  description: string;
+  description: string | ReactNode;
   buttonLabel: string;
   onButtonClick?: () => void;
+  secondaryButtonLabel?: string;
+  onSecondaryButtonClick?: () => void;
   className?: string;
 }
 
@@ -19,6 +22,8 @@ export function PopUp({
   description,
   buttonLabel,
   onButtonClick,
+  secondaryButtonLabel,
+  onSecondaryButtonClick,
   className,
 }: PopUpProps) {
   return (
@@ -31,11 +36,14 @@ export function PopUp({
         )}
         <div className={styles.textBlock}>
           <h2 className={styles.title}>{title}</h2>
-          <p className={styles.description}>{description}</p>
+          <div className={styles.description}>{description}</div>
         </div>
       </div>
 
       <div className={styles.buttonWrap}>
+        {secondaryButtonLabel && (
+          <Button label={secondaryButtonLabel} type="secondary" onClick={onSecondaryButtonClick} />
+        )}
         <Button label={buttonLabel} type="main" onClick={onButtonClick} />
       </div>
     </div>

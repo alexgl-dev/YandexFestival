@@ -88,7 +88,7 @@
 }
 
 .poolCardCorrect {
-  border-color: var(--color-green);
+  border-color: var(--color-blue);
 }
 
 .poolCardWrong {
@@ -362,7 +362,7 @@
 }
 
 .placedCorrect {
-  background: var(--color-green) !important;
+  background: var(--color-blue) !important;
 }
 
 .placedWrong {

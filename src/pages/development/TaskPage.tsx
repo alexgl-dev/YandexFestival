@@ -76,7 +76,8 @@ export function TaskPage() {
           onBack={() => navigate(`/${data.slug}/tasks`)}
           onComplete={(r) => {
             setResults(r);
-            setPhase('result');
+            const allCorrect = r.length > 0 && r.every((item) => item.correct);
+            setPhase(allCorrect ? 'moral' : 'result');
           }}
           theme={data.theme}
           orientation={data.orientation}

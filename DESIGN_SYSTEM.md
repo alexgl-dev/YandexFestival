@@ -235,7 +235,7 @@ Back=150px, Play/Pause=90px. Компонент Background автоматиче�
   orientation="landscape"
   items={[
     { label: 'Описание направления', onClick: () => navigate('/description') },
-    { label: 'Мои задания', onClick: () => navigate('/tasks') },
+    { label: 'Задачи на день', onClick: () => navigate('/tasks') },
     { label: 'Истории яндексоидов', onClick: () => navigate('/stories') },
     { label: 'Бинго-знакомство', onClick: () => navigate('/bingo') },
   ]}

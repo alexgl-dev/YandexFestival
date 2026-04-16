@@ -33,6 +33,9 @@ import { TaskList as DataTaskList } from './pages/data/TaskList';
 import { TaskPage as DataTaskPage } from './pages/data/TaskPage';
 import { Videos as DataVideos } from './pages/data/Videos';
 import { Test as DataTest } from './pages/data/Test';
+import { CalendarsLayout } from './pages/calendars/CalendarsLayout';
+import { CalendarsMenu } from './pages/calendars/CalendarsMenu';
+import { CalendarView } from './pages/calendars/CalendarView';
 
 function App() {
   return (
@@ -75,6 +78,10 @@ function App() {
           <Route path="tasks/:taskId" element={<DataTaskPage />} />
           <Route path="videos" element={<DataVideos />} />
           <Route path="test" element={<DataTest />} />
+        </Route>
+        <Route path="/calendars" element={<CalendarsLayout />}>
+          <Route index element={<CalendarsMenu />} />
+          <Route path=":section" element={<CalendarView />} />
         </Route>
       </Routes>
     </BrowserRouter>

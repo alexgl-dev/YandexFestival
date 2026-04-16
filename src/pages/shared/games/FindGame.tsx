@@ -130,7 +130,7 @@ export function FindGame({ task, onComplete, onBack, theme = 'orange', orientati
             {step.image ? (
               <img
                 src={step.image}
-                alt={step.prompt || 'Изображение задания'}
+                alt={step.prompt || 'Изображение Задачи на день'}
                 className={styles.image}
               />
             ) : (

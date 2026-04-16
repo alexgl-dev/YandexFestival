@@ -10,7 +10,7 @@ export function DataMenu() {
       orientation="landscape"
       items={[
         { label: 'Описание направления', onClick: () => navigate('/data/description') },
-        { label: 'Задания', onClick: () => navigate('/data/tasks') },
+        { label: 'Задачи на день', onClick: () => navigate('/data/tasks') },
         { label: 'Истории яндексоидов', onClick: () => navigate('/data/videos') },
         { label: 'Тест', onClick: () => navigate('/data/test') },
       ]}

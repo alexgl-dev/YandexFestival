@@ -22,7 +22,7 @@
   align-items: center;
   gap: var(--spacing-sm);
   padding: var(--spacing-md) var(--spacing-lg);
-  background: #2E7D32;
+  background: #40B551;
   min-height: 64px;
 }
 
@@ -58,9 +58,9 @@
 }
 
 .booksTabActive {
-  color: #2E7D32;
+  color: #40B551;
   font-weight: var(--font-weight-bold);
-  border-bottom: 3px solid #2E7D32;
+  border-bottom: 3px solid #40B551;
 }
 
 .booksList {
@@ -81,7 +81,7 @@
 .bookCover {
   width: 52px;
   height: 68px;
-  background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
+  background: linear-gradient(135deg, #c8eacb, #a3d4a8);
   border-radius: 4px;
   display: flex;
   align-items: center;
@@ -118,7 +118,7 @@
 
 .bookFree {
   font-size: 13px;
-  color: #2E7D32;
+  color: #40B551;
   font-weight: var(--font-weight-medium);
   font-family: var(--font-family);
   margin-top: 2px;
@@ -175,7 +175,7 @@
 
 .messengerOnline {
   font-size: 14px;
-  color: #43A047;
+  color: #40B551;
   font-family: var(--font-family);
 }
 

@@ -10,7 +10,7 @@ export function TaskList() {
   return (
     <Background theme="cobalt" orientation="landscape" onBack={() => navigate(`/${data.slug}`)}>
       <div className={styles.wrapper}>
-        <h2 className={styles.title}>Задания</h2>
+        <h2 className={styles.title}>Задачи на день</h2>
 
         <div className={styles.list}>
           {data.tasks.map((task) => (

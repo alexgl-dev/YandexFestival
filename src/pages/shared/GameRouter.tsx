@@ -20,6 +20,7 @@ import { BurnoutGame } from './games/BurnoutGame';
 import { LaunchSequenceGame } from './games/LaunchSequenceGame';
 import { UxSequenceGame } from './games/UxSequenceGame';
 import { CalendarGame } from './games/CalendarGame';
+import { CalendarGamePortrait } from './games/CalendarGamePortrait';
 import { FactorXGame } from './games/FactorXGame';
 import { GamePlaceholder } from './GamePlaceholder';
 
@@ -92,7 +93,9 @@ export function GameRouter({ task, onComplete, onBack, theme = 'orange', orienta
     case 'match':
       return <MatchGame task={task} onComplete={onComplete} onBack={onBack} theme={theme} orientation={orientation} />;
     case 'calendar':
-      return <CalendarGame task={task} onComplete={onComplete} onBack={onBack} theme={theme} />;
+      return orientation === 'portrait'
+        ? <CalendarGamePortrait task={task} onComplete={onComplete} onBack={onBack} theme={theme} />
+        : <CalendarGame task={task} onComplete={onComplete} onBack={onBack} theme={theme} />;
     default:
       return <GamePlaceholder task={task} onComplete={onComplete} theme={theme} orientation={orientation} />;
   }

@@ -569,13 +569,15 @@
   background: var(--color-white);
   border-radius: var(--radius-lg);
   padding: var(--spacing-2xl);
-  width: 80%;
-  max-width: 640px;
+  width: 85%;
+  max-width: 860px;
+  max-height: 90vh;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: var(--spacing-lg);
   box-shadow: 0 24px 64px rgba(0, 0, 0, 0.45);
+  overflow-y: auto;
 }
 
 .failedIcon {
@@ -612,6 +614,74 @@
   margin: 0;
   line-height: var(--line-height-relaxed);
   opacity: 0.75;
+  font-style: italic;
+}
+
+.failedHeading {
+  font-family: var(--font-family);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  text-align: center;
+  margin: 0;
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--letter-spacing-sm);
+}
+
+.correctStepsList {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  max-height: 55vh;
+  overflow-y: auto;
+  padding-right: var(--spacing-xs);
+  text-align: left;
+}
+
+.correctStepItem {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-md);
+  background: var(--color-grey-light);
+  border-radius: var(--radius-sm);
+  border-left: 4px solid var(--color-blue);
+}
+
+.correctStepTitle {
+  margin: 0;
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  letter-spacing: var(--letter-spacing-xs);
+  line-height: var(--line-height-tight);
+}
+
+.correctStepBody {
+  margin: 0;
+  font-family: var(--font-family);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-text-primary);
+  line-height: var(--line-height-relaxed);
+  letter-spacing: var(--letter-spacing-xs);
+  opacity: 0.85;
+}
+
+.failedMoral {
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  text-align: center;
+  margin: 0;
+  line-height: var(--line-height-normal);
+  padding-top: var(--spacing-sm);
+  border-top: var(--border-width-sm) solid var(--color-grey-secondary);
+  width: 100%;
+  box-sizing: border-box;
 }
 
 /* ── Completion question ── */

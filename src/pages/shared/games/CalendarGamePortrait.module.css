@@ -6,14 +6,28 @@
   --cal-p-pool-width: 340px;
 }
 
+.wrapper {
+  position: relative;
+  width: calc(100% - 80px);
+  height: calc(100% - 120px);
+  box-sizing: border-box;
+}
+
 .layout {
   display: flex;
   flex-direction: row;
-  width: calc(100% - 80px);
-  height: calc(100% - 100px);
+  width: 100%;
+  height: 100%;
   gap: var(--spacing-xl);
   box-sizing: border-box;
   overflow: hidden;
+}
+
+.backRow {
+  position: absolute;
+  bottom: var(--spacing-2xl);
+  left: var(--spacing-2xl);
+  z-index: 10;
 }
 
 /* ══ LEFT: fixed task pool ══ */
@@ -76,7 +90,7 @@
 }
 
 .poolCardDragging  { opacity: 0.4; }
-.poolCardCorrect   { border-color: var(--color-green); }
+.poolCardCorrect   { border-color: var(--color-blue); }
 .poolCardWrong     { border-color: var(--color-red); }
 
 .poolCardHeader {
@@ -304,8 +318,7 @@
   left: 0;
   right: 0;
   border-radius: var(--radius-sm);
-  background: rgba(255, 255, 255, 0.18);
-  border: 1.5px solid rgba(255, 255, 255, 0.4);
+  background: var(--color-white);
   padding: var(--spacing-xs) var(--spacing-sm);
   display: flex;
   flex-direction: column;
@@ -314,10 +327,18 @@
   z-index: 2;
   box-sizing: border-box;
   overflow: hidden;
+  opacity: 0.65;
 }
 
-.anchorCard:hover { background: rgba(255, 255, 255, 0.25); }
-.lockIcon { font-size: 14px; flex-shrink: 0; line-height: 1; }
+.anchorCard:hover { opacity: 0.85; }
+
+.anchorCard .cardTitle {
+  color: var(--color-black);
+}
+
+.anchorCard .cardTime {
+  color: rgba(0, 0, 0, 0.5);
+}
 
 /* Placed cards */
 .placedCard {
@@ -340,7 +361,7 @@
 .placedDragging { opacity: 0.3; }
 
 .placedCard:hover   { filter: brightness(1.08); }
-.placedCorrect      { background: var(--color-green) !important; }
+.placedCorrect      { background: var(--color-blue) !important; }
 .placedWrong        { background: var(--color-red) !important; }
 
 .cardTitle {
