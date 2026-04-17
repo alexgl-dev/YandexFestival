@@ -112,16 +112,14 @@ export function Player({
         </div>
       )}
 
-      {/* Timeline — shown when playing */}
-      {isPlaying && (
-        <div className={styles.timeline}>
-          <span className={styles.time}>{displayCurrentTime}</span>
-          <div className={styles.track}>
-            <div className={styles.fill} style={{ width: `${displayProgress}%` }} />
-          </div>
-          <span className={styles.time}>{displayTotalTime}</span>
+      {/* Timeline — slides in when playing, slides out when stopped */}
+      <div className={`${styles.timeline} ${isPlaying ? styles.timelineVisible : ''}`}>
+        <span className={styles.time}>{displayCurrentTime}</span>
+        <div className={styles.track}>
+          <div className={styles.fill} style={{ width: `${displayProgress}%` }} />
         </div>
-      )}
+        <span className={styles.time}>{displayTotalTime}</span>
+      </div>
     </div>
   );
 }

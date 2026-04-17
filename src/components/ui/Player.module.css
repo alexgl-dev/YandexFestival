@@ -48,7 +48,7 @@
   display: flex;
   align-items: center;
   padding: 14px 32px;
-  background: var(--color-bg-brand-translucent);
+  background: var(--color-grey-light);
   border-radius: var(--radius-lg) var(--radius-lg) 0 0;
   flex-shrink: 0;
   box-sizing: border-box;
@@ -58,7 +58,6 @@
   font-size: var(--font-size-player);
   font-weight: var(--font-weight-medium);
   color: var(--color-black-pressed);
-  opacity: 0.9;
   line-height: var(--line-height-relaxed);
   white-space: nowrap;
 }
@@ -89,23 +88,32 @@
   margin-left: 3px;
 }
 
-/* Timeline bar at bottom */
+/* Timeline bar at bottom — hidden by default, slides up when playing */
 .timeline {
   position: relative;
   display: flex;
   align-items: center;
   gap: var(--spacing-xs);
   width: 100%;
-  padding: 0 var(--spacing-md) var(--spacing-xs);
+  padding: var(--spacing-sm) var(--spacing-md);
+  background: var(--color-grey-light);
+  border-radius: 0 0 var(--radius-lg) var(--radius-lg);
   box-sizing: border-box;
   flex-shrink: 0;
+  transform: translateY(100%);
+  opacity: 0;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.timelineVisible {
+  transform: translateY(0);
+  opacity: 1;
 }
 
 .time {
   font-size: var(--font-size-2xs);
   font-weight: var(--font-weight-medium);
   color: var(--color-black-pressed);
-  opacity: 0.9;
   line-height: var(--line-height-relaxed);
   white-space: nowrap;
   flex-shrink: 0;
@@ -114,7 +122,7 @@
 .track {
   flex: 1;
   height: var(--spacing-xs);
-  background: var(--color-overlay-light);
+  background: var(--color-grey-secondary);
   border-radius: var(--radius-full);
   overflow: hidden;
 }
@@ -141,7 +149,7 @@
 
 .vertical .timeline {
   gap: 12px;
-  padding: 0 var(--spacing-xl) var(--spacing-md);
+  padding: var(--spacing-md) var(--spacing-xl);
 }
 
 .vertical .time {
