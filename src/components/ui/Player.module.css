@@ -63,13 +63,30 @@
   white-space: nowrap;
 }
 
-/* Centered play/pause button */
-.buttonWrap {
+/* Subtle play overlay — shown when paused */
+.playOverlay {
   position: absolute;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
   z-index: 1;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.playIcon {
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 10px 0 10px 18px;
+  border-color: transparent transparent transparent rgba(255,255,255,0.9);
+  margin-left: 3px;
 }
 
 /* Timeline bar at bottom */
