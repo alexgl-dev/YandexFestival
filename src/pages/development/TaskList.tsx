@@ -17,7 +17,7 @@ export function TaskList() {
             <ListItem
               key={task.id}
               title={task.title}
-              duration={`${task.duration} мин`}
+              duration={`${task.duration} минут`}
               showPeople={task.mode === 'group'}
               state="default"
               onClick={() => navigate(`/${data.slug}/tasks/${task.id}`)}

@@ -8,7 +8,7 @@ const PADDING_V = 48;
 
 const formatDuration = (slots: number) => {
   const min = slots * 30;
-  if (min < 60) return `${min} мин`;
+  if (min < 60) return `${min} минут`;
   const h = min / 60;
   if (h === 1) return '1 час';
   if (h < 5) return `${h} часа`;

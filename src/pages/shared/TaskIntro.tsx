@@ -38,7 +38,7 @@ function parseIntro(text: string, tooltips: GlossaryTerm[]): Array<{ text: strin
 
 export function TaskIntro({ task, onStart, onBack, theme = 'orange', orientation = 'portrait' }: TaskIntroProps) {
   const modeLabel = task.mode === 'group' ? 'Групповое' : 'Индивидуальное';
-  const durationLabel = `${task.duration} мин`;
+  const durationLabel = `${task.duration} минут`;
   const [activeTooltip, setActiveTooltip] = useState<GlossaryTerm | null>(null);
 
   const segments = parseIntro(task.intro, task.introTooltips ?? []);

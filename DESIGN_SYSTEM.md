@@ -142,7 +142,7 @@ Back=150px, Play/Pause=90px. Компонент Background автоматиче�
 ### Badge
 ```tsx
 <Badge label="Групповое" type="filled" icon={<Icon name="people" color="white" size="xs" />} />
-<Badge label="5 мин" type="filled" icon={<Icon name="clock" color="white" size="xs" />} />
+<Badge label="5 минут" type="filled" icon={<Icon name="clock" color="white" size="xs" />} />
 <Badge label="Групповое" type="outline" icon={<Icon name="people" color="blue" size="xs" />} />
 <Badge label="Графический дизайнер" type="outline" />  {/* без иконки — для кликабельных меток */}
 ```
@@ -156,12 +156,12 @@ Back=150px, Play/Pause=90px. Компонент Background автоматиче�
 ```tsx
 // На экране описания задания — синие бейджи с белыми иконками
 <Badge label="Групповое" type="filled" icon={<Icon name="people" color="white" size="xs" />} />
-<Badge label="5 мин" type="filled" icon={<Icon name="clock" color="white" size="xs" />} />
+<Badge label="5 минут" type="filled" icon={<Icon name="clock" color="white" size="xs" />} />
 ```
 
 ### ListItem
 ```tsx
-<ListItem title="Афиша" duration="5 мин" showPeople state="default" onClick={fn} />
+<ListItem title="Афиша" duration="5 минут" showPeople state="default" onClick={fn} />
 ```
 **Props:** `title`, `duration`, `showPeople`, `state` (default|pressed), `onClick`
 

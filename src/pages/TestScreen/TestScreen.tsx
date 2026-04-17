@@ -192,16 +192,16 @@ export function TestScreen() {
         <h2 className={styles.sectionTitle}>ListItem</h2>
         <div className={styles.listItems}>
           <div className={styles.labeled}>
-            <ListItem title="Афиша" duration="5 мин" showPeople state="default" onClick={() => {}} />
-            <Code>{'<ListItem title="Афиша" duration="5 мин" showPeople state="default" />'}</Code>
+            <ListItem title="Афиша" duration="5 минут" showPeople state="default" onClick={() => {}} />
+            <Code>{'<ListItem title="Афиша" duration="5 минут" showPeople state="default" />'}</Code>
           </div>
           <div className={styles.labeled}>
-            <ListItem title="Интервью с художником" duration="12 мин" state="default" onClick={() => {}} />
-            <Code>{'<ListItem title="..." duration="12 мин" state="default" />'}</Code>
+            <ListItem title="Интервью с художником" duration="12 минут" state="default" onClick={() => {}} />
+            <Code>{'<ListItem title="..." duration="12 минут" state="default" />'}</Code>
           </div>
           <div className={styles.labeled}>
-            <ListItem title="Нажатый элемент" duration="3 мин" showPeople state="pressed" onClick={() => {}} />
-            <Code>{'<ListItem title="..." duration="3 мин" showPeople state="pressed" />'}</Code>
+            <ListItem title="Нажатый элемент" duration="3 минут" showPeople state="pressed" onClick={() => {}} />
+            <Code>{'<ListItem title="..." duration="3 минут" showPeople state="pressed" />'}</Code>
           </div>
         </div>
       </div>

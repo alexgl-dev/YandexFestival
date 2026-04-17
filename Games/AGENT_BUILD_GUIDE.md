@@ -289,7 +289,7 @@ export function TaskPage() {
   variant="Задание 1"
   title="Афиша"
   description="Выбери подходящую афишу"
-  hint="5 мин"
+  hint="5 минут"
   image="/assets/..."
   state="default"          // 'default' | 'disabled' | 'flipped' | 'pressed'
   size="l"                 // 'm' | 'l'
@@ -307,7 +307,7 @@ export function TaskPage() {
 
 // Badge — метка (время, тип)
 <Badge label="Групповое" type="filled" icon={<Icon name="people" color="white" size="xs" />} />
-<Badge label="3 мин" type="outline" icon={<Icon name="clock" color="blue" size="xs" />} />
+<Badge label="3 минут" type="outline" icon={<Icon name="clock" color="blue" size="xs" />} />
 // type: 'filled' | 'outline'
 
 // PopUp — модальное окно (мораль, результат, инструкция)
