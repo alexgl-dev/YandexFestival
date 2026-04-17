@@ -345,43 +345,64 @@
   position: absolute;
   left: 0;
   right: 0;
-  border-radius: var(--radius-sm);
-  background: var(--color-blue);
-  padding: var(--spacing-xs) var(--spacing-sm);
+  border-radius: var(--radius-lg);
+  background: var(--color-white);
+  border: 3px solid transparent;
+  padding: 15px var(--spacing-md);
   display: flex;
-  flex-direction: column;
-  gap: 4px;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--spacing-xs);
   cursor: grab;
   z-index: 2;
   box-sizing: border-box;
   overflow: hidden;
-  transition: filter 0.15s, opacity 0.15s;
+  transition: box-shadow 0.15s, opacity 0.15s;
 }
 
 .placedDragging { opacity: 0.3; }
 
-.placedCard:hover   { filter: brightness(1.08); }
-.placedCorrect      { background: var(--color-blue) !important; }
-.placedWrong        { background: var(--color-red) !important; }
+.placedCard:hover   { box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15); }
+.placedCorrect      { border-color: var(--color-blue) !important; }
+.placedWrong        { border-color: var(--color-red) !important; }
 
 .cardTitle {
   font-family: var(--font-family);
   font-size: var(--font-size-2xs);
   font-weight: var(--font-weight-medium);
-  color: var(--color-white);
+  color: var(--color-text-primary);
   line-height: var(--line-height-tight);
   letter-spacing: var(--letter-spacing-xs);
   display: -webkit-box;
   -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
   overflow: hidden;
+  flex: 1;
+  min-width: 0;
+}
+
+.placedCardMeta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.placedCardDuration {
+  font-family: var(--font-family);
+  font-size: var(--font-size-2xs);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-text-primary);
+  letter-spacing: var(--letter-spacing-xs);
+  white-space: nowrap;
 }
 
 .cardTime {
   font-family: var(--font-family);
   font-size: var(--font-size-2xs);
   font-weight: var(--font-weight-regular);
-  color: rgba(255, 255, 255, 0.75);
+  color: rgba(0, 0, 0, 0.5);
   letter-spacing: var(--letter-spacing-xs);
   flex-shrink: 0;
 }
@@ -391,7 +412,7 @@
   bottom: 6px;
   right: 8px;
   font-size: 14px;
-  color: rgba(255, 255, 255, 0.45);
+  color: rgba(0, 0, 0, 0.25);
   pointer-events: none;
   line-height: 1;
 }

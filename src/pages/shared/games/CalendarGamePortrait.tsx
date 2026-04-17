@@ -1,6 +1,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { Background, Button, Icon, IconButton, InfoButton, PopUp } from '../../../components/ui';
 import type { Task, CalendarCardData } from '../../../types/game';
+import { getWeekDays } from '../../../utils/calendarDays';
 import styles from './CalendarGamePortrait.module.css';
 
 const SLOT_COUNT = 18;    // 9:00 → 18:00
@@ -20,11 +21,7 @@ const slotToTime = (slot: number) => {
   return `${String(Math.floor(m / 60)).padStart(2, '0')}:${String(m % 60).padStart(2, '0')}`;
 };
 
-const DAYS = [
-  { id: 'mon', abbr: 'Пн', date: '14 марта' },
-  { id: 'tue', abbr: 'Вт', date: '15 марта' },
-  { id: 'wed', abbr: 'Ср', date: '16 марта' },
-] as const;
+const DAYS = getWeekDays(3);
 
 function getOccupied(
   day: string,
@@ -301,7 +298,10 @@ export function CalendarGamePortrait({ task, onComplete, onBack, theme = 'orange
                           onClick={e => handlePlacedCardClick(card.id, e)}
                         >
                           <span className={styles.cardTitle}>{card.title}</span>
-                          <span className={styles.cardTime}>{slotToTime(p.startSlot)}–{slotToTime(p.startSlot + card.durationSlots)}</span>
+                          <div className={styles.placedCardMeta}>
+                            <Icon name="clock" color="blue" size="xs" />
+                            <span className={styles.placedCardDuration}>{formatDuration(card.durationSlots)}</span>
+                          </div>
                           {!checked && <span className={styles.removeHint}>✕</span>}
                         </div>
                       );

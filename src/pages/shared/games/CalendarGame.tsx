@@ -1,17 +1,14 @@
 import { useState } from 'react';
 import { Background, Button, Icon, InfoButton, PopUp } from '../../../components/ui';
 import type { Task, CalendarCardData } from '../../../types/game';
+import { getWeekDays } from '../../../utils/calendarDays';
 import styles from './CalendarGame.module.css';
 
 const SLOT_HEIGHT = 48;
 const SLOT_COUNT  = 18;
 const PADDING_V   = 40;
 
-const DAYS = [
-  { id: 'mon', abbr: 'Пн', date: '14 марта' },
-  { id: 'tue', abbr: 'Вт', date: '15 марта' },
-  { id: 'wed', abbr: 'Ср', date: '16 марта' },
-] as const;
+const DAYS = getWeekDays(3);
 
 const formatDuration = (slots: number) => {
   const min = slots * 30;
@@ -277,7 +274,10 @@ export function CalendarGame({ task, onComplete, onBack, theme = 'orange' }: Pro
                           onClick={e => handlePlacedCardClick(card.id, e)}
                         >
                           <span className={styles.cardTitle}>{card.title}</span>
-                          <span className={styles.cardTime}>{slotToTime(p.startSlot)}–{slotToTime(p.startSlot + card.durationSlots)}</span>
+                          <div className={styles.placedCardMeta}>
+                            <Icon name="clock" color="blue" size="xs" />
+                            <span className={styles.placedCardDuration}>{formatDuration(card.durationSlots)}</span>
+                          </div>
                           {!checked && <span className={styles.removeHint}>✕</span>}
                         </div>
                       );

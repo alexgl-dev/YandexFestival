@@ -1,0 +1,260 @@
+/* CalendarDayPortrait — portrait 1080×1920, single day, no task pool */
+
+.wrapper {
+  width: calc(100% - 80px);
+  height: calc(100% - 120px);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: var(--spacing-lg);
+}
+
+.backRow {
+  flex-shrink: 0;
+}
+
+/* ══ Calendar area — flex column: header row + body row ══ */
+
+.calendarArea {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  background: rgba(227, 226, 224, 0.25);
+  backdrop-filter: blur(22px);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-2xl) var(--spacing-lg);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  overflow: hidden;
+}
+
+/* ── Header row ── */
+
+.calendarHeader {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: row;
+  gap: var(--spacing-2xl);
+}
+
+/* Invisible stub — same width as timeAxisBody, ensures day header aligns above day column */
+.timeAxisStub {
+  flex-shrink: 0;
+  width: 130px;
+}
+
+.dayHeader {
+  flex: 1;
+  display: flex;
+  gap: 12px;
+  align-items: baseline;
+  justify-content: center;
+  padding: var(--spacing-xs) 0 var(--spacing-sm);
+  box-sizing: border-box;
+}
+
+.dayHeaderAbbr {
+  font-family: var(--font-family);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-white);
+  letter-spacing: var(--letter-spacing-xs);
+  line-height: var(--line-height-tight);
+}
+
+.dayHeaderDate {
+  font-family: var(--font-family);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-white);
+  letter-spacing: var(--letter-spacing-xs);
+  line-height: var(--line-height-tight);
+}
+
+/* ── Body row — time axis + day column, same flex row → guaranteed same height ── */
+
+.calendarBody {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: row;
+  gap: var(--spacing-2xl);
+}
+
+.timeAxisBody {
+  flex-shrink: 0;
+  width: 130px;
+  position: relative;
+  overflow: hidden;
+}
+
+.timeLabel {
+  position: absolute;
+  right: 0;
+  transform: translateY(-50%);
+  text-align: right;
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-white);
+  letter-spacing: var(--letter-spacing-xs);
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+.dayColumnBody {
+  flex: 1;
+  min-width: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+/* ── Slot lines ── */
+
+.slot {
+  position: absolute;
+  left: 0;
+  right: 0;
+  box-sizing: border-box;
+  pointer-events: none;
+}
+
+.slotHour {
+  border-top: 4px solid rgba(255, 255, 255, 0.5);
+}
+
+.slotHalf {
+  border-top: 2px solid rgba(255, 255, 255, 0.15);
+}
+
+/* ── Event cards ── */
+
+.eventCard {
+  position: absolute;
+  left: 0;
+  right: 0;
+  border-radius: var(--radius-lg);
+  background: var(--color-white);
+  border: 3px solid transparent;
+  padding: 15px var(--spacing-md);
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--spacing-xs);
+  cursor: pointer;
+  z-index: 2;
+  box-sizing: border-box;
+  overflow: hidden;
+  transition: box-shadow 0.15s;
+}
+
+.eventCard:hover {
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.cardTitle {
+  font-family: var(--font-family);
+  font-size: var(--font-size-2xs);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--letter-spacing-xs);
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  flex: 1;
+  min-width: 0;
+}
+
+.cardMeta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-shrink: 0;
+}
+
+.cardDuration {
+  font-family: var(--font-family);
+  font-size: var(--font-size-2xs);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-text-primary);
+  letter-spacing: var(--letter-spacing-xs);
+  white-space: nowrap;
+}
+
+/* ══ Overlay ══ */
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+}
+
+.tooltipCard {
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-2xl);
+  max-width: 640px;
+  width: 85%;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.35);
+}
+
+.tooltipDuration {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  font-family: var(--font-family);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-text-muted);
+  letter-spacing: var(--letter-spacing-xs);
+}
+
+.tooltipTitle {
+  font-family: var(--font-family);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-primary);
+  margin: 0;
+  line-height: var(--line-height-tight);
+  letter-spacing: var(--letter-spacing-xs);
+}
+
+.tooltipText {
+  font-family: var(--font-family);
+  font-size: var(--font-size-md);
+  color: var(--color-text-primary);
+  margin: 0;
+  line-height: var(--line-height-normal);
+  letter-spacing: var(--letter-spacing-xs);
+}
+
+.tooltipClose {
+  align-self: flex-end;
+  background: var(--color-blue);
+  color: var(--color-white);
+  border: none;
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-sm) var(--spacing-2xl);
+  font-family: var(--font-family);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+  cursor: pointer;
+  transition: filter 0.15s;
+}
+
+.tooltipClose:hover {
+  filter: brightness(1.1);
+}

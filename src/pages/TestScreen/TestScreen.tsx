@@ -18,8 +18,19 @@ import {
 } from '../../components/ui';
 import { CalendarGame } from '../shared/games/CalendarGame';
 import { CalendarGamePortrait } from '../shared/games/CalendarGamePortrait';
+import { CalendarDayPortrait } from '../shared/games/CalendarDayPortrait';
 import type { Task } from '../../types/game';
 import styles from './TestScreen.module.css';
+
+const CALENDAR_DAY_MOCK = {
+  day: { id: 'mon', abbr: 'Пн', date: '14 марта' },
+  cards: [
+    { id: 'a1', title: 'Созвон с командой', durationSlots: 1, tooltip: '30 минут — ежедневный стендап', anchorDay: 'mon', anchorStartSlot: 0 },
+    { id: 'a2', title: 'Подготовка презентации для хурала', durationSlots: 6, tooltip: '3 часа', anchorDay: 'mon', anchorStartSlot: 2 },
+    { id: 'a3', title: 'Инструктаж для стажёра', durationSlots: 2, tooltip: '1 час', anchorDay: 'mon', anchorStartSlot: 10 },
+    { id: 'a4', title: 'Пробежка с беговым клубом Яндекса', durationSlots: 4, tooltip: '2 часа', anchorDay: 'mon', anchorStartSlot: 13 },
+  ],
+};
 
 const CALENDAR_MOCK_TASK: Task = {
   id: 'preview',
@@ -443,6 +454,21 @@ export function TestScreen() {
             />
           </div>
           <Code>{'<CalendarGamePortrait task={task} theme="orange" onComplete={...} onBack={...} />'}</Code>
+        </div>
+      </div>
+
+      {/* 14c. CalendarDayPortrait */}
+      <div className={styles.section}>
+        <h2 className={styles.sectionTitle}>CalendarDayPortrait (9:16, 1 день)</h2>
+        <div className={styles.labeled}>
+          <div style={{ transform: 'scale(0.35)', transformOrigin: 'top left', width: 1080 * 0.35, height: 1920 * 0.35 }}>
+            <CalendarDayPortrait
+              cards={CALENDAR_DAY_MOCK.cards as never}
+              theme="orange"
+              onBack={() => {}}
+            />
+          </div>
+          <Code>{'<CalendarDayPortrait day={day} cards={cards} theme="orange" onBack={...} />'}</Code>
         </div>
       </div>
 

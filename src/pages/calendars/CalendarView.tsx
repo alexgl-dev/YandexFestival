@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from 'react-router';
-import { CalendarViewGame } from '../shared/games/CalendarViewGame';
+import { CalendarDayPortrait } from '../shared/games/CalendarDayPortrait';
 import { calendarsData } from './data';
 import { Background } from '../../components/ui';
 
@@ -10,7 +10,7 @@ export function CalendarView() {
 
   if (!data) {
     return (
-      <Background theme="cobalt" orientation="landscape" onBack={() => navigate('/calendars')}>
+      <Background theme="cobalt" orientation="portrait" onBack={() => navigate('/calendars')}>
         <p style={{ color: 'white', fontFamily: 'var(--font-family)', fontSize: 'var(--font-size-xl)' }}>
           Календарь не найден
         </p>
@@ -19,11 +19,9 @@ export function CalendarView() {
   }
 
   return (
-    <CalendarViewGame
-      title={data.title}
-      days={data.days}
+    <CalendarDayPortrait
       cards={data.cards}
-      theme={data.theme}
+      theme="cobalt"
       startHour={data.startHour}
       slotCount={data.slotCount}
       onBack={() => navigate('/calendars')}
