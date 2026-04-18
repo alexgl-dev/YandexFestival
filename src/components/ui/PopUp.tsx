@@ -6,7 +6,7 @@ import { Button } from './Button';
 export interface PopUpProps {
   icon?: 'close' | 'done';
   iconColor?: 'blue' | 'red';
-  title: string;
+  title?: string;
   description: string | ReactNode;
   buttonLabel: string;
   onButtonClick?: () => void;
@@ -35,7 +35,7 @@ export function PopUp({
           </div>
         )}
         <div className={styles.textBlock}>
-          <h2 className={styles.title}>{title}</h2>
+          {title && <h2 className={styles.title}>{title}</h2>}
           <div className={styles.description}>{description}</div>
         </div>
       </div>

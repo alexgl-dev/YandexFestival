@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
-import { Background, Button, Card, Icon, InfoButton, PopUp } from '../../../components/ui';
+import { Background, Button, Card, Icon, PopUp } from '../../../components/ui';
 import type { Task } from '../../../types/game';
+import { GameInstruction } from '../GameInstruction';
 import styles from './LabelGame.module.css';
 
 interface GameResult {
@@ -17,7 +18,7 @@ interface GameProps {
   orientation?: 'landscape' | 'portrait';
 }
 
-type Popup = { kind: 'success' } | { kind: 'error' } | { kind: 'instruction' } | null;
+type Popup = { kind: 'success' } | { kind: 'error' } | null;
 
 export function LabelGame({
   task,
@@ -35,7 +36,7 @@ export function LabelGame({
   const [answers, setAnswers] = useState<Record<number, string>>({});
   const [activeIdx, setActiveIdx] = useState<number | null>(null);
   const [wrongIdx, setWrongIdx] = useState<Set<number>>(new Set());
-  const [popup, setPopup] = useState<Popup>(task.instruction ? { kind: 'instruction' } : null);
+  const [popup, setPopup] = useState<Popup>(null);
 
   const answeredCount = Object.keys(answers).length;
   const allAnswered = items.length > 0 && answeredCount === items.length;
@@ -81,10 +82,6 @@ export function LabelGame({
 
   const handlePopupAction = useCallback(() => {
     if (!popup) return;
-    if (popup.kind === 'instruction') {
-      setPopup(null);
-      return;
-    }
     if (popup.kind === 'success') {
       const results: GameResult[] = items.map((item, idx) => {
         const chosenId = answers[idx];
@@ -110,14 +107,7 @@ export function LabelGame({
 
   return (
     <Background theme={theme} orientation={orientation} onBack={onBack}>
-      {task.instruction && (
-        <InfoButton
-          size="md"
-          variant="ghost"
-          className={styles.instructionToggle}
-          onClick={() => setPopup({ kind: 'instruction' })}
-        />
-      )}
+      <GameInstruction instruction={task.instruction} />
 
       <div className={styles.wrapper}>
         {step?.prompt && <p className={styles.prompt}>{step.prompt}</p>}
@@ -254,26 +244,6 @@ export function LabelGame({
                 );
               })}
             </div>
-          </div>
-        </div>
-      )}
-
-      {popup && popup.kind === 'instruction' && task.instruction && (
-        <div className={styles.overlay}>
-          <div className={styles.instructionPanel}>
-            <h2 className={styles.instructionTitle}>Как играть</h2>
-            <div className={styles.instructionBody}>
-              {task.instruction.split('\n').map((line, i) =>
-                line.trim() ? (
-                  <p key={i} className={styles.instructionLine}>
-                    {line}
-                  </p>
-                ) : (
-                  <div key={i} className={styles.instructionBreak} />
-                ),
-              )}
-            </div>
-            <Button label="Начать" type="main" onClick={handlePopupAction} />
           </div>
         </div>
       )}

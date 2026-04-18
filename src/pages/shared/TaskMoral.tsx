@@ -44,9 +44,6 @@ export function TaskMoral({ task, onNext, isLast, sectionSlug, theme = 'orange',
   return (
     <Background theme={theme} orientation={orientation} showBackButton={false}>
       <PopUp
-        icon="done"
-        iconColor="blue"
-        title="Отлично!"
         description={description}
         buttonLabel={isLast ? 'В меню' : 'Следующее задание'}
         onButtonClick={onNext}

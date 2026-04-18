@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Background, Button, Icon, InfoButton, PopUp } from '../../../components/ui';
 import type { Task, CalendarCardData } from '../../../types/game';
 import { getWeekDays } from '../../../utils/calendarDays';
+import { GameInstruction } from '../GameInstruction';
 import styles from './CalendarGame.module.css';
 
 const SLOT_HEIGHT = 48;
@@ -137,6 +138,7 @@ export function CalendarGame({ task, onComplete, onBack, theme = 'orange' }: Pro
 
   return (
     <Background theme={theme} orientation="landscape" onBack={onBack}>
+      <GameInstruction instruction={task.instruction} />
       <div className={styles.layout}>
 
         {/* ══ LEFT: task pool ══ */}

@@ -1,6 +1,7 @@
 import { useCallback, useState } from 'react';
-import { Background, Button, Icon, InfoButton, PopUp } from '../../../components/ui';
+import { Background, Button, Icon, PopUp } from '../../../components/ui';
 import type { EmailBlock, EmailContent, EmailField, Task } from '../../../types/game';
+import { GameInstruction } from '../GameInstruction';
 import styles from './SecurityCheckGame.module.css';
 
 interface GameResult {
@@ -18,7 +19,6 @@ interface GameProps {
 }
 
 type Popup =
-  | { kind: 'instruction' }
   | { kind: 'feedback'; correct: boolean; explanation: string }
   | null;
 
@@ -37,7 +37,7 @@ export function SecurityCheckGame({
   const [currentIdx, setCurrentIdx] = useState(0);
   const [results, setResults] = useState<GameResult[]>([]);
   const [activeNote, setActiveNote] = useState<string | null>(null);
-  const [popup, setPopup] = useState<Popup>(task.instruction ? { kind: 'instruction' } : null);
+  const [popup, setPopup] = useState<Popup>(null);
 
   const currentItem = items[currentIdx];
   const email = currentItem?.email;
@@ -70,10 +70,6 @@ export function SecurityCheckGame({
 
   const handlePopupAction = useCallback(() => {
     if (!popup) return;
-    if (popup.kind === 'instruction') {
-      setPopup(null);
-      return;
-    }
     // feedback dismiss → advance
     setPopup(null);
     const nextIdx = currentIdx + 1;
@@ -88,14 +84,7 @@ export function SecurityCheckGame({
 
   return (
     <Background theme={theme} orientation={orientation} onBack={onBack}>
-      {task.instruction && (
-        <InfoButton
-          size="md"
-          variant="ghost"
-          className={styles.instructionToggle}
-          onClick={() => setPopup({ kind: 'instruction' })}
-        />
-      )}
+      <GameInstruction instruction={task.instruction} />
 
       <div className={styles.wrapper}>
         <div className={styles.counter}>
@@ -123,26 +112,6 @@ export function SecurityCheckGame({
           })}
         </div>
       </div>
-
-      {popup && popup.kind === 'instruction' && task.instruction && (
-        <div className={styles.overlay} onClick={() => setPopup(null)}>
-          <div className={styles.instructionPanel} onClick={(e) => e.stopPropagation()}>
-            <h2 className={styles.instructionTitle}>Чек-лист «На что обращать внимание»</h2>
-            <div className={styles.instructionBody}>
-              {task.instruction.split('\n').map((line, i) =>
-                line.trim() ? (
-                  <p key={i} className={styles.instructionLine}>
-                    {line}
-                  </p>
-                ) : (
-                  <div key={i} className={styles.instructionBreak} />
-                ),
-              )}
-            </div>
-            <Button label="Начать" type="main" onClick={handlePopupAction} />
-          </div>
-        </div>
-      )}
 
       {popup && popup.kind === 'feedback' && (
         <div className={styles.overlay}>

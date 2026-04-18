@@ -2,6 +2,7 @@ import { useState, useCallback, useRef } from 'react';
 import { Background, Button, Icon, InfoButton, ListItem, PopUp } from '../../../components/ui';
 import type { Task, UxReview } from '../../../types/game';
 import { AppMockup } from './AppMockup';
+import { GameInstruction } from '../GameInstruction';
 import styles from './MarkGame.module.css';
 
 interface GameResult {
@@ -27,12 +28,14 @@ interface MarkerPosition {
 
 function UxReviewGame({
   reviews,
+  instruction,
   onComplete,
   theme,
   orientation,
   onBack,
 }: {
   reviews: UxReview[];
+  instruction?: string;
   onComplete: (results: GameResult[]) => void;
   theme: 'cobalt' | 'orange';
   orientation: 'landscape' | 'portrait';
@@ -86,6 +89,7 @@ function UxReviewGame({
 
   return (
     <Background theme={theme} orientation={orientation} onBack={onBack}>
+      <GameInstruction instruction={instruction} />
       <div className={styles.uxWrapper}>
 
         {/* Mockup */}
@@ -203,6 +207,7 @@ export function MarkGame({ task, onComplete, onBack, theme = 'orange', orientati
     return (
       <UxReviewGame
         reviews={step.reviews}
+        instruction={task.instruction}
         onComplete={onComplete}
         theme={theme}
         orientation={orientation}
@@ -266,6 +271,7 @@ export function MarkGame({ task, onComplete, onBack, theme = 'orange', orientati
 
   return (
     <Background theme={theme} orientation={orientation} onBack={onBack}>
+      <GameInstruction instruction={task.instruction} />
       <div className={styles.wrapper}>
         <div className={styles.content}>
           <div className={styles.imageContainer} ref={imageRef} onClick={handleImageClick}>

@@ -1,6 +1,7 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { Background, PopUp } from '../../../components/ui';
 import type { Task, CatchObject } from '../../../types/game';
+import { GameInstruction } from '../GameInstruction';
 import styles from './CatchGame.module.css';
 
 interface GameResult {
@@ -219,6 +220,7 @@ export function CatchGame({
 
   return (
     <Background theme={theme} orientation={orientation} onBack={onBack}>
+      <GameInstruction instruction={task.instruction} />
       <div
         ref={wrapperRef}
         className={styles.wrapper}

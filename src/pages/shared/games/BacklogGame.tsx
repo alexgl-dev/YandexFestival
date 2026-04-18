@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Background } from '../../../components/ui';
 import type { CatchObject, GlossaryTerm, Task } from '../../../types/game';
+import { GameInstruction } from '../GameInstruction';
 import styles from './BacklogGame.module.css';
 
 interface GameResult {
@@ -303,6 +304,7 @@ export function BacklogGame({
 
   return (
     <Background theme={theme} orientation={orientation} onBack={onBack}>
+      <GameInstruction instruction={task.instruction} />
       <div className={styles.field}>
         {/* Counter */}
         <div className={styles.counter}>

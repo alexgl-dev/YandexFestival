@@ -1,7 +1,8 @@
 import { useState, useCallback, useMemo, useRef } from 'react';
-import { Background, InfoButton, PopUp } from '../../../components/ui';
+import { Background, PopUp } from '../../../components/ui';
 import type { Task, TaskPair } from '../../../types/game';
 import { CodeArchaeologyMockup } from './CodeArchaeologyMockups';
+import { GameInstruction } from '../GameInstruction';
 import styles from './MatchGame.module.css';
 
 interface GameResult {
@@ -124,8 +125,6 @@ export function MatchGame({
     });
   }, [pairs]);
 
-  const hasInstruction = Boolean(task.instruction?.trim());
-
   const [selectedLeft, setSelectedLeft] = useState<number | null>(null);
   const [matchedPairs, setMatchedPairs] = useState<Set<number>>(new Set());
   const [wrongLeft, setWrongLeft] = useState<number | null>(null);
@@ -134,7 +133,6 @@ export function MatchGame({
   const [revealedChunks, setRevealedChunks] = useState<Set<string>>(new Set());
   const [results, setResults] = useState<GameResult[]>([]);
   const [showPopup, setShowPopup] = useState(false);
-  const [showInstruction, setShowInstruction] = useState(hasInstruction);
   // Speech bubble + tooltip state
   const [speechBubbleIndex, setSpeechBubbleIndex] = useState<number | null>(null);
   const [activeTooltip, setActiveTooltip] = useState<string | null>(null);
@@ -369,14 +367,7 @@ export function MatchGame({
 
   return (
     <Background theme={theme} orientation={orientation} onBack={onBack}>
-      {hasInstruction && (
-        <InfoButton
-          size="md"
-          variant="ghost"
-          className={styles.instructionToggle}
-          onClick={() => setShowInstruction(true)}
-        />
-      )}
+      <GameInstruction instruction={task.instruction} />
       <div className={styles.wrapper}>
         {step?.prompt && <p className={styles.prompt}>{step.prompt}</p>}
 
@@ -430,18 +421,6 @@ export function MatchGame({
               Закрыть
             </button>
           </div>
-        </div>
-      )}
-
-      {/* ── Instruction overlay ── */}
-      {showInstruction && hasInstruction && (
-        <div className={`${styles.overlay} ${overlayDimClass}`}>
-          <PopUp
-            title="Инструкция"
-            description={task.instruction ?? ''}
-            buttonLabel="Понятно!"
-            onButtonClick={() => setShowInstruction(false)}
-          />
         </div>
       )}
 

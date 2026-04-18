@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
 import { Background, Card, PopUp } from '../../../components/ui';
 import type { Task, TaskOption } from '../../../types/game';
+import { GameInstruction } from '../GameInstruction';
 import styles from './FindGame.module.css';
 
 interface GameResult {
@@ -113,6 +114,7 @@ export function FindGame({ task, onComplete, onBack, theme = 'orange', orientati
 
   return (
     <Background theme={theme} orientation={orientation} onBack={onBack}>
+      <GameInstruction instruction={task.instruction} />
       <div className={styles.wrapper}>
         {step.prompt && (() => {
           const lines = step.prompt.split('\n');

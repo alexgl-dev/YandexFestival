@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { Background, Button, Icon, IconButton, InfoButton, PopUp } from '../../../components/ui';
 import type { Task, CalendarCardData } from '../../../types/game';
 import { getWeekDays } from '../../../utils/calendarDays';
+import { GameInstruction } from '../GameInstruction';
 import styles from './CalendarGamePortrait.module.css';
 
 const SLOT_COUNT = 18;    // 9:00 → 18:00
@@ -151,6 +152,7 @@ export function CalendarGamePortrait({ task, onComplete, onBack, theme = 'orange
 
   return (
     <Background theme={theme} orientation="portrait" showBackButton={false}>
+      <GameInstruction instruction={task.instruction} />
       <div className={styles.wrapper}>
       <div className={styles.layout}>
 

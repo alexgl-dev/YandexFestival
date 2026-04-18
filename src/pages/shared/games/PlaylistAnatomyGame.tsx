@@ -1,6 +1,7 @@
 import { useState, useRef, useLayoutEffect } from 'react';
 import { Background, PopUp, Badge } from '../../../components/ui';
 import type { Task } from '../../../types/game';
+import { GameInstruction } from '../GameInstruction';
 import styles from './PlaylistAnatomyGame.module.css';
 
 interface GameResult {
@@ -227,6 +228,7 @@ export function PlaylistAnatomyGame({ task, onComplete, onBack, theme = 'cobalt'
 
   return (
     <Background theme={theme} orientation={orientation} onBack={onBack}>
+      <GameInstruction instruction={task.instruction} />
       <div
         ref={wrapperRef}
         className={styles.wrapper}

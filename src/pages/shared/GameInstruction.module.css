@@ -1,0 +1,58 @@
+.infoButton {
+  position: absolute;
+  top: var(--spacing-2xl);
+  right: var(--spacing-2xl);
+  z-index: 10;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-overlay-dark);
+  z-index: 9999;
+}
+
+.termBtn {
+  display: inline;
+  background: var(--color-bg-brand-translucent);
+  border: none;
+  color: var(--color-blue);
+  font: inherit;
+  padding: 0 var(--spacing-xs);
+  margin: 0 2px;
+  border-radius: var(--radius-xs);
+  cursor: pointer;
+}
+
+.termBtn:active {
+  background: var(--color-blue);
+  color: var(--color-white);
+}
+
+.tooltipCard {
+  margin-top: var(--spacing-md);
+  padding: var(--spacing-md) var(--spacing-lg);
+  background: var(--color-grey-light);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  cursor: pointer;
+}
+
+.tooltipText {
+  margin: 0;
+  color: var(--color-black);
+  font-size: var(--font-size-xs);
+  line-height: var(--line-height-normal);
+}
+
+.tooltipDismiss {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-xs);
+  flex-shrink: 0;
+}

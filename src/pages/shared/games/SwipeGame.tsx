@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { Background, PopUp } from '../../../components/ui';
 import type { Task, CatchObject } from '../../../types/game';
+import { GameInstruction } from '../GameInstruction';
 import styles from './SwipeGame.module.css';
 
 interface GameResult {
@@ -267,6 +268,7 @@ export function SwipeGame({
 
   return (
     <Background theme={theme} orientation={orientation} onBack={onBack}>
+      <GameInstruction instruction={task.instruction} />
       <div className={styles.wrapper}>
 
         {/* Purity meter */}

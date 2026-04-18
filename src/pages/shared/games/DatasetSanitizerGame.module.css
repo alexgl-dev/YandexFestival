@@ -43,10 +43,10 @@
   line-height: var(--line-height-tight);
 }
 
-/* Glossary button (top-right corner) */
+/* Glossary button (below the instruction toggle in top-right) */
 .glossaryBtn {
   position: absolute;
-  top: var(--spacing-2xl);
+  top: calc(var(--spacing-2xl) + 60px);
   right: var(--spacing-2xl);
   z-index: 20;
 }

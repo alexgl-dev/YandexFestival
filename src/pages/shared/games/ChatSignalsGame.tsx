@@ -1,6 +1,7 @@
 import { useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import { Background, Button, InfoButton } from '../../../components/ui';
 import type { Task, ChatMessage } from '../../../types/game';
+import { GameInstruction } from '../GameInstruction';
 import styles from './ChatSignalsGame.module.css';
 
 interface GameResult {
@@ -129,6 +130,7 @@ export function ChatSignalsGame({ task, onComplete, onBack, theme = 'orange', or
 
   return (
     <Background theme={theme} orientation={orientation} onBack={onBack}>
+      <GameInstruction instruction={task.instruction} />
       <div className={styles.page}>
         <div className={styles.gameHeader}>
           <div className={styles.timerPill}>

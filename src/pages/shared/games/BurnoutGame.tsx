@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
-import { Background, Button, Icon, InfoButton, PopUp } from '../../../components/ui';
+import { Background, Button, Icon, PopUp } from '../../../components/ui';
 import type { Task, TaskOption } from '../../../types/game';
+import { GameInstruction } from '../GameInstruction';
 import styles from './BurnoutGame.module.css';
 
 const DETAIL_ICONS: Record<string, string> = {
@@ -62,9 +63,6 @@ export function BurnoutGame({
   const [cardStates, setCardStates] = useState<Record<number, ProfileState>>({});
   const [lockedCorrect, setLockedCorrect] = useState<number | null>(null);
   const [results, setResults] = useState<GameResult[]>([]);
-  const [showInstruction, setShowInstruction] = useState(false);
-
-  const hasInstruction = Boolean(task.instruction?.trim());
 
   const handleOpen = useCallback(
     (index: number) => {
@@ -133,14 +131,7 @@ export function BurnoutGame({
 
   return (
     <Background theme={theme} orientation={orientation} onBack={onBack}>
-      {hasInstruction && (
-        <InfoButton
-          size="md"
-          variant="ghost"
-          className={styles.instructionToggle}
-          onClick={() => setShowInstruction(true)}
-        />
-      )}
+      <GameInstruction instruction={task.instruction} />
       <div className={styles.wrapper}>
         {step.prompt && <h2 className={styles.prompt}>{step.prompt}</h2>}
 
@@ -266,22 +257,6 @@ export function BurnoutGame({
         </div>
       )}
 
-      {showInstruction && hasInstruction && (
-        <div className={overlayClass}>
-          <div className={styles.instructionPanel}>
-            <button
-              type="button"
-              className={styles.instructionClose}
-              onClick={() => setShowInstruction(false)}
-              aria-label="Закрыть инструкцию"
-            >
-              ×
-            </button>
-            <h2 className={styles.instructionTitle}>Как играть</h2>
-            <p className={styles.instructionBody}>{task.instruction}</p>
-          </div>
-        </div>
-      )}
     </Background>
   );
 }

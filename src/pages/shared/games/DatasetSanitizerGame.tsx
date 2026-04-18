@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
 import { Background, InfoButton, PopUp } from '../../../components/ui';
 import type { CatchObject, Task } from '../../../types/game';
+import { GameInstruction } from '../GameInstruction';
 import styles from './DatasetSanitizerGame.module.css';
 
 interface GameResult {
@@ -336,6 +337,7 @@ export function DatasetSanitizerGame({
 
   return (
     <Background theme={theme} orientation={orientation} onBack={onBack}>
+      <GameInstruction instruction={task.instruction} />
       <div className={styles.field}>
         {/* ── Purity meter (top, spans between back button and ?) ── */}
         <div className={styles.meterWrap}>

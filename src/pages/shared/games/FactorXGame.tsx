@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { Background, PopUp } from '../../../components/ui';
 import type { Task } from '../../../types/game';
+import { GameInstruction } from '../GameInstruction';
 import styles from './FactorXGame.module.css';
 
 const TIMER_SECONDS = 20;
@@ -131,6 +132,7 @@ export function FactorXGame({ task, onComplete, onBack, theme = 'cobalt' }: Prop
 
   return (
     <Background theme={theme} orientation="landscape" onBack={onBack}>
+      <GameInstruction instruction={task.instruction} />
       <div className={styles.layout}>
 
         {/* ── Accuracy bar ── */}

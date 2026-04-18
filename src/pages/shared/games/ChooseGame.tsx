@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect } from 'react';
 import { Background, Card, PopUp } from '../../../components/ui';
 import type { Task, TaskOption } from '../../../types/game';
+import { GameInstruction } from '../GameInstruction';
 import styles from './ChooseGame.module.css';
 
 interface GameResult {
@@ -109,21 +110,26 @@ export function ChooseGame({ task, onComplete, onBack, theme = 'orange', orienta
 
   return (
     <Background theme={theme} orientation={orientation} onBack={onBack}>
+      <GameInstruction instruction={task.instruction} />
       <div className={styles.wrapper}>
-        {step.prompt && (
+        {!isImageMode && step.prompt && (
           <p className={styles.prompt}>{step.prompt}</p>
         )}
 
         {isImageMode ? (
           <>
-            {step.image && (
-              <div className={styles.eventImageWrap}>
-                <span className={styles.eventLabel}>Мероприятие</span>
-                <img
-                  src={step.image}
-                  alt="Мероприятие"
-                  className={styles.eventImage}
-                />
+            {(step.image || step.prompt) && (
+              <div className={styles.promptCard}>
+                {step.image && (
+                  <img
+                    src={step.image}
+                    alt=""
+                    className={styles.promptImage}
+                  />
+                )}
+                {step.prompt && (
+                  <p className={styles.promptText}>{step.prompt}</p>
+                )}
               </div>
             )}
 

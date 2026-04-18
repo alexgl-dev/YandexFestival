@@ -2,13 +2,12 @@ import { useState, useEffect } from 'react';
 import { useNavigate, useParams, useOutletContext } from 'react-router';
 import type { SectionData } from '../../types/game';
 import { TaskIntro } from '../shared/TaskIntro';
-import { TaskInstruction } from '../shared/TaskInstruction';
 import { TaskMoral } from '../shared/TaskMoral';
 import { TaskResult } from '../shared/TaskResult';
 import { GameRouter } from '../shared/GameRouter';
 import styles from './TaskPage.module.css';
 
-type Phase = 'intro' | 'instruction' | 'game' | 'result' | 'moral';
+type Phase = 'intro' | 'game' | 'result' | 'moral';
 
 type Result = {
   answer: string;
@@ -49,17 +48,8 @@ export function TaskPage() {
       return (
         <TaskIntro
           task={task}
-          onStart={() => setPhase(task.instruction && task.mechanic !== 'label' ? 'instruction' : 'game')}
+          onStart={() => setPhase('game')}
           onBack={() => navigate(-1)}
-          theme={data.theme}
-          orientation={data.orientation}
-        />
-      );
-    case 'instruction':
-      return (
-        <TaskInstruction
-          instruction={task.instruction!}
-          onContinue={() => setPhase('game')}
           theme={data.theme}
           orientation={data.orientation}
         />

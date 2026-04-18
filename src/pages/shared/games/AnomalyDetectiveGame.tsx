@@ -1,6 +1,7 @@
 import { useState, useCallback, useMemo } from 'react';
 import { Background, Button, Card, PopUp } from '../../../components/ui';
 import type { Task, TaskOption } from '../../../types/game';
+import { GameInstruction } from '../GameInstruction';
 import styles from './AnomalyDetectiveGame.module.css';
 
 interface GameResult {
@@ -434,6 +435,7 @@ export function AnomalyDetectiveGame({
 
   return (
     <Background theme={theme} orientation={orientation} onBack={onBack}>
+      <GameInstruction instruction={task.instruction} />
       <div className={styles.wrapper}>
         <p className={styles.prompt}>{promptText}</p>
 

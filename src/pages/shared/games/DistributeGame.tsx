@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Background, PopUp } from '../../../components/ui';
 import type { Task, TaskCategory } from '../../../types/game';
+import { GameInstruction } from '../GameInstruction';
 import styles from './DistributeGame.module.css';
 
 interface GameResult {
@@ -69,6 +70,7 @@ export function DistributeGame({ task, onComplete, onBack, theme = 'cobalt', ori
 
   return (
     <Background theme={theme} orientation={orientation} onBack={onBack}>
+      <GameInstruction instruction={task.instruction} />
       <div className={styles.layout} onClick={() => setActivePopup(null)}>
 
         {/* ══ TOP: 2×2 folder grid ══ */}

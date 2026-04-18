@@ -2,6 +2,7 @@ import { useState, useCallback, useRef, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { Background, Button, Icon } from '../../../components/ui';
 import type { Task } from '../../../types/game';
+import { GameInstruction } from '../GameInstruction';
 import styles from './UxSequenceGame.module.css';
 
 interface GameResult {
@@ -317,6 +318,7 @@ export function UxSequenceGame({
 
   return (
     <Background theme={theme} orientation={orientation} onBack={onBack}>
+      <GameInstruction instruction={task.instruction} />
       <div className={styles.page}>
         <div className={styles.topRow}>
           <p className={styles.title}>{task.title}</p>

@@ -1,5 +1,6 @@
 import { Background, Badge, Button } from '../../components/ui';
 import type { Task } from '../../types/game';
+import { GameInstruction } from './GameInstruction';
 import styles from './GamePlaceholder.module.css';
 
 interface ResultItem {
@@ -24,6 +25,7 @@ export function GamePlaceholder({ task, onComplete, theme = 'orange', orientatio
 
   return (
     <Background theme={theme} orientation={orientation}>
+      <GameInstruction instruction={task.instruction} />
       <div className={styles.wrapper}>
         <div className={styles.content}>
           <h2 className={styles.title}>{task.title}</h2>

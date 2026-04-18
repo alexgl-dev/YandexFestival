@@ -1,6 +1,7 @@
 import { useState, useCallback, useMemo, useRef, type ReactNode } from 'react';
 import { Background, Button, PopUp } from '../../../components/ui';
 import type { Task } from '../../../types/game';
+import { GameInstruction } from '../GameInstruction';
 import styles from './CodeSequenceGame.module.css';
 
 interface GameResult {
@@ -119,7 +120,6 @@ export function CodeSequenceGame({
   const [showPopup, setShowPopup] = useState(false);
   const [mood, setMood] = useState<RobotMood>('neutral');
   const [tooltip, setTooltip] = useState<string | null>(null);
-  const [stage, setStage] = useState<'briefing' | 'playing'>('briefing');
   const [briefingOpen, setBriefingOpen] = useState(false);
   const dragSourceRef = useRef<number | null>(null);
 
@@ -277,33 +277,9 @@ export function CodeSequenceGame({
     </div>
   );
 
-  if (stage === 'briefing') {
-    return (
-      <Background theme={theme} orientation={orientation} onBack={onBack}>
-        <div className={styles.briefingPage} onClick={() => setTooltip(null)}>
-          <div className={styles.briefingTopRow}>
-            <div className={`${styles.robot} ${styles.robotLarge} ${styles[`mood_${mood}`]}`}>
-              <img src={robotSrc} alt="Робот" className={styles.robotImg} />
-            </div>
-            {renderBubble('briefing')}
-          </div>
-          <div className={styles.briefingActions} onClick={(e) => e.stopPropagation()}>
-            <Button
-              label="Далее"
-              type="main"
-              onClick={() => {
-                setTooltip(null);
-                setStage('playing');
-              }}
-            />
-          </div>
-        </div>
-      </Background>
-    );
-  }
-
   return (
     <Background theme={theme} orientation={orientation} onBack={onBack}>
+      <GameInstruction instruction={task.instruction} />
       <button
         type="button"
         className={`${styles.floatingRobot} ${styles[`mood_${mood}`]}`}

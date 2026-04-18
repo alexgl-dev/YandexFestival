@@ -2,6 +2,7 @@ import { useState, useCallback, useRef, useEffect } from 'react';
 import { createPortal } from 'react-dom';
 import { Background, Button, ListItem, PopUp } from '../../../components/ui';
 import type { Task } from '../../../types/game';
+import { GameInstruction } from '../GameInstruction';
 import styles from './SequenceGame.module.css';
 
 interface GameResult {
@@ -202,10 +203,8 @@ export function SequenceGame({ task, onComplete, onBack, theme = 'orange', orien
 
   return (
     <Background theme={theme} orientation={orientation} onBack={onBack}>
+      <GameInstruction instruction={task.instruction} />
       <div className={styles.page}>
-        {task.instruction && (
-          <p className={styles.prompt}>{task.instruction}</p>
-        )}
         <div className={styles.columns}>
           <div className={styles.left}>
             <p className={styles.heading}>Доступные шаги</p>

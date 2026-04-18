@@ -1,6 +1,7 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
 import { Background, Button, InfoButton } from '../../../components/ui';
 import type { Task, TaskBlock } from '../../../types/game';
+import { GameInstruction } from '../GameInstruction';
 import styles from './LaunchSequenceGame.module.css';
 
 interface GameResult {
@@ -387,6 +388,7 @@ export function LaunchSequenceGame({
 
   return (
     <Background theme={theme} orientation={orientation} onBack={onBack}>
+      <GameInstruction instruction={task.instruction} />
       <div className={styles.wrapper}>
         {/* Top row: placed counter + attempt counter */}
         <div className={styles.topRow}>

@@ -1,6 +1,7 @@
 import { useState, useCallback } from 'react';
 import { Background, InfoButton, PopUp } from '../../../components/ui';
 import type { Task } from '../../../types/game';
+import { GameInstruction } from '../GameInstruction';
 import styles from './CategorizeGame.module.css';
 
 interface GameResult {
@@ -120,6 +121,7 @@ export function CategorizeGame({ task, onComplete, onBack, theme = 'cobalt', ori
 
   return (
     <Background theme={theme} orientation={orientation} onBack={onBack}>
+      <GameInstruction instruction={task.instruction} />
       <div className={styles.wrapper}>
         <p className={styles.instruction}>{step.prompt || 'Перетащи карточки в нужную зону'}</p>
 
