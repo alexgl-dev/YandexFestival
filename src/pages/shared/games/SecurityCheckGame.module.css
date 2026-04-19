@@ -41,11 +41,34 @@
   max-width: 1200px;
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-md);
   flex: 1;
   min-height: 0;
-  overflow-y: auto;
   box-sizing: border-box;
+}
+
+.emailCardScroll {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  overflow-y: auto;
+}
+
+.hintFooter {
+  flex-shrink: 0;
+  display: flex;
+  justify-content: flex-end;
+  padding-top: var(--spacing-md);
+  margin-top: var(--spacing-sm);
+  border-top: var(--border-width-sm) solid var(--color-grey-secondary);
+}
+
+.hintButton {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  padding: var(--spacing-xs) var(--spacing-lg);
+  gap: var(--spacing-sm);
 }
 
 .emailHeader {
@@ -106,22 +129,37 @@
 
 /* ── Notable / tappable elements ─────────────────────────────── */
 
-.notable {
+/* Фиксированная «коробка» до показа подсказки — без скачка при появлении фона и «?» */
+.notableHitArea {
   position: relative;
-  cursor: pointer;
-  border-radius: var(--radius-xs);
+  display: inline;
   padding: 2px 6px;
-  transition: background-color 0.15s ease;
+  border-radius: var(--radius-xs);
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+  background-color: transparent;
+  outline-width: var(--border-width-sm);
+  outline-style: dashed;
+  outline-color: transparent;
+  outline-offset: 0;
+}
+
+.notable {
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    outline-color 0.15s ease,
+    filter 0.15s ease;
 }
 
 .notableInfo {
   background-color: var(--color-bg-brand-translucent);
-  outline: var(--border-width-sm) dashed var(--color-blue);
+  outline-color: var(--color-blue);
 }
 
 .notableSuspicious {
   background-color: var(--color-overlay-red);
-  outline: var(--border-width-sm) dashed var(--color-red);
+  outline-color: var(--color-red);
 }
 
 .notableActive {
@@ -164,6 +202,10 @@
   box-shadow: var(--shadow-card);
   cursor: default;
   white-space: normal;
+  /* Не наследовать break-all от .link — перенос по границам слов */
+  word-break: normal;
+  overflow-wrap: normal;
+  hyphens: manual;
 }
 
 /* ── Link / attachment blocks ───────────────────────────────── */
@@ -181,6 +223,11 @@
 
 .linkSuspicious {
   color: var(--color-red);
+}
+
+.linkNeutral {
+  color: var(--color-black);
+  text-decoration-color: var(--color-grey-secondary);
 }
 
 .attachment {

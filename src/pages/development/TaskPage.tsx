@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, useParams, useOutletContext } from 'react-router';
+import { useNavigate, useParams, useOutletContext, useSearchParams } from 'react-router';
 import type { SectionData } from '../../types/game';
 import { TaskIntro } from '../shared/TaskIntro';
 import { TaskMoral } from '../shared/TaskMoral';
@@ -18,16 +18,19 @@ type Result = {
 export function TaskPage() {
   const { taskId } = useParams();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const data = useOutletContext<SectionData>();
   const task = data.tasks.find((t) => t.id === taskId);
 
-  const [phase, setPhase] = useState<Phase>('intro');
+  const moralPreview = import.meta.env.DEV && searchParams.get('moral') === '1';
+
+  const [phase, setPhase] = useState<Phase>(() => (moralPreview ? 'moral' : 'intro'));
   const [results, setResults] = useState<Result[]>([]);
 
   useEffect(() => {
-    setPhase('intro');
     setResults([]);
-  }, [taskId]);
+    setPhase(moralPreview ? 'moral' : 'intro');
+  }, [taskId, moralPreview]);
 
   if (!task) {
     return <div className={styles.notFound}>Задание не найдено</div>;
@@ -62,7 +65,7 @@ export function TaskPage() {
           onComplete={(r) => {
             setResults(r);
             const allCorrect = r.length > 0 && r.every((item) => item.correct);
-            setPhase(allCorrect ? 'moral' : 'result');
+            setPhase(allCorrect || task.id === 'security-check' ? 'moral' : 'result');
           }}
           theme={data.theme}
           orientation={data.orientation}

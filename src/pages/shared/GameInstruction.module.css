@@ -5,6 +5,11 @@
   z-index: 10;
 }
 
+.instructionLead {
+  font-weight: var(--font-weight-bold);
+  color: var(--color-black);
+}
+
 .overlay {
   position: absolute;
   inset: 0;

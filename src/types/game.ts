@@ -200,6 +200,8 @@ export interface Task {
   steps: TaskStep[];
   moral: string;
   moralFailure?: string;
+  /** Подсветка терминов в морали: тап открывает то же всплывающее окно, что и introTooltips на вступлении. */
+  moralTooltips?: GlossaryTerm[];
   hidden?: boolean;
 }
 

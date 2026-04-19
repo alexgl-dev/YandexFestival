@@ -70,7 +70,10 @@ export function DistributeGame({ task, onComplete, onBack, theme = 'cobalt', ori
 
   return (
     <Background theme={theme} orientation={orientation} onBack={onBack}>
-      <GameInstruction instruction={task.instruction} />
+      <GameInstruction
+        instruction={task.instruction ?? task.intro}
+        initialOpen={task.instruction?.trim() ? undefined : false}
+      />
       <div className={styles.layout} onClick={() => setActivePopup(null)}>
 
         {/* ══ TOP: 2×2 folder grid ══ */}

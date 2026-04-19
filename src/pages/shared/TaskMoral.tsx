@@ -1,6 +1,8 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router';
-import { Background, PopUp } from '../../components/ui';
-import type { Task } from '../../types/game';
+import { Background, Button, PopUp } from '../../components/ui';
+import type { GlossaryTerm, Task } from '../../types/game';
+import { parseGlossarySegments } from './parseGlossarySegments';
 import styles from './TaskMoral.module.css';
 
 interface TaskMoralProps {
@@ -30,14 +32,62 @@ function parseMoral(text: string): { main: string; question: string | null } {
   return { main: text, question: null };
 }
 
+function MoralParagraph({
+  text,
+  tooltips,
+  className,
+  onTermClick,
+}: {
+  text: string;
+  tooltips: GlossaryTerm[];
+  className: string;
+  onTermClick: (t: GlossaryTerm) => void;
+}) {
+  if (!tooltips.length) {
+    return <p className={className}>{text}</p>;
+  }
+  const segments = parseGlossarySegments(text, tooltips);
+  return (
+    <p className={className}>
+      {segments.map((seg, i) =>
+        seg.tooltip ? (
+          <span
+            key={i}
+            className={styles.tooltipWord}
+            onClick={() => onTermClick(seg.tooltip!)}
+          >
+            {seg.text}
+          </span>
+        ) : (
+          <span key={i}>{seg.text}</span>
+        ),
+      )}
+    </p>
+  );
+}
+
 export function TaskMoral({ task, onNext, isLast, sectionSlug, theme = 'orange', orientation = 'portrait' }: TaskMoralProps) {
   const navigate = useNavigate();
   const { main, question } = parseMoral(task.moral);
+  const moralTooltips = task.moralTooltips ?? [];
+  const [activeTooltip, setActiveTooltip] = useState<GlossaryTerm | null>(null);
 
   const description = (
     <>
-      <p className={styles.moralText}>{main}</p>
-      {question && <p className={`${styles.moralText} ${styles.moralQuestion}`}>{question}</p>}
+      <MoralParagraph
+        text={main}
+        tooltips={moralTooltips}
+        className={styles.moralText}
+        onTermClick={setActiveTooltip}
+      />
+      {question && (
+        <MoralParagraph
+          text={question}
+          tooltips={moralTooltips}
+          className={`${styles.moralText} ${styles.moralQuestion}`}
+          onTermClick={setActiveTooltip}
+        />
+      )}
     </>
   );
 
@@ -50,6 +100,17 @@ export function TaskMoral({ task, onNext, isLast, sectionSlug, theme = 'orange',
         secondaryButtonLabel="Меню заданий"
         onSecondaryButtonClick={() => navigate(`/${sectionSlug}/tasks`)}
       />
+      {activeTooltip && (
+        <div className={styles.overlay} onClick={() => setActiveTooltip(null)}>
+          <div className={styles.tooltipCard} onClick={(e) => e.stopPropagation()}>
+            <p className={styles.tooltipWord_title}>
+              {activeTooltip.word.charAt(0).toUpperCase() + activeTooltip.word.slice(1)}
+            </p>
+            <p className={styles.tooltipWord_text}>{activeTooltip.definition}</p>
+            <Button label="Понятно" type="main" onClick={() => setActiveTooltip(null)} />
+          </div>
+        </div>
+      )}
     </Background>
   );
 }

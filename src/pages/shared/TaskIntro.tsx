@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Background, Badge, Button, Icon } from '../../components/ui';
 import type { Task, GlossaryTerm } from '../../types/game';
+import { parseGlossarySegments } from './parseGlossarySegments';
 import styles from './TaskIntro.module.css';
 
 interface TaskIntroProps {
@@ -11,37 +12,12 @@ interface TaskIntroProps {
   orientation?: 'landscape' | 'portrait';
 }
 
-function parseIntro(text: string, tooltips: GlossaryTerm[]): Array<{ text: string; tooltip?: GlossaryTerm }> {
-  if (!tooltips.length) return [{ text }];
-
-  const positions: Array<{ start: number; end: number; tooltip: GlossaryTerm }> = [];
-  for (const t of tooltips) {
-    let idx = text.toLowerCase().indexOf(t.word.toLowerCase());
-    while (idx !== -1) {
-      positions.push({ start: idx, end: idx + t.word.length, tooltip: t });
-      idx = text.toLowerCase().indexOf(t.word.toLowerCase(), idx + 1);
-    }
-  }
-  positions.sort((a, b) => a.start - b.start);
-
-  const segments: Array<{ text: string; tooltip?: GlossaryTerm }> = [];
-  let pos = 0;
-  for (const p of positions) {
-    if (p.start < pos) continue;
-    if (p.start > pos) segments.push({ text: text.slice(pos, p.start) });
-    segments.push({ text: text.slice(p.start, p.end), tooltip: p.tooltip });
-    pos = p.end;
-  }
-  if (pos < text.length) segments.push({ text: text.slice(pos) });
-  return segments;
-}
-
 export function TaskIntro({ task, onStart, onBack, theme = 'orange', orientation = 'portrait' }: TaskIntroProps) {
   const modeLabel = task.mode === 'group' ? 'Групповое' : 'Индивидуальное';
   const durationLabel = `${task.duration} минут`;
   const [activeTooltip, setActiveTooltip] = useState<GlossaryTerm | null>(null);
 
-  const segments = parseIntro(task.intro, task.introTooltips ?? []);
+  const segments = parseGlossarySegments(task.intro, task.introTooltips ?? []);
 
   return (
     <Background theme={theme} orientation={orientation} onBack={onBack}>

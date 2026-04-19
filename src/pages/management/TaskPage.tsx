@@ -62,7 +62,7 @@ export function TaskPage() {
           onComplete={(r) => {
             setResults(r);
             const allCorrect = r.length > 0 && r.every((item) => item.correct);
-            setPhase(allCorrect ? 'moral' : 'result');
+            setPhase(allCorrect || task.id === 'security-check' ? 'moral' : 'result');
           }}
           theme={data.theme}
           orientation={data.orientation}
