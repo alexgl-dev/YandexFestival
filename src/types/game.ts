@@ -193,6 +193,8 @@ export interface Task {
   profession: string;
   duration: number;
   mode: Mode;
+  /** Не показывать бейдж «Групповое» / «Индивидуальное» на экране вступления к задаче */
+  hideIntroModeBadge?: boolean;
   order: number;
   isLast: boolean;
   feedback: Feedback;

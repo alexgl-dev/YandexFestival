@@ -26,11 +26,13 @@ export function TaskIntro({ task, onStart, onBack, theme = 'orange', orientation
 
         <div className={styles.card}>
           <div className={styles.badges}>
-            <Badge
-              label={modeLabel}
-              type="filled"
-              icon={<Icon name="people" color="white" size="xs" />}
-            />
+            {!task.hideIntroModeBadge && (
+              <Badge
+                label={modeLabel}
+                type="filled"
+                icon={<Icon name="people" color="white" size="xs" />}
+              />
+            )}
             <Badge
               label={durationLabel}
               type="filled"

@@ -75,7 +75,8 @@ export function TaskPage() {
                 archaeologyWin ||
                 task.id === 'security-check' ||
                 task.id === 'languages-intro' ||
-                task.id === 'shopping-list'
+                task.id === 'shopping-list' ||
+                task.id === 'dataset-sanitizers'
                 ? 'moral'
                 : 'result',
             );

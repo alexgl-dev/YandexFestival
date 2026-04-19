@@ -86,6 +86,8 @@ export function DatasetSanitizerGame({
   const [wrongCount, setWrongCount] = useState(0);
   const [finished, setFinished] = useState(false);
   const [showGlossary, setShowGlossary] = useState(false);
+  const hasInstruction = !!task.instruction?.trim();
+  const [playStarted, setPlayStarted] = useState(!hasInstruction);
 
   const cardsRef = useRef(new Map<number, ActiveCard>());
   const cardElsRef = useRef(new Map<number, HTMLDivElement | null>());
@@ -187,8 +189,10 @@ export function DatasetSanitizerGame({
     [addToast, fieldHeight],
   );
 
-  // ── RAF loop: timer + spawn + fall ─────────────────────────────
+  // ── RAF loop: timer + spawn + fall (после «Начать» в инструкции) ─
   useEffect(() => {
+    if (!playStarted) return;
+
     gameStartRef.current = performance.now();
     lastSpawnRef.current = performance.now() - SPAWN_INTERVAL_MS; // spawn first immediately
     lastTickRef.current = null;
@@ -243,8 +247,9 @@ export function DatasetSanitizerGame({
 
     rafRef.current = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(rafRef.current);
+    // spawnNext / resolveCard / fieldHeight — замыкание на момент старта игры
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [playStarted]);
 
   // ── pointer (drag) handlers ────────────────────────────────────
   const handlePointerDown = useCallback(
@@ -337,7 +342,10 @@ export function DatasetSanitizerGame({
 
   return (
     <Background theme={theme} orientation={orientation} onBack={onBack}>
-      <GameInstruction instruction={task.instruction} />
+      <GameInstruction
+        instruction={task.instruction}
+        onClose={() => setPlayStarted(true)}
+      />
       <div className={styles.field}>
         {/* ── Purity meter (top, spans between back button and ?) ── */}
         <div className={styles.meterWrap}>

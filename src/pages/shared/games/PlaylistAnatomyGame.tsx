@@ -2,6 +2,7 @@ import { useState, useRef, useLayoutEffect } from 'react';
 import { Background, PopUp, Badge } from '../../../components/ui';
 import type { Task } from '../../../types/game';
 import { GameInstruction } from '../GameInstruction';
+import { InstructionRichText } from '../InstructionRichText';
 import styles from './PlaylistAnatomyGame.module.css';
 
 interface GameResult {
@@ -295,7 +296,7 @@ export function PlaylistAnatomyGame({ task, onComplete, onBack, theme = 'cobalt'
               icon="done"
               iconColor="blue"
               title="Верно!"
-              description={explanation.text}
+              description={<InstructionRichText text={explanation.text} />}
               buttonLabel="Продолжить"
               onButtonClick={() => setExplanation(null)}
             />
@@ -309,7 +310,7 @@ export function PlaylistAnatomyGame({ task, onComplete, onBack, theme = 'cobalt'
               icon="done"
               iconColor="blue"
               title="Все карточки разложены!"
-              description={task.moral ?? ''}
+              description={<InstructionRichText text={task.moral ?? ''} />}
               buttonLabel="Завершить"
               onButtonClick={handleComplete}
             />
