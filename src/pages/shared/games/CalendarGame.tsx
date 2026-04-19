@@ -1,8 +1,9 @@
-import { useState } from 'react';
+import { useCallback, useRef, useState } from 'react';
 import { Background, Button, Icon, InfoButton, PopUp } from '../../../components/ui';
 import type { Task, CalendarCardData } from '../../../types/game';
 import { getWeekDays } from '../../../utils/calendarDays';
 import { GameInstruction } from '../GameInstruction';
+import { computeStartSlotFromClientY } from './calendarSlotMath';
 import styles from './CalendarGame.module.css';
 
 const SLOT_HEIGHT = 48;
@@ -74,9 +75,11 @@ export function CalendarGame({ task, onComplete, onBack, theme = 'orange' }: Pro
   const [hoverSlot, setHoverSlot] = useState<{ day: string; slot: number } | null>(null);
   const [conflict, setConflict] = useState<{ day: string; slot: number } | null>(null);
   const [tooltipCard, setTooltipCard] = useState<CalendarCardData | null>(null);
-  const [checked, setChecked] = useState(false);
   const [results, setResults] = useState<Record<string, boolean>>({});
   const [showResult, setShowResult] = useState(false);
+  /** Выбор карточки тапом: затем тап по колонке дня ставит задачу (работает там, где нет HTML5 drag). */
+  const [pickId, setPickId] = useState<string | null>(null);
+  const suppressPoolClickRef = useRef(false);
 
   const allPlaced = taskCards.every(c => placements[c.id]);
 
@@ -87,47 +90,73 @@ export function CalendarGame({ task, onComplete, onBack, theme = 'orange' }: Pro
     e.dataTransfer.setDragImage(canvas, 0, 0);
   };
 
-  const getSlotFromEvent = (e: React.DragEvent<HTMLDivElement>, durationSlots: number) => {
-    const el = e.currentTarget;
-    const rect = el.getBoundingClientRect();
-    // convert viewport coords → layout coords (accounts for CSS transform scale)
-    const toLayout = el.offsetHeight / rect.height;
-    const relY = (e.clientY - rect.top) * toLayout - PADDING_V;
-    return Math.min(Math.max(0, Math.round(relY / SLOT_HEIGHT)), SLOT_COUNT - durationSlots);
-  };
+  const getSlotFromEvent = (e: React.DragEvent<HTMLDivElement>, durationSlots: number) =>
+    computeStartSlotFromClientY(e.clientY, e.currentTarget, PADDING_V, SLOT_HEIGHT, SLOT_COUNT, durationSlots);
+
+  const commitPlacement = useCallback(
+    (cardId: string, day: string, columnEl: HTMLDivElement, clientY: number) => {
+      if (showResult) return;
+      const card = taskCards.find((c) => c.id === cardId);
+      if (!card) return;
+      const slot = computeStartSlotFromClientY(
+        clientY,
+        columnEl,
+        PADDING_V,
+        SLOT_HEIGHT,
+        SLOT_COUNT,
+        card.durationSlots,
+      );
+      const occupied = getOccupied(day, placements, allCards, cardId);
+      const hasConflict = Array.from({ length: card.durationSlots }, (_, i) => slot + i).some((s) =>
+        occupied.has(s),
+      );
+      if (hasConflict) {
+        setConflict({ day, slot });
+        setTimeout(() => setConflict(null), 500);
+      } else {
+        setPlacements((prev) => ({ ...prev, [cardId]: { day, startSlot: slot } }));
+        setPickId(null);
+      }
+      setDraggingId(null);
+      setHoverSlot(null);
+    },
+    [showResult, taskCards, placements, allCards],
+  );
 
   const handleDrop = (day: string, e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
-    if (!draggingId || checked) return;
-    const card = taskCards.find(c => c.id === draggingId);
-    if (!card) return;
-    const slot = getSlotFromEvent(e, card.durationSlots);
-    const occupied = getOccupied(day, placements, allCards, draggingId);
-    const hasConflict = Array.from({ length: card.durationSlots }, (_, i) => slot + i).some(s => occupied.has(s));
-    if (hasConflict) {
-      setConflict({ day, slot });
-      setTimeout(() => setConflict(null), 500);
-    } else {
-      setPlacements(prev => ({ ...prev, [draggingId]: { day, startSlot: slot } }));
-    }
-    setDraggingId(null);
-    setHoverSlot(null);
+    if (!draggingId || showResult) return;
+    commitPlacement(draggingId, day, e.currentTarget, e.clientY);
+  };
+
+  const handleDayColumnClick = (day: string, e: React.MouseEvent<HTMLDivElement>) => {
+    if (showResult || !pickId) return;
+    if ((e.target as HTMLElement).closest?.(`.${styles.placedCard}`)) return;
+    commitPlacement(pickId, day, e.currentTarget, e.clientY);
   };
 
   const handlePlacedCardClick = (cardId: string, e: React.MouseEvent) => {
     e.stopPropagation();
-    if (checked) return;
-    setPlacements(prev => { const next = { ...prev }; delete next[cardId]; return next; });
+    if (results[cardId] === true) return;
+    setPlacements((prev) => {
+      const next = { ...prev };
+      delete next[cardId];
+      return next;
+    });
   };
 
   const handleCheck = () => {
     const res: Record<string, boolean> = {};
+    const nextPlacements: Record<string, Placement> = { ...placements };
     for (const card of taskCards) {
       const p = placements[card.id];
-      res[card.id] = p ? isCorrect(card, p.day, p.startSlot) : false;
+      const ok = p ? isCorrect(card, p.day, p.startSlot) : false;
+      res[card.id] = ok;
+      if (p && !ok) delete nextPlacements[card.id];
     }
+    setPickId(null);
     setResults(res);
-    setChecked(true);
+    setPlacements(nextPlacements);
     setShowResult(true);
   };
 
@@ -139,7 +168,9 @@ export function CalendarGame({ task, onComplete, onBack, theme = 'orange' }: Pro
   return (
     <Background theme={theme} orientation="landscape" onBack={onBack}>
       <GameInstruction instruction={task.instruction} />
-      <div className={styles.layout}>
+      <div className={styles.gameRoot}>
+        {step.prompt && <p className={styles.prompt}>{step.prompt}</p>}
+        <div className={styles.layout}>
 
         {/* ══ LEFT: task pool ══ */}
         <div className={styles.pool}>
@@ -147,16 +178,39 @@ export function CalendarGame({ task, onComplete, onBack, theme = 'orange' }: Pro
           <div className={styles.poolList}>
             {taskCards.map(card => {
               const placed = !!placements[card.id];
-              if (placed && !checked) return null;
-              const ok = checked ? results[card.id] : undefined;
+              if (placed) return null;
+              const ok = card.id in results ? results[card.id] : undefined;
               const isDragging = draggingId === card.id;
               return (
                 <div
                   key={card.id}
-                  draggable={!checked}
-                  className={`${styles.poolCard} ${isDragging ? styles.poolCardDragging : ''} ${checked && ok ? styles.poolCardCorrect : ''} ${checked && ok === false ? styles.poolCardWrong : ''}`}
-                  onDragStart={e => { setDraggingId(card.id); hideDragImage(e); }}
-                  onDragEnd={() => { setDraggingId(null); setHoverSlot(null); }}
+                  draggable={!showResult}
+                  className={`${styles.poolCard} ${isDragging ? styles.poolCardDragging : ''} ${pickId === card.id ? styles.poolCardPicked : ''} ${ok === true ? styles.poolCardCorrect : ''} ${ok === false ? styles.poolCardWrong : ''}`}
+                  onDragStart={(e) => {
+                    try {
+                      e.dataTransfer.setData('text/plain', card.id);
+                      e.dataTransfer.effectAllowed = 'move';
+                    } catch {
+                      /* Safari */
+                    }
+                    setPickId(null);
+                    setDraggingId(card.id);
+                    hideDragImage(e);
+                  }}
+                  onDragEnd={() => {
+                    setDraggingId(null);
+                    setHoverSlot(null);
+                    suppressPoolClickRef.current = true;
+                    window.setTimeout(() => {
+                      suppressPoolClickRef.current = false;
+                    }, 350);
+                  }}
+                  onClick={(e) => {
+                    if (showResult) return;
+                    if (suppressPoolClickRef.current) return;
+                    if ((e.target as HTMLElement).closest('button')) return;
+                    setPickId((prev) => (prev === card.id ? null : card.id));
+                  }}
                 >
                   <div className={styles.poolCardHeader}>
                     <p className={styles.poolCardTitle}>{card.title}</p>
@@ -170,7 +224,7 @@ export function CalendarGame({ task, onComplete, onBack, theme = 'orange' }: Pro
                     <Icon name="clock" color="blue" size="xs" />
                     <span className={styles.poolCardDurationText}>{formatDuration(card.durationSlots)}</span>
                   </div>
-                  {checked && ok === false && placements[card.id] && (
+                  {ok === false && !placements[card.id] && (
                     <p className={styles.wrongNote}>{card.wrongExplanation}</p>
                   )}
                 </div>
@@ -207,8 +261,9 @@ export function CalendarGame({ task, onComplete, onBack, theme = 'orange' }: Pro
               </div>
 
               {DAYS.map(day => {
-                const occupied = getOccupied(day.id, placements, allCards, draggingId ?? '');
-                const draggingCard = draggingId ? taskCards.find(c => c.id === draggingId) : null;
+                const activeDragId = draggingId ?? pickId ?? '';
+                const occupied = getOccupied(day.id, placements, allCards, activeDragId);
+                const draggingCard = draggingId ? taskCards.find((c) => c.id === draggingId) : null;
 
                 let previewSlots: number[] = [];
                 if (draggingCard && hoverSlot?.day === day.id) {
@@ -220,17 +275,20 @@ export function CalendarGame({ task, onComplete, onBack, theme = 'orange' }: Pro
                 return (
                   <div
                     key={day.id}
-                    className={`${styles.dayColumn} ${draggingId && !checked ? styles.dayColumnTarget : ''}`}
+                    className={`${styles.dayColumn} ${(draggingId || pickId) && !showResult ? styles.dayColumnTarget : ''}`}
                     style={{ height: colHeight }}
-                    onDragOver={e => {
+                    role="presentation"
+                    onClick={(e) => handleDayColumnClick(day.id, e)}
+                    onDragOver={(e) => {
                       e.preventDefault();
-                      if (!draggingId || checked) return;
-                      const card = taskCards.find(c => c.id === draggingId);
+                      e.dataTransfer.dropEffect = 'move';
+                      if (!draggingId || showResult) return;
+                      const card = taskCards.find((c) => c.id === draggingId);
                       if (!card) return;
                       setHoverSlot({ day: day.id, slot: getSlotFromEvent(e, card.durationSlots) });
                     }}
                     onDragLeave={() => setHoverSlot(null)}
-                    onDrop={e => handleDrop(day.id, e)}
+                    onDrop={(e) => handleDrop(day.id, e)}
                   >
                     {Array.from({ length: SLOT_COUNT + 1 }, (_, i) => (
                       <div
@@ -264,15 +322,33 @@ export function CalendarGame({ task, onComplete, onBack, theme = 'orange' }: Pro
 
                     {taskCards.filter(c => placements[c.id]?.day === day.id).map(card => {
                       const p = placements[card.id];
-                      const ok = checked ? results[card.id] : undefined;
+                      const ok = card.id in results ? results[card.id] : undefined;
+                      const lockedCorrect = ok === true;
                       return (
                         <div
                           key={card.id}
-                          draggable={!checked}
+                          draggable={!showResult && !lockedCorrect}
                           className={`${styles.placedCard} ${ok === true ? styles.placedCorrect : ok === false ? styles.placedWrong : ''} ${draggingId === card.id ? styles.placedDragging : ''}`}
                           style={{ top: PADDING_V + p.startSlot * SLOT_HEIGHT + 2, height: card.durationSlots * SLOT_HEIGHT - 4 }}
-                          onDragStart={e => { e.stopPropagation(); setDraggingId(card.id); hideDragImage(e); }}
-                          onDragEnd={() => { setDraggingId(null); setHoverSlot(null); }}
+                          onDragStart={(e) => {
+                            e.stopPropagation();
+                            try {
+                              e.dataTransfer.setData('text/plain', card.id);
+                              e.dataTransfer.effectAllowed = 'move';
+                            } catch {
+                              /* Safari */
+                            }
+                            setDraggingId(card.id);
+                            hideDragImage(e);
+                          }}
+                          onDragEnd={() => {
+                            setDraggingId(null);
+                            setHoverSlot(null);
+                            suppressPoolClickRef.current = true;
+                            window.setTimeout(() => {
+                              suppressPoolClickRef.current = false;
+                            }, 350);
+                          }}
                           onClick={e => handlePlacedCardClick(card.id, e)}
                         >
                           <span className={styles.cardTitle}>{card.title}</span>
@@ -280,7 +356,7 @@ export function CalendarGame({ task, onComplete, onBack, theme = 'orange' }: Pro
                             <Icon name="clock" color="blue" size="xs" />
                             <span className={styles.placedCardDuration}>{formatDuration(card.durationSlots)}</span>
                           </div>
-                          {!checked && <span className={styles.removeHint}>✕</span>}
+                          {!lockedCorrect && <span className={styles.removeHint}>✕</span>}
                         </div>
                       );
                     })}
@@ -291,11 +367,12 @@ export function CalendarGame({ task, onComplete, onBack, theme = 'orange' }: Pro
 
           </div>
 
-          {!checked && allPlaced && (
+          {!showResult && allPlaced && (
             <div className={styles.checkWrap}>
               <Button label="Проверить" type="main" onClick={handleCheck} />
             </div>
           )}
+        </div>
         </div>
       </div>
 
@@ -324,12 +401,14 @@ export function CalendarGame({ task, onComplete, onBack, theme = 'orange' }: Pro
             description={
               allCorrect
                 ? 'Петя успел передать дела до отпуска, презентация готова к хуралу, стажёр получил инструктаж, а команда пообедала вместе.'
-                : 'Некоторые задачи попали не туда. Посмотри на красные карточки — там написано, что пошло не так.'
+                : 'Неверные задачи вернулись в список слева. Там же написано, что не так. Верные остались в календаре — расставь остальное заново и снова нажми «Проверить».'
             }
             buttonLabel={allCorrect ? 'Результаты' : 'Посмотреть ошибки'}
             onButtonClick={() => {
               setShowResult(false);
-              if (allCorrect) onComplete([{ correct: true, answer: '', explanation: '' }]);
+              if (allCorrect) {
+                onComplete([{ correct: true, answer: '', explanation: '' }]);
+              }
             }}
           />
         </div>

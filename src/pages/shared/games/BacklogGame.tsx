@@ -474,7 +474,7 @@ function FinalCard({
       )}
 
       <button className={styles.commentClose} onClick={onContinue}>
-        Результаты
+        Далее
       </button>
     </div>
   );

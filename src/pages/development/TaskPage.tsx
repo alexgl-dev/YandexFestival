@@ -73,6 +73,7 @@ export function TaskPage() {
             setPhase(
               allCorrect ||
                 archaeologyWin ||
+                task.id === 'backlog' ||
                 task.id === 'security-check' ||
                 task.id === 'languages-intro' ||
                 task.id === 'shopping-list' ||

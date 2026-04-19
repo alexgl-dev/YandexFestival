@@ -89,7 +89,6 @@ function UxReviewGame({
 
   return (
     <Background theme={theme} orientation={orientation} onBack={onBack}>
-      <GameInstruction instruction={instruction} />
       <div className={styles.uxWrapper}>
 
         {/* Mockup */}
@@ -182,6 +181,7 @@ function UxReviewGame({
           </div>
         );
       })()}
+      <GameInstruction instruction={instruction} />
     </Background>
   );
 }
