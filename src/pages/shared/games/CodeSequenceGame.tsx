@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo, useRef, type ReactNode } from 'react';
+import { useState, useEffect, useCallback, useMemo, useRef, type ReactNode } from 'react';
 import { Background, Button, PopUp } from '../../../components/ui';
 import type { Task } from '../../../types/game';
 import { GameInstruction } from '../GameInstruction';
@@ -103,6 +103,13 @@ export function CodeSequenceGame({
 }: GameProps) {
   const step = task.steps[0];
   const blocks = step?.blocks ?? [];
+  const briefingSource = (
+    step?.briefing?.trim() ||
+    task.instruction?.trim() ||
+    step?.hints ||
+    ''
+  ).trim();
+  const headingText = step?.prompt?.trim() ?? '';
   const validIndices = useMemo(
     () => blocks.map((b, i) => ({ b, i })).filter(({ b }) => b.order !== null).map(({ i }) => i),
     [blocks],
@@ -157,6 +164,11 @@ export function CodeSequenceGame({
         return next;
       });
 
+      setSlotResults((sr) => {
+        const n = [...sr];
+        n[slotIdx] = null;
+        return n;
+      });
       setSelected(null);
     },
     [checked, slots],
@@ -182,6 +194,11 @@ export function CodeSequenceGame({
           if (emptyIdx !== -1) next[emptyIdx] = inSlot;
           return next;
         });
+        setSlotResults((sr) => {
+          const n = [...sr];
+          n[slotIdx] = null;
+          return n;
+        });
       }
     },
     [checked, selected, slots, placeBlockInSlot],
@@ -203,14 +220,47 @@ export function CodeSequenceGame({
     }
   }, [allPlaced, slots, blocks, task.feedback]);
 
-  const handleReset = useCallback(() => {
-    setPool(shuffle(validIndices));
-    setSlots(Array(validIndices.length).fill(null));
-    setSlotResults(Array(validIndices.length).fill(null));
-    setSelected(null);
+  const lastAutoCheckSlotsKey = useRef('');
+  useEffect(() => {
+    if (!allPlaced || checked) {
+      if (!allPlaced) lastAutoCheckSlotsKey.current = '';
+      return;
+    }
+    const key = slots.join(',');
+    if (lastAutoCheckSlotsKey.current === key) return;
+    lastAutoCheckSlotsKey.current = key;
+    handleCheck();
+  }, [allPlaced, checked, slots, handleCheck]);
+
+  /** После ошибки: убрать только неверные блоки в пул, верные остаются в шагах. */
+  const retryAfterWrong = useCallback(() => {
+    setShowPopup(false);
+    const nextSlots = slots.map((bIdx, sIdx) =>
+      bIdx !== null && slotResults[sIdx] === 'wrong' ? null : bIdx,
+    );
+    const wrongBlocks = slots
+      .map((bIdx, sIdx) => (bIdx !== null && slotResults[sIdx] === 'wrong' ? bIdx : null))
+      .filter((x): x is number => x !== null);
+
+    setSlots(nextSlots);
+    setPool((prevPool) => {
+      const next = [...prevPool];
+      let w = 0;
+      for (let i = 0; i < next.length && w < wrongBlocks.length; i++) {
+        if (next[i] === null) next[i] = wrongBlocks[w++];
+      }
+      return next;
+    });
+    setSlotResults(
+      nextSlots.map((bIdx, sIdx) => {
+        if (bIdx === null) return null;
+        return blocks[bIdx].order === sIdx + 1 ? ('correct' as const) : null;
+      }),
+    );
     setChecked(false);
     setMood('neutral');
-  }, [validIndices]);
+    setSelected(null);
+  }, [slots, slotResults, blocks]);
 
   const getResult = useCallback((): GameResult => {
     const allCorrect = slotResults.every((s) => s === 'correct');
@@ -257,7 +307,7 @@ export function CodeSequenceGame({
     <div className={`${styles.bubble} ${variant === 'popup' ? styles.bubblePopup : ''}`}>
       <div className={styles.bubbleTail} />
       <p className={styles.bubbleText}>
-        {parseInteractive(task.instruction || '', (text, anchor) => {
+        {parseInteractive(briefingSource, (text, anchor) => {
           anchor.scrollIntoView({ block: 'nearest', inline: 'nearest' });
           setTooltip((prev) => (prev === text ? null : text));
         })}
@@ -278,22 +328,33 @@ export function CodeSequenceGame({
   );
 
   return (
-    <Background theme={theme} orientation={orientation} onBack={onBack}>
-      <GameInstruction instruction={task.instruction} />
-      <button
-        type="button"
-        className={`${styles.floatingRobot} ${styles[`mood_${mood}`]}`}
-        onClick={(e) => {
-          e.stopPropagation();
-          setTooltip(null);
-          setBriefingOpen(true);
-        }}
-        aria-label="Открыть подсказку робота"
-      >
-        <img src={robotSrc} alt="Робот" className={styles.robotImg} />
-      </button>
+    <Background
+      theme={theme}
+      orientation={orientation}
+      onBack={onBack}
+      contentClassName={styles.scrollableBackgroundContent}
+    >
+      <div className={styles.codeSequenceShell}>
+        <GameInstruction instruction={task.instruction} />
+        {briefingSource ? (
+          <button
+            type="button"
+            className={`${styles.floatingRobot} ${styles[`mood_${mood}`]}`}
+            onClick={(e) => {
+              e.stopPropagation();
+              setTooltip(null);
+              setBriefingOpen(true);
+            }}
+            aria-label="Открыть подсказку робота"
+          >
+            <img src={robotSrc} alt="Робот" className={styles.robotImg} />
+          </button>
+        ) : null}
 
-      <div className={styles.page} onClick={() => setTooltip(null)}>
+        <div className={styles.page} onClick={() => setTooltip(null)}>
+        {headingText ? (
+          <p className={styles.gameHeading}>{headingText}</p>
+        ) : null}
         <div className={styles.playArea}>
         <div className={styles.poolRow}>
           <p className={styles.zoneLabel}>Кусочки кода</p>
@@ -375,15 +436,7 @@ export function CodeSequenceGame({
           </div>
         </div>
         </div>
-
-        <div className={styles.actions}>
-          {!checked && allPlaced && (
-            <Button label="Проверить" type="main" onClick={handleCheck} />
-          )}
-          {checked && mood === 'sad' && (
-            <Button label="Попробовать снова" type="main" onClick={handleReset} />
-          )}
-        </div>
+      </div>
       </div>
 
       {briefingOpen && (
@@ -418,14 +471,18 @@ export function CodeSequenceGame({
           <PopUp
             icon={getResult().correct ? 'done' : 'close'}
             iconColor={getResult().correct ? 'blue' : 'red'}
-            title={getResult().correct ? 'Потрясающе!' : 'Ой!'}
+            title={getResult().correct ? 'Потрясающе!' : 'Ой, не получилось!'}
             description={getResult().correct
               ? 'Благодаря тебе робот спасён! И никто не останется голодным ;-)'
               : 'Сейчас не получилось, но ты совсем близко к правильной цепочке. Попробуй что-то поменять!'}
-            buttonLabel="Далее"
+            buttonLabel={getResult().correct ? 'Далее' : 'Попробовать ещё раз'}
             onButtonClick={() => {
-              setShowPopup(false);
-              onComplete([getResult()]);
+              if (getResult().correct) {
+                setShowPopup(false);
+                onComplete([getResult()]);
+              } else {
+                retryAfterWrong();
+              }
             }}
           />
         </div>

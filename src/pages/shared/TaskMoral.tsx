@@ -15,6 +15,11 @@ interface TaskMoralProps {
 }
 
 function parseMoral(text: string): { main: string; question: string | null } {
+  // Двойной перенос = несколько абзацев одного тона (без отдельного «вопроса»).
+  if (text.includes('\n\n')) {
+    return { main: text.trim(), question: null };
+  }
+
   const newlineIdx = text.indexOf('\n');
   if (newlineIdx !== -1) {
     return {

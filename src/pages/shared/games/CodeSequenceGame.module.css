@@ -1,3 +1,25 @@
+/* Прокрутка внутри кадра Background — длинный заголовок не обрезается */
+.scrollableBackgroundContent {
+  align-items: flex-start;
+  justify-content: flex-start;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Якорь для робота (position: absolute) и основной сцены */
+.codeSequenceShell {
+  position: relative;
+  width: 100%;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  box-sizing: border-box;
+  padding-top: var(--spacing-md);
+}
+
 .page {
   position: relative;
   display: flex;
@@ -7,11 +29,23 @@
   max-width: 80%;
   align-self: stretch;
   margin: 0 auto;
-  padding: var(--spacing-2xl) 0 140px;
+  padding: var(--spacing-2xl) 0 calc(var(--spacing-2xl) * 2);
   font-family: var(--font-family);
   box-sizing: border-box;
   justify-content: flex-start;
   overflow: visible;
+}
+
+.gameHeading {
+  font-family: var(--font-family);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-white);
+  text-align: center;
+  margin: 0 auto;
+  max-width: 920px;
+  letter-spacing: var(--letter-spacing-xs);
+  line-height: var(--line-height-relaxed);
 }
 
 /* ── Briefing screen (stage 1) ── */
@@ -462,21 +496,6 @@
 }
 
 /* ── Actions (floating bar above everything) ── */
-
-.actions {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: var(--spacing-2xl);
-  display: flex;
-  justify-content: center;
-  pointer-events: none;
-  z-index: 40;
-}
-
-.actions > * {
-  pointer-events: auto;
-}
 
 /* ── Briefing modal (reopen from floating robot) ── */
 

@@ -164,6 +164,8 @@ export interface CalendarCardData {
 
 export interface TaskStep {
   prompt?: string;
+  /** Длинный текст с `[слово]{tooltip: "…"}` для подсказки робота в CodeSequenceGame (без стартового оверлея). */
+  briefing?: string;
   image?: string;
   hints?: string;
   options?: TaskOption[];

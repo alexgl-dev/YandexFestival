@@ -195,6 +195,17 @@
   flex-shrink: 0;
 }
 
+/* Знакомство с языками — аватары крупнее (×2.5 от 72px) */
+.languagesIntro .compactAvatar {
+  width: 180px;
+  height: 180px;
+}
+
+.languagesIntro .charCardContent {
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
 .charCardInfo {
   display: flex;
   flex-direction: row;
@@ -216,26 +227,14 @@
   min-width: 0;
 }
 
-.speechBtn {
-  width: 28px;
-  height: 28px;
-  border-radius: var(--radius-full);
-  background: var(--color-blue);
-  color: var(--color-white);
-  font-family: var(--font-family);
-  font-size: var(--font-size-2xs);
-  font-weight: var(--font-weight-bold);
-  border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.speechHintWrap {
   flex-shrink: 0;
-  transition: background 0.15s;
 }
 
-.speechBtn:hover {
-  background: var(--color-blue-pressed);
+.speechHintBtn {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  padding: var(--spacing-xs) var(--spacing-md);
 }
 
 /* ── Image / code card ── */
@@ -448,6 +447,11 @@
   overflow: hidden;
   flex-shrink: 0;
   background: var(--color-grey-secondary);
+}
+
+.bubbleCardLanguagesIntro .bubbleAvatar {
+  width: 200px;
+  height: 200px;
 }
 
 .bubbleAvatarImg {

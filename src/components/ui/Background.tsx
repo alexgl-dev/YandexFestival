@@ -9,6 +9,8 @@ export interface BackgroundProps {
   onBack?: () => void;
   children?: ReactNode;
   className?: string;
+  /** Доп. класс для внутренней области (например overflow + выравнивание по верху). */
+  contentClassName?: string;
 }
 
 const bgMap = {
@@ -25,6 +27,7 @@ export function Background({
   onBack,
   children,
   className,
+  contentClassName,
 }: BackgroundProps) {
   const bgSrc = bgMap[`${theme}-${orientation}`];
 
@@ -38,7 +41,11 @@ export function Background({
         </div>
       )}
 
-      <div className={styles.content}>
+      <div
+        className={
+          contentClassName ? `${styles.content} ${contentClassName}` : styles.content
+        }
+      >
         {children}
       </div>
     </div>

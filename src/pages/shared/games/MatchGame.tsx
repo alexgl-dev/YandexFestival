@@ -1,5 +1,5 @@
 import { useState, useCallback, useMemo, useRef } from 'react';
-import { Background, PopUp } from '../../../components/ui';
+import { Background, Button, PopUp } from '../../../components/ui';
 import type { Task, TaskPair } from '../../../types/game';
 import { CodeArchaeologyMockup } from './CodeArchaeologyMockups';
 import { GameInstruction } from '../GameInstruction';
@@ -101,6 +101,68 @@ function computeHiddenTokenIndices(tokens: string[], seed: number): Set<number> 
   return result;
 }
 
+/** Доп. чёрные плашки для code-archaeology: слишком очевидные подсказки в коде. */
+const ARCHAEOLOGY_EXTRA_HIDDEN: Record<number, ReadonlySet<string>> = {
+  1: new Set([
+    'Популярные',
+    'товары',
+    'Подешевле',
+    'Подороже',
+    'Высокий',
+    'рейтинг',
+    'dropdown',
+    'title',
+    'items',
+    'display',
+    'none',
+    'block',
+    'open',
+    '4161FF',
+    'fff',
+  ]),
+  3: new Set([
+    'form',
+    'input',
+    'type',
+    'text',
+    'password',
+    'placeholder',
+    'invalid',
+    'error',
+    'script',
+    'if',
+    'length',
+    'classList',
+    'add',
+    'button',
+    'Войти',
+    'class',
+    'Вы',
+    'ввели',
+    'неверный',
+    'пароль',
+  ]),
+  4: new Set([
+    'Смартфон',
+    'display',
+    'grid',
+    'grid-template-columns',
+    '1fr',
+    '12px',
+    'gap',
+  ]),
+};
+
+function archaeologyExtraHiddenIndices(tokens: string[], pairIndex: number): Set<number> {
+  const words = ARCHAEOLOGY_EXTRA_HIDDEN[pairIndex];
+  if (!words) return new Set();
+  const out = new Set<number>();
+  tokens.forEach((t, i) => {
+    if (words.has(t)) out.add(i);
+  });
+  return out;
+}
+
 export function MatchGame({
   task,
   onComplete,
@@ -110,20 +172,24 @@ export function MatchGame({
 }: GameProps) {
   const step = task.steps[0];
   const pairs: TaskPair[] = step?.pairs ?? [];
+  const isLanguagesIntro = task.id === 'languages-intro';
 
   const shuffledRightIndices = useMemo(() => shuffle(pairs.map((_, i) => i)), [pairs]);
 
   /** Pre-compute tokens + hidden indices for every pair that has hidden code.
    *  Memoized by the pairs reference so randomness stays stable per mount. */
   const codeMasks = useMemo(() => {
-    return pairs.map((pair) => {
+    return pairs.map((pair, pairIndex) => {
       const code = pair.right.code;
       if (!code || !pair.right.hidden) return null;
       const tokens = tokenizeCode(code);
       const hidden = computeHiddenTokenIndices(tokens, hashString(code));
+      if (task.id === 'code-archaeology') {
+        archaeologyExtraHiddenIndices(tokens, pairIndex).forEach((i) => hidden.add(i));
+      }
       return { tokens, hidden };
     });
-  }, [pairs]);
+  }, [pairs, task.id]);
 
   const [selectedLeft, setSelectedLeft] = useState<number | null>(null);
   const [matchedPairs, setMatchedPairs] = useState<Set<number>>(new Set());
@@ -165,8 +231,11 @@ export function MatchGame({
 
       if (updatedResults.filter((r) => r.correct).length === pairs.length) {
         setTimeout(() => {
-          if (task.feedback === 'instant') setShowPopup(true);
-          else onComplete(updatedResults);
+          if (task.feedback === 'instant' && task.id !== 'languages-intro') {
+            setShowPopup(true);
+          } else {
+            onComplete(updatedResults);
+          }
         }, 600);
       }
       isProcessing.current = false;
@@ -181,7 +250,7 @@ export function MatchGame({
         isProcessing.current = false;
       }, 600);
     }
-  }, [matchedPairs, selectedLeft, pairs, results, task.feedback, onComplete]);
+  }, [matchedPairs, selectedLeft, pairs, results, task.feedback, task.id, onComplete]);
 
   const getLeftCardClass = (index: number): string => {
     const cls = [styles.card];
@@ -212,12 +281,18 @@ export function MatchGame({
             <div className={styles.charCardInfo}>
               {left.label && <p className={styles.charCardLabel}>{left.label}</p>}
               {left.description && (
-                <button
-                  className={styles.speechBtn}
-                  onClick={(e) => { e.stopPropagation(); setSpeechBubbleIndex(index); }}
+                <div
+                  className={styles.speechHintWrap}
+                  role="presentation"
+                  onClick={(e) => e.stopPropagation()}
                 >
-                  ?
-                </button>
+                  <Button
+                    label="Описание"
+                    type="secondary"
+                    className={styles.speechHintBtn}
+                    onClick={() => setSpeechBubbleIndex(index)}
+                  />
+                </div>
               )}
             </div>
           </div>
@@ -354,7 +429,7 @@ export function MatchGame({
             )}
           </>
         )}
-        {right.label && <p className={styles.cardLabel}>{right.label}</p>}
+        {right.label && !isLanguagesIntro && <p className={styles.cardLabel}>{right.label}</p>}
       </div>
     );
   };
@@ -368,7 +443,7 @@ export function MatchGame({
   return (
     <Background theme={theme} orientation={orientation} onBack={onBack}>
       <GameInstruction instruction={task.instruction} />
-      <div className={styles.wrapper}>
+      <div className={`${styles.wrapper} ${isLanguagesIntro ? styles.languagesIntro : ''}`}>
         {step?.prompt && <p className={styles.prompt}>{step.prompt}</p>}
 
         <div className={styles.columns}>
@@ -387,7 +462,10 @@ export function MatchGame({
           className={`${styles.overlay} ${overlayDimClass}`}
           onClick={() => { setSpeechBubbleIndex(null); setActiveTooltip(null); }}
         >
-          <div className={styles.bubbleCard} onClick={(e) => e.stopPropagation()}>
+          <div
+            className={`${styles.bubbleCard} ${isLanguagesIntro ? styles.bubbleCardLanguagesIntro : ''}`}
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className={styles.bubbleHeader}>
               {bubblePair.left.avatar && (
                 <div className={styles.bubbleAvatar}>
@@ -433,7 +511,7 @@ export function MatchGame({
             title={allCorrect ? 'Отлично!' : 'Результаты'}
             description={
               allCorrect
-                ? 'Все пары найдены верно!'
+                ? (step?.resultCorrect ?? 'Все пары найдены верно!')
                 : `Верных совпадений: ${results.filter((r) => r.correct).length} из ${pairs.length}`
             }
             buttonLabel="Далее"

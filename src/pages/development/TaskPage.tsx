@@ -65,7 +65,20 @@ export function TaskPage() {
           onComplete={(r) => {
             setResults(r);
             const allCorrect = r.length > 0 && r.every((item) => item.correct);
-            setPhase(allCorrect || task.id === 'security-check' ? 'moral' : 'result');
+            const pairCount = task.steps[0]?.pairs?.length ?? 0;
+            const archaeologyWin =
+              task.id === 'code-archaeology' &&
+              pairCount > 0 &&
+              r.filter((item) => item.correct).length >= pairCount;
+            setPhase(
+              allCorrect ||
+                archaeologyWin ||
+                task.id === 'security-check' ||
+                task.id === 'languages-intro' ||
+                task.id === 'shopping-list'
+                ? 'moral'
+                : 'result',
+            );
           }}
           theme={data.theme}
           orientation={data.orientation}
