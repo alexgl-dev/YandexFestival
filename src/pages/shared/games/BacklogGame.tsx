@@ -96,6 +96,7 @@ export function BacklogGame({
   const [decisions, setDecisions] = useState<Decision[]>([]);
   const [correctCount, setCorrectCount] = useState(0);
   const [activeGlossary, setActiveGlossary] = useState<GlossaryTerm | null>(null);
+  const [started, setStarted] = useState(false);
 
   const rafRef = useRef<number>(0);
   const startTimeRef = useRef<number>(0);
@@ -171,6 +172,7 @@ export function BacklogGame({
 
   // ── falling animation loop ───────────────────────────────────────────
   useEffect(() => {
+    if (!started) return;
     if (!card || card.phase !== 'falling') return;
     if (popup) return; // pause while popup is shown
 
@@ -247,12 +249,12 @@ export function BacklogGame({
 
   // ── spawn first card after mount ─────────────────────────────────────
   useEffect(() => {
+    if (!started) return;
     if (objects.length > 0 && !card && currentIdx === 0 && !popup) {
       const timer = setTimeout(() => spawnCard(0), 400);
       return () => clearTimeout(timer);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [objects.length]);
+  }, [started, objects.length, card, currentIdx, popup, spawnCard]);
 
   // ── pointer handlers ─────────────────────────────────────────────────
   const handlePointerDown = useCallback(
@@ -304,7 +306,11 @@ export function BacklogGame({
 
   return (
     <Background theme={theme} orientation={orientation} onBack={onBack}>
-      <GameInstruction instruction={task.instruction} />
+      <GameInstruction
+        instruction={task.instruction}
+        initialOpen
+        onClose={() => setStarted(true)}
+      />
       <div className={styles.field}>
         {/* Counter */}
         <div className={styles.counter}>
