@@ -12,7 +12,7 @@ export function DataMenu() {
         { label: 'Описание направления', onClick: () => navigate('/data/description') },
         { label: 'Задачи на день', onClick: () => navigate('/data/tasks') },
         { label: 'Истории яндексоидов', onClick: () => navigate('/data/videos') },
-        { label: 'Тест', onClick: () => navigate('/data/test') },
+        { label: 'Бинго-знакомство', onClick: () => navigate('/data/test') },
       ]}
     />
   );

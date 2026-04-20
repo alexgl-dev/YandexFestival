@@ -310,7 +310,7 @@ export function PlaylistAnatomyGame({ task, onComplete, onBack, theme = 'cobalt'
               icon="done"
               iconColor="blue"
               title="Все карточки разложены!"
-              description={<InstructionRichText text={task.moral ?? ''} />}
+              description="Отлично! Переходим дальше."
               buttonLabel="Завершить"
               onButtonClick={handleComplete}
             />

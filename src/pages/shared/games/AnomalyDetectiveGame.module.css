@@ -90,13 +90,15 @@
   font-family: var(--font-family);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-regular);
-  color: var(--color-white);
-  opacity: 0.8;
+  color: var(--color-black);
   margin: 0;
   text-align: center;
   letter-spacing: var(--letter-spacing-xs);
   line-height: var(--line-height-normal);
-  padding: 0 var(--spacing-md);
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-sm) var(--spacing-lg);
+  box-sizing: border-box;
 }
 
 .graphSvg {

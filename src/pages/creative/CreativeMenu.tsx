@@ -12,7 +12,7 @@ export function CreativeMenu() {
         { label: 'Описание направления', onClick: () => navigate('/creative/description') },
         { label: 'Задачи на день', onClick: () => navigate('/creative/tasks') },
         { label: 'Истории яндексоидов', onClick: () => navigate('/creative/videos') },
-        { label: 'Тест', onClick: () => navigate('/creative/test') },
+        { label: 'Бинго-знакомство', onClick: () => navigate('/creative/test') },
       ]}
     />
   );

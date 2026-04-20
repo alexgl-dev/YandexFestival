@@ -23,8 +23,8 @@ export function Test() {
   return (
     <Background theme="cobalt" orientation="landscape" onBack={handleBack}>
       <div className={styles.wrapper}>
-        <h2 className={styles.title}>Тест</h2>
-        <p className={styles.placeholder}>Тест в разработке</p>
+        <h2 className={styles.title}>Бинго-знакомство</h2>
+        <p className={styles.placeholder}>Бинго-знакомство в разработке</p>
       </div>
     </Background>
   );

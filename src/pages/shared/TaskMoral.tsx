@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router';
 import { Background, Button, PopUp } from '../../components/ui';
 import type { GlossaryTerm, Task } from '../../types/game';
 import { parseGlossarySegments } from './parseGlossarySegments';
+import { InstructionRichText } from './InstructionRichText';
 import styles from './TaskMoral.module.css';
 
 interface TaskMoralProps {
@@ -48,6 +49,14 @@ function MoralParagraph({
   className: string;
   onTermClick: (t: GlossaryTerm) => void;
 }) {
+  const hasInlineMarkup = /\[[^\]]+\]\{tooltip:\s*"[^"]*"\}/.test(text);
+  if (hasInlineMarkup) {
+    return (
+      <p className={className}>
+        <InstructionRichText text={text} />
+      </p>
+    );
+  }
   if (!tooltips.length) {
     return <p className={className}>{text}</p>;
   }

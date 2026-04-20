@@ -77,8 +77,8 @@ export const creativeSection: SectionData = {
     // === Task 1: Афиша (choose) ===
     {
       id: 'poster',
-      title: 'Афиша',
-      subtitle: 'В центре событий',
+      title: 'В центре событий',
+      // subtitle: 'В центре событий',
       mechanic: 'choose',
       profession: 'graphic-designer',
       duration: 5,
@@ -368,8 +368,7 @@ export const creativeSection: SectionData = {
     // === Task 4: Путь пользователя — помоги заказать пиццу (sequence) ===
     {
       id: 'pizza-order',
-      title: 'Путь пользователя',
-      subtitle: 'Помоги заказать пиццу',
+      title: 'Путь пользователя, или Помоги заказать пиццу',
       mechanic: 'sequence',
       profession: 'ux-designer',
       duration: 3,

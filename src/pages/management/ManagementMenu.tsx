@@ -12,7 +12,7 @@ export function ManagementMenu() {
         { label: 'Описание направления', onClick: () => navigate('/management/description') },
         { label: 'Задачи на день', onClick: () => navigate('/management/tasks') },
         { label: 'Истории яндексоидов', onClick: () => navigate('/management/videos') },
-        { label: 'Тест', onClick: () => navigate('/management/test') },
+        { label: 'Бинго-знакомство', onClick: () => navigate('/management/test') },
       ]}
     />
   );
