@@ -19,7 +19,7 @@
   flex-shrink: 0;
   width: 100%;
   max-width: 960px;
-  height: 593px;
+  height: 500px;
   display: flex;
   flex-direction: column;
   gap: var(--spacing-xs);
@@ -76,9 +76,13 @@
   transition: box-shadow 0.2s;
 }
 
-.rowSelected::after { box-shadow: 0 0 0 4px var(--color-blue); }
+.rowSelected::after { box-shadow: 0 0 0 6px var(--color-blue); }
 .rowGood::after     { box-shadow: 0 0 0 4px var(--color-blue); }
 .rowBad::after      { box-shadow: 0 0 0 4px var(--color-red); }
+
+.rowAssigned {
+  opacity: 0.6;
+}
 
 .listItemWrap {
   width: 100%;
@@ -156,20 +160,36 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: var(--spacing-sm);
-  padding: var(--spacing-sm) 0 var(--spacing-sm);
+  padding: 0 0 var(--spacing-sm);
   width: 100%;
   max-width: 960px;
+}
+
+.footerRow {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--spacing-lg);
 }
 
 .instruction {
   font-family: var(--font-family);
   font-size: var(--font-size-xs);
-  color: rgba(255, 255, 255, 0.85);
-  text-align: center;
+  color: var(--color-black);
+  text-align: left;
   margin: 0;
-  max-width: 720px;
+  flex: 1;
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-md) var(--spacing-lg);
   line-height: var(--line-height-normal);
+  box-sizing: border-box;
+}
+
+.sendDisabled {
+  opacity: 0.5;
+  pointer-events: none;
 }
 
 /* ─── Default coordinate-based mark game ────────────────────────────────────── */

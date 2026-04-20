@@ -60,6 +60,13 @@ export function TaskPage() {
           task={task}
           onBack={() => navigate(`/${data.slug}/tasks`)}
           onComplete={(r) => {
+            if (task.id === 'ux-review') {
+              // UX-review: без экрана результатов — сразу перезапуск задания.
+              setResults([]);
+              setPhase('intro');
+              navigate(`/${data.slug}/tasks/${task.id}`, { replace: true });
+              return;
+            }
             setResults(r);
             const allCorrect = r.length > 0 && r.every((item) => item.correct);
             const forceResult = task.id === 'match-icons';

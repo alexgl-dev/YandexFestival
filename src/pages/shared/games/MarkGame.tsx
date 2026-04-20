@@ -41,20 +41,32 @@ function UxReviewGame({
   orientation: 'landscape' | 'portrait';
   onBack: () => void;
 }) {
-  const [selectedZones, setSelectedZones] = useState<Set<string>>(new Set());
+  const [activeReviewId, setActiveReviewId] = useState<string | null>(null);
+  const [reviewToZone, setReviewToZone] = useState<Map<string, string>>(new Map());
+  const [zoneOrder, setZoneOrder] = useState<string[]>([]);
   const [checked, setChecked] = useState(false);
   const [expandedReviewId, setExpandedReviewId] = useState<string | null>(null);
 
   const problemZones = new Set(reviews.filter((r) => r.isProblem).map((r) => r.zone));
+  const problemReviewIds = reviews.filter((r) => r.isProblem).map((r) => r.id);
+
+  const selectedZones = new Set<string>([...reviewToZone.values()]);
 
   const handleZoneClick = useCallback((zoneId: string) => {
     if (checked) return;
-    setSelectedZones((prev) => {
-      const next = new Set(prev);
-      if (next.has(zoneId)) next.delete(zoneId);
-      else next.add(zoneId);
+    if (!activeReviewId) return;
+    setReviewToZone((prev) => {
+      const next = new Map(prev);
+      next.set(activeReviewId, zoneId);
       return next;
     });
+    setZoneOrder((prev) => (prev.includes(zoneId) ? prev : [...prev, zoneId]));
+    setActiveReviewId(null);
+  }, [checked, activeReviewId]);
+
+  const handleReviewClick = useCallback((reviewId: string) => {
+    if (checked) return;
+    setActiveReviewId((prev) => (prev === reviewId ? null : reviewId));
   }, [checked]);
 
   const handleCheck = useCallback(() => {
@@ -62,15 +74,15 @@ function UxReviewGame({
   }, []);
 
   const reviewStatus = (r: UxReview): 'correct' | 'wrong' | 'missed' | 'ok' => {
-    const zoneSelected = selectedZones.has(r.zone);
-    if (r.isProblem) return zoneSelected ? 'correct' : 'missed';
-    return zoneSelected ? 'wrong' : 'ok';
+    const assigned = reviewToZone.get(r.id);
+    if (r.isProblem) return assigned === r.zone ? 'correct' : 'missed';
+    return assigned ? 'wrong' : 'ok';
   };
 
   const handleComplete = useCallback(() => {
-    const correctCount = [...selectedZones].filter((z) => problemZones.has(z)).length;
-    const wrongCount = [...selectedZones].filter((z) => !problemZones.has(z)).length;
-    const foundAll = correctCount === problemZones.size && wrongCount === 0;
+    const correctCount = reviews.filter((r) => r.isProblem && reviewToZone.get(r.id) === r.zone).length;
+    const wrongCount = reviews.filter((r) => !r.isProblem && reviewToZone.get(r.id)).length;
+    const foundAll = correctCount === problemReviewIds.length && wrongCount === 0;
     onComplete([{
       answer: `Найдено ${correctCount} из ${problemZones.size} проблем`,
       correct: foundAll,
@@ -78,7 +90,7 @@ function UxReviewGame({
         ? 'Все проблемные зоны определены верно!'
         : `Найдено ${correctCount} из ${problemZones.size} проблем`,
     }]);
-  }, [selectedZones, problemZones, onComplete]);
+  }, [reviews, reviewToZone, problemReviewIds.length, problemZones.size, onComplete]);
 
   // After check: each zone gets correct/wrong
   const zoneResults: Record<string, 'correct' | 'wrong'> = checked
@@ -94,6 +106,7 @@ function UxReviewGame({
         {/* Mockup */}
         <AppMockup
           selectedZones={selectedZones}
+          selectedOrder={zoneOrder}
           zoneResults={checked ? zoneResults : undefined}
           onZoneClick={handleZoneClick}
         />
@@ -105,17 +118,21 @@ function UxReviewGame({
             {reviews.map((r) => {
               const s = checked ? reviewStatus(r) : undefined;
               const isGood = s === 'correct' || s === 'ok';
+              const isActive = !checked && activeReviewId === r.id;
+              const isAssigned = !checked && reviewToZone.has(r.id);
               return (
                 <div key={r.id} className={styles.reviewWrap}>
                   <div
                     className={[
                       styles.reviewItemRow,
+                      isActive ? styles.rowSelected : '',
+                      isAssigned ? styles.rowAssigned : '',
                       s ? styles.reviewItemRowChecked : '',
                       s ? (isGood ? styles.rowGood : styles.rowBad) : '',
                     ]
                       .filter(Boolean)
                       .join(' ')}
-                    onClick={() => {}}
+                    onClick={() => handleReviewClick(r.id)}
                   >
                     <div className={styles.listItemWrap}>
                       <ListItem title={`«${r.text}»`} state="default" />
@@ -145,13 +162,17 @@ function UxReviewGame({
 
         {/* Footer */}
         <div className={styles.uxFooter}>
-          {!checked ? (
-            selectedZones.size > 0 && (
-              <Button label="Отправить в работу" type="main" onClick={handleCheck} />
-            )
-          ) : (
-            <Button label="Далее" type="main" onClick={handleComplete} />
-          )}
+          <div className={styles.footerRow}>
+            {!checked ? (
+              <Button
+                label="Отправить в работу"
+                type="main"
+                onClick={handleCheck}
+              />
+            ) : (
+              <Button label="Далее" type="main" onClick={handleComplete} />
+            )}
+          </div>
         </div>
       </div>
 
