@@ -33,9 +33,19 @@ export function TaskResult({ results, onContinue, theme = 'orange', orientation 
           </div>
           <div className={styles.items}>
             {results.map((result, index) => (
-              <p key={index} className={styles.item}>
-                {result.correct ? '● ' : '● '}{result.answer}{result.explanation ? ` — ${result.explanation}` : ''}
-              </p>
+              <div
+                key={index}
+                className={[
+                  styles.item,
+                  result.correct ? styles.itemCorrect : styles.itemWrong,
+                ].join(' ')}
+              >
+                <span className={styles.itemIcon}>{result.correct ? '✔' : '✕'}</span>
+                <span className={styles.itemText}>
+                  <span className={styles.itemAnswer}>{result.answer}</span>
+                  {result.explanation ? <span className={styles.itemExplanation}> — {result.explanation}</span> : null}
+                </span>
+              </div>
             ))}
           </div>
           <div className={styles.buttonWrap}>

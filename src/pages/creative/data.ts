@@ -437,8 +437,8 @@ export const creativeSection: SectionData = {
           prompt:
             'Перетащи каждую иконку в подходящее приложение. Если иконка не подходит ни одному — отправь её в корзину.',
           categories: [
-            { id: 'music', title: 'Музыка', image: '/assets/games/001/match-icons/category-trash.png' },
-            { id: 'maps', title: 'Навигатор', image: '/assets/games/001/match-icons/category-trash.png' },
+            { id: 'music', title: 'Музыка', image: '/assets/games/001/match-icons/music-tra.png' },
+            { id: 'maps', title: 'Навигатор', image: '/assets/games/001/match-icons/nav-tra.png' },
             { id: 'trash', title: 'Корзина', image: '/assets/games/001/match-icons/category-trash.png' },
           ],
           items: [
@@ -461,7 +461,7 @@ export const creativeSection: SectionData = {
               image: '/assets/games/001/match-icons/icon-shuffle.png',
               belongs: ['music'],
               explanation:
-                'Две скрещивающиеся стрелки с нотой внутри — перемешивает треки в плейлисте.',
+                'Две скрещивающиеся стрелки — перемешивает треки в плейлисте.',
             },
             {
               name: 'Виниловая пластинка',

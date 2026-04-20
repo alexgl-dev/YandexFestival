@@ -16,7 +16,7 @@
 
 .prompt {
   font-family: var(--font-family);
-  font-size: var(--font-size-xl);
+  font-size: var(--font-size-2xl);
   font-weight: var(--font-weight-medium);
   color: var(--color-white);
   text-align: center;

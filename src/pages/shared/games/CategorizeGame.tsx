@@ -1,5 +1,5 @@
-import { useState, useCallback } from 'react';
-import { Background, InfoButton, PopUp } from '../../../components/ui';
+import { useMemo, useState, useCallback } from 'react';
+import { Background, Button, InfoButton, PopUp } from '../../../components/ui';
 import type { Task } from '../../../types/game';
 import { GameInstruction } from '../GameInstruction';
 import styles from './CategorizeGame.module.css';
@@ -19,8 +19,6 @@ interface GameProps {
 }
 
 type Popup =
-  | { kind: 'correct'; explanation: string }
-  | { kind: 'wrong'; hint: string }
   | { kind: 'category'; tooltip: string; title: string }
   | { kind: 'info'; title: string; description: string }
   | null;
@@ -32,42 +30,55 @@ export function CategorizeGame({ task, onComplete, onBack, theme = 'cobalt', ori
   const categories = step?.categories ?? [];
   const items = step?.items ?? [];
 
-  // itemIndex → categoryId (only correct placements persist)
-  const [correctPlacements, setCorrectPlacements] = useState<Record<number, string>>({});
+  const isOnCompleteMode = task.feedback === 'onComplete';
+
+  // itemIndex → categoryId
+  // - instant: сохраняем только правильные размещения (как раньше)
+  // - onComplete: сохраняем любые размещения; проверка в конце
+  const [placements, setPlacements] = useState<Record<number, string>>({});
   const [selectedItem, setSelectedItem] = useState<number | null>(null);
   const [draggedItem, setDraggedItem] = useState<number | null>(null);
   const [dragOverCategory, setDragOverCategory] = useState<string | null>(null);
   const [popup, setPopup] = useState<Popup>(null);
-  const [exitingItems, setExitingItems] = useState<Set<number>>(new Set());
-  const [removedItems, setRemovedItems] = useState<Set<number>>(new Set());
 
-  const correctCount = Object.keys(correctPlacements).length;
-  const allPlaced = items.length > 0 && correctCount === items.length;
+  const placedCount = Object.keys(placements).length;
+  const allPlaced = items.length > 0 && placedCount === items.length;
 
   const tryPlace = useCallback((itemIndex: number, categoryId: string) => {
-    if (correctPlacements[itemIndex] !== undefined) return; // already placed
     const item = items[itemIndex];
     if (!item) return;
 
-    if (item.belongs?.includes(categoryId)) {
-      setExitingItems((prev) => new Set(prev).add(itemIndex));
-      setTimeout(() => {
-        setExitingItems((prev) => { const s = new Set(prev); s.delete(itemIndex); return s; });
-        setRemovedItems((prev) => new Set(prev).add(itemIndex));
-      }, 320);
-      setCorrectPlacements((prev) => ({ ...prev, [itemIndex]: categoryId }));
-      setPopup({ kind: 'correct', explanation: item.explanation });
-    } else {
-      setPopup({ kind: 'wrong', hint: item.wrongHint || 'Попробуй другую группу.' });
+    // instant mode: keep only correct placements
+    if (!isOnCompleteMode) {
+      if (placements[itemIndex] !== undefined) return; // already placed correctly
+      if (item.belongs?.includes(categoryId)) {
+        setPlacements((prev) => ({ ...prev, [itemIndex]: categoryId }));
+      } else {
+        // no per-item popup in this game mode
+      }
+      setSelectedItem(null);
+      return;
     }
+
+    // onComplete mode: allow any placement and re-placement
+    setPlacements((prev) => ({ ...prev, [itemIndex]: categoryId }));
     setSelectedItem(null);
-  }, [correctPlacements, items]);
+  }, [items, isOnCompleteMode, placements]);
 
   const handleItemClick = useCallback((itemIndex: number) => {
     if (popup) return;
-    if (correctPlacements[itemIndex] !== undefined) return;
+    if (!isOnCompleteMode && placements[itemIndex] !== undefined) return;
+    if (isOnCompleteMode && placements[itemIndex] !== undefined) {
+      // toggle: remove from placement back to tray
+      setPlacements((prev) => {
+        const next = { ...prev };
+        delete next[itemIndex];
+        return next;
+      });
+      return;
+    }
     setSelectedItem((prev) => (prev === itemIndex ? null : itemIndex));
-  }, [popup, correctPlacements]);
+  }, [popup, placements, isOnCompleteMode]);
 
   const handleCategoryClick = useCallback((categoryId: string) => {
     if (popup) return;
@@ -105,17 +116,45 @@ export function CategorizeGame({ task, onComplete, onBack, theme = 'cobalt', ori
     setDragOverCategory(null);
   }, [draggedItem, tryPlace]);
 
+  const placedByCategory = useMemo(() => {
+    const map: Record<string, number[]> = {};
+    categories.forEach((c) => { map[c.id] = []; });
+    for (const [idxStr, catId] of Object.entries(placements)) {
+      const idx = Number(idxStr);
+      if (!Number.isFinite(idx)) continue;
+      if (!map[catId]) map[catId] = [];
+      map[catId].push(idx);
+    }
+    Object.values(map).forEach((arr) => arr.sort((a, b) => a - b));
+    return map;
+  }, [placements, categories]);
+
+  const buildResults = useCallback((): GameResult[] => {
+    return items.map((item, idx) => {
+      const label = item.text || item.name || '';
+      const placedCatId = placements[idx];
+      const placedCatTitle = categories.find((c) => c.id === placedCatId)?.title ?? '';
+      const correct = !!placedCatId && (item.belongs?.includes(placedCatId) ?? false);
+      return {
+        answer: label,
+        correct,
+        explanation: correct
+          ? 'Абсолютно верно.'
+          : placedCatId
+            ? `Иконка «${label}» ошибочно помещена в «${placedCatTitle}». ${item.wrongHint ?? ''}`.trim()
+            : 'Иконка не распределена.',
+      };
+    });
+  }, [items, placements, categories]);
+
+  const handleCheck = useCallback(() => {
+    if (!allPlaced) return;
+    onComplete(buildResults());
+  }, [allPlaced, onComplete, buildResults]);
+
   const handlePopupDismiss = useCallback(() => {
     setPopup(null);
-    if (allPlaced) {
-      const results: GameResult[] = items.map((item) => ({
-        answer: item.text || item.name || '',
-        correct: true,
-        explanation: item.explanation,
-      }));
-      onComplete(results);
-    }
-  }, [allPlaced, items, onComplete]);
+  }, []);
 
   if (!step) return null;
 
@@ -147,7 +186,53 @@ export function CategorizeGame({ task, onComplete, onBack, theme = 'cobalt', ori
                 {cat.image && (
                   <img src={cat.image} alt={cat.title} className={styles.categoryImage} />
                 )}
-                <span className={styles.columnTitle}>{cat.title}</span>
+                <div className={styles.columnHeader}>
+                  <span className={styles.columnTitle}>{cat.title}</span>
+                  {cat.tooltip && (
+                    <InfoButton
+                      size="sm"
+                      variant="ghost"
+                      className={styles.columnInfo}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        if (popup) return;
+                        if (!cat.tooltip) return;
+                        setPopup({ kind: 'category', title: cat.title, tooltip: cat.tooltip });
+                      }}
+                    />
+                  )}
+                </div>
+
+                {isOnCompleteMode && (
+                  <div className={styles.placedStrip}>
+                    {(placedByCategory[cat.id] ?? []).map((idx) => {
+                      const it = items[idx];
+                      const label = it?.name || it?.text || '';
+                      return (
+                        <button
+                          key={idx}
+                          type="button"
+                          className={styles.placedChip}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            // remove back to tray
+                            setPlacements((prev) => {
+                              const next = { ...prev };
+                              delete next[idx];
+                              return next;
+                            });
+                          }}
+                        >
+                          {it?.image ? (
+                            <img src={it.image} alt={label} className={styles.placedChipIcon} draggable={false} />
+                          ) : (
+                            <span className={styles.placedChipText}>{label}</span>
+                          )}
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
             );
           })}
@@ -156,9 +241,8 @@ export function CategorizeGame({ task, onComplete, onBack, theme = 'cobalt', ori
         {/* Card tray */}
         <div className={styles.tray}>
           {items.map((item, idx) => {
-            if (removedItems.has(idx)) return null;
-            const isPlaced = correctPlacements[idx] !== undefined;
-            const isExiting = exitingItems.has(idx);
+            const isPlaced = placements[idx] !== undefined;
+            if (isPlaced) return null;
             const isSelected = selectedItem === idx;
             const isDragging = draggedItem === idx;
 
@@ -171,12 +255,10 @@ export function CategorizeGame({ task, onComplete, onBack, theme = 'cobalt', ori
                   styles.card,
                   isSelected ? styles.cardSelected : '',
                   isDragging ? styles.cardDragging : '',
-                  isPlaced && !isExiting ? styles.cardPlaced : '',
-                  isExiting ? styles.cardExiting : '',
                 ].filter(Boolean).join(' ')}
                 style={{ ['--rot' as string]: `${rot}deg` }}
-                draggable={!isPlaced}
-                onClick={() => !isPlaced && handleItemClick(idx)}
+                draggable
+                onClick={() => handleItemClick(idx)}
                 onDragStart={() => handleDragStart(idx)}
                 onDragEnd={handleDragEnd}
               >
@@ -200,31 +282,17 @@ export function CategorizeGame({ task, onComplete, onBack, theme = 'cobalt', ori
             );
           })}
         </div>
+
+        {isOnCompleteMode && allPlaced && (
+          <div className={styles.checkWrap}>
+            <Button label="Проверить" type="main" onClick={handleCheck} />
+          </div>
+        )}
       </div>
 
       {/* Popup overlay */}
       {popup && (
         <div className={styles.overlay}>
-          {popup.kind === 'correct' && (
-            <PopUp
-              icon="done"
-              iconColor="blue"
-              title="Верно!"
-              description={popup.explanation}
-              buttonLabel={allPlaced ? 'Результаты' : 'Продолжить'}
-              onButtonClick={handlePopupDismiss}
-            />
-          )}
-          {popup.kind === 'wrong' && (
-            <PopUp
-              icon="close"
-              iconColor="red"
-              title="Не совсем"
-              description={popup.hint}
-              buttonLabel="Попробовать ещё"
-              onButtonClick={handlePopupDismiss}
-            />
-          )}
           {popup.kind === 'category' && (
             <PopUp
               title={popup.title}

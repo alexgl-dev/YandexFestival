@@ -62,13 +62,14 @@ export function TaskPage() {
           onComplete={(r) => {
             setResults(r);
             const allCorrect = r.length > 0 && r.every((item) => item.correct);
+            const forceResult = task.id === 'match-icons';
             const pairCount = task.steps[0]?.pairs?.length ?? 0;
             const archaeologyWin =
               task.id === 'code-archaeology' &&
               pairCount > 0 &&
               r.filter((item) => item.correct).length >= pairCount;
             setPhase(
-              allCorrect ||
+              (!forceResult && allCorrect) ||
                 archaeologyWin ||
                 task.id === 'backlog' ||
                 task.id === 'security-check' ||

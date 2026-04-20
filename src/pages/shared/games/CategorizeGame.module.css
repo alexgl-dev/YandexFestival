@@ -17,13 +17,76 @@
 
 .instruction {
   font-family: var(--font-family);
-  font-size: var(--font-size-md);
+  font-size: var(--font-size-lg);
   font-weight: var(--font-weight-medium);
   color: var(--color-white);
   margin: 0;
   line-height: var(--line-height-tight);
   text-align: center;
   width: 70%;
+}
+
+/* Header inside a category column (title + optional info button) */
+.columnHeader {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+}
+
+.columnInfo {
+  flex-shrink: 0;
+}
+
+/* Placed items strip (onComplete mode) */
+.placedStrip {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--spacing-xs);
+  margin-top: var(--spacing-sm);
+}
+
+.placedChip {
+  width: 72px;
+  height: 72px;
+  border: var(--border-width-sm) solid rgba(0, 0, 0, 0.08);
+  border-radius: var(--radius-sm);
+  background: var(--color-white);
+  padding: var(--spacing-xs);
+  cursor: pointer;
+  box-sizing: border-box;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.placedChip:active {
+  opacity: 0.9;
+}
+
+.placedChipIcon {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+.placedChipText {
+  font-family: var(--font-family);
+  font-size: var(--font-size-2xs);
+  color: var(--color-black);
+  text-align: center;
+  line-height: 1.1;
+}
+
+.checkWrap {
+  margin-top: var(--spacing-sm);
+  display: flex;
+  justify-content: center;
+  width: 100%;
 }
 
 /* ── Three drop zones ── */

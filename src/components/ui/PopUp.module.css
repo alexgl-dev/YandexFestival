@@ -4,7 +4,7 @@
   align-items: center;
   justify-content: space-between;
   width: var(--width-content);
-  min-height: 600px;
+  min-height: 300px;
   max-height: 90vh;
   padding: var(--spacing-2xl);
   overflow-y: auto;
