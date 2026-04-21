@@ -267,3 +267,16 @@
   width: 100% !important;
   flex: 1;
 }
+
+.resultCardMain {
+  --card-title-size: var(--font-size-3xl);
+  --card-desc-size: var(--font-size-lg);
+}
+
+.resultCardMain > :first-child {
+  display: none;
+}
+
+.resultCardMain p {
+  white-space: pre-line;
+}
