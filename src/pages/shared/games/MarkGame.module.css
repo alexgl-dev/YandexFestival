@@ -19,7 +19,7 @@
   flex-shrink: 0;
   width: 100%;
   max-width: 960px;
-  height: 500px;
+  height: 575px;
   display: flex;
   flex-direction: column;
   gap: var(--spacing-xs);
@@ -113,46 +113,6 @@
 }
 
 
-/* Explanation popup card */
-.expCard {
-  background: var(--color-white);
-  border-radius: var(--radius-lg);
-  padding: var(--spacing-2xl);
-  width: 80%;
-  max-width: 760px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: var(--spacing-lg);
-  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.45);
-}
-
-.expCardIcon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.expCardQuote {
-  font-family: var(--font-family);
-  font-size: var(--font-size-md);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-black);
-  text-align: center;
-  line-height: var(--line-height-normal);
-  margin: 0;
-}
-
-.expCardText {
-  font-family: var(--font-family);
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-regular);
-  color: var(--color-black);
-  text-align: center;
-  line-height: var(--line-height-relaxed);
-  margin: 0;
-  opacity: 0.85;
-}
 
 /* Footer — always at bottom */
 .uxFooter {
@@ -169,7 +129,7 @@
   width: 100%;
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: center;
   gap: var(--spacing-lg);
 }
 

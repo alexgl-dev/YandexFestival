@@ -59,6 +59,9 @@
   flex-direction: column;
   /* no gap — spacing is handled via blockWrapper margin-bottom */
   min-width: 0;
+  overflow: visible;
+  padding: 4px;
+  margin: -4px;
 }
 
 .right {
@@ -67,6 +70,9 @@
   flex-direction: column;
   gap: var(--spacing-sm);
   min-width: 0;
+  overflow: visible;
+  padding: 4px;
+  margin: -4px;
 }
 
 .right > div {
@@ -84,15 +90,20 @@
     margin-bottom 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* The inner div must have min-height: 0 for grid row collapse to work */
+/* The inner div must have min-height: 0 for grid row collapse to work.
+   overflow is visible normally so pressed/focus styles aren't clipped;
+   it's clamped to hidden only while the item is collapsing away. */
 .blockWrapperInner {
   min-height: 0;
-  overflow: hidden;
 }
 
 .blockWrapperCollapsing {
   grid-template-rows: 0fr;
   margin-bottom: 0;
+}
+
+.blockWrapperCollapsing .blockWrapperInner {
+  overflow: hidden;
 }
 
 /* ---- Shared ---- */

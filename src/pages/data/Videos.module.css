@@ -34,7 +34,8 @@
 
 .grid {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: row;
+  flex-wrap: nowrap;
   gap: var(--spacing-lg);
   width: 100%;
   justify-content: center;
@@ -44,9 +45,8 @@
 }
 
 .item {
-  flex: 1 1 40%;
+  flex: 0 1 calc((100% - 3 * var(--spacing-lg)) / 4);
   min-width: 0;
-  max-width: 48%;
   display: flex;
   justify-content: center;
 }

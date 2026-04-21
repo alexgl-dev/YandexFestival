@@ -217,12 +217,15 @@
 
 .blockInner {
   min-height: 0;
-  overflow: hidden;
 }
 
 .blockWrapperCollapsing {
   grid-template-rows: 0fr;
   margin-bottom: 0;
+}
+
+.blockWrapperCollapsing .blockInner {
+  overflow: hidden;
 }
 
 .block {

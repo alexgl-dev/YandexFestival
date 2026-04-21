@@ -45,9 +45,12 @@
 }
 
 .zone:hover::after   { box-shadow: inset 0 0 0 3px var(--color-bg-brand-translucent); }
+.zoneSelected        { background: rgba(50, 120, 255, 0.22); }
 .zoneSelected::after { box-shadow: inset 0 0 0 6px var(--color-blue); }
-.zoneCorrect::after  { box-shadow: inset 0 0 0 3px var(--color-green); }
-.zoneWrong::after    { box-shadow: inset 0 0 0 3px var(--color-red); }
+.zoneCorrect         { background: rgba(36, 165, 103, 0.22); }
+.zoneCorrect::after  { box-shadow: inset 0 0 0 6px var(--color-green); }
+.zoneWrong           { background: rgba(227, 66, 52, 0.22); }
+.zoneWrong::after    { box-shadow: inset 0 0 0 6px var(--color-red); }
 
 .zoneBadge {
   position: absolute;

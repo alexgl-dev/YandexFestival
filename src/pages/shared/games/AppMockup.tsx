@@ -49,16 +49,6 @@ export function AppMockup({ selectedZones, selectedOrder, zoneResults, onZoneCli
                 height: `${rect.height}%`,
                 borderRadius: rect.radius != null ? `${rect.radius}px` : undefined,
               }}
-              onPointerDown={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                onZoneClick(id);
-              }}
-              onTouchStart={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                onZoneClick(id);
-              }}
               onClick={(e) => { e.stopPropagation(); onZoneClick(id); }}
             >
               {badge(id)}
