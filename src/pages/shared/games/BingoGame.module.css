@@ -264,3 +264,16 @@
 .resultCard {
   width: 100% !important;
 }
+
+.resultCardMain {
+  --card-title-size: var(--font-size-3xl);
+  --card-desc-size: var(--font-size-lg);
+}
+
+.resultCardMain > :first-child {
+  display: none;
+}
+
+.resultCardMain p {
+  white-space: pre-line;
+}

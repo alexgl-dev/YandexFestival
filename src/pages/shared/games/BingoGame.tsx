@@ -184,12 +184,12 @@ export function BingoGame({ bingo, onBack, theme = 'cobalt' }: BingoGameProps) {
             />
           ) : (
             <Card
-              variant="Результат"
+              variant=""
               title="Бинго!"
               description={bingo.resultText}
               size="m"
               state="default"
-              className={styles.resultCard}
+              className={`${styles.resultCard} ${styles.resultCardMain}`}
             />
           )}
           <Button

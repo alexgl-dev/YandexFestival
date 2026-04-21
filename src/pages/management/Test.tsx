@@ -126,12 +126,12 @@ export function Test() {
       <div className={styles.resultLayout}>
         <div className={styles.resultSide}>
           <Card
-            variant="Результат"
+            variant=""
             title="Бинго!"
             description={bingo.resultText}
             size="m"
             state="default"
-            className={styles.resultCard}
+            className={`${styles.resultCard} ${styles.resultCardMain}`}
           />
           <Button
             label="В главное меню"
