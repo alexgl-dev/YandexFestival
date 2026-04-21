@@ -286,12 +286,15 @@
 
 .pickerOptions {
   display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
+  grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: var(--spacing-md);
 }
 
 .pickerBtn {
   width: 100%;
+  white-space: normal;
+  line-height: 1.2;
+  text-align: center;
 }
 
 /* === Error popup: per-item explanations + tooltip terms === */
