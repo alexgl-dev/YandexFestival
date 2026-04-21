@@ -205,7 +205,7 @@
 
 .cardPeregovorka {
   display: block;
-  margin-top: var(--spacing-xs);
+  margin-top: 2px;
   font-family: var(--font-family);
   font-size: 14px;
   font-weight: var(--font-weight-regular);
