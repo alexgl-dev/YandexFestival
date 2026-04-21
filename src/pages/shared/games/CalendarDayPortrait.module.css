@@ -5,7 +5,7 @@
   height: calc(100% - 120px);
   box-sizing: border-box;
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   align-items: stretch;
   gap: var(--spacing-lg);
 }
@@ -15,26 +15,16 @@
   align-self: flex-start;
 }
 
-/* Intro/outro text */
-.topText,
-.bottomText {
-  font-family: var(--font-family);
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-regular);
-  color: var(--color-white);
-  letter-spacing: var(--letter-spacing-xs);
-  line-height: var(--line-height-normal);
+.popupParagraph {
   margin: 0;
-  opacity: 0.9;
-  padding: 0 var(--spacing-xs);
-  max-width: 70%;
 }
 
-.bottomText {
-  opacity: 0.85;
-  background: var(--color-white);
-  color: black;
-  border-radius: 15px;
+.popupParagraph + .popupParagraph {
+  margin-top: var(--spacing-lg);
+}
+
+.popupParagraphItalic {
+  font-style: italic;
 }
 
 /* ══ Calendar area — flex column: header row + body row ══ */
@@ -60,28 +50,21 @@
   flex-shrink: 0;
   display: flex;
   flex-direction: row;
-  gap: var(--spacing-2xl);
-}
-
-/* Invisible stub — same width as timeAxisBody, ensures day header aligns above day column */
-.timeAxisStub {
-  flex-shrink: 0;
-  width: 130px;
+  justify-content: center;
 }
 
 .dayHeader {
-  flex: 1;
   display: flex;
-  gap: 12px;
+  gap: var(--spacing-sm);
   align-items: baseline;
   justify-content: center;
-  padding: var(--spacing-xs) 0 var(--spacing-sm);
+  padding: var(--spacing-xs) 0 var(--spacing-lg);
   box-sizing: border-box;
 }
 
 .dayHeaderAbbr {
   font-family: var(--font-family);
-  font-size: var(--font-size-md);
+  font-size: var(--font-size-xl);
   font-weight: var(--font-weight-bold);
   color: var(--color-white);
   letter-spacing: var(--letter-spacing-xs);
@@ -90,7 +73,7 @@
 
 .dayHeaderDate {
   font-family: var(--font-family);
-  font-size: var(--font-size-md);
+  font-size: var(--font-size-xl);
   font-weight: var(--font-weight-medium);
   color: var(--color-white);
   letter-spacing: var(--letter-spacing-xs);
@@ -111,7 +94,7 @@
   flex-shrink: 0;
   width: 130px;
   position: relative;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .timeLabel {
@@ -153,6 +136,13 @@
   border-top: 2px solid rgba(255, 255, 255, 0.15);
 }
 
+.slotLast {
+  top: auto;
+  bottom: 0;
+  border-top: none;
+  border-bottom: 4px solid rgba(255, 255, 255, 0.5);
+}
+
 /* ── Event cards ── */
 
 .eventCard {
@@ -167,7 +157,7 @@
   flex-direction: row;
   align-items: flex-start;
   justify-content: space-between;
-  gap: var(--spacing-xs);
+  gap: var(--spacing-lg);
   cursor: pointer;
   z-index: 2;
   box-sizing: border-box;
@@ -177,6 +167,7 @@
 
 .eventCardCompact {
   padding: var(--spacing-xs) var(--spacing-md);
+  align-items: center;
 }
 
 .eventCard:hover {
@@ -190,35 +181,37 @@
   color: var(--color-text-primary);
   line-height: var(--line-height-tight);
   letter-spacing: var(--letter-spacing-xs);
-  display: -webkit-box;
-  line-clamp: 4;
-  -webkit-line-clamp: 4;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
   flex: 1;
   min-width: 0;
-  max-width: 80%;
+  white-space: normal;
+  overflow-wrap: break-word;
 }
 
-.eventCardCompact .cardTitle {
-  line-clamp: 1;
-  -webkit-line-clamp: 1;
+.cardTitleClamped {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 
 .cardMeta {
-  position: absolute;
-  right: var(--spacing-md);
-  top: var(--spacing-sm);
-  width: 100px;
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: var(--spacing-xs);
   flex-shrink: 0;
+  width: 150px;
 }
 
-.eventCardCompact .cardMeta {
-  top: var(--spacing-xs);
-  right: var(--spacing-sm);
+.cardPeregovorka {
+  display: block;
+  margin-top: var(--spacing-xs);
+  font-family: var(--font-family);
+  font-size: 14px;
+  font-weight: var(--font-weight-regular);
+  color: #808080;
+  line-height: 1;
+  letter-spacing: -0.14px;
 }
 
 .cardDuration {
@@ -228,10 +221,6 @@
   color: var(--color-text-primary);
   letter-spacing: var(--letter-spacing-xs);
   white-space: nowrap;
-}
-
-.eventCardCompact .cardDuration {
-  font-size: var(--font-size-2xs);
 }
 
 /* ══ Overlay ══ */
