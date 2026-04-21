@@ -43,7 +43,8 @@
   color: var(--color-white);
   text-align: center;
   margin: 0 auto;
-  max-width: 920px;
+  width: 90%;
+  max-width: none;
   letter-spacing: var(--letter-spacing-xs);
   line-height: var(--line-height-relaxed);
 }
@@ -183,6 +184,17 @@
   color: var(--color-black);
   line-height: var(--line-height-relaxed);
   margin: 0;
+  white-space: pre-wrap;
+}
+
+.bubblePromptItalic {
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-regular);
+  font-style: italic;
+  color: var(--color-text-muted);
+  line-height: var(--line-height-relaxed);
+  margin: var(--spacing-md) 0 0;
   white-space: pre-wrap;
 }
 

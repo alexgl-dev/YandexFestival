@@ -52,6 +52,16 @@
   white-space: pre-line;
 }
 
+.introPrompt {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-regular);
+  font-style: italic;
+  color: var(--color-text-muted);
+  line-height: var(--line-height-relaxed);
+  margin: var(--spacing-md) 0 0;
+  white-space: pre-line;
+}
+
 .tooltipWord {
   border-bottom: 2px dashed var(--color-blue);
   cursor: pointer;

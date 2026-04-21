@@ -59,6 +59,10 @@ export function TaskIntro({ task, onStart, onBack, theme = 'orange', orientation
               )
             )}
           </p>
+
+          {task.steps[0]?.briefing && task.steps[0]?.prompt && (
+            <p className={styles.introPrompt}>{task.steps[0].prompt}</p>
+          )}
         </div>
 
         <Button label="Начать" type="main" onClick={onStart} />

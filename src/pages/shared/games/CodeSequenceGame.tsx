@@ -312,6 +312,9 @@ export function CodeSequenceGame({
           setTooltip((prev) => (prev === text ? null : text));
         })}
       </p>
+      {headingText && (
+        <p className={styles.bubblePromptItalic}>{headingText}</p>
+      )}
       {tooltip && (
         <div
           className={styles.tooltipCard}
@@ -352,7 +355,7 @@ export function CodeSequenceGame({
         ) : null}
 
         <div className={styles.page} onClick={() => setTooltip(null)}>
-        {headingText ? (
+        {headingText && !briefingSource ? (
           <p className={styles.gameHeading}>{headingText}</p>
         ) : null}
         <div className={styles.playArea}>
