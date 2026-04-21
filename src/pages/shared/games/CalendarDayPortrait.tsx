@@ -27,6 +27,8 @@ interface Props {
   theme?: 'cobalt' | 'orange';
   startHour?: number;
   slotCount?: number;
+  topText?: string;
+  bottomText?: string;
 }
 
 export function CalendarDayPortrait({
@@ -36,6 +38,8 @@ export function CalendarDayPortrait({
   theme = 'orange',
   startHour = 9,
   slotCount = 18,
+  topText,
+  bottomText,
 }: Props) {
   const [tooltipCard, setTooltipCard] = useState<CalendarCardData | null>(null);
 
@@ -64,6 +68,10 @@ export function CalendarDayPortrait({
         <div className={styles.backRow}>
           <IconButton type="back" variant="light" size="lg" onClick={onBack} />
         </div>
+
+        {topText && (
+          <p className={styles.topText}>{topText}</p>
+        )}
 
         <div className={styles.calendarArea}>
 
@@ -119,6 +127,10 @@ export function CalendarDayPortrait({
           </div>
 
         </div>
+
+        {bottomText && (
+          <p className={styles.bottomText}>{bottomText}</p>
+        )}
       </div>
 
       {tooltipCard && (

@@ -5,13 +5,36 @@
   height: calc(100% - 120px);
   box-sizing: border-box;
   display: flex;
-  flex-direction: row;
-  align-items: flex-start;
+  flex-direction: column;
+  align-items: stretch;
   gap: var(--spacing-lg);
 }
 
 .backRow {
   flex-shrink: 0;
+  align-self: flex-start;
+}
+
+/* Intro/outro text */
+.topText,
+.bottomText {
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-white);
+  letter-spacing: var(--letter-spacing-xs);
+  line-height: var(--line-height-normal);
+  margin: 0;
+  opacity: 0.9;
+  padding: 0 var(--spacing-xs);
+  max-width: 70%;
+}
+
+.bottomText {
+  opacity: 0.85;
+  background: var(--color-white);
+  color: black;
+  border-radius: 15px;
 }
 
 /* ══ Calendar area — flex column: header row + body row ══ */
@@ -19,7 +42,7 @@
 .calendarArea {
   flex: 1;
   min-width: 0;
-  height: 100%;
+  min-height: 0;
   background: rgba(227, 226, 224, 0.25);
   backdrop-filter: blur(22px);
   border-radius: var(--radius-lg);
@@ -93,7 +116,7 @@
 
 .timeLabel {
   position: absolute;
-  left: 150px;
+  left: var(--spacing-xs);
   transform: translateY(-50%);
   text-align: left;
   font-family: var(--font-family);
@@ -164,6 +187,7 @@
   line-height: var(--line-height-tight);
   letter-spacing: var(--letter-spacing-xs);
   display: -webkit-box;
+  line-clamp: 4;
   -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
   overflow: hidden;
