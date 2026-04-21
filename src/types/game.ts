@@ -156,6 +156,8 @@ export interface CalendarCardData {
   isAnchor?: boolean;
   anchorDay?: string;         // 'mon' | 'tue' | 'wed'
   anchorStartSlot?: number;   // index from 0 (9:00=0, 9:30=1, ...)
+  /** Смещение старта внутри слота `anchorStartSlot` (0–29 минут) — для отображения «не ровно по сетке». */
+  anchorStartMinuteOffset?: number;
   validDays?: string[];
   minStartSlot?: number;
   maxStartSlot?: number;

@@ -297,3 +297,43 @@
 .tooltipClose:hover {
   filter: brightness(1.1);
 }
+
+/* ══ Glossary term highlight + nested tooltip ══ */
+
+.glossaryWord {
+  border-bottom: 2px dashed var(--color-blue);
+  color: var(--color-blue);
+  cursor: pointer;
+}
+
+.glossaryCard {
+  width: 85%;
+  max-width: 600px;
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-2xl);
+  box-shadow: 0 24px 64px rgba(0, 0, 0, 0.35);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xl);
+  align-items: center;
+}
+
+.glossaryTitle {
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-black);
+  margin: 0;
+  align-self: flex-start;
+}
+
+.glossaryDefinition {
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-black);
+  line-height: 1.4;
+  margin: 0;
+  align-self: flex-start;
+}
