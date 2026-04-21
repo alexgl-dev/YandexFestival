@@ -150,6 +150,8 @@ export interface CalendarCardData {
   id: string;
   title: string;
   durationSlots: number; // 30-min units: 1=30min, 2=1hr, 4=2hr, 6=3hr
+  /** Отображаемая длительность в минутах (если нужно 15/45 и т.п. при сетке 30 мин). */
+  durationMin?: number;
   tooltip: string;
   isAnchor?: boolean;
   anchorDay?: string;         // 'mon' | 'tue' | 'wed'

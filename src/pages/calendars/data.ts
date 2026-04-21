@@ -80,7 +80,7 @@ export const calendarsData: Record<string, CalendarViewData> = {
         durationSlots: 1,
         anchorDay: 'mon',
         anchorStartSlot: 11, // 14:30
-        tooltip: 'Пришёл в спортзал, чтобы подумать над архитектурой на беговой дорожке. Реальная причина — надо перезагрузить голову.',
+        tooltip: 'Иду в спортзал, чтобы подумать над архитектурой на беговой дорожке. Реальная причина — надо перезагрузить голову.',
         glossary: [
           { word: 'Архитектура', definition: 'Структура и организация программной системы — как её компоненты взаимодействуют между собой.' },
         ],
@@ -204,6 +204,7 @@ export const calendarsData: Record<string, CalendarViewData> = {
         id: 'd-sync',
         title: 'Синк с бизнесом. Переговорка 2B «Предел риска»',
         durationSlots: 1,
+        durationMin: 45,
         anchorDay: 'mon',
         anchorStartSlot: 10, // 15:00
         tooltip: 'Встреча с продуктовой командой. На повестке больной вопрос: как рекомендовать что-то новому пользователю, если он только установил приложение? Проблема cold start во всей красе. Спорим, рисуем на листочках и даже салфетках, договариваемся. Результат — новые задачи в Трекере.',
@@ -217,6 +218,7 @@ export const calendarsData: Record<string, CalendarViewData> = {
         id: 'd-snack',
         title: 'Личная встреча «Сырок и подышать»',
         durationSlots: 1,
+        durationMin: 15,
         anchorDay: 'mon',
         anchorStartSlot: 11, // 15:30
         tooltip: 'Между встречами — 15 минут. Этого хватит, чтобы дойти до кофепойнта, взять сырок из холодильника и посмотреть в окно. П — продуктивность.',
@@ -369,6 +371,7 @@ export const calendarsData: Record<string, CalendarViewData> = {
         id: 'm-brainstorm',
         title: 'Технический брейншторм команды приложения. Переговорка «Оранжевый — хит сезона»',
         durationSlots: 1,
+        durationMin: 50,
         anchorDay: 'mon',
         anchorStartSlot: 14, // 16:00
         tooltip: 'Будем искать оптимальное решение задач приложения для учеников и репетиторов. Мой план: выслушать разные подходы, взвесить преимущества и недостатки, найти сбалансированное решение.',
@@ -380,6 +383,7 @@ export const calendarsData: Record<string, CalendarViewData> = {
         id: 'm-peanuts',
         title: 'Захватить арахис на кофепойнте',
         durationSlots: 1,
+        durationMin: 10,
         anchorDay: 'mon',
         anchorStartSlot: 15, // 16:30
         tooltip: 'Не в смысле «взять арахис в плен», а съесть орехи и зарядить мозги.',
@@ -403,7 +407,8 @@ export const calendarsData: Record<string, CalendarViewData> = {
       {
         id: 'm-bookclub',
         title: 'Встреча книжного клуба. Дворик',
-        durationSlots: 1,
+        durationSlots: 2,
+        durationMin: 60,
         anchorDay: 'mon',
         anchorStartSlot: 20, // 19:00
         tooltip: 'Раз в две недели встречаемся книжным клубом Яндекса и обсуждаем литературу.',
@@ -493,8 +498,9 @@ export const calendarsData: Record<string, CalendarViewData> = {
         id: 'prozharka',
         title: 'Прожарка. Командная встреча дизайнеров. Переговорка «Сельдерей»',
         durationSlots: 1,
+        durationMin: 40,
         anchorDay: 'mon',
-        anchorStartSlot: 15, // 15:30
+        anchorStartSlot: 17, // 16:30
         tooltip: 'Ничего общего с кулинарией. И никого не сжигают на костре за просроченные дедлайны. Это встреча дизайнеров, где мы смотрим текущие задачи по основным проектам. Важно, чтобы все проекты придерживались единого стиля компании и в то же время были индивидуальны.',
         glossary: [
           { word: 'Дедлайн', definition: 'Крайний срок выполнения задачи.' },
@@ -503,7 +509,8 @@ export const calendarsData: Record<string, CalendarViewData> = {
       {
         id: 'sync',
         title: 'Синк золотоискателей. Переговорка «Сельдерей»',
-        durationSlots: 3,
+        durationSlots: 1,
+        durationMin: 40,
         anchorDay: 'mon',
         anchorStartSlot: 16, // 16:00
         tooltip: 'Митап с продактом и аналитиком. Хотим обменяться опытом и подумать над образовательным проектом для людей с особенностями здоровья.',
@@ -535,7 +542,7 @@ export const calendarsData: Record<string, CalendarViewData> = {
         title: 'Блок работы «Ушла в задачи»',
         durationSlots: 2,
         anchorDay: 'mon',
-        anchorStartSlot: 21, // 18:30
+        anchorStartSlot: 20, // 18:00
         tooltip: 'Дорабатываю основные задачи, которые неожиданно упали к вечеру после всех встреч. Или пишу план по их решению на ближайшие 5 лет.',
       },
       {
