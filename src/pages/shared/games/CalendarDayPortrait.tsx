@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Background, Icon, IconButton, PopUp } from '../../../components/ui';
+import { Background, Icon, IconButton, InfoButton, PopUp } from '../../../components/ui';
 import type { CalendarCardData } from '../../../types/game';
 import { getWeekDays, type CalendarDay } from '../../../utils/calendarDays';
 import styles from './CalendarDayPortrait.module.css';
@@ -65,8 +65,11 @@ export function CalendarDayPortrait({
     <Background theme={theme} orientation="portrait" showBackButton={false}>
       <div className={styles.wrapper}>
 
-        <div className={styles.backRow}>
+        <div className={styles.leftColumn}>
           <IconButton type="back" variant="light" size="lg" onClick={onBack} />
+          {(topText || bottomText || bottomTextItalic) && (
+            <InfoButton size="lg" variant="dark" onClick={() => setShowIntro(true)} />
+          )}
         </div>
 
         <div className={styles.calendarArea}>

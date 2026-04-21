@@ -10,9 +10,12 @@
   gap: var(--spacing-lg);
 }
 
-.backRow {
+.leftColumn {
   flex-shrink: 0;
-  align-self: flex-start;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
 }
 
 .popupParagraph {

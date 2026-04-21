@@ -26,7 +26,7 @@ function getSrc(type: IconButtonProps['type'], variant: 'default' | 'light' | 'o
 
 export function IconButton({ type, variant = 'default', pressed, size, onClick, className }: IconButtonProps) {
   const resolvedSize = size ?? defaultSize[type];
-  const px = resolvedSize === 'lg' ? 84 : resolvedSize === 'md' ? 74 : 63;
+  const px = resolvedSize === 'lg' ? 96 : resolvedSize === 'md' ? 74 : 63;
 
   return (
     <button
