@@ -162,7 +162,7 @@
   border-radius: var(--radius-lg);
   background: var(--color-white);
   border: 3px solid transparent;
-  padding: 15px var(--spacing-md);
+  padding: var(--spacing-md) var(--spacing-lg);
   display: flex;
   flex-direction: row;
   align-items: flex-start;
@@ -175,13 +175,17 @@
   transition: box-shadow 0.15s;
 }
 
+.eventCardCompact {
+  padding: var(--spacing-xs) var(--spacing-md);
+}
+
 .eventCard:hover {
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
 }
 
 .cardTitle {
   font-family: var(--font-family);
-  font-size: var(--font-size-2xs);
+  font-size: var(--font-size-xs);
   font-weight: var(--font-weight-medium);
   color: var(--color-text-primary);
   line-height: var(--line-height-tight);
@@ -196,10 +200,15 @@
   max-width: 80%;
 }
 
+.eventCardCompact .cardTitle {
+  line-clamp: 1;
+  -webkit-line-clamp: 1;
+}
+
 .cardMeta {
   position: absolute;
-  right: 15px;
-  top: 10px;
+  right: var(--spacing-md);
+  top: var(--spacing-sm);
   width: 100px;
   display: flex;
   align-items: center;
@@ -207,13 +216,22 @@
   flex-shrink: 0;
 }
 
+.eventCardCompact .cardMeta {
+  top: var(--spacing-xs);
+  right: var(--spacing-sm);
+}
+
 .cardDuration {
   font-family: var(--font-family);
-  font-size: var(--font-size-2xs);
+  font-size: var(--font-size-xs);
   font-weight: var(--font-weight-regular);
   color: var(--color-text-primary);
   letter-spacing: var(--letter-spacing-xs);
   white-space: nowrap;
+}
+
+.eventCardCompact .cardDuration {
+  font-size: var(--font-size-2xs);
 }
 
 /* ══ Overlay ══ */

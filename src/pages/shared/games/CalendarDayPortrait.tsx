@@ -109,7 +109,7 @@ export function CalendarDayPortrait({
               {dayCards.map(card => (
                 <div
                   key={card.id}
-                  className={styles.eventCard}
+                  className={`${styles.eventCard} ${card.durationSlots === 1 ? styles.eventCardCompact : ''}`}
                   style={{
                     top: PADDING_V + (card.anchorStartSlot ?? 0) * slotH + 2,
                     height: card.durationSlots * slotH - 4,
