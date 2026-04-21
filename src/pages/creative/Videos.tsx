@@ -15,9 +15,8 @@ export function Videos() {
     navigate(`/${data.slug}`);
   };
 
-  const handleToggle = (index: number) => {
-    setPlayingIndex((prev) => (prev === index ? null : index));
-  };
+  const closeOverlay = () => setPlayingIndex(null);
+  const activeVideo = playingIndex !== null ? data.videos[playingIndex] : null;
 
   return (
     <Background theme="orange" orientation="portrait" onBack={handleBack}>
@@ -26,24 +25,34 @@ export function Videos() {
           <h2 className={styles.title}>Истории яндексоидов</h2>
 
           <div className={styles.grid}>
-            {data.videos.map((video, index) => {
-              const isPlaying = playingIndex === index;
-              return (
-                <div key={index} className={styles.item}>
-                  <Player
-                    title={video.title}
-                    state={isPlaying ? 'playing' : 'default'}
-                    orientation="vertical"
-                    src={video.src}
-                    onPlay={() => handleToggle(index)}
-                    onPause={() => handleToggle(index)}
-                  />
-                </div>
-              );
-            })}
+            {data.videos.map((video, index) => (
+              <div key={index} className={styles.item}>
+                <Player
+                  title={video.title}
+                  state="default"
+                  orientation="vertical"
+                  src={video.src}
+                  onPlay={() => setPlayingIndex(index)}
+                />
+              </div>
+            ))}
           </div>
         </div>
       </div>
+
+      {activeVideo && (
+        <div className={styles.videoOverlay} onClick={closeOverlay}>
+          <div className={styles.videoOverlayInner} onClick={(e) => e.stopPropagation()}>
+            <Player
+              title={activeVideo.title}
+              state="playing"
+              orientation="vertical"
+              src={activeVideo.src}
+              onPause={closeOverlay}
+            />
+          </div>
+        </div>
+      )}
     </Background>
   );
 }

@@ -55,6 +55,8 @@ export function Videos() {
     setPlayingIndex(null);
   }, [stopTimer]);
 
+  const activeVideo = playingIndex !== null ? data.videos[playingIndex] : null;
+
   return (
     <Background theme="orange" orientation="portrait" onBack={() => navigate(`/${data.slug}`)}>
       <div className={styles.wrapper}>
@@ -62,26 +64,36 @@ export function Videos() {
           <h2 className={styles.title}>Истории яндексоидов</h2>
 
           <div className={styles.grid}>
-          {data.videos.map((video, index) => {
-            const isPlaying = playingIndex === index;
-            return (
+            {data.videos.map((video, index) => (
               <div key={index} className={styles.item}>
                 <Player
                   title={video.title}
-                  state={isPlaying ? 'playing' : 'default'}
+                  state="default"
                   orientation="vertical"
-                  currentTime={isPlaying ? formatTime(elapsed) : '00:00'}
                   totalTime={formatTime(TOTAL_DURATION)}
-                  progress={isPlaying ? (elapsed / TOTAL_DURATION) * 100 : 0}
                   onPlay={() => handlePlay(index)}
-                  onPause={handlePause}
                 />
               </div>
-            );
-          })}
+            ))}
           </div>
         </div>
       </div>
+
+      {activeVideo && (
+        <div className={styles.videoOverlay} onClick={handlePause}>
+          <div className={styles.videoOverlayInner} onClick={(e) => e.stopPropagation()}>
+            <Player
+              title={activeVideo.title}
+              state="playing"
+              orientation="vertical"
+              currentTime={formatTime(elapsed)}
+              totalTime={formatTime(TOTAL_DURATION)}
+              progress={(elapsed / TOTAL_DURATION) * 100}
+              onPause={handlePause}
+            />
+          </div>
+        </div>
+      )}
     </Background>
   );
 }
