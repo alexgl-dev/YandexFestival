@@ -91,6 +91,10 @@ export interface TaskItem {
   belongs?: string[];
   correctLabel?: string;
   box?: { x: number; y: number; width: number; height: number };
+  /** Подмножество id из step.labels, которое показывается в пикере именно для этого объекта. Если не задано — показываются все step.labels. */
+  options?: string[];
+  /** Подсказка про точность рамки, показывается в пикере под заголовком. */
+  boxTip?: string;
   explanation: string;
   wrongHint?: string;
 }

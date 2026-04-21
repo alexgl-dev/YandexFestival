@@ -1,4 +1,6 @@
+import { useState } from 'react';
 import { Background, Button, Icon } from '../../components/ui';
+import { parseInstructionMarkup } from './instructionMarkup';
 import styles from './TaskResult.module.css';
 
 interface ResultItem {
@@ -16,6 +18,7 @@ interface TaskResultProps {
 
 export function TaskResult({ results, onContinue, theme = 'orange', orientation = 'portrait' }: TaskResultProps) {
   const correctCount = results.filter((r) => r.correct).length;
+  const [tooltip, setTooltip] = useState<string | null>(null);
 
   return (
     <Background theme={theme} orientation={orientation} showBackButton={false}>
@@ -43,11 +46,33 @@ export function TaskResult({ results, onContinue, theme = 'orange', orientation 
                 <span className={styles.itemIcon}>{result.correct ? '✔' : '✕'}</span>
                 <span className={styles.itemText}>
                   <span className={styles.itemAnswer}>{result.answer}</span>
-                  {result.explanation ? <span className={styles.itemExplanation}> — {result.explanation}</span> : null}
+                  {result.explanation ? (
+                    <span className={styles.itemExplanation}>
+                      {' — '}
+                      {parseInstructionMarkup(
+                        result.explanation,
+                        (tip) => setTooltip((prev) => (prev === tip ? null : tip)),
+                        `tr-${index}`,
+                        styles.termBtn,
+                      )}
+                    </span>
+                  ) : null}
                 </span>
               </div>
             ))}
           </div>
+          {tooltip && (
+            <div
+              className={styles.tooltipCard}
+              onClick={(e) => {
+                e.stopPropagation();
+                setTooltip(null);
+              }}
+            >
+              <p className={styles.tooltipText}>{tooltip}</p>
+              <span className={styles.tooltipDismiss}>✕</span>
+            </div>
+          )}
           <div className={styles.buttonWrap}>
             <Button label="Далее" type="main" onClick={onContinue} />
           </div>

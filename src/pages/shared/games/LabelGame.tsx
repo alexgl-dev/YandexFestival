@@ -1,7 +1,8 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import { Background, Button, Card, Icon, PopUp } from '../../../components/ui';
 import type { Task } from '../../../types/game';
 import { GameInstruction } from '../GameInstruction';
+import { parseInstructionMarkup } from '../instructionMarkup';
 import styles from './LabelGame.module.css';
 
 interface GameResult {
@@ -37,6 +38,7 @@ export function LabelGame({
   const [activeIdx, setActiveIdx] = useState<number | null>(null);
   const [wrongIdx, setWrongIdx] = useState<Set<number>>(new Set());
   const [popup, setPopup] = useState<Popup>(null);
+  const [tooltip, setTooltip] = useState<string | null>(null);
 
   const answeredCount = Object.keys(answers).length;
   const allAnswered = items.length > 0 && answeredCount === items.length;
@@ -82,6 +84,7 @@ export function LabelGame({
 
   const handlePopupAction = useCallback(() => {
     if (!popup) return;
+    setTooltip(null);
     if (popup.kind === 'success') {
       const results: GameResult[] = items.map((item, idx) => {
         const chosenId = answers[idx];
@@ -104,6 +107,22 @@ export function LabelGame({
   }, [popup, items, answers, labels, onComplete, wrongIdx]);
 
   const activeItem = activeIdx !== null ? items[activeIdx] : null;
+
+  const pickerLabels = useMemo(() => {
+    if (!activeItem?.options?.length) return labels;
+    return activeItem.options
+      .map((id) => labels.find((l) => l.id === id))
+      .filter((l): l is NonNullable<typeof l> => !!l);
+  }, [activeItem, labels]);
+
+  const handleTermClick = useCallback((tip: string) => {
+    setTooltip((prev) => (prev === tip ? null : tip));
+  }, []);
+
+  const wrongList = useMemo(
+    () => Array.from(wrongIdx).sort((a, b) => a - b),
+    [wrongIdx],
+  );
 
   return (
     <Background theme={theme} orientation={orientation} onBack={onBack}>
@@ -229,8 +248,11 @@ export function LabelGame({
                 <Icon name="close" color="red" size="s" />
               </button>
             </div>
+            {activeItem?.boxTip && (
+              <div className={styles.pickerBoxTip}>{activeItem.boxTip}</div>
+            )}
             <div className={styles.pickerOptions}>
-              {labels.map((label) => {
+              {pickerLabels.map((label) => {
                 const isChosen = activeIdx !== null && answers[activeIdx] === label.id;
                 return (
                   <Button
@@ -263,13 +285,48 @@ export function LabelGame({
                   : 'Автопилот не может тронуться'
             }
             description={
-              popup.kind === 'success'
-                ? isCardMode
+              popup.kind === 'success' ? (
+                isCardMode
                   ? 'Ты правильно классифицировал все объекты.'
                   : 'Ты только что сделал дорогу немного безопаснее.'
-                : isCardMode
-                  ? 'Попробуй ещё раз — посмотри на красные карточки.'
-                  : 'Он не понимает, что перед ним. Попробуй ещё раз — посмотри на красные объекты.'
+              ) : (
+                <div className={styles.errorBlock}>
+                  <p className={styles.errorLead}>
+                    {isCardMode
+                      ? 'Посмотри, в чём ошибка, и попробуй ещё раз:'
+                      : 'Он не понимает, что перед ним. Посмотри, что не так, и попробуй ещё раз:'}
+                  </p>
+                  <ul className={styles.errorList}>
+                    {wrongList.map((idx) => {
+                      const item = items[idx];
+                      if (!item) return null;
+                      return (
+                        <li key={idx} className={styles.errorItem}>
+                          <span className={styles.errorItemTitle}>{item.title}.</span>{' '}
+                          {parseInstructionMarkup(
+                            item.explanation,
+                            handleTermClick,
+                            `lg-err-${idx}`,
+                            styles.termBtn,
+                          )}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                  {tooltip && (
+                    <div
+                      className={styles.tooltipCard}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setTooltip(null);
+                      }}
+                    >
+                      <p className={styles.tooltipText}>{tooltip}</p>
+                      <span className={styles.tooltipDismiss}>✕</span>
+                    </div>
+                  )}
+                </div>
+              )
             }
             buttonLabel={popup.kind === 'success' ? 'Результаты' : 'Попробовать ещё'}
             onButtonClick={handlePopupAction}

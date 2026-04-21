@@ -114,3 +114,45 @@
   align-self: center;
   flex-shrink: 0;
 }
+
+.termBtn {
+  display: inline;
+  background: var(--color-bg-brand-translucent);
+  border: none;
+  color: var(--color-blue);
+  font: inherit;
+  padding: 0 var(--spacing-xs);
+  margin: 0 2px;
+  border-radius: var(--radius-xs);
+  cursor: pointer;
+}
+
+.termBtn:active {
+  background: var(--color-blue);
+  color: var(--color-white);
+}
+
+.tooltipCard {
+  padding: var(--spacing-md) var(--spacing-lg);
+  background: var(--color-white);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.tooltipText {
+  margin: 0;
+  color: var(--color-black);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+}
+
+.tooltipDismiss {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  flex-shrink: 0;
+}

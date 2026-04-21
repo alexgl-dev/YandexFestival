@@ -275,6 +275,15 @@
   background: var(--color-grey-secondary);
 }
 
+.pickerBoxTip {
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-text-muted);
+  line-height: 1.4;
+  margin-top: calc(-1 * var(--spacing-sm));
+}
+
 .pickerOptions {
   display: grid;
   grid-template-columns: repeat(6, minmax(0, 1fr));
@@ -283,6 +292,87 @@
 
 .pickerBtn {
   width: 100%;
+}
+
+/* === Error popup: per-item explanations + tooltip terms === */
+
+.errorBlock {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  width: 100%;
+}
+
+.errorLead {
+  margin: 0;
+  font-family: var(--font-family);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-text-primary);
+  line-height: 1.3;
+}
+
+.errorList {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.errorItem {
+  font-family: var(--font-family);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-text-primary);
+  line-height: 1.4;
+}
+
+.errorItemTitle {
+  font-weight: var(--font-weight-medium);
+}
+
+.termBtn {
+  display: inline;
+  background: var(--color-bg-brand-translucent);
+  border: none;
+  color: var(--color-blue);
+  font: inherit;
+  padding: 0 var(--spacing-xs);
+  margin: 0 2px;
+  border-radius: var(--radius-xs);
+  cursor: pointer;
+}
+
+.termBtn:active {
+  background: var(--color-blue);
+  color: var(--color-white);
+}
+
+.tooltipCard {
+  margin-top: var(--spacing-sm);
+  padding: var(--spacing-md) var(--spacing-lg);
+  background: var(--color-grey-light);
+  border-radius: var(--radius-sm);
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  cursor: pointer;
+}
+
+.tooltipText {
+  margin: 0;
+  color: var(--color-black);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+}
+
+.tooltipDismiss {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
+  flex-shrink: 0;
 }
 
 /* === Instruction / result overlay === */
