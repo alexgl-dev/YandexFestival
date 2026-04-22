@@ -101,56 +101,14 @@ function computeHiddenTokenIndices(tokens: string[], seed: number): Set<number> 
   return result;
 }
 
-/** Доп. чёрные плашки для code-archaeology: слишком очевидные подсказки в коде. */
+/** Чёрные плашки для code-archaeology: точный список токенов-подсказок, которые
+ *  должны быть скрыты (для этого задания случайное скрытие не используется). */
 const ARCHAEOLOGY_EXTRA_HIDDEN: Record<number, ReadonlySet<string>> = {
-  1: new Set([
-    'Популярные',
-    'товары',
-    'Подешевле',
-    'Подороже',
-    'Высокий',
-    'рейтинг',
-    'dropdown',
-    'title',
-    'items',
-    'display',
-    'none',
-    'block',
-    'open',
-    '4161FF',
-    'fff',
-  ]),
-  3: new Set([
-    'form',
-    'input',
-    'type',
-    'text',
-    'password',
-    'placeholder',
-    'invalid',
-    'error',
-    'script',
-    'if',
-    'length',
-    'classList',
-    'add',
-    'button',
-    'Войти',
-    'class',
-    'Вы',
-    'ввели',
-    'неверный',
-    'пароль',
-  ]),
-  4: new Set([
-    'Смартфон',
-    'display',
-    'grid',
-    'grid-template-columns',
-    '1fr',
-    '12px',
-    'gap',
-  ]),
+  0: new Set(['Купить']),
+  1: new Set(['Товары', 'для', 'дома', 'Электроника', 'Одежда']),
+  2: new Set(['like-button', '❤']),
+  3: new Set(['Вход', 'в', 'систему', 'password', 'Минимум', '6', 'символов', 'Продолжить']),
+  4: new Set(['Смартфон', 'XYZ', '📱', '29', '990', '₽', 'В', 'корзину']),
 };
 
 function archaeologyExtraHiddenIndices(tokens: string[], pairIndex: number): Set<number> {
@@ -183,10 +141,9 @@ export function MatchGame({
       const code = pair.right.code;
       if (!code || !pair.right.hidden) return null;
       const tokens = tokenizeCode(code);
-      const hidden = computeHiddenTokenIndices(tokens, hashString(code));
-      if (task.id === 'code-archaeology') {
-        archaeologyExtraHiddenIndices(tokens, pairIndex).forEach((i) => hidden.add(i));
-      }
+      const hidden = task.id === 'code-archaeology'
+        ? archaeologyExtraHiddenIndices(tokens, pairIndex)
+        : computeHiddenTokenIndices(tokens, hashString(code));
       return { tokens, hidden };
     });
   }, [pairs, task.id]);
@@ -442,7 +399,7 @@ export function MatchGame({
 
   return (
     <Background theme={theme} orientation={orientation} onBack={onBack}>
-      <GameInstruction instruction={task.instruction} />
+      <GameInstruction instruction={task.instruction} initialOpen={!!task.instruction?.trim()} />
       <div className={`${styles.wrapper} ${isLanguagesIntro ? styles.languagesIntro : ''}`}>
         {step?.prompt && <p className={styles.prompt}>{step.prompt}</p>}
 

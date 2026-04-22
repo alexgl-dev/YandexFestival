@@ -54,9 +54,9 @@ function highlightPython(code: string): ReactNode[] {
 
 function parseInteractive(
   text: string,
-  onTooltip: (text: string, anchor: HTMLElement) => void,
+  onTooltip: (term: string, tip: string) => void,
 ): ReactNode[] {
-  const regex = /\[([^\]]+)\]\{tooltip:\s*"([^"]*)"\}/g;
+  const regex = /\[([^\]]+)\]\{tooltip:\s*"([^"]*)"\}|\*\*([^*]+)\*\*/g;
   const parts: ReactNode[] = [];
   let last = 0;
   let key = 0;
@@ -64,21 +64,29 @@ function parseInteractive(
 
   while ((m = regex.exec(text)) !== null) {
     if (m.index > last) parts.push(<span key={key++}>{text.slice(last, m.index)}</span>);
-    const term = m[1];
-    const tip = m[2];
-    parts.push(
-      <button
-        key={key++}
-        type="button"
-        className={styles.termBtn}
-        onClick={(e) => {
-          e.stopPropagation();
-          onTooltip(tip, e.currentTarget);
-        }}
-      >
-        {term}
-      </button>,
-    );
+    if (m[1] !== undefined) {
+      const term = m[1];
+      const tip = m[2];
+      parts.push(
+        <button
+          key={key++}
+          type="button"
+          className={styles.termBtn}
+          onClick={(e) => {
+            e.stopPropagation();
+            onTooltip(term, tip);
+          }}
+        >
+          {term}
+        </button>,
+      );
+    } else if (m[3] !== undefined) {
+      parts.push(
+        <strong key={key++} className={styles.bold}>
+          {m[3]}
+        </strong>,
+      );
+    }
     last = m.index + m[0].length;
   }
   if (last < text.length) parts.push(<span key={key++}>{text.slice(last)}</span>);
@@ -126,7 +134,7 @@ export function CodeSequenceGame({
   );
   const [showPopup, setShowPopup] = useState(false);
   const [mood, setMood] = useState<RobotMood>('neutral');
-  const [tooltip, setTooltip] = useState<string | null>(null);
+  const [tooltip, setTooltip] = useState<{ term: string; tip: string } | null>(null);
   const [briefingOpen, setBriefingOpen] = useState(false);
   const dragSourceRef = useRef<number | null>(null);
 
@@ -307,25 +315,12 @@ export function CodeSequenceGame({
     <div className={`${styles.bubble} ${variant === 'popup' ? styles.bubblePopup : ''}`}>
       <div className={styles.bubbleTail} />
       <p className={styles.bubbleText}>
-        {parseInteractive(briefingSource, (text, anchor) => {
-          anchor.scrollIntoView({ block: 'nearest', inline: 'nearest' });
-          setTooltip((prev) => (prev === text ? null : text));
+        {parseInteractive(briefingSource, (term, tip) => {
+          setTooltip({ term, tip });
         })}
       </p>
       {headingText && (
         <p className={styles.bubblePromptItalic}>{headingText}</p>
-      )}
-      {tooltip && (
-        <div
-          className={styles.tooltipCard}
-          onClick={(e) => {
-            e.stopPropagation();
-            setTooltip(null);
-          }}
-        >
-          <p className={styles.tooltipText}>{tooltip}</p>
-          <span className={styles.tooltipDismiss}>✕</span>
-        </div>
       )}
     </div>
   );
@@ -340,18 +335,31 @@ export function CodeSequenceGame({
       <div className={styles.codeSequenceShell}>
         <GameInstruction instruction={task.instruction} />
         {briefingSource ? (
-          <button
-            type="button"
-            className={`${styles.floatingRobot} ${styles[`mood_${mood}`]}`}
-            onClick={(e) => {
-              e.stopPropagation();
-              setTooltip(null);
-              setBriefingOpen(true);
-            }}
-            aria-label="Открыть подсказку робота"
-          >
-            <img src={robotSrc} alt="Робот" className={styles.robotImg} />
-          </button>
+          <div className={styles.floatingRobotWrap}>
+            <button
+              type="button"
+              className={`${styles.floatingRobot} ${styles[`mood_${mood}`]}`}
+              onClick={(e) => {
+                e.stopPropagation();
+                setTooltip(null);
+                setBriefingOpen(true);
+              }}
+              aria-label="Открыть подсказку робота"
+            >
+              <img src={robotSrc} alt="Робот" className={styles.robotImg} />
+            </button>
+            <button
+              type="button"
+              className={styles.instructionBtn}
+              onClick={(e) => {
+                e.stopPropagation();
+                setTooltip(null);
+                setBriefingOpen(true);
+              }}
+            >
+              Инструкция
+            </button>
+          </div>
         ) : null}
 
         <div className={styles.page} onClick={() => setTooltip(null)}>
@@ -444,7 +452,7 @@ export function CodeSequenceGame({
 
       {briefingOpen && (
         <div
-          className={`${styles.overlay} ${overlayDimClass}`}
+          className={`${styles.overlay} ${overlayDimClass} ${styles.overlayBriefing}`}
           onClick={() => {
             setBriefingOpen(false);
             setTooltip(null);
@@ -455,16 +463,18 @@ export function CodeSequenceGame({
               <div className={`${styles.robot} ${styles.robotMedium} ${styles[`mood_${mood}`]}`}>
                 <img src={robotSrc} alt="Робот" className={styles.robotImg} />
               </div>
-              {renderBubble('popup')}
+              <div className={styles.briefingBubbleCol}>
+                {renderBubble('popup')}
+                <Button
+                  label="Закрыть"
+                  type="main"
+                  onClick={() => {
+                    setBriefingOpen(false);
+                    setTooltip(null);
+                  }}
+                />
+              </div>
             </div>
-            <Button
-              label="Закрыть"
-              type="main"
-              onClick={() => {
-                setBriefingOpen(false);
-                setTooltip(null);
-              }}
-            />
           </div>
         </div>
       )}
@@ -488,6 +498,23 @@ export function CodeSequenceGame({
               }
             }}
           />
+        </div>
+      )}
+
+      {tooltip && (
+        <div
+          className={`${styles.overlay} ${overlayDimClass} ${styles.overlayTooltip}`}
+          onClick={() => setTooltip(null)}
+        >
+          <div onClick={(e) => e.stopPropagation()}>
+            <PopUp
+              title={tooltip.term.charAt(0).toUpperCase() + tooltip.term.slice(1)}
+              description={tooltip.tip}
+              buttonLabel="Понятно"
+              onButtonClick={() => setTooltip(null)}
+              compact
+            />
+          </div>
         </div>
       )}
     </Background>

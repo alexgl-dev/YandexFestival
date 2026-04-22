@@ -640,12 +640,14 @@ export const developmentSection: SectionData = {
       feedback: 'instant',
       intro:
         'Робот-помощник пытался собрать программу для списка покупок, но рассыпал детали. Он перепутал порядок шагов и теперь не знает, что за чем должно идти.\n\nПомоги роботу разложить части кода в правильном порядке — как пазл или инструкцию по сборке техники.',
+      instruction:
+        'Распредели картинки с кодом в правильном порядке. Обращай внимание на вспомогательные слова-команды. Или слушай своё сердце. У тебя всё получится!',
       steps: [
         {
-          prompt:
-            'Распредели картинки с кодом в правильном порядке. Обращай внимание на вспомогательные слова-команды. Или слушай своё сердце. У тебя всё получится!',
+          // prompt:
+          //   'Распредели картинки с кодом в правильном порядке. Обращай внимание на вспомогательные слова-команды. Или слушай своё сердце. У тебя всё получится!',
           briefing:
-            'В программировании, как в строительстве дома, есть чёткая последовательность.\n\nНАЧАЛО — Подготовка материалов\nСначала мы достаём [инструменты]{tooltip: "from flask import…"} и готовим их к работе.\n\nСЕРЕДИНА — Инструкции\nПотом мы объясняем, что нужно показать, когда приходят пользователи. [Показать список и добавить новый элемент.]{tooltip: "Показать список (show_list) и добавить новый элемент (add_item)."}\n\nКОНЕЦ — Запуск\nВ конце мы говорим: [«Всё готово, можно включать!»]{tooltip: "Run."}',
+            'В программировании, как в строительстве дома, есть чёткая последовательность.\n\n**Начало** — Подготовка материалов\nСначала мы достаём [инструменты]{tooltip: "from flask import…"} и готовим их к работе.\n\n**Середина** — Инструкции\nПотом мы объясняем, что нужно показать, когда приходят пользователи. [Показать список и добавить новый элемент.]{tooltip: "Показать список (show_list) и добавить новый элемент (add_item)."}\n\n**Конец** — Запуск\nВ конце мы говорим: [«Всё готово, можно включать!»]{tooltip: "Run."}',
           blocks: [
             {
               text: 'НАЧАЛО — Подготовка материалов',
@@ -696,21 +698,20 @@ export const developmentSection: SectionData = {
               right: {
                 type: 'code',
                 hidden: true,
-                code: `<button class="buy">
-  Купить
-</button>
+                code: `<button class="buy-button">Купить</button>
 
-.buy {
-  background: #4161FF;
-  color: #FFFFFF;
-  padding: 18px 44px;
-  border-radius: 999px;
-  font-size: 32px;
-  border: none;
-  cursor: pointer;
-}`,
+<style>
+  .buy-button {
+    background-color: #ff5500; /* Оранжевый фон */
+    color: white;              /* Белый текст */
+    border: none;
+    padding: 15px 30px;
+    font-size: 18px;
+    border-radius: 5px;        /* Скругленные углы */
+  }
+</style>`,
               },
-              explanation: 'HTML-тег <button> с классом \'buy\' + CSS-стили с синим фоном и эффектом при наведении',
+              explanation: 'HTML-кнопка с классом buy-button + CSS-стили с оранжевым фоном и скруглёнными углами.',
             },
             {
               left: {
@@ -721,29 +722,22 @@ export const developmentSection: SectionData = {
               right: {
                 type: 'code',
                 hidden: true,
-                code: `<div class="dropdown open">
-  <div class="title">
-    Популярные товары
-  </div>
-  <ul class="items">
-    <li>Подешевле</li>
-    <li>Подороже</li>
-    <li>Высокий рейтинг</li>
-  </ul>
-</div>
+                code: `<select class="dropdown">
+  <option>Товары для дома</option>
+  <option>Электроника</option>
+  <option>Одежда</option>
+</select>
 
-.dropdown .items {
-  display: none;
-}
-.dropdown.open .items {
-  display: block;
-}
-.title {
-  background: #4161FF;
-  color: #fff;
-}`,
+<style>
+  .dropdown {
+    padding: 10px;
+    font-size: 16px;
+    border: 2px solid #ccc;
+    border-radius: 4px;
+  }
+</style>`,
               },
-              explanation: 'HTML-список <ul> с вложенными <li> + CSS-стили с display:none/block для показа/скрытия',
+              explanation: 'HTML-тег <select> с <option> внутри — стандартное выпадающее меню, оформлено простым CSS.',
             },
             {
               left: {
@@ -754,29 +748,25 @@ export const developmentSection: SectionData = {
               right: {
                 type: 'code',
                 hidden: true,
-                code: `<svg class="heart liked">
-  <path d="M12 21l-1-1
-    C5 15 2 12 2 8.5
-    A5.5 5.5 0 0 1 12 5
-    A5.5 5.5 0 0 1 22 8.5
-    C22 12 19 15 13 20z"/>
-</svg>
+                code: `<button class="like-button">❤️ 45</button>
 
-@keyframes pulse {
-  0%, 100% {
-    transform: scale(1);
+<style>
+  .like-button {
+    font-size: 24px;
+    background: none;
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 20px;
+    transition: transform 0.2s; /* Плавная анимация */
   }
-  50% {
-    transform: scale(1.3);
-  }
-}
 
-.heart.liked {
-  fill: #4161FF;
-  animation: pulse 0.6s ease;
-}`,
+  .like-button:hover {
+    transform: scale(1.2); /* Кнопка увеличивается */
+    background-color: #ffeeee;
+  }
+</style>`,
               },
-              explanation: 'CSS @keyframes анимация с transform: scale() для эффекта пульсации сердечка',
+              explanation: 'HTML-кнопка с классом like-button и CSS-трансформация scale() по :hover для увеличения при наведении.',
             },
             {
               left: {
@@ -787,26 +777,20 @@ export const developmentSection: SectionData = {
               right: {
                 type: 'code',
                 hidden: true,
-                code: `<form>
-  <input type="text"
-    placeholder="Логин">
-  <input type="password"
-    placeholder="Пароль"
-    class="invalid">
-  <p class="error">
-    Вы ввели неверный пароль
-  </p>
-  <button>Войти</button>
-</form>
+                code: `<div>
+  <h3>Вход в систему</h3>
+  <input type="text"> <input type="password">
+  <div>Минимум 6 символов</div>
+  <button>Продолжить</button>
+</div>
 
-<script>
-  if (password.length < 6) {
-    input.classList
-      .add('invalid');
-  }
-</script>`,
+<style>
+  div { width: 320px; padding: 25px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+  input { width: 100%; margin: 8px 0; }
+  button { width: 100%; background: #007bff; color: white; }
+</style>`,
               },
-              explanation: 'HTML <form> с <input type=\'password\'> + JavaScript-валидация длины пароля',
+              explanation: 'HTML-форма с <input type="password"> и подписью про длину пароля — плюс простой CSS-бокс.',
             },
             {
               left: {
@@ -817,29 +801,26 @@ export const developmentSection: SectionData = {
               right: {
                 type: 'code',
                 hidden: true,
-                code: `<div class="cards">
-  <div class="card">
-    <img src="laptop.jpg">
-    <p class="name">Ноутбук</p>
-    <span class="price">
-      38 055 ₽
-    </span>
-  </div>
-  <div class="card">
-    <img src="phone.jpg">
-    <p class="name">Смартфон</p>
-    <span class="price">
-      13 163 ₽
-    </span>
-  </div>
+                code: `<div>
+  <div>📱</div>
+  <h4>Смартфон XYZ</h4>
+  <div>29 990 ₽</div>
+  <button>В корзину</button>
 </div>
 
-.cards {
-  display: grid;
-  grid-template-columns:
-    1fr 1fr;
-  gap: 12px;
-}`,
+<style>
+  div {
+    width: 200px;
+    padding: 15px;
+    text-align: center;
+    ...
+  }
+  button {
+    background: #28a745;
+    color: white;
+    ...
+  }
+</style>`,
               },
               explanation: 'HTML-структура с <img> и <span class=\'price\'> + CSS Grid/Flexbox для сетки карточек',
             },
