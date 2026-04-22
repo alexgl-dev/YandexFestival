@@ -13,6 +13,7 @@ export interface PopUpProps {
   secondaryButtonLabel?: string;
   onSecondaryButtonClick?: () => void;
   className?: string;
+  compact?: boolean;
 }
 
 export function PopUp({
@@ -25,9 +26,10 @@ export function PopUp({
   secondaryButtonLabel,
   onSecondaryButtonClick,
   className,
+  compact,
 }: PopUpProps) {
   return (
-    <div className={`${styles.root} ${className ?? ''}`}>
+    <div className={`${styles.root} ${compact ? styles.compact : ''} ${className ?? ''}`}>
       <div className={styles.topContent}>
         {icon && (
           <div className={styles.iconArea}>

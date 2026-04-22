@@ -327,6 +327,7 @@ export function LabelGame({
               description={activeTerm.definition}
               buttonLabel="Понятно"
               onButtonClick={() => setActiveTerm(null)}
+              compact
             />
           </div>
         </div>

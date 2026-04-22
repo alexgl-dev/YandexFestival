@@ -255,6 +255,7 @@ export function ChatSignalsGame({ task, onComplete, onBack, theme = 'orange', or
               description={capitalizeFirst(activeTerm.definition)}
               buttonLabel="Понятно"
               onButtonClick={() => setActiveTerm(null)}
+              compact
             />
           </div>
         </div>

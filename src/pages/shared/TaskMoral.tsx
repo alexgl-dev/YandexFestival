@@ -131,6 +131,7 @@ export function TaskMoral({ task, onNext, isLast, sectionSlug, theme = 'orange',
               description={activeTooltip.definition}
               buttonLabel="Понятно"
               onButtonClick={() => setActiveTooltip(null)}
+              compact
             />
           </div>
         </div>

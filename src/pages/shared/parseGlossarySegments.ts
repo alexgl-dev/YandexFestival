@@ -9,15 +9,17 @@ export function parseGlossarySegments(text: string, tooltips: GlossaryTerm[]): G
   const positions: Array<{ start: number; end: number; tooltip: GlossaryTerm }> = [];
   const lower = text.toLowerCase();
   for (const t of tooltips) {
-    const needle = t.word.toLowerCase();
-    let idx = lower.indexOf(needle);
-    while (idx !== -1) {
-      let end = idx + needle.length;
-      // Extend selection through trailing letters so Russian inflections
-      // ("проджект-менеджера", "релиза", ...) are highlighted fully.
-      while (end < text.length && /\p{L}/u.test(text[end])) end++;
-      positions.push({ start: idx, end, tooltip: t });
-      idx = lower.indexOf(needle, end);
+    const needles = [t.word, ...(t.aliases ?? [])].map((w) => w.toLowerCase());
+    for (const needle of needles) {
+      let idx = lower.indexOf(needle);
+      while (idx !== -1) {
+        let end = idx + needle.length;
+        // Extend selection through trailing letters so Russian inflections
+        // ("проджект-менеджера", "релиза", ...) are highlighted fully.
+        while (end < text.length && /\p{L}/u.test(text[end])) end++;
+        positions.push({ start: idx, end, tooltip: t });
+        idx = lower.indexOf(needle, end);
+      }
     }
   }
   positions.sort((a, b) => a.start - b.start);

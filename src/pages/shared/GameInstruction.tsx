@@ -69,6 +69,7 @@ export function GameInstruction({ instruction, initialOpen, onClose, onOpenChang
                   description={activeTerm.definition}
                   buttonLabel="Понятно"
                   onButtonClick={() => setActiveTerm(null)}
+                  compact
                 />
               </div>
             </div>

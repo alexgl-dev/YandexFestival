@@ -622,6 +622,7 @@ export function LaunchSequenceGame({
               description={wordTooltip}
               buttonLabel="Понятно"
               onButtonClick={() => setWordTooltip(null)}
+              compact
             />
           </div>
         </div>

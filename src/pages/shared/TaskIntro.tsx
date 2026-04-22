@@ -77,6 +77,7 @@ export function TaskIntro({ task, onStart, onBack, theme = 'orange', orientation
               description={activeTooltip.definition}
               buttonLabel="Понятно"
               onButtonClick={() => setActiveTooltip(null)}
+              compact
             />
           </div>
         </div>

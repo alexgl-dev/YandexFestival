@@ -48,7 +48,6 @@ function StickerCard({ title, variantIndex }: {
   );
 }
 const SWIPE_THRESHOLD_X = 180; // px horizontal drag to commit trash
-const POPUP_AUTO_DISMISS = 5000; // ms
 
 type CardPhase = 'falling' | 'trashing' | 'keeping';
 
@@ -204,21 +203,6 @@ export function BacklogGame({
     // covers the initial entry only. No re-anchoring needed here.
   }, [card, popup]);
 
-  // ── popup auto-dismiss ───────────────────────────────────────────────
-  useEffect(() => {
-    if (!popup || popup.kind !== 'comment') return;
-    if (popupTimerRef.current) {
-      clearTimeout(popupTimerRef.current);
-    }
-    popupTimerRef.current = window.setTimeout(() => {
-      handlePopupDismiss();
-    }, POPUP_AUTO_DISMISS);
-    return () => {
-      if (popupTimerRef.current) clearTimeout(popupTimerRef.current);
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [popup]);
-
   const handlePopupDismiss = useCallback(() => {
     if (popupTimerRef.current) {
       clearTimeout(popupTimerRef.current);
@@ -363,8 +347,8 @@ export function BacklogGame({
 
       {/* Comment popup */}
       {popup && popup.kind === 'comment' && (
-        <div className={styles.overlay} onClick={handlePopupDismiss}>
-          <div onClick={(e) => e.stopPropagation()}>
+        <div className={styles.overlay}>
+          <div>
             <PopUp
               icon={popup.correct ? 'done' : 'close'}
               iconColor={popup.correct ? 'blue' : 'red'}
@@ -380,12 +364,14 @@ export function BacklogGame({
       {/* Glossary term modal (secondary) */}
       {activeGlossary && (
         <div className={styles.overlay} onClick={() => setActiveGlossary(null)}>
-          <div className={styles.glossaryCard} onClick={(e) => e.stopPropagation()}>
-            <h3 className={styles.glossaryWord}>{activeGlossary.word}</h3>
-            <p className={styles.glossaryDef}>{activeGlossary.definition}</p>
-            <button className={styles.commentClose} onClick={() => setActiveGlossary(null)}>
-              Понятно
-            </button>
+          <div onClick={(e) => e.stopPropagation()}>
+            <PopUp
+              title={activeGlossary.word.charAt(0).toUpperCase() + activeGlossary.word.slice(1)}
+              description={activeGlossary.definition}
+              buttonLabel="Понятно"
+              onButtonClick={() => setActiveGlossary(null)}
+              compact
+            />
           </div>
         </div>
       )}
@@ -490,12 +476,18 @@ function renderCommentWithGlossary(
   onTap: (term: GlossaryTerm) => void,
 ): React.ReactNode {
   if (!glossary || glossary.length === 0) return text;
-  const escaped = glossary.map((g) => g.word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
+  const allForms = glossary.flatMap((g) => [g.word, ...(g.aliases ?? [])]);
+  const escaped = allForms.map((w) => w.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'));
   const pattern = new RegExp(`(${escaped.join('|')})`, 'gi');
   const parts = text.split(pattern);
 
   return parts.map((part, i) => {
-    const term = glossary.find((g) => g.word.toLowerCase() === part.toLowerCase());
+    const lower = part.toLowerCase();
+    const term = glossary.find(
+      (g) =>
+        g.word.toLowerCase() === lower ||
+        (g.aliases?.some((a) => a.toLowerCase() === lower) ?? false),
+    );
     if (term) {
       return (
         <span

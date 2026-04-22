@@ -75,6 +75,7 @@ export function TaskResult({ results, onContinue, theme = 'orange', orientation 
               description={activeTerm.definition}
               buttonLabel="Понятно"
               onButtonClick={() => setActiveTerm(null)}
+              compact
             />
           </div>
         </div>

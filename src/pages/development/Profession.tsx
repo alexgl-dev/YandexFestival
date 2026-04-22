@@ -103,6 +103,7 @@ export function Profession() {
               description={activeTerm.definition}
               buttonLabel="Понятно"
               onButtonClick={() => setActiveTerm(null)}
+              compact
             />
           </div>
         </div>

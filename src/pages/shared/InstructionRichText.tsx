@@ -46,6 +46,7 @@ export function InstructionRichText({ text, withBold }: InstructionRichTextProps
               description={active.definition}
               buttonLabel="Понятно"
               onButtonClick={() => setActive(null)}
+              compact
             />
           </div>
         </div>

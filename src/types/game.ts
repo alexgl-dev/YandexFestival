@@ -10,6 +10,7 @@ export interface ProfessionSection {
 export interface GlossaryTerm {
   word: string;
   definition: string;
+  aliases?: string[];
 }
 
 export interface Profession {
