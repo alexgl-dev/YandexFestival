@@ -147,9 +147,9 @@ export const managementSection: SectionData = {
             },
             {
               id: 'anchor-hural',
-              title: 'Хурал',
+              title: 'Хурал. Еженедельное общее собрание команды. Стоит в календаре у всех. Никуда не двигать!',
               durationSlots: 2,
-              tooltip: 'Хурал — собрание, где обсуждают важные новости компании. Стоит в календаре у всех. Никуда не двигать!',
+              tooltip: 'Хурал — собрание, где обсуждают важные новости компании.',
               isAnchor: true,
               anchorDay: 'tue',
               anchorStartSlot: 2,
@@ -219,7 +219,7 @@ export const managementSection: SectionData = {
             },
             {
               id: 'card-lunch',
-              title: 'Совместный обед с командой',
+              title: 'Совместный обед с командой. Продолжительность — 1 час.',
               durationSlots: 2,
               tooltip: 'Обычно обед начинается в 13:00',
               validDays: ['mon', 'tue', 'wed'],
