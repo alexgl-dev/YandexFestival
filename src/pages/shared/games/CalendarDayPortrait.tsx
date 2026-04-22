@@ -175,28 +175,35 @@ export function CalendarDayPortrait({
 
       {tooltipCard && (
         <div className={styles.overlay} onClick={() => setTooltipCard(null)}>
-          <div className={styles.tooltipCard} onClick={e => e.stopPropagation()}>
-            <p className={styles.tooltipTitle}>{tooltipCard.title}</p>
-            <div className={styles.tooltipDuration}>
-              <Icon name="clock" color="blue" size="xs" />
-              <span>{formatDuration(tooltipCard.durationSlots, tooltipCard.durationMin)}</span>
-            </div>
-            <p className={styles.tooltipText}>
-              {parseGlossarySegments(tooltipCard.tooltip, tooltipCard.glossary ?? []).map((seg, i) =>
-                seg.tooltip ? (
-                  <span
-                    key={i}
-                    className={styles.glossaryWord}
-                    onClick={() => setActiveTerm(seg.tooltip!)}
-                  >
-                    {seg.text}
+          <div onClick={e => e.stopPropagation()}>
+            <PopUp
+              title={tooltipCard.title}
+              description={
+                <>
+                  <div className={styles.tooltipDuration}>
+                    <Icon name="clock" color="blue" size="xs" />
+                    <span>{formatDuration(tooltipCard.durationSlots, tooltipCard.durationMin)}</span>
+                  </div>
+                  <span>
+                    {parseGlossarySegments(tooltipCard.tooltip, tooltipCard.glossary ?? []).map((seg, i) =>
+                      seg.tooltip ? (
+                        <span
+                          key={i}
+                          className={styles.glossaryWord}
+                          onClick={() => setActiveTerm(seg.tooltip!)}
+                        >
+                          {seg.text}
+                        </span>
+                      ) : (
+                        <span key={i}>{seg.text}</span>
+                      )
+                    )}
                   </span>
-                ) : (
-                  <span key={i}>{seg.text}</span>
-                )
-              )}
-            </p>
-            <button className={styles.tooltipClose} onClick={() => setTooltipCard(null)}>Понятно</button>
+                </>
+              }
+              buttonLabel="Понятно"
+              onButtonClick={() => setTooltipCard(null)}
+            />
           </div>
         </div>
       )}

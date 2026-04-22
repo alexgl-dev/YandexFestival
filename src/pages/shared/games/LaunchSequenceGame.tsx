@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
-import { Background, Button, InfoButton } from '../../../components/ui';
+import { Background, Button, InfoButton, PopUp } from '../../../components/ui';
 import type { Task, TaskBlock } from '../../../types/game';
 import { GameInstruction } from '../GameInstruction';
 import styles from './LaunchSequenceGame.module.css';
@@ -25,6 +25,11 @@ const PARALLEL_ORDERS = [4, 5];
 const ROTATIONS = [-2, 3, -4, 2, -1, 4, -3, 1];
 
 const MAX_ATTEMPTS = 3;
+
+// Slots that have a right-side chevron (flow continues to the right / next row)
+const SLOTS_WITH_ARROW_RIGHT = new Set([0, 1, 2, 3, 4, 5, 6]);
+// Slots that have a left-side chevron (flow enters from previous row)
+const SLOTS_WITH_ARROW_LEFT = new Set([3, 6]);
 
 // Abstract hints for empty slots by slot index (0-based)
 const SLOT_HINTS: string[] = [
@@ -355,7 +360,16 @@ export function LaunchSequenceGame({
     const isLit = litSlots.has(sIdx);
 
     return (
-      <div key={sIdx} className={styles.slotWrapper}>
+      <div
+        key={sIdx}
+        className={[
+          styles.slotWrapper,
+          SLOTS_WITH_ARROW_RIGHT.has(sIdx) ? styles.slotWrapperArrow : '',
+          SLOTS_WITH_ARROW_LEFT.has(sIdx) ? styles.slotWrapperArrowLeft : '',
+        ]
+          .filter(Boolean)
+          .join(' ')}
+      >
         <div
           className={[
             styles.slot,
@@ -483,7 +497,7 @@ export function LaunchSequenceGame({
               ? 'Продукт запускается за 4 месяца!'
               : allPlaced
                 ? 'Готово — нажми «Проверить»'
-                : 'Выбирай карточку, затем ячейку в таймлайне'}
+                : ''}
           </p>
         </div>
 
@@ -500,30 +514,32 @@ export function LaunchSequenceGame({
           className={`${styles.overlay} ${overlayClass}`}
           onClick={() => { setDescriptionFor(null); setWordTooltip(null); }}
         >
-          <div className={styles.descCard} onClick={(e) => e.stopPropagation()}>
-            <h3 className={styles.descTitle}>{blocks[descriptionFor]?.text}</h3>
-            <p className={styles.descBody}>
-              {renderTooltips(
-                blocks[descriptionFor]?.description ?? '',
-                setWordTooltip,
-                styles.tooltipWord,
-              )}
-            </p>
-
-            {/* Inline word tooltip */}
-            {wordTooltip && (
-              <div className={styles.wordTooltipBox}>
-                <p className={styles.wordTooltipText}>{wordTooltip}</p>
-                <button className={styles.wordTooltipClose} onClick={() => setWordTooltip(null)}>✕</button>
-              </div>
-            )}
-
-            <button
-              className={styles.descBtn}
-              onClick={() => { setDescriptionFor(null); setWordTooltip(null); }}
-            >
-              Понятно
-            </button>
+          <div onClick={(e) => e.stopPropagation()}>
+            <PopUp
+              title={blocks[descriptionFor]?.text ?? ''}
+              description={
+                <>
+                  {renderTooltips(
+                    blocks[descriptionFor]?.description ?? '',
+                    setWordTooltip,
+                    styles.tooltipWord,
+                  )}
+                  {wordTooltip && (
+                    <div className={styles.wordTooltipBox}>
+                      <p className={styles.wordTooltipText}>{wordTooltip}</p>
+                      <button
+                        className={styles.wordTooltipClose}
+                        onClick={() => setWordTooltip(null)}
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  )}
+                </>
+              }
+              buttonLabel="Понятно"
+              onButtonClick={() => { setDescriptionFor(null); setWordTooltip(null); }}
+            />
           </div>
         </div>
       )}
@@ -534,12 +550,13 @@ export function LaunchSequenceGame({
           className={`${styles.overlay} ${overlayClass}`}
           onClick={() => setSlotHintFor(null)}
         >
-          <div className={styles.descCard} onClick={(e) => e.stopPropagation()}>
-            <h3 className={styles.descTitle}>Шаг {slotHintFor + 1}</h3>
-            <p className={styles.descBody}>{SLOT_HINTS[slotHintFor]}</p>
-            <button className={styles.descBtn} onClick={() => setSlotHintFor(null)}>
-              Понятно
-            </button>
+          <div onClick={(e) => e.stopPropagation()}>
+            <PopUp
+              title={`Шаг ${slotHintFor + 1}`}
+              description={SLOT_HINTS[slotHintFor]}
+              buttonLabel="Понятно"
+              onButtonClick={() => setSlotHintFor(null)}
+            />
           </div>
         </div>
       )}
@@ -550,11 +567,12 @@ export function LaunchSequenceGame({
           className={`${styles.overlay} ${overlayClass}`}
           onClick={() => setWordTooltip(null)}
         >
-          <div className={styles.wordTooltipCard} onClick={(e) => e.stopPropagation()}>
-            <p className={styles.wordTooltipCardText}>{wordTooltip}</p>
-            <button className={styles.descBtn} onClick={() => setWordTooltip(null)}>
-              Понятно
-            </button>
+          <div onClick={(e) => e.stopPropagation()}>
+            <PopUp
+              description={wordTooltip}
+              buttonLabel="Понятно"
+              onButtonClick={() => setWordTooltip(null)}
+            />
           </div>
         </div>
       )}
@@ -562,61 +580,65 @@ export function LaunchSequenceGame({
       {/* Error popup */}
       {showError && (
         <div className={`${styles.overlay} ${overlayClass}`}>
-          <div className={styles.errorCard}>
-            <div className={styles.errorIcon}>!</div>
-            <h3 className={styles.errorTitle}>Не совсем...</h3>
-            <p className={styles.errorBody}>{errorMsg}</p>
-            <p className={styles.errorAttempts}>
-              Осталось попыток: {MAX_ATTEMPTS - attemptCount}
-            </p>
-            <button className={styles.retryBtn} onClick={() => doReset(false)}>
-              Попробовать снова
-            </button>
-          </div>
+          <PopUp
+            icon="close"
+            iconColor="red"
+            title="Не совсем..."
+            description={
+              <>
+                <span>{errorMsg}</span>
+                {'\n\n'}
+                <span>Осталось попыток: {MAX_ATTEMPTS - attemptCount}</span>
+              </>
+            }
+            buttonLabel="Попробовать снова"
+            onButtonClick={() => doReset(false)}
+          />
         </div>
       )}
 
       {/* Failure popup (after MAX_ATTEMPTS wrong answers) */}
       {showFailed && (
         <div className={`${styles.overlay} ${overlayClass}`}>
-          <div className={styles.failedCard}>
-            <h2 className={styles.failedHeading}>
-              А вот как стоило расставить этапы, по мнению реальных проджект-менеджеров.
-            </h2>
-            <div className={styles.correctStepsList}>
-              {CORRECT_STEPS.map((s) => (
-                <div key={s.title} className={styles.correctStepItem}>
-                  <p className={styles.correctStepTitle}>{s.title}</p>
-                  <p className={styles.correctStepBody}>{s.body}</p>
+          <PopUp
+            icon="close"
+            iconColor="red"
+            title="А вот как стоило расставить этапы, по мнению реальных проджект-менеджеров."
+            description={
+              <>
+                <div className={styles.correctStepsList}>
+                  {CORRECT_STEPS.map((s) => (
+                    <div key={s.title} className={styles.correctStepItem}>
+                      <p className={styles.correctStepTitle}>{s.title}</p>
+                      <p className={styles.correctStepBody}>{s.body}</p>
+                    </div>
+                  ))}
                 </div>
-              ))}
-            </div>
-            <p className={styles.failedMoral}>
-              Правильный запуск экономит время и деньги, но ошибки случаются — для этого и стоит учиться.
-            </p>
-            <p className={styles.failedBody}>
-              А если бы тебе пришлось запускать видеоблог, из каких этапов состоял бы твой запуск?
-            </p>
-            <button className={styles.retryBtn} onClick={() => doReset(true)}>
-              Попробовать ещё раз
-            </button>
-          </div>
+                <p className={styles.failedMoral}>
+                  Правильный запуск экономит время и деньги, но ошибки случаются — для этого и стоит учиться.
+                </p>
+                <p className={styles.failedBody}>
+                  А если бы тебе пришлось запускать видеоблог, из каких этапов состоял бы твой запуск?
+                </p>
+              </>
+            }
+            buttonLabel="Попробовать ещё раз"
+            onButtonClick={() => doReset(true)}
+          />
         </div>
       )}
 
       {/* Completion popup */}
       {showComplete && (
         <div className={`${styles.overlay} ${overlayClass}`}>
-          <div className={styles.completeCard}>
-            <div className={styles.completeCheck}>✓</div>
-            <h2 className={styles.completeTitle}>Поздравляем!</h2>
-            <p className={styles.completeStat}>
-              Тебе удалось правильно расставить все этапы. Продукт запущен за 4 месяца.
-            </p>
-            <button className={styles.completeBtn} onClick={handleComplete}>
-              Далее
-            </button>
-          </div>
+          <PopUp
+            icon="done"
+            iconColor="blue"
+            title="Поздравляем!"
+            description="Тебе удалось правильно расставить все этапы. Продукт запущен за 4 месяца."
+            buttonLabel="Далее"
+            onButtonClick={handleComplete}
+          />
         </div>
       )}
     </Background>

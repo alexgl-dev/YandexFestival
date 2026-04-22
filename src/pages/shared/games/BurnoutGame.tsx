@@ -225,7 +225,7 @@ export function BurnoutGame({
 
               <div className={styles.infoAction}>
                 <Button
-                  label="Это он / она"
+                  label={popupOption.gender === 'f' ? 'Это она' : popupOption.gender === 'm' ? 'Это он' : 'Это он / она'}
                   type="main"
                   onClick={() => handleChoose(popupIndex)}
                 />

@@ -16,8 +16,17 @@ interface TaskMoralProps {
 }
 
 function parseMoral(text: string): { main: string; question: string | null } {
-  // Двойной перенос = несколько абзацев одного тона (без отдельного «вопроса»).
+  // Двойной перенос: если последний абзац — рефлексивный вопрос (оканчивается «?»),
+  // вытаскиваем его как отдельный италик-блок. Иначе оставляем всё «одним тоном».
   if (text.includes('\n\n')) {
+    const lastIdx = text.lastIndexOf('\n\n');
+    const tail = text.slice(lastIdx + 2).trim();
+    if (tail.endsWith('?')) {
+      return {
+        main: text.slice(0, lastIdx).trim(),
+        question: tail,
+      };
+    }
     return { main: text.trim(), question: null };
   }
 

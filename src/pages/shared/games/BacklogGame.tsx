@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Background } from '../../../components/ui';
+import { Background, PopUp } from '../../../components/ui';
 import type { CatchObject, GlossaryTerm, Task } from '../../../types/game';
 import { GameInstruction } from '../GameInstruction';
 import styles from './BacklogGame.module.css';
@@ -364,18 +364,15 @@ export function BacklogGame({
       {/* Comment popup */}
       {popup && popup.kind === 'comment' && (
         <div className={styles.overlay} onClick={handlePopupDismiss}>
-          <div className={styles.commentCard} onClick={(e) => e.stopPropagation()}>
-            <div className={[styles.commentIcon, popup.correct ? styles.iconCorrect : styles.iconWrong].join(' ')}>
-              {popup.correct ? '✓' : '✕'}
-            </div>
-            <h3 className={styles.commentTitle}>{popup.correct ? 'Верно!' : 'Не совсем...'}</h3>
-            <p className={styles.commentText}>
-              {renderCommentWithGlossary(popup.comment, popup.glossary, setActiveGlossary)}
-            </p>
-            <button className={styles.commentClose} onClick={handlePopupDismiss}>
-              Дальше
-            </button>
-            {/* <p className={styles.commentHint}>или дождись автопродолжения…</p> */}
+          <div onClick={(e) => e.stopPropagation()}>
+            <PopUp
+              icon={popup.correct ? 'done' : 'close'}
+              iconColor={popup.correct ? 'blue' : 'red'}
+              title={popup.correct ? 'Верно!' : 'Не совсем...'}
+              description={renderCommentWithGlossary(popup.comment, popup.glossary, setActiveGlossary)}
+              buttonLabel="Дальше"
+              onButtonClick={handlePopupDismiss}
+            />
           </div>
         </div>
       )}

@@ -30,6 +30,8 @@ export interface TaskOption {
   role?: string;
   quote?: string;
   details?: string[];
+  /** Пол персонажа — для согласования местоимений в кнопках/подписях. */
+  gender?: 'm' | 'f';
 }
 
 export interface TaskBlock {

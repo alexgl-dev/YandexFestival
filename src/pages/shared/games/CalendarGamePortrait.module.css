@@ -1,8 +1,7 @@
 /* CalendarGamePortrait — portrait 1080×1920 */
 
 :root {
-  --cal-p-col-width: 304px;
-  --cal-p-axis-width: 130px;
+  --cal-p-axis-width: 72px;
   --cal-p-pool-width: 340px;
 }
 
@@ -17,19 +16,6 @@
   min-height: 0;
 }
 
-.prompt {
-  flex-shrink: 0;
-  font-family: var(--font-family);
-  font-size: var(--font-size-md);
-  font-weight: var(--font-weight-medium);
-  color: var(--color-white);
-  text-align: center;
-  margin: 0;
-  padding: 0 var(--spacing-sm);
-  line-height: 1.25;
-  letter-spacing: var(--letter-spacing-xs);
-}
-
 .layout {
   display: flex;
   flex-direction: row;
@@ -42,10 +28,9 @@
 }
 
 .backRow {
-  position: absolute;
-  bottom: var(--spacing-2xl);
-  left: var(--spacing-2xl);
-  z-index: 10;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
 }
 
 /* ══ LEFT: fixed task pool ══ */
@@ -160,7 +145,7 @@
   padding-top: var(--spacing-sm);
 }
 
-/* ══ RIGHT: scrollable calendar ══ */
+/* ══ RIGHT: single-day calendar ══ */
 
 .calendarArea {
   flex: 1;
@@ -172,60 +157,51 @@
   box-sizing: border-box;
   overflow: hidden;
   display: flex;
-  flex-direction: row;
-  gap: var(--spacing-2xl);
-}
-
-/* Fixed time axis column */
-.timeAxisWrapper {
-  flex-shrink: 0;
-  width: var(--cal-p-axis-width);
-  display: flex;
   flex-direction: column;
+  gap: var(--spacing-sm);
 }
 
-.dayHeaderSpacer {
-  flex-shrink: 0;
-  height: 44px; /* matches day header row height */
-}
-
-/* Scrollable days section */
-.daysScroll {
-  flex: 1;
-  min-width: 0;
-  overflow-x: auto;
-  overflow-y: hidden;
-  display: flex;
-  flex-direction: column;
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
-}
-
-.daysScroll::-webkit-scrollbar { height: 5px; }
-.daysScroll::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.3);
-  border-radius: var(--radius-full);
-}
-
-/* ── Headers ── */
+/* ── Header with day nav ── */
 
 .calendarHeader {
   display: flex;
   flex-direction: row;
-  gap: var(--spacing-2xl);
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-lg);
   flex-shrink: 0;
-  min-width: calc(3 * var(--cal-p-col-width) + 2 * var(--spacing-2xl));
+  padding: var(--spacing-xs) 0 var(--spacing-sm);
+}
+
+.dayNavBtn {
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.18);
+  border: none;
+  color: var(--color-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.15s, opacity 0.15s;
+  flex-shrink: 0;
+}
+
+.dayNavBtn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.dayNavBtn:disabled {
+  opacity: 0.3;
+  cursor: default;
 }
 
 .dayHeader {
-  width: var(--cal-p-col-width);
-  flex-shrink: 0;
   display: flex;
   gap: 12px;
   align-items: baseline;
   justify-content: center;
-  padding: var(--spacing-xs) 0 var(--spacing-sm);
-  scroll-snap-align: start;
 }
 
 .dayHeaderAbbr {
@@ -251,11 +227,10 @@
 .calendarBody {
   display: flex;
   flex-direction: row;
-  gap: var(--spacing-2xl);
+  gap: var(--spacing-sm);
   position: relative;
   flex: 1;
   min-height: 0;
-  min-width: calc(3 * var(--cal-p-col-width) + 2 * var(--spacing-2xl));
 }
 
 /* ── Time axis ── */
@@ -281,15 +256,14 @@
   pointer-events: none;
 }
 
-/* ── Day columns ── */
+/* ── Day column ── */
 
 .dayColumn {
-  width: var(--cal-p-col-width);
-  flex-shrink: 0;
+  flex: 1;
+  min-width: 0;
   position: relative;
   /* height set via inline style */
   cursor: default;
-  scroll-snap-align: start;
 }
 
 .dayColumnTarget { cursor: crosshair; }
@@ -314,56 +288,29 @@
   background: rgba(255, 51, 0, 0.2) !important;
 }
 
-/* Ghost preview */
+/* Ghost preview — same design as placed card, dashed blue outline */
 .previewCard {
   position: absolute;
   left: 0;
   right: 0;
-  box-sizing: border-box;
-  border-radius: var(--radius-sm);
-  background: rgba(65, 97, 255, 0.3);
-  border: 2px dashed rgba(65, 97, 255, 0.7);
-  pointer-events: none;
-  display: flex;
-  align-items: flex-start;
-  padding: var(--spacing-xs);
-  font-family: var(--font-family);
-  font-size: var(--font-size-2xs);
-  font-weight: var(--font-weight-medium);
-  color: var(--color-white);
-  z-index: 3;
-  overflow: hidden;
-}
-
-/* Anchor cards */
-.anchorCard {
-  position: absolute;
-  left: 0;
-  right: 0;
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-lg);
   background: var(--color-white);
-  padding: var(--spacing-xs) var(--spacing-sm);
+  border: 3px dashed var(--color-blue);
+  padding: var(--spacing-md) var(--spacing-lg);
   display: flex;
-  flex-direction: column;
-  gap: 4px;
-  cursor: pointer;
-  z-index: 2;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--spacing-lg);
+  pointer-events: none;
+  z-index: 3;
   box-sizing: border-box;
   overflow: hidden;
-  opacity: 0.65;
+  opacity: 0.85;
 }
 
-.anchorCard:hover { opacity: 0.85; }
-
-.anchorCard .cardTitle {
-  color: var(--color-black);
-}
-
-.anchorCard .cardTime {
-  color: rgba(0, 0, 0, 0.5);
-}
-
-/* Placed cards */
+/* Event cards (anchor + placed) — 1:1 with CalendarDayPortrait */
+.anchorCard,
 .placedCard {
   position: absolute;
   left: 0;
@@ -371,63 +318,68 @@
   border-radius: var(--radius-lg);
   background: var(--color-white);
   border: 3px solid transparent;
-  padding: 15px var(--spacing-md);
+  padding: var(--spacing-md) var(--spacing-lg);
   display: flex;
   flex-direction: row;
   align-items: flex-start;
   justify-content: space-between;
-  gap: var(--spacing-xs);
-  cursor: grab;
+  gap: var(--spacing-lg);
+  cursor: pointer;
   z-index: 2;
   box-sizing: border-box;
   overflow: hidden;
   transition: box-shadow 0.15s, opacity 0.15s;
 }
 
-.placedDragging { opacity: 0.3; }
+.eventCardCompact {
+  padding: var(--spacing-xs) var(--spacing-md);
+  align-items: center;
+}
 
-.placedCard:hover   { box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15); }
-.placedCorrect      { border-color: var(--color-blue) !important; }
-.placedWrong        { border-color: var(--color-red) !important; }
+.placedCard { cursor: grab; }
+.placedCard:hover,
+.anchorCard:hover { box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15); }
+
+.placedDragging { opacity: 0.3; }
+.placedCorrect  { border-color: var(--color-blue) !important; }
+.placedWrong    { border-color: var(--color-red) !important; }
 
 .cardTitle {
   font-family: var(--font-family);
-  font-size: var(--font-size-2xs);
+  font-size: var(--font-size-xs);
   font-weight: var(--font-weight-medium);
   color: var(--color-text-primary);
   line-height: var(--line-height-tight);
   letter-spacing: var(--letter-spacing-xs);
-  display: -webkit-box;
-  -webkit-line-clamp: 4;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
   flex: 1;
   min-width: 0;
+  white-space: normal;
+  overflow-wrap: break-word;
 }
 
-.placedCardMeta {
+.cardTitleClamped {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.cardMeta {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: var(--spacing-xs);
   flex-shrink: 0;
+  width: 150px;
 }
 
-.placedCardDuration {
+.cardDuration {
   font-family: var(--font-family);
-  font-size: var(--font-size-2xs);
+  font-size: var(--font-size-xs);
   font-weight: var(--font-weight-regular);
   color: var(--color-text-primary);
   letter-spacing: var(--letter-spacing-xs);
   white-space: nowrap;
-}
-
-.cardTime {
-  font-family: var(--font-family);
-  font-size: var(--font-size-2xs);
-  font-weight: var(--font-weight-regular);
-  color: rgba(0, 0, 0, 0.5);
-  letter-spacing: var(--letter-spacing-xs);
-  flex-shrink: 0;
 }
 
 .removeHint {
@@ -494,18 +446,7 @@
   letter-spacing: var(--letter-spacing-xs);
 }
 
-.tooltipClose {
-  align-self: flex-end;
-  background: var(--color-blue);
-  color: var(--color-white);
-  border: none;
-  border-radius: var(--radius-lg);
-  padding: var(--spacing-sm) var(--spacing-2xl);
-  font-family: var(--font-family);
-  font-size: var(--font-size-md);
-  font-weight: var(--font-weight-bold);
-  cursor: pointer;
-  transition: filter 0.15s;
+.tooltipButton {
+  align-self: center;
+  margin-top: var(--spacing-sm);
 }
-
-.tooltipClose:hover { filter: brightness(1.1); }

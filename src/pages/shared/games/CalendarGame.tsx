@@ -70,6 +70,8 @@ export function CalendarGame({ task, onComplete, onBack, theme = 'orange' }: Pro
   const allCards: CalendarCardData[] = step?.calendarCards ?? [];
   const taskCards = allCards.filter(c => !c.isAnchor);
 
+  const [activeDayIdx, setActiveDayIdx] = useState(0);
+  const activeDay = DAYS[activeDayIdx];
   const [draggingId, setDraggingId] = useState<string | null>(null);
   const [placements, setPlacements] = useState<Record<string, Placement>>({});
   const [hoverSlot, setHoverSlot] = useState<{ day: string; slot: number } | null>(null);
@@ -235,136 +237,153 @@ export function CalendarGame({ task, onComplete, onBack, theme = 'orange' }: Pro
 
         {/* ══ RIGHT: calendar ══ */}
         <div className={styles.calendarArea}>
-          <div className={styles.calendarScrollWrapper}>
 
-            <div className={styles.calendarHeader}>
-              <div className={styles.timeAxisHead} />
-              {DAYS.map(d => (
-                <div key={d.id} className={styles.dayHeader}>
-                  <span className={styles.dayHeaderAbbr}>{d.abbr}</span>
-                  <span className={styles.dayHeaderDate}>{d.date}</span>
-                </div>
-              ))}
+          <div className={styles.calendarHeader}>
+            <button
+              type="button"
+              className={styles.dayNavBtn}
+              disabled={activeDayIdx === 0}
+              onClick={() => setActiveDayIdx(i => Math.max(0, i - 1))}
+              aria-label="Предыдущий день"
+            >
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="15 6 9 12 15 18" />
+              </svg>
+            </button>
+            <div className={styles.dayHeader}>
+              <span className={styles.dayHeaderAbbr}>{activeDay.abbr}</span>
+              <span className={styles.dayHeaderDate}>{activeDay.date}</span>
             </div>
+            <button
+              type="button"
+              className={styles.dayNavBtn}
+              disabled={activeDayIdx === DAYS.length - 1}
+              onClick={() => setActiveDayIdx(i => Math.min(DAYS.length - 1, i + 1))}
+              aria-label="Следующий день"
+            >
+              <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="9 6 15 12 9 18" />
+              </svg>
+            </button>
+          </div>
 
-            <div className={styles.calendarBody}>
+          <div className={styles.calendarBody}>
 
-              <div className={styles.timeAxis} style={{ height: colHeight }}>
-                {Array.from({ length: SLOT_COUNT + 1 }, (_, i) => {
-                  if (i % 2 !== 0) return null;
-                  return (
-                    <div key={i} className={styles.timeLabel} style={{ top: PADDING_V + i * SLOT_HEIGHT }}>
-                      {slotToTime(i)}
-                    </div>
-                  );
-                })}
-              </div>
-
-              {DAYS.map(day => {
-                const activeDragId = draggingId ?? pickId ?? '';
-                const occupied = getOccupied(day.id, placements, allCards, activeDragId);
-                const draggingCard = draggingId ? taskCards.find((c) => c.id === draggingId) : null;
-
-                let previewSlots: number[] = [];
-                if (draggingCard && hoverSlot?.day === day.id) {
-                  const startSlot = Math.min(hoverSlot.slot, SLOT_COUNT - draggingCard.durationSlots);
-                  const hasConf = Array.from({ length: draggingCard.durationSlots }, (_, i) => startSlot + i).some(s => occupied.has(s));
-                  if (!hasConf) previewSlots = Array.from({ length: draggingCard.durationSlots }, (_, i) => startSlot + i);
-                }
-
+            <div className={styles.timeAxis} style={{ height: colHeight }}>
+              {Array.from({ length: SLOT_COUNT + 1 }, (_, i) => {
+                if (i % 2 !== 0) return null;
                 return (
-                  <div
-                    key={day.id}
-                    className={`${styles.dayColumn} ${(draggingId || pickId) && !showResult ? styles.dayColumnTarget : ''}`}
-                    style={{ height: colHeight }}
-                    role="presentation"
-                    onClick={(e) => handleDayColumnClick(day.id, e)}
-                    onDragOver={(e) => {
-                      e.preventDefault();
-                      e.dataTransfer.dropEffect = 'move';
-                      if (!draggingId || showResult) return;
-                      const card = taskCards.find((c) => c.id === draggingId);
-                      if (!card) return;
-                      setHoverSlot({ day: day.id, slot: getSlotFromEvent(e, card.durationSlots) });
-                    }}
-                    onDragLeave={() => setHoverSlot(null)}
-                    onDrop={(e) => handleDrop(day.id, e)}
-                  >
-                    {Array.from({ length: SLOT_COUNT + 1 }, (_, i) => (
-                      <div
-                        key={i}
-                        className={`${styles.slot} ${i % 2 === 0 ? styles.slotHour : styles.slotHalf} ${conflict?.day === day.id && conflict.slot === i ? styles.slotConflict : ''}`}
-                        style={{ top: PADDING_V + i * SLOT_HEIGHT, height: i < SLOT_COUNT ? SLOT_HEIGHT : 0 }}
-                      />
-                    ))}
-
-                    {previewSlots.length > 0 && (
-                      <div
-                        className={styles.previewCard}
-                        style={{ top: PADDING_V + previewSlots[0] * SLOT_HEIGHT + 2, height: previewSlots.length * SLOT_HEIGHT - 4 }}
-                      >
-                        {draggingCard?.title}
-                      </div>
-                    )}
-
-                    {allCards.filter(c => c.isAnchor && c.anchorDay === day.id).map(card => (
-                      <div
-                        key={card.id}
-                        className={styles.anchorCard}
-                        style={{ top: PADDING_V + (card.anchorStartSlot ?? 0) * SLOT_HEIGHT + 2, height: card.durationSlots * SLOT_HEIGHT - 4 }}
-                        onClick={e => { e.stopPropagation(); setTooltipCard(card); }}
-                      >
-                        <span className={styles.lockIcon}>🔒</span>
-                        <span className={styles.cardTitle}>{card.title}</span>
-                        <span className={styles.cardTime}>{slotToTime(card.anchorStartSlot ?? 0)}–{slotToTime((card.anchorStartSlot ?? 0) + card.durationSlots)}</span>
-                      </div>
-                    ))}
-
-                    {taskCards.filter(c => placements[c.id]?.day === day.id).map(card => {
-                      const p = placements[card.id];
-                      const ok = card.id in results ? results[card.id] : undefined;
-                      const lockedCorrect = ok === true;
-                      return (
-                        <div
-                          key={card.id}
-                          draggable={!showResult && !lockedCorrect}
-                          className={`${styles.placedCard} ${ok === true ? styles.placedCorrect : ok === false ? styles.placedWrong : ''} ${draggingId === card.id ? styles.placedDragging : ''}`}
-                          style={{ top: PADDING_V + p.startSlot * SLOT_HEIGHT + 2, height: card.durationSlots * SLOT_HEIGHT - 4 }}
-                          onDragStart={(e) => {
-                            e.stopPropagation();
-                            try {
-                              e.dataTransfer.setData('text/plain', card.id);
-                              e.dataTransfer.effectAllowed = 'move';
-                            } catch {
-                              /* Safari */
-                            }
-                            setDraggingId(card.id);
-                            hideDragImage(e);
-                          }}
-                          onDragEnd={() => {
-                            setDraggingId(null);
-                            setHoverSlot(null);
-                            suppressPoolClickRef.current = true;
-                            window.setTimeout(() => {
-                              suppressPoolClickRef.current = false;
-                            }, 350);
-                          }}
-                          onClick={e => handlePlacedCardClick(card.id, e)}
-                        >
-                          <span className={styles.cardTitle}>{card.title}</span>
-                          <div className={styles.placedCardMeta}>
-                            <Icon name="clock" color="blue" size="xs" />
-                            <span className={styles.placedCardDuration}>{formatDuration(card.durationSlots)}</span>
-                          </div>
-                          {!lockedCorrect && <span className={styles.removeHint}>✕</span>}
-                        </div>
-                      );
-                    })}
+                  <div key={i} className={styles.timeLabel} style={{ top: PADDING_V + i * SLOT_HEIGHT }}>
+                    {slotToTime(i)}
                   </div>
                 );
               })}
             </div>
 
+            {(() => {
+              const day = activeDay;
+              const activeDragId = draggingId ?? pickId ?? '';
+              const occupied = getOccupied(day.id, placements, allCards, activeDragId);
+              const draggingCard = draggingId ? taskCards.find((c) => c.id === draggingId) : null;
+
+              let previewSlots: number[] = [];
+              if (draggingCard && hoverSlot?.day === day.id) {
+                const startSlot = Math.min(hoverSlot.slot, SLOT_COUNT - draggingCard.durationSlots);
+                const hasConf = Array.from({ length: draggingCard.durationSlots }, (_, i) => startSlot + i).some(s => occupied.has(s));
+                if (!hasConf) previewSlots = Array.from({ length: draggingCard.durationSlots }, (_, i) => startSlot + i);
+              }
+
+              return (
+                <div
+                  key={day.id}
+                  className={`${styles.dayColumn} ${(draggingId || pickId) && !showResult ? styles.dayColumnTarget : ''}`}
+                  style={{ height: colHeight }}
+                  role="presentation"
+                  onClick={(e) => handleDayColumnClick(day.id, e)}
+                  onDragOver={(e) => {
+                    e.preventDefault();
+                    e.dataTransfer.dropEffect = 'move';
+                    if (!draggingId || showResult) return;
+                    const card = taskCards.find((c) => c.id === draggingId);
+                    if (!card) return;
+                    setHoverSlot({ day: day.id, slot: getSlotFromEvent(e, card.durationSlots) });
+                  }}
+                  onDragLeave={() => setHoverSlot(null)}
+                  onDrop={(e) => handleDrop(day.id, e)}
+                >
+                  {Array.from({ length: SLOT_COUNT + 1 }, (_, i) => (
+                    <div
+                      key={i}
+                      className={`${styles.slot} ${i % 2 === 0 ? styles.slotHour : styles.slotHalf} ${conflict?.day === day.id && conflict.slot === i ? styles.slotConflict : ''}`}
+                      style={{ top: PADDING_V + i * SLOT_HEIGHT, height: i < SLOT_COUNT ? SLOT_HEIGHT : 0 }}
+                    />
+                  ))}
+
+                  {previewSlots.length > 0 && (
+                    <div
+                      className={styles.previewCard}
+                      style={{ top: PADDING_V + previewSlots[0] * SLOT_HEIGHT + 2, height: previewSlots.length * SLOT_HEIGHT - 4 }}
+                    >
+                      {draggingCard?.title}
+                    </div>
+                  )}
+
+                  {allCards.filter(c => c.isAnchor && c.anchorDay === day.id).map(card => (
+                    <div
+                      key={card.id}
+                      className={styles.anchorCard}
+                      style={{ top: PADDING_V + (card.anchorStartSlot ?? 0) * SLOT_HEIGHT + 2, height: card.durationSlots * SLOT_HEIGHT - 4 }}
+                      onClick={e => { e.stopPropagation(); setTooltipCard(card); }}
+                    >
+                      <span className={styles.lockIcon}>🔒</span>
+                      <span className={styles.cardTitle}>{card.title}</span>
+                      <span className={styles.cardTime}>{slotToTime(card.anchorStartSlot ?? 0)}–{slotToTime((card.anchorStartSlot ?? 0) + card.durationSlots)}</span>
+                    </div>
+                  ))}
+
+                  {taskCards.filter(c => placements[c.id]?.day === day.id).map(card => {
+                    const p = placements[card.id];
+                    const ok = card.id in results ? results[card.id] : undefined;
+                    const lockedCorrect = ok === true;
+                    return (
+                      <div
+                        key={card.id}
+                        draggable={!showResult && !lockedCorrect}
+                        className={`${styles.placedCard} ${ok === true ? styles.placedCorrect : ok === false ? styles.placedWrong : ''} ${draggingId === card.id ? styles.placedDragging : ''}`}
+                        style={{ top: PADDING_V + p.startSlot * SLOT_HEIGHT + 2, height: card.durationSlots * SLOT_HEIGHT - 4 }}
+                        onDragStart={(e) => {
+                          e.stopPropagation();
+                          try {
+                            e.dataTransfer.setData('text/plain', card.id);
+                            e.dataTransfer.effectAllowed = 'move';
+                          } catch {
+                            /* Safari */
+                          }
+                          setDraggingId(card.id);
+                          hideDragImage(e);
+                        }}
+                        onDragEnd={() => {
+                          setDraggingId(null);
+                          setHoverSlot(null);
+                          suppressPoolClickRef.current = true;
+                          window.setTimeout(() => {
+                            suppressPoolClickRef.current = false;
+                          }, 350);
+                        }}
+                        onClick={e => handlePlacedCardClick(card.id, e)}
+                      >
+                        <span className={styles.cardTitle}>{card.title}</span>
+                        <div className={styles.placedCardMeta}>
+                          <Icon name="clock" color="blue" size="xs" />
+                          <span className={styles.placedCardDuration}>{formatDuration(card.durationSlots)}</span>
+                        </div>
+                        {!lockedCorrect && <span className={styles.removeHint}>✕</span>}
+                      </div>
+                    );
+                  })}
+                </div>
+              );
+            })()}
           </div>
 
           {!showResult && allPlaced && (

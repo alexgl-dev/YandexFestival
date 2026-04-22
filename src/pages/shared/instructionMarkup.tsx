@@ -42,37 +42,48 @@ export function parseInstructionMarkup(
   return parts.length ? parts : [<span key={`${keyPrefix}-t-0`}>{text}</span>];
 }
 
-/** Parses `<b>…</b>` blocks and nested tooltip markup. */
+/** Parses `<b>…</b>` and `<i>…</i>` blocks and nested tooltip markup. */
 export function parseInstructionWithBoldMarkup(
   text: string,
   onTermClick: (tooltipDefinition: string) => void,
   keyPrefix: string,
   termBtnClassName: string,
   strongClassName: string,
+  italicClassName?: string,
 ): ReactNode[] {
   const out: ReactNode[] = [];
   let last = 0;
-  let boldIdx = 0;
-  const boldRe = /<b>([\s\S]*?)<\/b>/g;
+  let segIdx = 0;
+  const tagRe = /<(b|i)>([\s\S]*?)<\/\1>/g;
   let m: RegExpExecArray | null;
 
-  while ((m = boldRe.exec(text)) !== null) {
+  while ((m = tagRe.exec(text)) !== null) {
     if (m.index > last) {
       out.push(
-        ...parseInstructionMarkup(text.slice(last, m.index), onTermClick, `p${boldIdx}`, termBtnClassName),
+        ...parseInstructionMarkup(text.slice(last, m.index), onTermClick, `p${segIdx}`, termBtnClassName),
       );
     }
-    boldIdx += 1;
-    out.push(
-      <strong key={`${keyPrefix}-bold-${boldIdx}`} className={strongClassName}>
-        {parseInstructionMarkup(m[1], onTermClick, `b${boldIdx}`, termBtnClassName)}
-      </strong>,
-    );
+    segIdx += 1;
+    const tag = m[1];
+    const inner = parseInstructionMarkup(m[2], onTermClick, `${tag}${segIdx}`, termBtnClassName);
+    if (tag === 'b') {
+      out.push(
+        <strong key={`${keyPrefix}-bold-${segIdx}`} className={strongClassName}>
+          {inner}
+        </strong>,
+      );
+    } else {
+      out.push(
+        <em key={`${keyPrefix}-italic-${segIdx}`} className={italicClassName}>
+          {inner}
+        </em>,
+      );
+    }
     last = m.index + m[0].length;
   }
   if (last < text.length) {
     out.push(
-      ...parseInstructionMarkup(text.slice(last), onTermClick, `p${boldIdx}`, termBtnClassName),
+      ...parseInstructionMarkup(text.slice(last), onTermClick, `p${segIdx}`, termBtnClassName),
     );
   }
   return out.length

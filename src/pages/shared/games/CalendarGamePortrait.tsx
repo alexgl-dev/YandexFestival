@@ -67,6 +67,8 @@ export function CalendarGamePortrait({ task, onComplete, onBack, theme = 'orange
   const allCards: CalendarCardData[] = step?.calendarCards ?? [];
   const taskCards = allCards.filter(c => !c.isAnchor);
 
+  const [activeDayIdx, setActiveDayIdx] = useState(0);
+  const activeDay = DAYS[activeDayIdx];
   const [draggingId, setDraggingId] = useState<string | null>(null);
   const [placements, setPlacements] = useState<Record<string, Placement>>({});
   const [hoverSlot, setHoverSlot] = useState<{ day: string; slot: number } | null>(null);
@@ -183,7 +185,9 @@ export function CalendarGamePortrait({ task, onComplete, onBack, theme = 'orange
     <Background theme={theme} orientation="portrait" showBackButton={false}>
       <GameInstruction instruction={task.instruction} />
       <div className={styles.wrapper}>
-        {step.prompt && <p className={styles.prompt}>{step.prompt}</p>}
+        <div className={styles.backRow}>
+          <IconButton type="back" variant="orange" size="md" onClick={onBack} />
+        </div>
         <div className={styles.layout}>
 
         {/* ══ LEFT: fixed task pool ══ */}
@@ -253,12 +257,39 @@ export function CalendarGamePortrait({ task, onComplete, onBack, theme = 'orange
           )}
         </div>
 
-        {/* ══ RIGHT: horizontally scrollable calendar ══ */}
+        {/* ══ RIGHT: single-day calendar with day nav ══ */}
         <div className={styles.calendarArea}>
 
-          {/* Fixed time axis */}
-          <div className={styles.timeAxisWrapper}>
-            <div className={styles.dayHeaderSpacer} />
+          <div className={styles.calendarHeader}>
+            <button
+              type="button"
+              className={styles.dayNavBtn}
+              disabled={activeDayIdx === 0}
+              onClick={() => setActiveDayIdx(i => Math.max(0, i - 1))}
+              aria-label="Предыдущий день"
+            >
+              <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="15 6 9 12 15 18" />
+              </svg>
+            </button>
+            <div className={styles.dayHeader}>
+              <span className={styles.dayHeaderAbbr}>{activeDay.abbr}</span>
+              <span className={styles.dayHeaderDate}>{activeDay.date}</span>
+            </div>
+            <button
+              type="button"
+              className={styles.dayNavBtn}
+              disabled={activeDayIdx === DAYS.length - 1}
+              onClick={() => setActiveDayIdx(i => Math.min(DAYS.length - 1, i + 1))}
+              aria-label="Следующий день"
+            >
+              <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="9 6 15 12 9 18" />
+              </svg>
+            </button>
+          </div>
+
+          <div className={styles.calendarBody} ref={bodyRef}>
             <div className={styles.timeAxis} style={{ height: colH }}>
               {Array.from({ length: SLOT_COUNT + 1 }, (_, i) => {
                 if (i % 2 !== 0) return null;
@@ -269,141 +300,142 @@ export function CalendarGamePortrait({ task, onComplete, onBack, theme = 'orange
                 );
               })}
             </div>
-          </div>
 
-          {/* Scrollable day columns */}
-          <div className={styles.daysScroll}>
-            <div className={styles.calendarHeader}>
-              {DAYS.map(d => (
-                <div key={d.id} className={styles.dayHeader}>
-                  <span className={styles.dayHeaderAbbr}>{d.abbr}</span>
-                  <span className={styles.dayHeaderDate}>{d.date}</span>
-                </div>
-              ))}
-            </div>
+            {(() => {
+              const day = activeDay;
+              const activeDragId = draggingId ?? pickId ?? '';
+              const occupied = getOccupied(day.id, placements, allCards, activeDragId);
+              const draggingCard = draggingId ? taskCards.find((c) => c.id === draggingId) : null;
 
-            {/* Body — ref for height measurement */}
-            <div className={styles.calendarBody} ref={bodyRef}>
-              {DAYS.map(day => {
-                const activeDragId = draggingId ?? pickId ?? '';
-                const occupied = getOccupied(day.id, placements, allCards, activeDragId);
-                const draggingCard = draggingId ? taskCards.find((c) => c.id === draggingId) : null;
+              let previewSlots: number[] = [];
+              if (draggingCard && hoverSlot?.day === day.id) {
+                const startSlot = Math.min(hoverSlot.slot, SLOT_COUNT - draggingCard.durationSlots);
+                const hasConf = Array.from({ length: draggingCard.durationSlots }, (_, i) => startSlot + i).some(s => occupied.has(s));
+                if (!hasConf) previewSlots = Array.from({ length: draggingCard.durationSlots }, (_, i) => startSlot + i);
+              }
 
-                let previewSlots: number[] = [];
-                if (draggingCard && hoverSlot?.day === day.id) {
-                  const startSlot = Math.min(hoverSlot.slot, SLOT_COUNT - draggingCard.durationSlots);
-                  const hasConf = Array.from({ length: draggingCard.durationSlots }, (_, i) => startSlot + i).some(s => occupied.has(s));
-                  if (!hasConf) previewSlots = Array.from({ length: draggingCard.durationSlots }, (_, i) => startSlot + i);
-                }
+              return (
+                <div
+                  key={day.id}
+                  className={`${styles.dayColumn} ${(draggingId || pickId) && !showResult ? styles.dayColumnTarget : ''}`}
+                  style={{ height: colH }}
+                  role="presentation"
+                  onClick={(e) => handleDayColumnClick(day.id, e)}
+                  onDragOver={(e) => {
+                    e.preventDefault();
+                    e.dataTransfer.dropEffect = 'move';
+                    if (!draggingId || showResult) return;
+                    const card = taskCards.find((c) => c.id === draggingId);
+                    if (!card) return;
+                    setHoverSlot({ day: day.id, slot: getSlotFromDrag(e, card.durationSlots) });
+                  }}
+                  onDragLeave={() => setHoverSlot(null)}
+                  onDrop={(e) => handleDrop(day.id, e)}
+                >
+                  {Array.from({ length: SLOT_COUNT + 1 }, (_, i) => (
+                    <div
+                      key={i}
+                      className={`${styles.slot} ${i % 2 === 0 ? styles.slotHour : styles.slotHalf} ${conflict?.day === day.id && conflict.slot === i ? styles.slotConflict : ''}`}
+                      style={{ top: PADDING_V + i * slotH, height: i < SLOT_COUNT ? slotH : 0 }}
+                    />
+                  ))}
 
-                return (
-                  <div
-                    key={day.id}
-                    className={`${styles.dayColumn} ${(draggingId || pickId) && !showResult ? styles.dayColumnTarget : ''}`}
-                    style={{ height: colH }}
-                    role="presentation"
-                    onClick={(e) => handleDayColumnClick(day.id, e)}
-                    onDragOver={(e) => {
-                      e.preventDefault();
-                      e.dataTransfer.dropEffect = 'move';
-                      if (!draggingId || showResult) return;
-                      const card = taskCards.find((c) => c.id === draggingId);
-                      if (!card) return;
-                      setHoverSlot({ day: day.id, slot: getSlotFromDrag(e, card.durationSlots) });
-                    }}
-                    onDragLeave={() => setHoverSlot(null)}
-                    onDrop={(e) => handleDrop(day.id, e)}
-                  >
-                    {Array.from({ length: SLOT_COUNT + 1 }, (_, i) => (
+                  {previewSlots.length > 0 && draggingCard && (() => {
+                    const compact = draggingCard.durationSlots === 1;
+                    return (
                       <div
-                        key={i}
-                        className={`${styles.slot} ${i % 2 === 0 ? styles.slotHour : styles.slotHalf} ${conflict?.day === day.id && conflict.slot === i ? styles.slotConflict : ''}`}
-                        style={{ top: PADDING_V + i * slotH, height: i < SLOT_COUNT ? slotH : 0 }}
-                      />
-                    ))}
-
-                    {previewSlots.length > 0 && (
-                      <div
-                        className={styles.previewCard}
+                        className={`${styles.previewCard} ${compact ? styles.eventCardCompact : ''}`}
                         style={{ top: PADDING_V + previewSlots[0] * slotH + 2, height: previewSlots.length * slotH - 4 }}
                       >
-                        {draggingCard?.title}
+                        <span className={`${styles.cardTitle} ${compact ? styles.cardTitleClamped : ''}`}>{draggingCard.title}</span>
+                        <div className={styles.cardMeta}>
+                          <Icon name="clock" color="blue" size="xs" />
+                          <span className={styles.cardDuration}>{formatDuration(draggingCard.durationSlots)}</span>
+                        </div>
                       </div>
-                    )}
+                    );
+                  })()}
 
-                    {allCards.filter(c => c.isAnchor && c.anchorDay === day.id).map(card => (
+                  {allCards.filter(c => c.isAnchor && c.anchorDay === day.id).map(card => {
+                    const compact = card.durationSlots === 1;
+                    return (
                       <div
                         key={card.id}
-                        className={styles.anchorCard}
+                        className={`${styles.anchorCard} ${compact ? styles.eventCardCompact : ''}`}
                         style={{ top: PADDING_V + (card.anchorStartSlot ?? 0) * slotH + 2, height: card.durationSlots * slotH - 4 }}
                         onClick={e => { e.stopPropagation(); setTooltipCard(card); }}
                       >
-                        <span className={styles.cardTitle}>{card.title}</span>
-                        <span className={styles.cardTime}>{slotToTime(card.anchorStartSlot ?? 0)}–{slotToTime((card.anchorStartSlot ?? 0) + card.durationSlots)}</span>
-                      </div>
-                    ))}
-
-                    {taskCards.filter(c => placements[c.id]?.day === day.id).map(card => {
-                      const p = placements[card.id];
-                      const ok = card.id in results ? results[card.id] : undefined;
-                      const lockedCorrect = ok === true;
-                      return (
-                        <div
-                          key={card.id}
-                          draggable={!showResult && !lockedCorrect}
-                          className={`${styles.placedCard} ${ok === true ? styles.placedCorrect : ok === false ? styles.placedWrong : ''} ${draggingId === card.id ? styles.placedDragging : ''}`}
-                          style={{ top: PADDING_V + p.startSlot * slotH + 2, height: card.durationSlots * slotH - 4 }}
-                          onDragStart={(e) => {
-                            e.stopPropagation();
-                            try {
-                              e.dataTransfer.setData('text/plain', card.id);
-                              e.dataTransfer.effectAllowed = 'move';
-                            } catch {
-                              /* Safari */
-                            }
-                            setDraggingId(card.id);
-                            hideDragImage(e);
-                          }}
-                          onDragEnd={() => { setDraggingId(null); setHoverSlot(null); }}
-                          onClick={e => handlePlacedCardClick(card.id, e)}
-                        >
-                          <span className={styles.cardTitle}>{card.title}</span>
-                          <div className={styles.placedCardMeta}>
-                            <Icon name="clock" color="blue" size="xs" />
-                            <span className={styles.placedCardDuration}>{formatDuration(card.durationSlots)}</span>
-                          </div>
-                          {!lockedCorrect && <span className={styles.removeHint}>✕</span>}
+                        <span className={`${styles.cardTitle} ${compact ? styles.cardTitleClamped : ''}`}>{card.title}</span>
+                        <div className={styles.cardMeta}>
+                          <Icon name="clock" color="blue" size="xs" />
+                          <span className={styles.cardDuration}>{formatDuration(card.durationSlots)}</span>
                         </div>
-                      );
-                    })}
-                  </div>
-                );
-              })}
-            </div>
+                      </div>
+                    );
+                  })}
+
+                  {taskCards.filter(c => placements[c.id]?.day === day.id).map(card => {
+                    const p = placements[card.id];
+                    const ok = card.id in results ? results[card.id] : undefined;
+                    const lockedCorrect = ok === true;
+                    const compact = card.durationSlots === 1;
+                    return (
+                      <div
+                        key={card.id}
+                        draggable={!showResult && !lockedCorrect}
+                        className={`${styles.placedCard} ${compact ? styles.eventCardCompact : ''} ${ok === true ? styles.placedCorrect : ok === false ? styles.placedWrong : ''} ${draggingId === card.id ? styles.placedDragging : ''}`}
+                        style={{ top: PADDING_V + p.startSlot * slotH + 2, height: card.durationSlots * slotH - 4 }}
+                        onDragStart={(e) => {
+                          e.stopPropagation();
+                          try {
+                            e.dataTransfer.setData('text/plain', card.id);
+                            e.dataTransfer.effectAllowed = 'move';
+                          } catch {
+                            /* Safari */
+                          }
+                          setDraggingId(card.id);
+                          hideDragImage(e);
+                        }}
+                        onDragEnd={() => { setDraggingId(null); setHoverSlot(null); }}
+                        onClick={e => handlePlacedCardClick(card.id, e)}
+                      >
+                        <span className={`${styles.cardTitle} ${compact ? styles.cardTitleClamped : ''}`}>{card.title}</span>
+                        <div className={styles.cardMeta}>
+                          <Icon name="clock" color="blue" size="xs" />
+                          <span className={styles.cardDuration}>{formatDuration(card.durationSlots)}</span>
+                        </div>
+                        {!lockedCorrect && <span className={styles.removeHint}>✕</span>}
+                      </div>
+                    );
+                  })}
+                </div>
+              );
+            })()}
           </div>
 
         </div>
         </div>
-      </div>
-
-      <div className={styles.backRow}>
-        <IconButton type="back" variant="orange" size="md" onClick={onBack} />
       </div>
 
       {tooltipCard && (
         <div className={styles.overlay} onClick={() => setTooltipCard(null)}>
-          <div className={styles.tooltipCard} onClick={e => e.stopPropagation()}>
-            <p className={styles.tooltipTitle}>{tooltipCard.title}</p>
-            {!tooltipCard.isAnchor && (
-              <div className={styles.tooltipDuration}>
-                <Icon name="clock" color="blue" size="xs" />
-                <span>{formatDuration(tooltipCard.durationSlots)}</span>
-              </div>
-            )}
-            <p className={styles.tooltipText}>{tooltipCard.tooltip}</p>
-            <button className={styles.tooltipClose} onClick={() => setTooltipCard(null)}>
-              Понятно
-            </button>
+          <div onClick={e => e.stopPropagation()}>
+            <PopUp
+              title={tooltipCard.title}
+              description={
+                <>
+                  {!tooltipCard.isAnchor && (
+                    <div className={styles.tooltipDuration}>
+                      <Icon name="clock" color="blue" size="xs" />
+                      <span>{formatDuration(tooltipCard.durationSlots)}</span>
+                    </div>
+                  )}
+                  <span>{tooltipCard.tooltip}</span>
+                </>
+              }
+              buttonLabel="Понятно"
+              onButtonClick={() => setTooltipCard(null)}
+            />
           </div>
         </div>
       )}

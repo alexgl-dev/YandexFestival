@@ -51,6 +51,7 @@ export function GameInstruction({ instruction, initialOpen, onClose }: GameInstr
                     'gi',
                     styles.termBtn,
                     styles.instructionLead,
+                    styles.instructionItalic,
                   )}
                   {tooltip && (
                     <div

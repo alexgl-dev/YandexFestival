@@ -1,8 +1,8 @@
 /* CalendarGame — landscape 1920×1080 */
 
 :root {
-  --cal-col-width: 326px;
-  --cal-axis-width: 82px;
+  --cal-col-width: 520px;
+  --cal-axis-width: 64px;
 }
 
 .gameRoot {
@@ -171,45 +171,47 @@
   overflow: hidden;
 }
 
-/* Single horizontal scroll wrapper — header + body scroll together */
-.calendarScrollWrapper {
-  flex: 1;
-  min-height: 0;
-  overflow-x: auto;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-}
-
-.calendarScrollWrapper::-webkit-scrollbar { display: none; }
-.calendarScrollWrapper { scrollbar-width: none; }
-
-/* ── Headers ── */
+/* ── Header with day nav ── */
 
 .calendarHeader {
   display: flex;
   flex-direction: row;
-  gap: var(--spacing-xl);
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-lg);
   flex-shrink: 0;
-  min-width: calc(var(--cal-axis-width) + var(--spacing-xl) + 3 * var(--cal-col-width) + 2 * var(--spacing-xl));
+  padding-bottom: var(--spacing-xs);
 }
 
-.timeAxisHead {
-  width: var(--cal-axis-width);
+.dayNavBtn {
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.18);
+  border: none;
+  color: var(--color-white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.15s, opacity 0.15s;
   flex-shrink: 0;
-  position: sticky;
-  left: 0;
-  z-index: 3;
+}
+
+.dayNavBtn:hover:not(:disabled) {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.dayNavBtn:disabled {
+  opacity: 0.3;
+  cursor: default;
 }
 
 .dayHeader {
-  width: var(--cal-col-width);
-  flex-shrink: 0;
   display: flex;
   gap: 12px;
   align-items: baseline;
   justify-content: center;
-  padding: var(--spacing-xs) 0 var(--spacing-sm);
 }
 
 .dayHeaderAbbr {
@@ -235,10 +237,9 @@
 .calendarBody {
   display: flex;
   flex-direction: row;
-  gap: var(--spacing-xl);
+  gap: var(--spacing-sm);
   position: relative;
   flex-shrink: 0;
-  min-width: calc(var(--cal-axis-width) + var(--spacing-xl) + 3 * var(--cal-col-width) + 2 * var(--spacing-xl));
 }
 
 /* ── Time axis ── */
@@ -246,9 +247,7 @@
 .timeAxis {
   width: var(--cal-axis-width);
   flex-shrink: 0;
-  position: sticky;
-  left: 0;
-  z-index: 3;
+  position: relative;
   /* height set via inline style */
 }
 
@@ -265,7 +264,7 @@
   pointer-events: none;
 }
 
-/* ── Day columns ── */
+/* ── Day column ── */
 
 .dayColumn {
   width: var(--cal-col-width);
