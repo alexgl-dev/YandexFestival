@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Background, InfoButton, PopUp } from '../../../components/ui';
+import { Background, PopUp } from '../../../components/ui';
 import type { CatchObject, Task } from '../../../types/game';
 import { GameInstruction } from '../GameInstruction';
 import styles from './DatasetSanitizerGame.module.css';
@@ -85,7 +85,6 @@ export function DatasetSanitizerGame({
   const [correctCount, setCorrectCount] = useState(0);
   const [wrongCount, setWrongCount] = useState(0);
   const [finished, setFinished] = useState(false);
-  const [showGlossary, setShowGlossary] = useState(false);
   const hasInstruction = !!task.instruction?.trim();
   const [playStarted, setPlayStarted] = useState(!hasInstruction);
 
@@ -369,14 +368,6 @@ export function DatasetSanitizerGame({
           <span className={styles.timerValue}>{timeStr}</span>
         </div>
 
-        {/* ── Glossary ? button (top-right) ── */}
-        <InfoButton
-          size="md"
-          variant="ghost"
-          className={styles.glossaryBtn}
-          onClick={() => setShowGlossary(true)}
-        />
-
         {/* ── Falling cards ── */}
         {cards.map((card) => (
           <div
@@ -407,9 +398,6 @@ export function DatasetSanitizerGame({
           </div>
         ))}
       </div>
-
-      {/* ── Glossary modal ── */}
-      {showGlossary && <GlossaryModal onClose={() => setShowGlossary(false)} />}
 
       {/* ── Final screen ── */}
       {finished && (
@@ -505,72 +493,3 @@ function FinalOverlay({
   );
 }
 
-// ── Glossary modal ─────────────────────────────────────────────
-const GLOSSARY: { word: string; definition: string }[] = [
-  {
-    word: 'Датасет',
-    definition:
-      'Набор данных, организованных в таблицу. Каждая строка — одна запись (например, один клиент). Каждый столбец — один параметр (имя, возраст, email).',
-  },
-  {
-    word: 'NaN',
-    definition:
-      '«Не число» (Not a Number) — технический маркер. Появляется, когда система не нашла числового значения. В реальных данных — признак потери информации.',
-  },
-  {
-    word: 'NULL',
-    definition:
-      'Специальный маркер «пустоты». Показывает, что значение отсутствует вообще — не ноль, не пробел, а именно «ничего».',
-  },
-  {
-    word: 'undefined',
-    definition:
-      'Техническое значение из программирования: переменная объявлена, но значение ей не присвоено. В базе данных — ошибка импорта.',
-  },
-  {
-    word: 'Чистка данных',
-    definition:
-      'Процесс поиска и исправления (или удаления) ошибочных, неполных, повторяющихся или некорректных записей в базе данных.',
-  },
-  {
-    word: 'Outlier (выброс)',
-    definition:
-      'Значение, которое сильно отличается от остальных. Например, возраст 150 лет при среднем 35. Выброс — это либо ошибка, либо уникальный случай. Аналитик должен разобраться.',
-  },
-  {
-    word: 'Формат email',
-    definition:
-      'Стандарт записи электронной почты: имя@домен.зона. Все три части обязательны. Без @ письмо отправить невозможно.',
-  },
-  {
-    word: 'База клиентов',
-    definition:
-      'Структурированный список записей о пользователях или покупателях. Основа для маркетингового анализа, персонализации и отчётности.',
-  },
-  {
-    word: 'Логическая ошибка',
-    definition:
-      'Данные технически записаны, но не имеют смысла. Например, возраст −5 лет. Система приняла, но реальности это не соответствует.',
-  },
-];
-
-function GlossaryModal({ onClose }: { onClose: () => void }) {
-  return (
-    <div className={styles.overlay} onClick={onClose}>
-      <div className={styles.glossaryCard} onClick={(e) => e.stopPropagation()}>
-        <h2 className={styles.glossaryTitle}>Словарь</h2>
-        <div className={styles.glossaryList}>
-          {GLOSSARY.map((term) => (
-            <div key={term.word} className={styles.glossaryItem}>
-              <div className={styles.glossaryWord}>{term.word}</div>
-              <div className={styles.glossaryDef}>{term.definition}</div>
-            </div>
-          ))}
-        </div>
-        <button className={styles.glossaryClose} onClick={onClose}>
-          Закрыть
-        </button>
-      </div>
-    </div>
-  );
-}

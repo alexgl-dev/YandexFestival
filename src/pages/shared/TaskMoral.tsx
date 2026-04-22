@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router';
-import { Background, Button, PopUp } from '../../components/ui';
+import { Background, PopUp } from '../../components/ui';
 import type { GlossaryTerm, Task } from '../../types/game';
 import { parseGlossarySegments } from './parseGlossarySegments';
 import { InstructionRichText } from './InstructionRichText';
@@ -125,12 +125,13 @@ export function TaskMoral({ task, onNext, isLast, sectionSlug, theme = 'orange',
       />
       {activeTooltip && (
         <div className={styles.overlay} onClick={() => setActiveTooltip(null)}>
-          <div className={styles.tooltipCard} onClick={(e) => e.stopPropagation()}>
-            <p className={styles.tooltipWord_title}>
-              {activeTooltip.word.charAt(0).toUpperCase() + activeTooltip.word.slice(1)}
-            </p>
-            <p className={styles.tooltipWord_text}>{activeTooltip.definition}</p>
-            <Button label="Понятно" type="main" onClick={() => setActiveTooltip(null)} />
+          <div onClick={(e) => e.stopPropagation()}>
+            <PopUp
+              title={activeTooltip.word.charAt(0).toUpperCase() + activeTooltip.word.slice(1)}
+              description={activeTooltip.definition}
+              buttonLabel="Понятно"
+              onButtonClick={() => setActiveTooltip(null)}
+            />
           </div>
         </div>
       )}

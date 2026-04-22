@@ -33,34 +33,3 @@
   box-sizing: border-box;
 }
 
-.tooltipCard {
-  width: 100%;
-  max-width: 600px;
-  background: var(--color-white);
-  border-radius: var(--radius-lg);
-  padding: var(--spacing-2xl);
-  box-shadow: var(--shadow-card);
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-xl);
-  align-items: center;
-}
-
-.tooltipWord_title {
-  font-family: var(--font-family);
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
-  color: var(--color-black);
-  margin: 0;
-  align-self: flex-start;
-}
-
-.tooltipWord_text {
-  font-family: var(--font-family);
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-regular);
-  color: var(--color-black);
-  line-height: 1.4;
-  margin: 0;
-  align-self: flex-start;
-}

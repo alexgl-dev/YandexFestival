@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { PopUp } from '../../components/ui';
 import { parseInstructionMarkup, parseInstructionWithBoldMarkup } from './instructionMarkup';
 import styles from './GameInstruction.module.css';
 
@@ -8,18 +9,26 @@ interface InstructionRichTextProps {
   withBold?: boolean;
 }
 
+type ActiveTerm = { term: string; definition: string };
+
+function capitalize(s: string): string {
+  if (!s) return s;
+  return s.charAt(0).toUpperCase() + s.slice(1);
+}
+
 /**
  * Текст с разметкой `[термин]{tooltip: "…"}` (и опционально `<b>`) для блоков вроде PopUp.description.
+ * По клику на термин показывает унифицированный модальный PopUp с определением.
  */
 export function InstructionRichText({ text, withBold }: InstructionRichTextProps) {
-  const [tooltip, setTooltip] = useState<string | null>(null);
+  const [active, setActive] = useState<ActiveTerm | null>(null);
 
   useEffect(() => {
-    setTooltip(null);
+    setActive(null);
   }, [text]);
 
-  const onTerm = (tip: string) => {
-    setTooltip((prev) => (prev === tip ? null : tip));
+  const onTerm = (term: string, definition: string) => {
+    setActive({ term, definition });
   };
 
   const body = withBold
@@ -29,16 +38,16 @@ export function InstructionRichText({ text, withBold }: InstructionRichTextProps
   return (
     <>
       {body}
-      {tooltip && (
-        <div
-          className={styles.tooltipCard}
-          onClick={(e) => {
-            e.stopPropagation();
-            setTooltip(null);
-          }}
-        >
-          <p className={styles.tooltipText}>{tooltip}</p>
-          <span className={styles.tooltipDismiss}>✕</span>
+      {active && (
+        <div className={styles.termOverlay} onClick={() => setActive(null)}>
+          <div onClick={(e) => e.stopPropagation()}>
+            <PopUp
+              title={capitalize(active.term)}
+              description={active.definition}
+              buttonLabel="Понятно"
+              onButtonClick={() => setActive(null)}
+            />
+          </div>
         </div>
       )}
     </>

@@ -38,7 +38,8 @@ export function LabelGame({
   const [activeIdx, setActiveIdx] = useState<number | null>(null);
   const [wrongIdx, setWrongIdx] = useState<Set<number>>(new Set());
   const [popup, setPopup] = useState<Popup>(null);
-  const [tooltip, setTooltip] = useState<string | null>(null);
+  const [activeTerm, setActiveTerm] = useState<{ term: string; definition: string } | null>(null);
+  const [hintFor, setHintFor] = useState<number | null>(null);
 
   const answeredCount = Object.keys(answers).length;
   const allAnswered = items.length > 0 && answeredCount === items.length;
@@ -46,10 +47,21 @@ export function LabelGame({
   const handleHotspotClick = useCallback(
     (idx: number) => {
       if (popup) return;
+      // Wrong hotspot → show hint first; on close the picker opens
+      if (wrongIdx.has(idx)) {
+        setHintFor(idx);
+        return;
+      }
       setActiveIdx((prev) => (prev === idx ? null : idx));
     },
-    [popup],
+    [popup, wrongIdx],
   );
+
+  const handleHintClose = useCallback(() => {
+    const idx = hintFor;
+    setHintFor(null);
+    if (idx !== null) setActiveIdx(idx);
+  }, [hintFor]);
 
   const handlePickLabel = useCallback(
     (labelId: string) => {
@@ -84,7 +96,7 @@ export function LabelGame({
 
   const handlePopupAction = useCallback(() => {
     if (!popup) return;
-    setTooltip(null);
+    setActiveTerm(null);
     if (popup.kind === 'success') {
       const results: GameResult[] = items.map((item, idx) => {
         const chosenId = answers[idx];
@@ -98,13 +110,9 @@ export function LabelGame({
       onComplete(results);
       return;
     }
-    setAnswers((prev) => {
-      const next = { ...prev };
-      wrongIdx.forEach((i) => delete next[i]);
-      return next;
-    });
+    // Error: keep wrong answers visible so user can tap red hotspots for hints
     setPopup(null);
-  }, [popup, items, answers, labels, onComplete, wrongIdx]);
+  }, [popup, items, answers, labels, onComplete]);
 
   const activeItem = activeIdx !== null ? items[activeIdx] : null;
 
@@ -115,14 +123,9 @@ export function LabelGame({
       .filter((l): l is NonNullable<typeof l> => !!l);
   }, [activeItem, labels]);
 
-  const handleTermClick = useCallback((tip: string) => {
-    setTooltip((prev) => (prev === tip ? null : tip));
+  const handleTermClick = useCallback((term: string, definition: string) => {
+    setActiveTerm({ term, definition });
   }, []);
-
-  const wrongList = useMemo(
-    () => Array.from(wrongIdx).sort((a, b) => a - b),
-    [wrongIdx],
-  );
 
   return (
     <Background theme={theme} orientation={orientation} onBack={onBack}>
@@ -278,59 +281,54 @@ export function LabelGame({
             title={
               popup.kind === 'success'
                 ? isCardMode
-                  ? 'Всё верно!'
-                  : 'Автопилот запущен'
+                  ? 'Автопилот запущен.'
+                  : 'Ты только что сделал дорогу немного безопаснее.'
                 : isCardMode
-                  ? 'Есть ошибки'
-                  : 'Автопилот не может тронуться'
+                  ? 'Данные не точны.'
+                  : 'Выполнять движение рискованно.'
             }
             description={
-              popup.kind === 'success' ? (
-                isCardMode
+              popup.kind === 'success'
+                ? isCardMode
                   ? 'Ты правильно классифицировал все объекты.'
                   : 'Ты только что сделал дорогу немного безопаснее.'
-              ) : (
-                <div className={styles.errorBlock}>
-                  <p className={styles.errorLead}>
-                    {isCardMode
-                      ? 'Посмотри, в чём ошибка, и попробуй ещё раз:'
-                      : 'Он не понимает, что перед ним. Посмотри, что не так, и попробуй ещё раз:'}
-                  </p>
-                  <ul className={styles.errorList}>
-                    {wrongList.map((idx) => {
-                      const item = items[idx];
-                      if (!item) return null;
-                      return (
-                        <li key={idx} className={styles.errorItem}>
-                          <span className={styles.errorItemTitle}>{item.title}.</span>{' '}
-                          {parseInstructionMarkup(
-                            item.explanation,
-                            handleTermClick,
-                            `lg-err-${idx}`,
-                            styles.termBtn,
-                          )}
-                        </li>
-                      );
-                    })}
-                  </ul>
-                  {tooltip && (
-                    <div
-                      className={styles.tooltipCard}
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        setTooltip(null);
-                      }}
-                    >
-                      <p className={styles.tooltipText}>{tooltip}</p>
-                      <span className={styles.tooltipDismiss}>✕</span>
-                    </div>
-                  )}
-                </div>
-              )
+                : isCardMode
+                  ? 'Тапни на карточки с ошибкой, чтобы увидеть подсказку и попробовать ещё раз.'
+                  : 'Он не понимает, что перед ним. Нажми на объекты с ошибкой, чтобы увидеть подсказку.'
             }
-            buttonLabel={popup.kind === 'success' ? 'Результаты' : 'Попробовать ещё'}
+            buttonLabel={popup.kind === 'success' ? 'Результаты' : 'Понятно'}
             onButtonClick={handlePopupAction}
           />
+        </div>
+      )}
+
+      {hintFor !== null && items[hintFor] && (
+        <div className={styles.overlay} onClick={handleHintClose}>
+          <div onClick={(e) => e.stopPropagation()}>
+            <PopUp
+              description={parseInstructionMarkup(
+                items[hintFor].explanation,
+                handleTermClick,
+                `lg-hint-${hintFor}`,
+                styles.termBtn,
+              )}
+              buttonLabel="Перевыбрать тег"
+              onButtonClick={handleHintClose}
+            />
+          </div>
+        </div>
+      )}
+
+      {activeTerm && (
+        <div className={styles.termOverlay} onClick={() => setActiveTerm(null)}>
+          <div onClick={(e) => e.stopPropagation()}>
+            <PopUp
+              title={activeTerm.term.charAt(0).toUpperCase() + activeTerm.term.slice(1)}
+              description={activeTerm.definition}
+              buttonLabel="Понятно"
+              onButtonClick={() => setActiveTerm(null)}
+            />
+          </div>
         </div>
       )}
     </Background>

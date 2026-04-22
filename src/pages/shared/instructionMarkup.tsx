@@ -3,7 +3,7 @@ import type { ReactNode } from 'react';
 /** Parse `[term]{tooltip: "..."}` into inline term controls (trusted subset from CMS/data). */
 export function parseInstructionMarkup(
   text: string,
-  onTermClick: (tooltipDefinition: string) => void,
+  onTermClick: (term: string, tooltipDefinition: string) => void,
   keyPrefix: string,
   termBtnClassName: string,
 ): ReactNode[] {
@@ -28,7 +28,7 @@ export function parseInstructionMarkup(
         className={termBtnClassName}
         onClick={(e) => {
           e.stopPropagation();
-          onTermClick(tip);
+          onTermClick(term, tip);
         }}
       >
         {term}
@@ -45,7 +45,7 @@ export function parseInstructionMarkup(
 /** Parses `<b>…</b>` and `<i>…</i>` blocks and nested tooltip markup. */
 export function parseInstructionWithBoldMarkup(
   text: string,
-  onTermClick: (tooltipDefinition: string) => void,
+  onTermClick: (term: string, tooltipDefinition: string) => void,
   keyPrefix: string,
   termBtnClassName: string,
   strongClassName: string,

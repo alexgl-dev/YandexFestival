@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, useParams, useOutletContext } from 'react-router';
-import { Background, Badge, Icon } from '../../components/ui';
+import { Background, Badge, PopUp } from '../../components/ui';
 import type { SectionData, GlossaryTerm } from '../../types/game';
 import styles from './Profession.module.css';
 
@@ -91,10 +91,13 @@ export function Profession() {
 
       {activeTerm && (
         <div className={styles.overlay} onClick={() => setActiveTerm(null)}>
-          <div className={styles.popup} onClick={(e) => e.stopPropagation()}>
-            <p className={styles.popupWord}>{activeTerm.word}</p>
-            <p className={styles.popupDefinition}>{activeTerm.definition}</p>
-            <span className={styles.popupClose} onClick={() => setActiveTerm(null)}><Icon name="close" color="red" size="s" /></span>
+          <div onClick={(e) => e.stopPropagation()}>
+            <PopUp
+              title={activeTerm.word.charAt(0).toUpperCase() + activeTerm.word.slice(1)}
+              description={activeTerm.definition}
+              buttonLabel="Понятно"
+              onButtonClick={() => setActiveTerm(null)}
+            />
           </div>
         </div>
       )}

@@ -179,6 +179,8 @@ export function LaunchSequenceGame({
   const [showError, setShowError] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [litSlots, setLitSlots] = useState<Set<number>>(new Set());
+  const [litWrongSlots, setLitWrongSlots] = useState<Set<number>>(new Set());
+  const [brokenFromGroup, setBrokenFromGroup] = useState<number | null>(null);
   const [animating, setAnimating] = useState(false);
   const [showComplete, setShowComplete] = useState(false);
   const [attemptCount, setAttemptCount] = useState(0);
@@ -255,7 +257,10 @@ export function LaunchSequenceGame({
   );
 
   const runAnimation = useCallback(
-    (_currentSlots: (number | null)[]) => {
+    (
+      results: ('correct' | 'wrong' | null)[],
+      onFinish: () => void,
+    ) => {
       setAnimating(true);
       const sequence: number[][] = [];
       for (let i = 0; i < slotCount; i++) {
@@ -268,15 +273,45 @@ export function LaunchSequenceGame({
       }
 
       let delay = 150;
+      const stepDelay = 420;
       const timers: ReturnType<typeof setTimeout>[] = [];
-      for (const group of sequence) {
+      let breakAt: number | null = null;
+
+      for (let gi = 0; gi < sequence.length; gi++) {
+        const group = sequence[gi];
+        const groupCorrect = group.every((idx) => results[idx] === 'correct');
+
+        if (breakAt !== null) break;
+
         const t = setTimeout(() => {
-          setLitSlots((prev) => new Set([...prev, ...group]));
+          if (groupCorrect) {
+            setLitSlots((prev) => new Set([...prev, ...group]));
+          } else {
+            // Light correct ones (inside a parallel group) green, wrong ones red
+            const correctInGroup = group.filter((idx) => results[idx] === 'correct');
+            const wrongInGroup = group.filter((idx) => results[idx] !== 'correct');
+            if (correctInGroup.length > 0) {
+              setLitSlots((prev) => new Set([...prev, ...correctInGroup]));
+            }
+            setLitWrongSlots((prev) => new Set([...prev, ...wrongInGroup]));
+          }
         }, delay);
         timers.push(t);
-        delay += 420;
+
+        if (!groupCorrect) {
+          breakAt = gi;
+          // Break the chain: slots after this group scatter away
+          const chainT = setTimeout(() => {
+            setBrokenFromGroup(gi);
+          }, delay + 250);
+          timers.push(chainT);
+        }
+
+        delay += stepDelay;
       }
-      const doneT = setTimeout(() => setShowComplete(true), delay + 300);
+
+      const postDelay = (breakAt !== null ? delay + 600 : delay + 300);
+      const doneT = setTimeout(onFinish, postDelay);
       timers.push(doneT);
       timersRef.current = timers;
     },
@@ -298,6 +333,8 @@ export function LaunchSequenceGame({
       setSelected(null);
       setSlotHintFor(null);
       setLitSlots(new Set());
+      setLitWrongSlots(new Set());
+      setBrokenFromGroup(null);
       setAnimating(false);
       setShowComplete(false);
       if (resetAttempts) setAttemptCount(0);
@@ -318,23 +355,24 @@ export function LaunchSequenceGame({
     setSlotResults(results);
 
     const allCorrect = results.every((r) => r === 'correct');
-    if (allCorrect) {
-      const t = setTimeout(() => runAnimation(slots), 350);
-      timersRef.current.push(t);
-    } else {
-      const newCount = attemptCount + 1;
-      setAttemptCount(newCount);
 
-      if (newCount >= MAX_ATTEMPTS) {
-        // After 3 failures show the failure moral popup
-        const t = setTimeout(() => setShowFailed(true), 700);
-        timersRef.current.push(t);
+    const handleDone = () => {
+      if (allCorrect) {
+        setShowComplete(true);
       } else {
-        setErrorMsg(ATTEMPT_HINTS[newCount - 1] ?? ATTEMPT_HINTS[ATTEMPT_HINTS.length - 1]);
-        const t = setTimeout(() => setShowError(true), 700);
-        timersRef.current.push(t);
+        const newCount = attemptCount + 1;
+        setAttemptCount(newCount);
+        if (newCount >= MAX_ATTEMPTS) {
+          setShowFailed(true);
+        } else {
+          setErrorMsg(ATTEMPT_HINTS[newCount - 1] ?? ATTEMPT_HINTS[ATTEMPT_HINTS.length - 1]);
+          setShowError(true);
+        }
       }
-    }
+    };
+
+    const t = setTimeout(() => runAnimation(results, handleDone), 350);
+    timersRef.current.push(t);
   }, [allPlaced, checked, animating, slots, blocks, runAnimation, attemptCount]);
 
   const handleComplete = useCallback(() => {
@@ -352,12 +390,22 @@ export function LaunchSequenceGame({
   const overlayClass =
     orientation === 'landscape' ? styles.overlayLandscape : styles.overlayPortrait;
 
+  // Slot index → its group in the lighting sequence
+  const slotToGroup = (sIdx: number) => {
+    if (sIdx <= 2) return sIdx;
+    if (sIdx === 3 || sIdx === 4) return 3;
+    return sIdx - 1;
+  };
+
   // Render a single slot
   const renderSlot = (sIdx: number) => {
     const bIdx = slots[sIdx];
     const block = bIdx !== null ? blocks[bIdx] : null;
     const result = slotResults[sIdx];
     const isLit = litSlots.has(sIdx);
+    const isLitWrong = litWrongSlots.has(sIdx);
+    const isChainBroken =
+      brokenFromGroup !== null && slotToGroup(sIdx) > brokenFromGroup;
 
     return (
       <div
@@ -377,6 +425,8 @@ export function LaunchSequenceGame({
             result === 'correct' ? styles.slotCorrect : '',
             result === 'wrong' ? styles.slotWrong : '',
             isLit ? styles.slotLit : '',
+            isLitWrong ? styles.slotLitWrong : '',
+            isChainBroken ? styles.slotChainBroken : '',
           ]
             .filter(Boolean)
             .join(' ')}

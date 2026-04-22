@@ -32,7 +32,7 @@ export const calendarsData: Record<string, CalendarViewData> = {
       },
       {
         id: 'dev-daily',
-        title: 'Дейли. Переговорка «4 Квадробер»',
+        title: 'Дейли. \n Переговорка «4 Квадробер»',
         durationSlots: 1,
         anchorDay: 'mon',
         anchorStartSlot: 4, // 11:00
@@ -45,7 +45,7 @@ export const calendarsData: Record<string, CalendarViewData> = {
       },
       {
         id: 'dev-khural',
-        title: 'Хурал. Переговорка «7 Чудес»',
+        title: 'Хурал. \n Переговорка «7 Чудес»',
         durationSlots: 1,
         anchorDay: 'mon',
         anchorStartSlot: 6, // 12:00
@@ -64,7 +64,7 @@ export const calendarsData: Record<string, CalendarViewData> = {
       },
       {
         id: 'dev-1on1',
-        title: 'Встреча один на один с руководителем. Переговорка «3 Топовая»',
+        title: 'Встреча один на один с руководителем. \n Переговорка «3 Топовая»',
         durationSlots: 2,
         anchorDay: 'mon',
         anchorStartSlot: 9, // 13:30
@@ -87,7 +87,7 @@ export const calendarsData: Record<string, CalendarViewData> = {
       },
       {
         id: 'dev-ci',
-        title: 'Стендап CI. Переговорка «2 Ёжик в тумане»',
+        title: 'Стендап CI. \n Переговорка «2 Ёжик в тумане»',
         durationSlots: 1,
         anchorDay: 'mon',
         anchorStartSlot: 12, // 15:00
@@ -189,7 +189,7 @@ export const calendarsData: Record<string, CalendarViewData> = {
       },
       {
         id: 'd-1on1',
-        title: 'Встреча один на один «Датасеты, деплои и доберманы». Переговорка 3B «Отель Гранд Будапешт»',
+        title: 'Встреча один на один «Датасеты, деплои и доберманы». \n Переговорка 3B «Отель Гранд Будапешт»',
         durationSlots: 1,
         anchorDay: 'mon',
         anchorStartSlot: 9, // 14:30
@@ -203,7 +203,7 @@ export const calendarsData: Record<string, CalendarViewData> = {
       },
       {
         id: 'd-sync',
-        title: 'Синк с бизнесом. Переговорка 2B «Предел риска»',
+        title: 'Синк с бизнесом. \n Переговорка 2B «Предел риска»',
         durationSlots: 1,
         durationMin: 45,
         anchorDay: 'mon',
@@ -226,7 +226,7 @@ export const calendarsData: Record<string, CalendarViewData> = {
       },
       {
         id: 'd-mlweekly',
-        title: 'Командный технический синк «ML-викли: у кого что болит». Переговорка «3B Кинопаркинг»',
+        title: 'Командный технический синк «ML-викли: у кого что болит». \n Переговорка «3B Кинопаркинг»',
         durationSlots: 2,
         anchorDay: 'mon',
         anchorStartSlot: 12, // 16:00
@@ -242,7 +242,7 @@ export const calendarsData: Record<string, CalendarViewData> = {
       },
       {
         id: 'd-legal',
-        title: 'Встреча «Юридический ликбез». Переговорка «3В Тормозное шоссе»',
+        title: 'Встреча «Юридический ликбез». \n Переговорка «3В Тормозное шоссе»',
         durationSlots: 1,
         anchorDay: 'mon',
         anchorStartSlot: 14, // 17:00
@@ -264,7 +264,7 @@ export const calendarsData: Record<string, CalendarViewData> = {
       },
       {
         id: 'd-end',
-        title: 'Конец рабочего дня «Оки-Караоке». Переговорка «2B Озарк»',
+        title: 'Конец рабочего дня «Оки-Караоке». \n Переговорка «2B Озарк»',
         durationSlots: 1,
         anchorDay: 'mon',
         anchorStartSlot: 18, // 19:00
@@ -316,19 +316,19 @@ export const calendarsData: Record<string, CalendarViewData> = {
       },
       {
         id: 'm-standup',
-        title: 'Стендап с командой разработки образовательного проекта. Переговорка «Оранжевый гусь»',
+        title: 'Стендап с командой разработки образовательного проекта. \n Переговорка «Оранжевый гусь»',
         durationSlots: 1,
         anchorDay: 'mon',
         anchorStartSlot: 5, // 11:30
         tooltip: 'Я веду три проекта, и у каждого своя команда разработки. Встречи с ними проходят в разные дни. Обсуждаем, как продвигается проект.',
         glossary: [
           { word: 'Стендап', definition: 'Короткая совещательная встреча для синхронизации команды.' },
-          { word: 'Переговорка', definition: 'Помещение в офисе для проведения встреч, которое нужно бронировать заранее. Каждая переговорка имеет уникальное название со своей историей.' },
+          { word: '\n Переговорка', definition: 'Помещение в офисе для проведения встреч, которое нужно бронировать заранее. Каждая \n Переговорка имеет уникальное название со своей историей.' },
         ],
       },
       {
         id: 'm-grooming',
-        title: 'Груминг задач на дизайн приложения. Переговорка «Оранжевый гусь»',
+        title: 'Груминг задач на дизайн приложения. \n Переговорка «Оранжевый гусь»',
         durationSlots: 2,
         anchorDay: 'mon',
         anchorStartSlot: 6, // 12:00
@@ -340,7 +340,7 @@ export const calendarsData: Record<string, CalendarViewData> = {
       },
       {
         id: 'm-1on1',
-        title: 'Встреча один на один. Переговорка «Оранжевое настроение»',
+        title: 'Встреча один на один. \n Переговорка «Оранжевое настроение»',
         durationSlots: 2,
         anchorDay: 'mon',
         anchorStartSlot: 8, // 13:00
@@ -359,7 +359,7 @@ export const calendarsData: Record<string, CalendarViewData> = {
       },
       {
         id: 'm-weekly',
-        title: 'Викли. Переговорка «Оранжевый — хит сезона»',
+        title: 'Викли. \n Переговорка «Оранжевый — хит сезона»',
         durationSlots: 2,
         anchorDay: 'mon',
         anchorStartSlot: 12, // 15:00
@@ -371,7 +371,7 @@ export const calendarsData: Record<string, CalendarViewData> = {
       },
       {
         id: 'm-brainstorm',
-        title: 'Технический брейншторм команды приложения. Переговорка «Оранжевый — хит сезона»',
+        title: 'Технический брейншторм команды приложения. \n Переговорка «Оранжевый — хит сезона»',
         durationSlots: 1,
         durationMin: 50,
         anchorDay: 'mon',
@@ -444,14 +444,14 @@ export const calendarsData: Record<string, CalendarViewData> = {
       },
       {
         id: 'daily',
-        title: 'Дейли. Переговорка «Три тополя на Плющихе»',
+        title: 'Дейли. \n Переговорка «Три тополя на Плющихе»',
         durationSlots: 1,
         anchorDay: 'mon',
         anchorStartSlot: 6, // 11:00
         tooltip: 'Ежедневная командная встреча. Мы с ребятами, как супергерои, распределяем задачи между собой, чтобы в конце дня дойти до босса. Иногда встреча длится 5 минут, а иногда затягивается на целую вечность.',
         glossary: [
           { word: 'Дейли', definition: 'Короткая встреча, на которой обсуждают, что делать сегодня.' },
-          { word: 'Переговорка', definition: 'Помещение в офисе для проведения встреч, которое нужно бронировать заранее. Каждая переговорка имеет уникальное название со своей историей.' },
+          { word: '\n Переговорка', definition: 'Помещение в офисе для проведения встреч, которое нужно бронировать заранее. Каждая \n Переговорка имеет уникальное название со своей историей.' },
         ],
       },
       {
@@ -488,7 +488,7 @@ export const calendarsData: Record<string, CalendarViewData> = {
       },
       {
         id: 'grooming',
-        title: 'Груминг. Командная встреча одного из проектов. Переговорка «Три поросёнка»',
+        title: 'Груминг. Командная встреча одного из проектов. \n Переговорка «Три поросёнка»',
         durationSlots: 1,
         anchorDay: 'mon',
         anchorStartSlot: 14, // 15:00
@@ -499,7 +499,7 @@ export const calendarsData: Record<string, CalendarViewData> = {
       },
       {
         id: 'prozharka',
-        title: 'Прожарка. Командная встреча дизайнеров. Переговорка «Сельдерей»',
+        title: 'Прожарка. Командная встреча дизайнеров. \n Переговорка «Сельдерей»',
         durationSlots: 1,
         durationMin: 40,
         anchorDay: 'mon',
@@ -511,7 +511,7 @@ export const calendarsData: Record<string, CalendarViewData> = {
       },
       {
         id: 'sync',
-        title: 'Синк золотоискателей. Переговорка «Сельдерей»',
+        title: 'Синк золотоискателей. \n Переговорка «Сельдерей»',
         durationSlots: 1,
         durationMin: 40,
         anchorDay: 'mon',
@@ -550,7 +550,7 @@ export const calendarsData: Record<string, CalendarViewData> = {
       },
       {
         id: 'bookclub',
-        title: 'Неформальная встреча «Что делать?» Переговорка «Лондон»',
+        title: 'Неформальная встреча «Что делать?» \n Переговорка «Лондон»',
         durationSlots: 1,
         anchorDay: 'mon',
         anchorStartSlot: 23, // 19:30

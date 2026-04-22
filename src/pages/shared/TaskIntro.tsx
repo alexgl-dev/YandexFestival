@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import { Background, Badge, Button, Icon } from '../../components/ui';
+import { Background, Badge, Button, Icon, PopUp } from '../../components/ui';
 import type { Task, GlossaryTerm } from '../../types/game';
 import { parseGlossarySegments } from './parseGlossarySegments';
+import { minutesLabel } from '../../utils/plural';
 import styles from './TaskIntro.module.css';
 
 interface TaskIntroProps {
@@ -14,7 +15,7 @@ interface TaskIntroProps {
 
 export function TaskIntro({ task, onStart, onBack, theme = 'orange', orientation = 'portrait' }: TaskIntroProps) {
   const modeLabel = task.mode === 'group' ? 'Групповое' : 'Индивидуальное';
-  const durationLabel = `${task.duration} минут`;
+  const durationLabel = minutesLabel(task.duration);
   const [activeTooltip, setActiveTooltip] = useState<GlossaryTerm | null>(null);
 
   const segments = parseGlossarySegments(task.intro, task.introTooltips ?? []);
@@ -70,10 +71,13 @@ export function TaskIntro({ task, onStart, onBack, theme = 'orange', orientation
 
       {activeTooltip && (
         <div className={styles.overlay} onClick={() => setActiveTooltip(null)}>
-          <div className={styles.tooltipCard} onClick={(e) => e.stopPropagation()}>
-            <p className={styles.tooltipWord_title}>{activeTooltip.word.charAt(0).toUpperCase() + activeTooltip.word.slice(1)}</p>
-            <p className={styles.tooltipWord_text}>{activeTooltip.definition}</p>
-            <Button label="Понятно" type="main" onClick={() => setActiveTooltip(null)} />
+          <div onClick={(e) => e.stopPropagation()}>
+            <PopUp
+              title={activeTooltip.word.charAt(0).toUpperCase() + activeTooltip.word.slice(1)}
+              description={activeTooltip.definition}
+              buttonLabel="Понятно"
+              onButtonClick={() => setActiveTooltip(null)}
+            />
           </div>
         </div>
       )}

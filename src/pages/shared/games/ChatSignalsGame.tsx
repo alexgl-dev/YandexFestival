@@ -1,5 +1,5 @@
 import { useState, useCallback, useMemo, useEffect, useRef } from 'react';
-import { Background, Button, InfoButton } from '../../../components/ui';
+import { Background, Button, IconButton, PopUp } from '../../../components/ui';
 import type { Task, ChatMessage } from '../../../types/game';
 import { GameInstruction } from '../GameInstruction';
 import styles from './ChatSignalsGame.module.css';
@@ -38,6 +38,69 @@ function formatTime(s: number): string {
   return `${Math.floor(s / 60).toString().padStart(2, '0')}:${(s % 60).toString().padStart(2, '0')}`;
 }
 
+interface Term { term: string; definition: string }
+
+function parseTooltipTerms(tooltip?: string): Term[] {
+  if (!tooltip) return [];
+  return tooltip
+    .split(/\n{2,}/)
+    .map((para): Term | null => {
+      const m = para.match(/^\s*([^—]+?)\s+—\s+(.+)\s*$/s);
+      if (!m) return null;
+      return { term: m[1].trim(), definition: m[2].trim() };
+    })
+    .filter((x): x is Term => x !== null);
+}
+
+function escapeRegex(s: string): string {
+  return s.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function renderMessageText(
+  text: string,
+  terms: Term[],
+  onTermClick: (t: Term) => void,
+  wordClass: string,
+): React.ReactNode {
+  if (terms.length === 0) return text;
+  const sorted = [...terms].sort((a, b) => b.term.length - a.term.length);
+  // Match term + any trailing letters so inflected forms («багов», «релиза») highlight fully.
+  const pattern = new RegExp(
+    `(${sorted.map((t) => escapeRegex(t.term)).join('|')})(\\p{L}*)`,
+    'giu',
+  );
+  const nodes: React.ReactNode[] = [];
+  let pos = 0;
+  let match: RegExpExecArray | null;
+  while ((match = pattern.exec(text)) !== null) {
+    const [full, base] = match;
+    const start = match.index;
+    if (start > pos) nodes.push(<span key={`t-${pos}`}>{text.slice(pos, start)}</span>);
+    const matched = sorted.find((t) => t.term.toLowerCase() === base.toLowerCase());
+    if (matched) {
+      nodes.push(
+        <span
+          key={`w-${start}`}
+          className={wordClass}
+          onClick={(e) => { e.stopPropagation(); onTermClick(matched); }}
+        >
+          {full}
+        </span>
+      );
+    } else {
+      nodes.push(<span key={`u-${start}`}>{full}</span>);
+    }
+    pos = start + full.length;
+  }
+  if (pos < text.length) nodes.push(<span key="t-end">{text.slice(pos)}</span>);
+  return nodes;
+}
+
+function capitalizeFirst(s: string): string {
+  if (!s) return s;
+  return s.charAt(0).toUpperCase() + s.slice(1);
+}
+
 export function ChatSignalsGame({ task, onComplete, onBack, theme = 'orange', orientation = 'portrait' }: GameProps) {
   const step = task.steps[0];
   const messages: ChatMessage[] = useMemo(() => step?.messages ?? [], [step]);
@@ -48,7 +111,7 @@ export function ChatSignalsGame({ task, onComplete, onBack, theme = 'orange', or
   const [done, setDone] = useState(false);
   const [flashWrong, setFlashWrong] = useState<string | null>(null);
   const [toast, setToast] = useState<string | null>(null);
-  const [tooltipMsg, setTooltipMsg] = useState<ChatMessage | null>(null);
+  const [activeTerm, setActiveTerm] = useState<Term | null>(null);
   const [secondsLeft, setSecondsLeft] = useState(TOTAL_SECONDS);
   const timerRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
@@ -88,11 +151,6 @@ export function ChatSignalsGame({ task, onComplete, onBack, theme = 'orange', or
     }
   }, [done, total, finish]);
 
-  const handleTooltipOpen = useCallback((e: React.MouseEvent, msg: ChatMessage) => {
-    e.stopPropagation();
-    setTooltipMsg(msg);
-  }, []);
-
   const buildResult = useCallback((): GameResult => {
     const hits = [...selected].filter((id) => problemIds.has(id));
     const correct = hits.length === total && [...selected].every((id) => problemIds.has(id));
@@ -129,19 +187,22 @@ export function ChatSignalsGame({ task, onComplete, onBack, theme = 'orange', or
   };
 
   return (
-    <Background theme={theme} orientation={orientation} onBack={onBack}>
+    <Background theme={theme} orientation={orientation} showBackButton={false}>
       <GameInstruction instruction={task.instruction} />
       <div className={styles.page}>
         <div className={styles.gameHeader}>
-          <div className={styles.timerPill}>
-            <span>⏱</span>
-            <span className={`${styles.timerValue} ${secondsLeft <= 30 ? styles.timerUrgent : ''}`}>
-              {formatTime(secondsLeft)}
-            </span>
-          </div>
-          <div className={styles.counterPill}>
-            <span>🚩</span>
-            <span>Сигналов найдено: {foundCount}/{total}</span>
+          <IconButton type="back" variant={theme === 'orange' ? 'orange' : 'light'} size="md" onClick={onBack} />
+          <div className={styles.headerPills}>
+            <div className={styles.timerPill}>
+              <span>⏱</span>
+              <span className={`${styles.timerValue} ${secondsLeft <= 30 ? styles.timerUrgent : ''}`}>
+                {formatTime(secondsLeft)}
+              </span>
+            </div>
+            <div className={styles.counterPill}>
+              <span>🚩</span>
+              <span>Сигналов найдено: {foundCount}/{total}</span>
+            </div>
           </div>
         </div>
 
@@ -162,6 +223,7 @@ export function ChatSignalsGame({ task, onComplete, onBack, theme = 'orange', or
           <div className={styles.chatBody}>
             {messages.map((msg) => {
               const isPm = msg.role === 'pm';
+              const terms = parseTooltipTerms(msg.tooltip);
               return (
                 <div key={msg.id} className={`${styles.messageRow} ${isPm ? styles.messageRowPm : ''}`}>
                   <div className={`${styles.avatar} ${roleAvatarClass[msg.role]}`}>
@@ -173,15 +235,7 @@ export function ChatSignalsGame({ task, onComplete, onBack, theme = 'orange', or
                       <span className={styles.messageTime}>{msg.time}</span>
                     </div>
                     <div className={getBubbleClass(msg)} onClick={() => handleTap(msg)} role="button">
-                      {msg.text}
-                      {msg.tooltip && !done && (
-                        <InfoButton
-                          size="sm"
-                          variant="dark"
-                          className={styles.tooltipBtn}
-                          onClick={(e) => handleTooltipOpen(e, msg)}
-                        />
-                      )}
+                      {renderMessageText(msg.text, !done ? terms : [], setActiveTerm, styles.termWord)}
                     </div>
                   </div>
                 </div>
@@ -193,11 +247,15 @@ export function ChatSignalsGame({ task, onComplete, onBack, theme = 'orange', or
 
       {toast && <div className={styles.toast}>{toast}</div>}
 
-      {tooltipMsg && (
-        <div className={styles.overlay} onClick={() => setTooltipMsg(null)}>
-          <div className={styles.tooltipCard} onClick={(e) => e.stopPropagation()}>
-            <p className={styles.tooltipText}>{tooltipMsg.tooltip}</p>
-            <Button label="Понятно" type="main" onClick={() => setTooltipMsg(null)} />
+      {activeTerm && (
+        <div className={styles.overlay} onClick={() => setActiveTerm(null)}>
+          <div onClick={(e) => e.stopPropagation()}>
+            <PopUp
+              title={activeTerm.term}
+              description={capitalizeFirst(activeTerm.definition)}
+              buttonLabel="Понятно"
+              onButtonClick={() => setActiveTerm(null)}
+            />
           </div>
         </div>
       )}

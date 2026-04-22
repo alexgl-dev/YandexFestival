@@ -32,7 +32,7 @@ function getCardLayoutPct(card: CalendarCardData, slotPct: number) {
 }
 
 function renderCardTitle(title: string, peregClass: string) {
-  const idx = title.indexOf('Переговорка');
+  const idx = title.indexOf('\n Переговорка');
   if (idx === -1) return title;
   const before = title.slice(0, idx).replace(/[.\s]+$/, '');
   const after = title.slice(idx);

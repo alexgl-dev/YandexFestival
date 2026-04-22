@@ -1,6 +1,7 @@
 import { useNavigate, useOutletContext } from 'react-router';
 import { Background, ListItem } from '../../components/ui';
 import type { SectionData } from '../../types/game';
+import { minutesLabel } from '../../utils/plural';
 import styles from './TaskList.module.css';
 
 export function TaskList() {
@@ -17,7 +18,7 @@ export function TaskList() {
             <ListItem
               key={task.id}
               title={task.title}
-              duration={`${task.duration} минут`}
+              duration={minutesLabel(task.duration)}
               showPeople={task.mode === 'group'}
               state="default"
               onClick={() => navigate(`/${data.slug}/tasks/${task.id}`)}

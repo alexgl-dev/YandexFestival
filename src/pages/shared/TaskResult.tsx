@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Background, Button, Icon } from '../../components/ui';
+import { Background, Button, Icon, PopUp } from '../../components/ui';
 import { parseInstructionMarkup } from './instructionMarkup';
 import styles from './TaskResult.module.css';
 
@@ -18,7 +18,7 @@ interface TaskResultProps {
 
 export function TaskResult({ results, onContinue, theme = 'orange', orientation = 'portrait' }: TaskResultProps) {
   const correctCount = results.filter((r) => r.correct).length;
-  const [tooltip, setTooltip] = useState<string | null>(null);
+  const [activeTerm, setActiveTerm] = useState<{ term: string; definition: string } | null>(null);
 
   return (
     <Background theme={theme} orientation={orientation} showBackButton={false}>
@@ -51,7 +51,7 @@ export function TaskResult({ results, onContinue, theme = 'orange', orientation 
                       {' — '}
                       {parseInstructionMarkup(
                         result.explanation,
-                        (tip) => setTooltip((prev) => (prev === tip ? null : tip)),
+                        (term, definition) => setActiveTerm({ term, definition }),
                         `tr-${index}`,
                         styles.termBtn,
                       )}
@@ -61,23 +61,24 @@ export function TaskResult({ results, onContinue, theme = 'orange', orientation 
               </div>
             ))}
           </div>
-          {tooltip && (
-            <div
-              className={styles.tooltipCard}
-              onClick={(e) => {
-                e.stopPropagation();
-                setTooltip(null);
-              }}
-            >
-              <p className={styles.tooltipText}>{tooltip}</p>
-              <span className={styles.tooltipDismiss}>✕</span>
-            </div>
-          )}
           <div className={styles.buttonWrap}>
             <Button label="Далее" type="main" onClick={onContinue} />
           </div>
         </div>
       </div>
+
+      {activeTerm && (
+        <div className={styles.termOverlay} onClick={() => setActiveTerm(null)}>
+          <div onClick={(e) => e.stopPropagation()}>
+            <PopUp
+              title={activeTerm.term.charAt(0).toUpperCase() + activeTerm.term.slice(1)}
+              description={activeTerm.definition}
+              buttonLabel="Понятно"
+              onButtonClick={() => setActiveTerm(null)}
+            />
+          </div>
+        </div>
+      )}
     </Background>
   );
 }

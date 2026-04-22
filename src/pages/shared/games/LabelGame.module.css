@@ -338,44 +338,14 @@
 
 .termBtn {
   display: inline;
-  background: var(--color-bg-brand-translucent);
+  background: none;
   border: none;
+  border-bottom: 2px dashed var(--color-blue);
   color: var(--color-blue);
   font: inherit;
-  padding: 0 var(--spacing-xs);
-  margin: 0 2px;
-  border-radius: var(--radius-xs);
-  cursor: pointer;
-}
-
-.termBtn:active {
-  background: var(--color-blue);
-  color: var(--color-white);
-}
-
-.tooltipCard {
-  margin-top: var(--spacing-sm);
-  padding: var(--spacing-md) var(--spacing-lg);
-  background: var(--color-grey-light);
-  border-radius: var(--radius-sm);
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: var(--spacing-md);
-  cursor: pointer;
-}
-
-.tooltipText {
+  padding: 0;
   margin: 0;
-  color: var(--color-black);
-  font-size: var(--font-size-sm);
-  line-height: var(--line-height-normal);
-}
-
-.tooltipDismiss {
-  color: var(--color-text-muted);
-  font-size: var(--font-size-sm);
-  flex-shrink: 0;
+  cursor: pointer;
 }
 
 /* === Instruction / result overlay === */
@@ -390,6 +360,18 @@
   justify-content: center;
   background: rgba(0, 0, 0, 0.7);
   z-index: 9999;
+  padding: var(--spacing-2xl);
+  box-sizing: border-box;
+}
+
+.termOverlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--color-overlay-dark);
+  z-index: 10001;
   padding: var(--spacing-2xl);
   box-sizing: border-box;
 }

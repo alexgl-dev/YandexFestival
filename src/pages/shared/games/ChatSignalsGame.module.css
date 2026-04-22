@@ -8,7 +8,7 @@
   height: 100%;
   align-self: stretch;
   margin: 0 auto;
-  padding: var(--spacing-lg) 0;
+  padding: var(--spacing-2xl) 0 var(--spacing-lg);
   font-family: var(--font-family);
   box-sizing: border-box;
   min-height: 0;
@@ -23,6 +23,12 @@
   width: 100%;
   gap: var(--spacing-md);
   flex-shrink: 0;
+}
+
+.headerPills {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
 }
 
 .timerPill,
@@ -54,12 +60,11 @@
 .chat {
   width: 100%;
   flex: 1 1 auto;
+  max-height: 90%;
   min-height: 0;
   background: var(--color-white);
   border-radius: 48px;
-  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.3),
-    0 0 0 8px rgba(0, 0, 0, 0.25),
-    0 0 0 10px rgba(255, 255, 255, 0.08);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.3);
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -235,13 +240,12 @@
   box-shadow: none;
 }
 
-/* ── Tooltip button inside bubble ── */
+/* ── Highlighted term inside message ── */
 
-.tooltipBtn {
-  position: absolute;
-  bottom: -14px;
-  right: -14px;
-  z-index: 1;
+.termWord {
+  border-bottom: 2px dashed var(--color-blue);
+  color: var(--color-blue);
+  cursor: pointer;
 }
 
 /* ── Avatar ── */
@@ -276,13 +280,13 @@
 /* ── Toast ── */
 
 @keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(16px); }
-  to   { opacity: 1; transform: translateY(0); }
+  from { opacity: 0; transform: translate(-50%, 16px); }
+  to   { opacity: 1; transform: translate(-50%, 0); }
 }
 
 .toast {
   position: fixed;
-  bottom: 80px;
+  bottom: 220px;
   left: 50%;
   transform: translateX(-50%);
   background: var(--color-black);
@@ -326,6 +330,13 @@
   flex-direction: column;
   gap: var(--spacing-xl);
   align-items: center;
+}
+
+.tooltipTextWrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  width: 100%;
 }
 
 .tooltipText {
@@ -380,7 +391,7 @@
 .signalCard {
   position: relative;
   background: var(--color-white);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-lg);
   padding: var(--spacing-lg);
   display: flex;
   flex-direction: column;
