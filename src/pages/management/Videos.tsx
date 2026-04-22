@@ -64,7 +64,7 @@ export function Videos() {
           <h2 className={styles.title}>Истории яндексоидов</h2>
 
           <div className={styles.grid}>
-            {data.videos.map((video, index) => (
+            {data.videos.slice(0, 1).map((video, index) => (
               <div key={index} className={styles.item}>
                 <Player
                   title={video.title}
