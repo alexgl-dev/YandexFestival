@@ -7,7 +7,6 @@
   min-height: 300px;
   max-height: 90vh;
   padding: var(--spacing-2xl);
-  overflow-y: auto;
   border-radius: var(--radius-lg);
   background-color: var(--color-grey-light);
   font-family: var(--font-family);
@@ -20,7 +19,9 @@
   gap: var(--spacing-2xl);
   align-items: flex-start;
   width: 100%;
-  flex-shrink: 0;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
 }
 
 .iconArea {
