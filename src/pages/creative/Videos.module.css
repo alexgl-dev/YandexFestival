@@ -29,7 +29,7 @@
   letter-spacing: var(--letter-spacing-md);
   line-height: var(--line-height-tight);
   margin: 0;
-  align-self: flex-start;
+  align-self: center;
 }
 
 .grid {
