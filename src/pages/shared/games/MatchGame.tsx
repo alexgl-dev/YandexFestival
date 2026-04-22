@@ -22,7 +22,7 @@ interface GameProps {
 /** Renders description with [term]{tooltip: "..."} — terms become tappable buttons */
 function parseDescriptionInteractive(
   text: string,
-  onTooltip: (text: string) => void
+  onTermTap: (term: string, definition: string) => void
 ): React.ReactNode[] {
   const regex = /\[([^\]]+)\]\{tooltip:\s*"([^"]*)"\}/g;
   const parts: React.ReactNode[] = [];
@@ -40,7 +40,7 @@ function parseDescriptionInteractive(
       <button
         key={key++}
         className={styles.termBtn}
-        onClick={(e) => { e.stopPropagation(); onTooltip(tooltip); }}
+        onClick={(e) => { e.stopPropagation(); onTermTap(term, tooltip); }}
       >
         {term}
       </button>
@@ -201,7 +201,7 @@ export function MatchGame({
   const [showPopup, setShowPopup] = useState(false);
   // Speech bubble + tooltip state
   const [speechBubbleIndex, setSpeechBubbleIndex] = useState<number | null>(null);
-  const [activeTooltip, setActiveTooltip] = useState<string | null>(null);
+  const [activeTerm, setActiveTerm] = useState<{ term: string; definition: string } | null>(null);
   const isProcessing = useRef(false);
 
   const handleLeftTap = useCallback((index: number) => {
@@ -460,7 +460,7 @@ export function MatchGame({
       {bubblePair && (
         <div
           className={`${styles.overlay} ${overlayDimClass}`}
-          onClick={() => { setSpeechBubbleIndex(null); setActiveTooltip(null); }}
+          onClick={() => { setSpeechBubbleIndex(null); setActiveTerm(null); }}
         >
           <div
             className={`${styles.bubbleCard} ${isLanguagesIntro ? styles.bubbleCardLanguagesIntro : ''}`}
@@ -480,24 +480,31 @@ export function MatchGame({
             <p className={styles.bubbleText}>
               {parseDescriptionInteractive(
                 bubblePair.left.description || '',
-                (text) => setActiveTooltip(activeTooltip === text ? null : text)
+                (term, definition) => setActiveTerm({ term, definition })
               )}
             </p>
 
-            {/* Tooltip inside the bubble */}
-            {activeTooltip && (
-              <div className={styles.tooltipCard} onClick={(e) => { e.stopPropagation(); setActiveTooltip(null); }}>
-                <p className={styles.tooltipText}>{activeTooltip}</p>
-                <span className={styles.tooltipDismiss}>✕</span>
-              </div>
-            )}
-
             <button
               className={styles.bubbleCloseBtn}
-              onClick={() => { setSpeechBubbleIndex(null); setActiveTooltip(null); }}
+              onClick={() => { setSpeechBubbleIndex(null); setActiveTerm(null); }}
             >
               Закрыть
             </button>
+          </div>
+        </div>
+      )}
+
+      {/* ── Term explanation popup (on top of speech bubble) ── */}
+      {activeTerm && (
+        <div className={styles.termOverlay} onClick={() => setActiveTerm(null)}>
+          <div onClick={(e) => e.stopPropagation()}>
+            <PopUp
+              title={activeTerm.term}
+              description={activeTerm.definition}
+              buttonLabel="Понятно"
+              onButtonClick={() => setActiveTerm(null)}
+              compact
+            />
           </div>
         </div>
       )}
