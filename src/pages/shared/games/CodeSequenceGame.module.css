@@ -192,7 +192,7 @@
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-regular);
   font-style: italic;
-  color: var(--color-text-muted);
+  color: var(--color-black);
   line-height: var(--line-height-relaxed);
   margin: var(--spacing-md) 0 0;
   white-space: pre-wrap;
