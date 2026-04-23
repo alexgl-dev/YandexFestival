@@ -221,7 +221,8 @@ export const calendarsData: Record<string, CalendarViewData> = {
         durationSlots: 1,
         durationMin: 15,
         anchorDay: 'mon',
-        anchorStartSlot: 11, // 15:30
+        anchorStartSlot: 11, // 15:30 + 15 min offset = 15:45
+        anchorStartMinuteOffset: 15,
         tooltip: 'Между встречами — 15 минут. Этого хватит, чтобы дойти до кофепойнта, взять сырок из холодильника и посмотреть в окно. П — продуктивность.',
       },
       {
