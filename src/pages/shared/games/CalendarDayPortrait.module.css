@@ -1,12 +1,30 @@
 /* CalendarDayPortrait — portrait 1080×1920, single day, no task pool */
 
-.wrapper {
+.root {
   width: calc(100% - 80px);
   height: calc(100% - 120px);
   box-sizing: border-box;
   display: flex;
+  flex-direction: column;
+}
+
+.wrapper {
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+  box-sizing: border-box;
+  display: flex;
   flex-direction: row;
   align-items: stretch;
+  gap: var(--spacing-lg);
+}
+
+.rightColumn {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
   gap: var(--spacing-lg);
 }
 
@@ -32,10 +50,24 @@
 
 /* ══ Calendar area — flex column: header row + body row ══ */
 
-.calendarArea {
+.scrollArea {
   flex: 1;
-  min-width: 0;
   min-height: 0;
+  overflow-y: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
+.scrollArea::-webkit-scrollbar {
+  display: none;
+}
+
+.calendarArea {
+  flex-shrink: 0;
+  min-width: 0;
   background: rgba(227, 226, 224, 0.25);
   backdrop-filter: blur(22px);
   border-radius: var(--radius-lg);
@@ -44,16 +76,69 @@
   display: flex;
   flex-direction: column;
   gap: 0;
-  overflow: hidden;
+}
+
+.introText {
+  flex-shrink: 0;
+  margin: 0;
+  padding: var(--spacing-lg) var(--spacing-xl);
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  font-family: var(--font-family);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-black);
+  line-height: var(--line-height-relaxed);
+  text-align: left;
+}
+
+.outroText {
+  flex-shrink: 0;
+  padding: var(--spacing-lg) var(--spacing-xl);
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}
+
+.outroParagraph {
+  margin: 0;
+  font-family: var(--font-family);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-black);
+  line-height: var(--line-height-relaxed);
+  text-align: left;
+}
+
+.outroItalic {
+  font-style: normal;
 }
 
 /* ── Header row ── */
 
 .calendarHeader {
   flex-shrink: 0;
+  position: relative;
   display: flex;
   flex-direction: row;
   justify-content: center;
+}
+
+.utcLabel {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs) 0;
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-white);
+  letter-spacing: var(--letter-spacing-xs);
 }
 
 .dayHeader {
@@ -86,11 +171,11 @@
 /* ── Body row — time axis + day column, same flex row → guaranteed same height ── */
 
 .calendarBody {
-  flex: 1;
-  min-height: 0;
+  flex: none;
   display: flex;
   flex-direction: row;
   gap: var(--spacing-sm);
+  min-height: calc(110px * var(--slot-count, 18));
 }
 
 .timeAxisBody {
@@ -150,8 +235,6 @@
 
 .eventCard {
   position: absolute;
-  left: 0;
-  right: 0;
   border-radius: var(--radius-lg);
   background: var(--color-white);
   border: 3px solid transparent;
@@ -198,6 +281,12 @@
   overflow: hidden;
 }
 
+.cardTitleOneLine {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 .cardMeta {
   display: flex;
   align-items: center;
@@ -236,6 +325,16 @@
   justify-content: center;
   background: rgba(0, 0, 0, 0.5);
   z-index: 9999;
+}
+
+.termOverlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.82);
+  z-index: 10000;
 }
 
 .tooltipCard {

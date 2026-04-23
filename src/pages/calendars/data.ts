@@ -121,6 +121,8 @@ export const calendarsData: Record<string, CalendarViewData> = {
         id: 'dev-basket',
         title: 'Баскет',
         durationSlots: 1,
+        durationMin: 10,
+        durationLabel: '5 минут',
         anchorDay: 'mon',
         anchorStartSlot: 22, // 20:00
         tooltip: 'Тренировка баскетбольной команды Яндекса. Скоро чемпионат, и наша задача — поднять позиции.',
@@ -427,7 +429,7 @@ export const calendarsData: Record<string, CalendarViewData> = {
       {
         id: 'run',
         title: 'Пробежка с беговым клубом Яндекса',
-        durationSlots: 4,
+        durationSlots: 2,
         anchorDay: 'mon',
         anchorStartSlot: 0, // 08:00
         tooltip: 'Сегодня бег ради удовольствия. Недавно участвовали с ребятами в полумарафоне, теперь готовимся к марафону. В нашем беговом комьюнити более 800 человек.',
@@ -461,7 +463,7 @@ export const calendarsData: Record<string, CalendarViewData> = {
         durationSlots: 4,
         anchorDay: 'mon',
         anchorStartSlot: 8, // 12:00
-        tooltip: 'Активное время, чтобы решить важные дела. Сегодняшние задачи: подготовить интерактивный прототип приложения в онлайн-редакторе, упростить путь от входа до выбора курса.',
+        tooltip: 'Активное время, чтобы решить важные дела. Сегодняшние задачи: \n- подготовить интерактивный прототип приложения в онлайн-редакторе, \n- упростить путь от входа до выбора курса.',
         glossary: [
           { word: 'Фокус', definition: 'Концентрация на рабочем месте.' },
           { word: 'Прототип', definition: 'Черновая модель приложения, которую можно протестировать и проверить, прежде чем отдавать разработчикам в код.' },
@@ -490,10 +492,10 @@ export const calendarsData: Record<string, CalendarViewData> = {
       {
         id: 'grooming',
         title: 'Груминг. Командная встреча одного из проектов. \n Переговорка «Три поросёнка»',
-        durationSlots: 1,
+        durationSlots: 2,
         anchorDay: 'mon',
         anchorStartSlot: 14, // 15:00
-        tooltip: 'Встречаемся с коллегами образовательного проекта. Отдаю разработчикам готовый макет приложения. Мои задачи: подробно объяснить функционал приложения, ответить на вопросы, зафиксировать обратную связь. Запретная фраза: «Я думала, вы сами это поймёте!»',
+        tooltip: 'Встречаемся с коллегами образовательного проекта. Отдаю разработчикам готовый макет приложения. Мои задачи: \n- подробно объяснить функционал приложения, \n- ответить на вопросы, \n- зафиксировать обратную связь. \n\nЗапретная фраза: «Я думала, вы сами это поймёте!»',
         glossary: [
           { word: 'Груминг', definition: 'Рабочая встреча, на которой команда обсуждает и прорабатывает задачи.' },
         ],
@@ -501,10 +503,11 @@ export const calendarsData: Record<string, CalendarViewData> = {
       {
         id: 'prozharka',
         title: 'Прожарка. Командная встреча дизайнеров. \n Переговорка «Сельдерей»',
-        durationSlots: 1,
-        durationMin: 40,
+        durationSlots: 2,
+        durationMin: 50,
         anchorDay: 'mon',
-        anchorStartSlot: 17, // 16:30
+        anchorStartSlot: 17, // 16:30 slot + 10 min offset = 16:40; ends 17:30
+        anchorStartMinuteOffset: 10,
         tooltip: 'Ничего общего с кулинарией. И никого не сжигают на костре за просроченные дедлайны. Это встреча дизайнеров, где мы смотрим текущие задачи по основным проектам. Важно, чтобы все проекты придерживались единого стиля компании и в то же время были индивидуальны.',
         glossary: [
           { word: 'Дедлайн', definition: 'Крайний срок выполнения задачи.' },
@@ -529,6 +532,7 @@ export const calendarsData: Record<string, CalendarViewData> = {
         id: 'popcorn',
         title: 'Попкорн на кофепойнте (Двигать можно, но только в сторону кухни.)',
         durationSlots: 1,
+        durationMin: 10,
         anchorDay: 'mon',
         anchorStartSlot: 19, // 17:30
         tooltip: 'Это очень вкусный попкорн! Не осуждать! Им угощают несколько раз в неделю, поэтому в календаре стоит напоминалка.',
@@ -537,16 +541,18 @@ export const calendarsData: Record<string, CalendarViewData> = {
         id: 'massage',
         title: 'Массажное кресло (Пожалуйста, не двигать — ни кресло, ни меня.)',
         durationSlots: 1,
+        durationMin: 20,
         anchorDay: 'mon',
-        anchorStartSlot: 20, // 18:00
+        anchorStartSlot: 19, // 17:30 slot + 10 min offset = 17:40; ends 18:00
+        anchorStartMinuteOffset: 10,
         tooltip: 'После долгих созвонов моя спина требует личной встречи с этим гаджетом. Массажные кресла есть почти в каждом офисе. Главное правило — не уснуть в нём. Но если кто-то уже спит, не будить.',
       },
       {
         id: 'focus2',
         title: 'Блок работы «Ушла в задачи»',
-        durationSlots: 2,
+        durationSlots: 3,
         anchorDay: 'mon',
-        anchorStartSlot: 20, // 18:00
+        anchorStartSlot: 20, // 18:00; ends 19:30
         tooltip: 'Дорабатываю основные задачи, которые неожиданно упали к вечеру после всех встреч. Или пишу план по их решению на ближайшие 5 лет.',
       },
       {
