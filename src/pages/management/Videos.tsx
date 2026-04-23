@@ -32,6 +32,7 @@ export function Videos() {
                   state="default"
                   orientation="vertical"
                   src={video.src}
+                  showTitle={false}
                   onPlay={() => setPlayingIndex(index)}
                 />
               </div>
@@ -48,6 +49,7 @@ export function Videos() {
               state="playing"
               orientation="vertical"
               src={activeVideo.src}
+              showTitle={false}
               onPause={closeOverlay}
             />
           </div>

@@ -214,6 +214,12 @@ export function CalendarDayPortrait({
                     {renderCardTitle(card.title, styles.cardPeregovorka)}
                   </span>
                   <div className={styles.cardMeta}>
+                    <InfoButton
+                      size="sm"
+                      variant="dark"
+                      className={styles.cardMetaInfo}
+                      onClick={(e) => { e.stopPropagation(); setTooltipCard(card); }}
+                    />
                     <Icon name="clock" color="blue" size="xs" />
                     <span className={styles.cardDuration}>{card.durationLabel ?? formatDuration(card.durationSlots, card.durationMin)}</span>
                   </div>

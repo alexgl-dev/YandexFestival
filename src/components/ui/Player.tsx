@@ -7,6 +7,8 @@ export interface PlayerProps {
   orientation?: 'horizontal' | 'vertical';
   thumbnail?: string;
   src?: string;
+  /** Показывать верхнюю плашку с названием (по умолчанию true). */
+  showTitle?: boolean;
   // These remain for non-video usage (fake timer mode)
   currentTime?: string;
   totalTime?: string;
@@ -28,6 +30,7 @@ export function Player({
   orientation = 'horizontal',
   thumbnail,
   src,
+  showTitle = true,
   currentTime,
   totalTime,
   progress,
@@ -99,7 +102,7 @@ export function Player({
       <div className={styles.bgOverlay} />
 
       {/* Title bar */}
-      {!isFullscreen && (
+      {!isFullscreen && showTitle && (
         <div className={styles.titleBar}>
           <span className={styles.title}>{title}</span>
         </div>
