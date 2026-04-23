@@ -113,7 +113,12 @@
   flex-direction: row;
   align-items: center;
   gap: 20px;
-  padding: 40px 0 24px 60px;
+  padding: 40px 24px 24px 60px;
+  flex-shrink: 0;
+}
+
+.zoneInfoBtn {
+  margin-left: auto;
   flex-shrink: 0;
 }
 
@@ -128,6 +133,17 @@
   display: flex;
   flex-direction: column;
   gap: 12px;
+  flex: 1;
+  min-width: 0;
+}
+
+.zoneTitleRow {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
 }
 
 .zoneTitle {
@@ -177,10 +193,4 @@
   justify-content: center;
   background: var(--color-overlay-dark);
   z-index: 100;
-  animation: fadeIn 0.3s ease;
-}
-
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
 }

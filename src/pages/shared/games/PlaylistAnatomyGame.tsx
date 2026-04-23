@@ -1,5 +1,5 @@
 import { useState, useRef, useLayoutEffect } from 'react';
-import { Background, PopUp, Badge } from '../../../components/ui';
+import { Background, PopUp, Badge, InfoButton } from '../../../components/ui';
 import type { Task } from '../../../types/game';
 import { GameInstruction } from '../GameInstruction';
 import { InstructionRichText } from '../InstructionRichText';
@@ -71,6 +71,7 @@ export function PlaylistAnatomyGame({ task, onComplete, onBack, theme = 'cobalt'
   const [dragOverZone, setDragOverZone] = useState<string | null>(null);
   const [explanation, setExplanation] = useState<{ text: string; zoneId: string } | null>(null);
   const [allCorrect, setAllCorrect] = useState(false);
+  const [infoZone, setInfoZone] = useState<string | null>(null);
 
   const wrapperRef = useRef<HTMLDivElement>(null);
   const cardRefs = useRef<(HTMLDivElement | null)[]>([]);
@@ -269,7 +270,20 @@ export function PlaylistAnatomyGame({ task, onComplete, onBack, theme = 'cobalt'
                   <img src={cat.image} alt="" className={styles.zoneIcon} />
                 )}
                 <div className={styles.zoneTextBlock}>
-                  <span className={styles.zoneTitle}>{cat?.title ?? zoneId}</span>
+                  <div className={styles.zoneTitleRow}>
+                    <span className={styles.zoneTitle}>{cat?.title ?? zoneId}</span>
+                    {cat?.tooltip && (
+                      <InfoButton
+                        size="sm"
+                        variant="dark"
+                        className={styles.zoneInfoBtn}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setInfoZone(zoneId);
+                        }}
+                      />
+                    )}
+                  </div>
                   {cat?.description && (
                     <span className={styles.zoneDesc}>{cat.description}</span>
                   )}
@@ -316,6 +330,25 @@ export function PlaylistAnatomyGame({ task, onComplete, onBack, theme = 'cobalt'
             />
           </div>
         )}
+
+        {/* Zone info popup */}
+        {infoZone && (() => {
+          const cat = categories.find((c) => c.id === infoZone);
+          if (!cat?.tooltip) return null;
+          return (
+            <div className={styles.overlay} onClick={() => setInfoZone(null)}>
+              <div onClick={(e) => e.stopPropagation()}>
+                <PopUp
+                  title={cat.title}
+                  description={cat.tooltip}
+                  buttonLabel="Понятно"
+                  onButtonClick={() => setInfoZone(null)}
+                  compact
+                />
+              </div>
+            </div>
+          );
+        })()}
       </div>
     </Background>
   );
