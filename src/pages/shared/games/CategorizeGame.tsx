@@ -31,6 +31,16 @@ export function CategorizeGame({ task, onComplete, onBack, theme = 'cobalt', ori
   const categories = step?.categories ?? [];
   const items = step?.items ?? [];
 
+  /** Порядок отображения карточек в пуле: случайный, фиксируется на первый маунт. */
+  const shuffledOrder = useMemo(() => {
+    const arr = items.map((_, i) => i);
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }, [items]);
+
   const isOnCompleteMode = task.feedback === 'onComplete';
 
   // itemIndex → categoryId
@@ -242,7 +252,9 @@ export function CategorizeGame({ task, onComplete, onBack, theme = 'cobalt', ori
 
         {/* Card tray */}
         <div className={styles.tray}>
-          {items.map((item, idx) => {
+          {shuffledOrder.map((idx) => {
+            const item = items[idx];
+            if (!item) return null;
             const isPlaced = placements[idx] !== undefined;
             if (isPlaced) return null;
             const isSelected = selectedItem === idx;
