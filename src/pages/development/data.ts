@@ -173,7 +173,7 @@ export const developmentSection: SectionData = {
             {
               id: 'backend',
               title: 'Бэкенд-разработчик',
-              description: 'Создаёт серверную логику: пишет код обработки данных, работает с базами данных, разрабатывает API. Если сайт — это машина, бэкенд — её двигатель.',
+              description: 'Создаёт серверную часть приложений: пишет логику обработки данных, работает с базами данных, разрабатывает программный интерфейс приложения. Отвечает за то, как система хранит, обрабатывает и передаёт информацию. Если сайт — это машина, бэкенд — её двигатель и электроника: не видно, но без них ничего не работает.',
               image: '/assets/games/002/task-distribution/folder-backend.png',
               avatar: '/assets/games/002/task-distribution/avatar-backend.png',
               color: '#4161FF',
@@ -181,7 +181,7 @@ export const developmentSection: SectionData = {
             {
               id: 'frontend',
               title: 'Фронтенд-разработчик',
-              description: 'Создаёт интерфейсы, которые видит пользователь: вёрстка, анимации, отображение данных. Фронтенд — это витрина магазина.',
+              description: 'Создаёт интерфейсы, с которыми взаимодействует пользователь. Верстает страницы, добавляет анимацию, делает сайт удобным на любых устройствах. Если сайт — это машина, фронтенд — её салон, приборная панель и руль: всё, что водитель видит и чем управляет.',
               image: '/assets/games/002/task-distribution/folder-frontend.png',
               avatar: '/assets/games/002/task-distribution/avatar-frontend.png',
               color: '#7B4DD6',
@@ -189,7 +189,7 @@ export const developmentSection: SectionData = {
             {
               id: 'devops',
               title: 'DevOps-инженер',
-              description: 'Настраивает инфраструктуру и автоматизирует процессы: сборку, деплой, резервные копии. DevOps — конвейер на заводе.',
+              description: 'Настраивает инфраструктуру и автоматизирует процессы: строит конвейеры доставки кода (CI/CD), управляет серверами и облаками, работает с контейнерами (Docker, Kubernetes). Если разработчики создают машину, то DevOps строит завод, где эти машины собирают, и дороги, по которым они едут к пользователю.',
               image: '/assets/games/002/task-distribution/folder-devops.png',
               avatar: '/assets/games/002/task-distribution/avatar-devops.png',
               color: '#D07800',
@@ -197,7 +197,7 @@ export const developmentSection: SectionData = {
             {
               id: 'security',
               title: 'Специалист по ИБ',
-              description: 'Защищает данные и системы от взлома, утечек и атак. Анализирует уязвимости и настраивает защиту.',
+              description: 'Защищает данные и системы от взлома, утечек и атак. Ищет уязвимости, настраивает средства защиты, расследует инциденты, обучает сотрудников. Если разработчики собирают машину, а DevOps строит завод, то безопасник ставит замки, сигнализацию и камеры. А потом проверяет, не оставил ли кто-то окно открытым.',
               image: '/assets/games/002/task-distribution/folder-security.png',
               avatar: '/assets/games/002/task-distribution/avatar-security.png',
               color: '#CC2200',
@@ -541,7 +541,7 @@ export const developmentSection: SectionData = {
               right: {
                 type: 'code',
                 label: 'Java',
-                code: 'public class Robot {\n    private String name;\n    private int batteryLevel;\n\n    public Robot(String name) {\n        this.name = name;\n        this.batteryLevel = 100;\n    }\n\n    public void greet() {\n        System.out.println(\n            "Hello, I am " + name\n        );\n    }\n\n    public boolean isReady() {\n        return batteryLevel > 20;\n    }\n\n    public static void main(String[] args) {\n        Robot r = new Robot("R2D2");\n        if (r.isReady()) {\n            r.greet();\n        }\n    }\n}',
+                code: 'public class BankAccount {\n    private String owner;\n    private double balance;\n\n    public BankAccount(String owner, double balance) {\n        this.owner = owner;\n        this.balance = balance;\n    }\n\n    public static void main(String[] args) {\n        BankAccount account = new BankAccount("Иван", 1000.0);\n        System.out.println("Баланс: " + account.balance);\n    }\n}',
               },
               explanation: 'Java — строго типизированный язык с классами. Используется в банках, на Android и в крупных системах.',
             },
@@ -556,7 +556,7 @@ export const developmentSection: SectionData = {
               right: {
                 type: 'code',
                 label: 'Go',
-                code: 'package main\n\nimport (\n    "fmt"\n    "sync"\n)\n\ntype Worker struct {\n    id   int\n    jobs chan string\n}\n\nfunc (w Worker) run(wg *sync.WaitGroup) {\n    defer wg.Done()\n    for job := range w.jobs {\n        fmt.Printf("Worker %d: %s\\n",\n            w.id, job)\n    }\n}\n\nfunc main() {\n    jobs := make(chan string, 3)\n    var wg sync.WaitGroup\n\n    w := Worker{id: 1, jobs: jobs}\n    wg.Add(1)\n    go w.run(&wg)\n\n    jobs <- "task one"\n    jobs <- "task two"\n    close(jobs)\n    wg.Wait()\n}',
+                code: 'package main\n\nimport "fmt"\n\nfunc main() {\n    messages := make(chan string)\n\n    go func() { messages <- "ping" }()\n\n    msg := <-messages\n    fmt.Println(msg)\n}',
               },
               explanation: 'Go (Golang) — язык от Google. Простой синтаксис, мощная многопоточность, талисман — суслик.',
             },
@@ -571,7 +571,7 @@ export const developmentSection: SectionData = {
               right: {
                 type: 'code',
                 label: 'JavaScript',
-                code: 'const fetchUser = async (id) => {\n    const res = await fetch(\n        `/api/users/${id}`\n    );\n    return await res.json();\n};\n\nconst btn = document\n    .querySelector(\'#load-btn\');\nconst card = document\n    .querySelector(\'.user-card\');\n\nbtn.addEventListener(\'click\',\n    async () => {\n        btn.disabled = true;\n        const user = await fetchUser(42);\n        card.innerHTML = `\n            <h2>${user.name}</h2>\n            <p>${user.email}</p>\n        `;\n        btn.disabled = false;\n    }\n);',
+                code: "const button = document.querySelector('.like-button');\nlet likes = 45;\n\nbutton.addEventListener('click', () => {\n  likes++;\n  button.innerHTML = `❤️ ${likes}`;\n  console.log('Лайк!');\n});",
               },
               explanation: 'JavaScript — язык интернета. Работает в браузере и на сервере. Стрелочные функции — его визитная карточка.',
             },
@@ -586,7 +586,7 @@ export const developmentSection: SectionData = {
               right: {
                 type: 'code',
                 label: 'C++',
-                code: '#include <iostream>\n#include <string>\nusing namespace std;\n\nclass Robot {\nprivate:\n    string name;\n    int* battery;\n\npublic:\n    Robot(string n) : name(n) {\n        battery = new int(100);\n    }\n\n    ~Robot() {\n        delete battery;\n    }\n\n    void greet() {\n        cout << "Hello, " << name << endl;\n        cout << "Battery: "\n             << *battery << "%" << endl;\n    }\n};\n\nint main() {\n    Robot* r = new Robot("R2D2");\n    r->greet();\n    delete r;\n    return 0;\n}',
+                code: '#include <iostream>\nusing namespace std;\n\nint main() {\n    int* ptr = new int(42);\n    cout << "Значение: " << *ptr << endl;\n    cout << "Адрес: " << ptr << endl;\n    delete ptr;\n    return 0;\n}',
               },
               explanation: 'C++ — мощный язык для игр, графики и системного ПО. Работает напрямую с памятью.',
             },
@@ -601,7 +601,7 @@ export const developmentSection: SectionData = {
               right: {
                 type: 'code',
                 label: 'Python',
-                code: 'class Robot:\n    def __init__(self, name):\n        self.name = name\n        self.battery = 100\n\n    def greet(self):\n        print(f"Hello, I am {self.name}!")\n\n    def charge(self, amount):\n        self.battery = min(\n            100, self.battery + amount\n        )\n        print(f"Battery: {self.battery}%")\n\n    def is_ready(self):\n        return self.battery > 20\n\n\ndef main():\n    r = Robot("R2D2")\n    if r.is_ready():\n        r.greet()\n    r.charge(20)\n\n\nif __name__ == "__main__":\n    main()',
+                code: 'def calculate_discount(price, percent):\n    if percent > 0:\n        discount = price * percent / 100\n        return price - discount\n    else:\n        return price\n\n# Использование\nfinal_price = calculate_discount(1000, 15)\nprint(f"Итоговая цена: {final_price} рублей")',
               },
               explanation: 'Python — самый читаемый язык. Используется в AI, науке и обучении. Назван в честь Monty Python.',
             },
@@ -616,7 +616,7 @@ export const developmentSection: SectionData = {
               right: {
                 type: 'code',
                 label: 'PHP',
-                code: '<?php\nclass Robot {\n    private string $name;\n    private int $battery;\n\n    public function __construct(\n        string $name\n    ) {\n        $this->name = $name;\n        $this->battery = 100;\n    }\n\n    public function greet(): string {\n        return "Hello, I am "\n            . $this->name . "!";\n    }\n\n    public function isReady(): bool {\n        return $this->battery > 20;\n    }\n}\n\n$robot = new Robot("R2D2");\n$msg = $robot->greet();\n?>\n\n<html><body>\n    <h1><?= $msg ?></h1>\n</body></html>',
+                code: '<?php\n$user = "Иван";\n$age = 25;\n\necho "Привет, $user!";\necho "<br>";\n\nif ($age > 18) {\n    echo "Доступ разрешён";\n} else {\n    echo "Доступ запрещён";\n}\n?>',
               },
               explanation: 'PHP — язык для веб-серверов. На нём работают WordPress, Wikipedia и множество сайтов. Символ — слон.',
             },

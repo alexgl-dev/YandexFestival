@@ -4,7 +4,7 @@ import type { Task } from '../../../types/game';
 import { GameInstruction } from '../GameInstruction';
 import styles from './FactorXGame.module.css';
 
-const TIMER_SECONDS = 20;
+const TIMER_SECONDS = 10;
 const ACCURACY_CORRECT_DELTA = 5;
 const ACCURACY_WRONG_DELTA = 8;
 
