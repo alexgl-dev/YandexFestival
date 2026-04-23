@@ -91,22 +91,22 @@ export const creativeSection: SectionData = {
       steps: [
         {
           prompt: 'Нажми на подходящую афишу для весеннего фестиваля аниме.',
-          image: '/assets/games/001/poster/step1-event.png',
+          image: '/assets/games/001/poster/step1-event.jpg',
           options: [
             {
-              image: '/assets/games/001/poster/step1-c.png',
+              image: '/assets/games/001/poster/step1-c.jpg',
               correct: true,
               explanation:
                 'Это самая подходящая афиша, на ней ничего не противоречит информации о мероприятии.',
             },
             {
-              image: '/assets/games/001/poster/step1-a.png',
+              image: '/assets/games/001/poster/step1-a.jpg',
               correct: false,
               explanation:
                 'Афиша с зимними развлечениями не подходит для весеннего фестиваля — она не соответствует сезону.',
             },
             {
-              image: '/assets/games/001/poster/step1-b.png',
+              image: '/assets/games/001/poster/step1-b.jpg',
               correct: false,
               explanation:
                 'Афиша с мультяшными картинками не подходит для мероприятия с возрастным ограничением 16+. Стиль не соответствует жанру аниме и целевой аудитории.',
@@ -115,22 +115,22 @@ export const creativeSection: SectionData = {
         },
         {
           prompt: 'Нажми на вариант вывески, которая лучше всего подходит для открытия кафе «Мороженое».',
-          image: '/assets/games/001/poster/step2-event.png',
+          image: '/assets/games/001/poster/step2-event.jpg',
           options: [
             {
-              image: '/assets/games/001/poster/step2-a.png',
+              image: '/assets/games/001/poster/step2-a.jpg',
               correct: false,
               explanation:
                 'Готический стиль ассоциируется с мрачностью и таинственностью, а черно-белая палитра создаёт ощущение холодности и дистанции. Такая вывеска будет резко выбиваться из милой и нежной атмосферы кафе, создавать у гостей неправильные ожидания и отпугивать целевую аудиторию, которая ищет уют.',
             },
             {
-              image: '/assets/games/001/poster/step2-c.png',
+              image: '/assets/games/001/poster/step2-c.jpg',
               correct: true,
               explanation:
                 'Это самая подходящая вывеска. Цвет и стиль не противоречат формату заведения и привлекут целевую аудиторию.',
             },
             {
-              image: '/assets/games/001/poster/step2-b.png',
+              image: '/assets/games/001/poster/step2-b.jpg',
               correct: false,
               explanation:
                 'Строгий деловой стиль с резкими линиями ассоциируется с офисами, банками и другими серьёзными учреждениями. Такая вывеска не сочетается с интерьером и может оттолкнуть людей, которые ищут тёплую и дружелюбную атмосферу.',
@@ -139,22 +139,22 @@ export const creativeSection: SectionData = {
         },
         {
           prompt: 'Какая афиша подходит для открытия скейт-площадки?',
-          image: '/assets/games/001/poster/step3-event.png',
+          image: '/assets/games/001/poster/step3-event.jpg',
           options: [
             {
-              image: '/assets/games/001/poster/step3-b.png',
+              image: '/assets/games/001/poster/step3-b.jpg',
               correct: false,
               explanation:
                 'Эта афиша красивая, но не информативная. Изображение не отражает, что именно откроется в парке 15-го апреля.',
             },
             {
-              image: '/assets/games/001/poster/step3-c.png',
+              image: '/assets/games/001/poster/step3-c.jpg',
               correct: true,
               explanation:
                 'Это подходящая афиша для открытия скейт-площадки. На ней есть вся необходимая информация о мероприятии, а яркий шрифт и динамичное изображение могут привлечь целевую аудиторию.',
             },
             {
-              image: '/assets/games/001/poster/step3-a.png',
+              image: '/assets/games/001/poster/step3-a.jpg',
               correct: false,
               explanation:
                 'Эта афиша красивая, но не информативная. Изображение не отражает, где откроется площадка.',
