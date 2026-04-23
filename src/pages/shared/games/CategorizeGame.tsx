@@ -8,6 +8,7 @@ interface GameResult {
   answer: string;
   correct: boolean;
   explanation: string;
+  group?: string;
 }
 
 interface GameProps {
@@ -143,6 +144,7 @@ export function CategorizeGame({ task, onComplete, onBack, theme = 'cobalt', ori
           : placedCatId
             ? `Иконка «${label}» ошибочно помещена в «${placedCatTitle}». ${item.wrongHint ?? ''}`.trim()
             : 'Иконка не распределена.',
+        group: placedCatTitle,
       };
     });
   }, [items, placements, categories]);
@@ -162,7 +164,7 @@ export function CategorizeGame({ task, onComplete, onBack, theme = 'cobalt', ori
     <Background theme={theme} orientation={orientation} onBack={onBack}>
       <GameInstruction instruction={task.instruction} />
       <div className={styles.wrapper}>
-        <p className={styles.instruction}>{step.prompt || 'Перетащи карточки в нужную зону'}</p>
+        {step.prompt && <p className={styles.instruction}>{step.prompt}</p>}
 
         {/* Drop zones */}
         <div className={styles.columnsArea}>

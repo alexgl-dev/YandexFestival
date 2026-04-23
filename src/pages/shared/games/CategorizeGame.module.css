@@ -83,7 +83,8 @@
 }
 
 .checkWrap {
-  margin-top: var(--spacing-sm);
+  margin-top: auto;
+  margin-bottom: var(--spacing-2xl);
   display: flex;
   justify-content: center;
   width: 100%;
@@ -159,6 +160,10 @@
   padding: var(--spacing-sm) var(--spacing-sm) var(--spacing-2xl);
   scrollbar-width: thin;
   scrollbar-color: rgba(255,255,255,0.3) transparent;
+}
+
+.tray:empty {
+  display: none;
 }
 
 .card {

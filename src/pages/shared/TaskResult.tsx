@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Background, Button, Icon, PopUp } from '../../components/ui';
+import { Background, Button, PopUp } from '../../components/ui';
 import { parseInstructionMarkup } from './instructionMarkup';
 import styles from './TaskResult.module.css';
 
@@ -7,6 +7,7 @@ interface ResultItem {
   answer: string;
   correct: boolean;
   explanation: string;
+  group?: string;
 }
 
 interface TaskResultProps {
@@ -17,49 +18,63 @@ interface TaskResultProps {
 }
 
 export function TaskResult({ results, onContinue, theme = 'orange', orientation = 'portrait' }: TaskResultProps) {
-  const correctCount = results.filter((r) => r.correct).length;
   const [activeTerm, setActiveTerm] = useState<{ term: string; definition: string } | null>(null);
+
+  const hasGroups = results.length > 0 && results.every((r) => !!r.group);
+  const groups: { name: string; items: { result: ResultItem; index: number }[] }[] = [];
+  if (hasGroups) {
+    const order = new Map<string, number>();
+    results.forEach((r, i) => {
+      const name = r.group!;
+      if (!order.has(name)) {
+        order.set(name, groups.length);
+        groups.push({ name, items: [] });
+      }
+      groups[order.get(name)!].items.push({ result: r, index: i });
+    });
+  }
+
+  const renderItem = (result: ResultItem, index: number) => (
+    <div
+      key={index}
+      className={[
+        styles.item,
+        result.correct ? styles.itemCorrect : styles.itemWrong,
+      ].join(' ')}
+    >
+      <span className={styles.itemText}>
+        <span className={styles.itemAnswer}>{result.answer}</span>
+        {result.explanation ? (
+          <span className={styles.itemExplanation}>
+            {' — '}
+            {parseInstructionMarkup(
+              result.explanation,
+              (term, definition) => setActiveTerm({ term, definition }),
+              `tr-${index}`,
+              styles.termBtn,
+            )}
+          </span>
+        ) : null}
+      </span>
+    </div>
+  );
 
   return (
     <Background theme={theme} orientation={orientation} showBackButton={false}>
       <div className={styles.wrapper}>
         <div className={styles.card}>
           <div className={styles.header}>
-            <div className={styles.iconWrap}>
-              <Icon
-                name={correctCount === results.length ? 'done' : 'close'}
-                color={correctCount === results.length ? 'blue' : 'red'}
-                size="m"
-              />
-            </div>
             <h2 className={styles.cardTitle}>Результаты</h2>
           </div>
           <div className={styles.items}>
-            {results.map((result, index) => (
-              <div
-                key={index}
-                className={[
-                  styles.item,
-                  result.correct ? styles.itemCorrect : styles.itemWrong,
-                ].join(' ')}
-              >
-                <span className={styles.itemIcon}>{result.correct ? '✔' : '✕'}</span>
-                <span className={styles.itemText}>
-                  <span className={styles.itemAnswer}>{result.answer}</span>
-                  {result.explanation ? (
-                    <span className={styles.itemExplanation}>
-                      {' — '}
-                      {parseInstructionMarkup(
-                        result.explanation,
-                        (term, definition) => setActiveTerm({ term, definition }),
-                        `tr-${index}`,
-                        styles.termBtn,
-                      )}
-                    </span>
-                  ) : null}
-                </span>
-              </div>
-            ))}
+            {hasGroups
+              ? groups.map((g) => (
+                  <div key={g.name} className={styles.group}>
+                    <h3 className={styles.groupTitle}>{g.name}</h3>
+                    {g.items.map(({ result, index }) => renderItem(result, index))}
+                  </div>
+                ))
+              : results.map((r, i) => renderItem(r, i))}
           </div>
           <div className={styles.buttonWrap}>
             <Button label="Далее" type="main" onClick={onContinue} />

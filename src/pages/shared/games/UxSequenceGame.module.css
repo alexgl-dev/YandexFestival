@@ -72,6 +72,8 @@
   gap: var(--spacing-lg);
   width: 100%;
   align-items: flex-start;
+  /* фиксируем итоговую высоту, чтобы при перетаскивании страница не прыгала */
+  min-height: 1200px;
 }
 
 .slotsCol {
@@ -80,6 +82,7 @@
   flex-direction: column;
   gap: var(--spacing-sm);
   min-width: 0;
+  align-self: stretch;
 }
 
 .poolCol {
@@ -87,6 +90,7 @@
   display: flex;
   flex-direction: column;
   min-width: 0;
+  align-self: stretch;
 }
 
 .heading {
@@ -123,6 +127,11 @@
 .slotFilled {
   background: var(--color-white);
   border: var(--border-width-sm) solid var(--color-white);
+  cursor: grab;
+}
+
+.slotFilled:active {
+  cursor: grabbing;
 }
 
 .slotCorrect {
@@ -148,6 +157,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.slotInfoBtn {
+  margin-left: auto;
+  flex-shrink: 0;
 }
 
 .slotHint {
@@ -236,17 +250,34 @@
   background: var(--color-white);
   border-radius: var(--radius-lg);
   border: var(--border-width-sm) solid var(--color-white);
-  cursor: pointer;
+  cursor: grab;
   user-select: none;
   min-height: 96px;
   box-sizing: border-box;
-  transition: border-color 0.15s, transform 0.15s;
+  transition: border-color 0.15s, transform 0.15s, opacity 0.15s;
 }
 
-.blockSelected {
-  border-color: var(--color-blue);
-  transform: scale(1.02);
-  box-shadow: 0 0 0 4px var(--color-bg-brand-translucent);
+.block:active {
+  cursor: grabbing;
+}
+
+.blockDragging .block {
+  opacity: 0.4;
+}
+
+.slotDragging {
+  opacity: 0.4;
+}
+
+.slotDropHover {
+  border-color: var(--color-blue) !important;
+  background: var(--color-bg-brand-translucent) !important;
+}
+
+.poolColDropHover {
+  outline: 2px dashed var(--color-white);
+  outline-offset: -8px;
+  border-radius: var(--radius-lg);
 }
 
 .blockText {
@@ -312,6 +343,12 @@
 
 .btnWrap {
   margin-top: var(--spacing-sm);
+  /* резервируем высоту, чтобы появление кнопки «Запуск» не сдвигало верстку */
+  min-height: 96px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
 }
 
 /* ── Pizza rolling animation ── */

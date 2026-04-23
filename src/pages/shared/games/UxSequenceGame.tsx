@@ -1,6 +1,5 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
-import { createPortal } from 'react-dom';
-import { Background, Button, Icon } from '../../../components/ui';
+import { Background, Button, Icon, InfoButton, PopUp } from '../../../components/ui';
 import type { Task } from '../../../types/game';
 import { GameInstruction } from '../GameInstruction';
 import styles from './UxSequenceGame.module.css';
@@ -19,62 +18,25 @@ interface GameProps {
   orientation?: 'landscape' | 'portrait';
 }
 
-type FlyingItem = {
-  id: number;
-  text: string;
-  fromX: number;
-  fromY: number;
-  toX: number;
-  toY: number;
-  width: number;
-  height: number;
-};
-
-const FLY_DURATION = 420;
-const COLLAPSE_DURATION = 300;
 const MAX_ERRORS = 3;
-const CHECK_DELAY = 900;
+const CHECK_DELAY = 2200;
 const SUCCESS_DELAY = 1800;
 
-function FlyingBlock({ item }: { item: FlyingItem }) {
-  const [moved, setMoved] = useState(false);
+type DragSource =
+  | { kind: 'pool'; blockIdx: number }
+  | { kind: 'slot'; slotIdx: number };
 
-  useEffect(() => {
-    let raf2 = 0;
-    const raf1 = requestAnimationFrame(() => {
-      raf2 = requestAnimationFrame(() => setMoved(true));
-    });
-    return () => {
-      cancelAnimationFrame(raf1);
-      cancelAnimationFrame(raf2);
-    };
-  }, []);
+function encodeSource(src: DragSource): string {
+  return src.kind === 'pool' ? `pool:${src.blockIdx}` : `slot:${src.slotIdx}`;
+}
 
-  const dx = item.toX - item.fromX;
-  const dy = item.toY - item.fromY;
-
-  return (
-    <div
-      className={styles.flyingBlock}
-      style={{
-        left: item.fromX,
-        top: item.fromY,
-        width: item.width,
-        height: item.height,
-        transform: moved
-          ? `translate(${dx}px, ${dy}px) scale(1)`
-          : 'translate(0, 0) scale(1.04)',
-        transition: moved
-          ? `transform ${FLY_DURATION}ms cubic-bezier(0.34, 1.3, 0.64, 1), box-shadow ${FLY_DURATION}ms ease`
-          : 'none',
-        boxShadow: moved
-          ? '0 4px 12px rgba(0,0,0,0.15)'
-          : '0 16px 40px rgba(0,0,0,0.35)',
-      }}
-    >
-      <span className={styles.flyingBlockText}>{item.text}</span>
-    </div>
-  );
+function decodeSource(raw: string): DragSource | null {
+  const [kind, rawIdx] = raw.split(':');
+  const idx = Number(rawIdx);
+  if (!Number.isFinite(idx)) return null;
+  if (kind === 'pool') return { kind: 'pool', blockIdx: idx };
+  if (kind === 'slot') return { kind: 'slot', slotIdx: idx };
+  return null;
 }
 
 export function UxSequenceGame({
@@ -96,7 +58,6 @@ export function UxSequenceGame({
   const [slots, setSlots] = useState<(number | null)[]>(() =>
     Array(slotCount).fill(null),
   );
-  const [selected, setSelected] = useState<number | null>(null);
   const [checked, setChecked] = useState(false);
   const [slotResults, setSlotResults] = useState<('correct' | 'wrong' | 'idle')[]>(
     () => Array(slotCount).fill('idle'),
@@ -106,12 +67,10 @@ export function UxSequenceGame({
   const [hintOpen, setHintOpen] = useState(false);
   const [showMoralFailure, setShowMoralFailure] = useState(false);
   const [success, setSuccess] = useState(false);
-
-  const blockRefs = useRef<Map<number, HTMLDivElement>>(new Map());
-  const slotRefs = useRef<Map<number, HTMLDivElement>>(new Map());
-  const [flyingItems, setFlyingItems] = useState<FlyingItem[]>([]);
-  const flyIdRef = useRef(0);
-  const [collapsing, setCollapsing] = useState<Set<number>>(new Set());
+  const [dragging, setDragging] = useState<DragSource | null>(null);
+  const [dropTarget, setDropTarget] = useState<
+    { kind: 'slot'; slotIdx: number } | { kind: 'pool' } | null
+  >(null);
 
   const timersRef = useRef<ReturnType<typeof setTimeout>[]>([]);
   useEffect(() => () => timersRef.current.forEach(clearTimeout), []);
@@ -120,7 +79,6 @@ export function UxSequenceGame({
     setAvailable(makeShuffled());
     setTrashed([]);
     setSlots(Array(slotCount).fill(null));
-    setSelected(null);
     setChecked(false);
     setSlotResults(Array(slotCount).fill('idle'));
     setHintSlot(null);
@@ -128,18 +86,12 @@ export function UxSequenceGame({
     setSuccess(false);
     setErrorCount(0);
     setShowMoralFailure(false);
+    setDragging(null);
+    setDropTarget(null);
   }, [slotCount]);
 
   const allPlaced = slots.every((s) => s !== null);
   const interactionsLocked = checked || success;
-
-  const selectBlock = useCallback(
-    (idx: number) => {
-      if (interactionsLocked) return;
-      setSelected((prev) => (prev === idx ? null : idx));
-    },
-    [interactionsLocked],
-  );
 
   const trashBlock = useCallback(
     (idx: number, e: React.MouseEvent) => {
@@ -147,7 +99,6 @@ export function UxSequenceGame({
       if (interactionsLocked) return;
       setAvailable((a) => a.filter((i) => i !== idx));
       setTrashed((t) => [...t, idx]);
-      setSelected((s) => (s === idx ? null : s));
     },
     [interactionsLocked],
   );
@@ -161,90 +112,94 @@ export function UxSequenceGame({
     [interactionsLocked],
   );
 
-  const placeInSlot = useCallback(
-    (slotIdx: number) => {
-      if (interactionsLocked) return;
+  // ── Drag handlers ────────────────────────────────────────────────────
+  const startDragPool = (blockIdx: number) => (e: React.DragEvent) => {
+    if (interactionsLocked) {
+      e.preventDefault();
+      return;
+    }
+    const src: DragSource = { kind: 'pool', blockIdx };
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', encodeSource(src));
+    setDragging(src);
+  };
 
-      if (selected !== null) {
-        const blockIdx = selected;
-        const prevInSlot = slots[slotIdx];
-        const blockEl = blockRefs.current.get(blockIdx);
-        const slotEl = slotRefs.current.get(slotIdx);
+  const startDragSlot = (slotIdx: number) => (e: React.DragEvent) => {
+    if (interactionsLocked || slots[slotIdx] === null) {
+      e.preventDefault();
+      return;
+    }
+    const src: DragSource = { kind: 'slot', slotIdx };
+    e.dataTransfer.effectAllowed = 'move';
+    e.dataTransfer.setData('text/plain', encodeSource(src));
+    setDragging(src);
+  };
 
-        setSelected(null);
+  const endDrag = () => {
+    setDragging(null);
+    setDropTarget(null);
+  };
 
-        if (hintSlot === slotIdx) {
-          setHintSlot(null);
-          setHintOpen(false);
-        }
+  const dropOnSlot = (targetSlot: number) => (e: React.DragEvent) => {
+    e.preventDefault();
+    const raw = e.dataTransfer.getData('text/plain');
+    const src = decodeSource(raw) ?? dragging;
+    setDropTarget(null);
+    setDragging(null);
+    if (!src || interactionsLocked) return;
 
-        if (blockEl && slotEl) {
-          const fromRect = blockEl.getBoundingClientRect();
-          const toRect = slotEl.getBoundingClientRect();
-          const flyId = flyIdRef.current++;
-
-          setCollapsing((h) => new Set([...h, blockIdx]));
-          setFlyingItems((items) => [
-            ...items,
-            {
-              id: flyId,
-              text: blocks[blockIdx].text || '',
-              fromX: fromRect.left,
-              fromY: fromRect.top,
-              toX: toRect.left,
-              toY: toRect.top,
-              width: fromRect.width,
-              height: fromRect.height,
-            },
-          ]);
-
-          const t1 = setTimeout(() => {
-            setAvailable((a) => {
-              let next = a.filter((i) => i !== blockIdx);
-              if (prevInSlot !== null) next = [...next, prevInSlot];
-              return next;
-            });
-            setCollapsing((h) => {
-              const n = new Set(h);
-              n.delete(blockIdx);
-              return n;
-            });
-          }, COLLAPSE_DURATION);
-
-          const t2 = setTimeout(() => {
-            setSlots((s) => {
-              const n = [...s];
-              n[slotIdx] = blockIdx;
-              return n;
-            });
-            setFlyingItems((items) => items.filter((item) => item.id !== flyId));
-          }, FLY_DURATION);
-
-          timersRef.current.push(t1, t2);
-        } else {
-          setSlots((s) => {
-            const n = [...s];
-            n[slotIdx] = blockIdx;
-            return n;
-          });
-          setAvailable((a) => {
-            let next = a.filter((i) => i !== blockIdx);
-            if (prevInSlot !== null) next = [...next, prevInSlot];
-            return next;
-          });
-        }
-      } else if (slots[slotIdx] !== null) {
-        const blockIdx = slots[slotIdx]!;
-        setSlots((s) => {
-          const n = [...s];
-          n[slotIdx] = null;
-          return n;
-        });
-        setAvailable((a) => [...a, blockIdx]);
+    if (src.kind === 'pool') {
+      const blockIdx = src.blockIdx;
+      const prev = slots[targetSlot];
+      setSlots((s) => {
+        const n = [...s];
+        n[targetSlot] = blockIdx;
+        return n;
+      });
+      setAvailable((a) => {
+        let next = a.filter((i) => i !== blockIdx);
+        if (prev !== null) next = [...next, prev];
+        return next;
+      });
+      if (hintSlot === targetSlot) {
+        setHintSlot(null);
+        setHintOpen(false);
       }
-    },
-    [interactionsLocked, selected, slots, hintSlot, blocks],
-  );
+      return;
+    }
+
+    // src.kind === 'slot' — swap slot contents
+    if (src.slotIdx === targetSlot) return;
+    setSlots((s) => {
+      const n = [...s];
+      [n[targetSlot], n[src.slotIdx]] = [n[src.slotIdx], n[targetSlot]];
+      return n;
+    });
+    if (hintSlot === targetSlot) {
+      setHintSlot(null);
+      setHintOpen(false);
+    }
+  };
+
+  const dropOnPool = (e: React.DragEvent) => {
+    e.preventDefault();
+    const raw = e.dataTransfer.getData('text/plain');
+    const src = decodeSource(raw) ?? dragging;
+    setDropTarget(null);
+    setDragging(null);
+    if (!src || interactionsLocked) return;
+    if (src.kind !== 'slot') return;
+
+    const blockIdx = slots[src.slotIdx];
+    if (blockIdx === null) return;
+
+    setSlots((s) => {
+      const n = [...s];
+      n[src.slotIdx] = null;
+      return n;
+    });
+    setAvailable((a) => [...a, blockIdx]);
+  };
 
   const handleCheck = useCallback(() => {
     if (!allPlaced || checked) return;
@@ -281,12 +236,17 @@ export function UxSequenceGame({
     const firstWrong = results.findIndex((r) => r === 'wrong');
 
     const t = setTimeout(() => {
-      setAvailable((a) => {
-        const placed = slots.filter((s): s is number => s !== null);
-        return [...a, ...placed];
-      });
-      setSlots(Array(slotCount).fill(null));
-      setSlotResults(Array(slotCount).fill('idle'));
+      // Возвращаем в пул только неверно поставленные блоки; верные оставляем на местах.
+      const wrongBlocks = slots.filter(
+        (bIdx, sIdx): bIdx is number => bIdx !== null && results[sIdx] === 'wrong',
+      );
+      setAvailable((a) => [...a, ...wrongBlocks]);
+      setSlots((s) =>
+        s.map((bIdx, sIdx) => (results[sIdx] === 'correct' ? bIdx : null)),
+      );
+      setSlotResults((prev) =>
+        prev.map((_, sIdx) => (results[sIdx] === 'correct' ? 'correct' : 'idle')),
+      );
       setChecked(false);
       setErrorCount(newErrorCount);
 
@@ -299,18 +259,9 @@ export function UxSequenceGame({
     timersRef.current.push(t);
   }, [allPlaced, checked, slots, blocks, errorCount, slotCount, onComplete]);
 
-  const handleSlotTap = (sIdx: number) => {
-    const isHint = hintSlot === sIdx;
-    if (isHint && selected === null && slots[sIdx] === null) {
-      setHintOpen(true);
-      return;
-    }
-    placeInSlot(sIdx);
-  };
-
   const hintText =
     hintSlot !== null
-      ? blocks.find((b) => b.order === hintSlot + 1)?.text ?? ''
+      ? blocks.find((b) => b.order === hintSlot + 1)?.hint ?? ''
       : '';
 
   const overlayClass =
@@ -320,23 +271,6 @@ export function UxSequenceGame({
     <Background theme={theme} orientation={orientation} onBack={onBack}>
       <GameInstruction instruction={task.instruction} />
       <div className={styles.page}>
-        <div className={styles.topRow}>
-          <p className={styles.title}>{task.title}</p>
-          <div className={styles.errors}>
-            <span className={styles.errorsLabel}>Ошибки</span>
-            <div className={styles.errorsDots}>
-              {Array.from({ length: MAX_ERRORS }).map((_, i) => (
-                <span
-                  key={i}
-                  className={`${styles.errorDot} ${
-                    i < errorCount ? styles.errorDotActive : ''
-                  }`}
-                />
-              ))}
-            </div>
-          </div>
-        </div>
-
         <div className={styles.columns}>
           <div className={styles.slotsCol}>
             <p className={styles.heading}>Путь пользователя</p>
@@ -344,13 +278,13 @@ export function UxSequenceGame({
               const block = bIdx !== null ? blocks[bIdx] : null;
               const result = slotResults[sIdx];
               const isHint = hintSlot === sIdx;
+              const isDropHover =
+                dropTarget?.kind === 'slot' && dropTarget.slotIdx === sIdx;
+              const isDraggingThis =
+                dragging?.kind === 'slot' && dragging.slotIdx === sIdx;
               return (
                 <div
                   key={sIdx}
-                  ref={(el) => {
-                    if (el) slotRefs.current.set(sIdx, el);
-                    else slotRefs.current.delete(sIdx);
-                  }}
                   className={[
                     styles.slot,
                     block ? styles.slotFilled : styles.slotEmpty,
@@ -358,19 +292,53 @@ export function UxSequenceGame({
                     result === 'wrong' ? styles.slotWrong : '',
                     success ? styles.slotSuccess : '',
                     isHint ? styles.slotHint : '',
+                    isDropHover ? styles.slotDropHover : '',
+                    isDraggingThis ? styles.slotDragging : '',
                   ]
                     .filter(Boolean)
                     .join(' ')}
-                  onClick={() => handleSlotTap(sIdx)}
+                  draggable={!interactionsLocked && block !== null}
+                  onDragStart={block !== null ? startDragSlot(sIdx) : undefined}
+                  onDragEnd={endDrag}
+                  onDragOver={(e) => {
+                    if (interactionsLocked) return;
+                    e.preventDefault();
+                    e.dataTransfer.dropEffect = 'move';
+                    if (
+                      dropTarget?.kind !== 'slot' ||
+                      dropTarget.slotIdx !== sIdx
+                    ) {
+                      setDropTarget({ kind: 'slot', slotIdx: sIdx });
+                    }
+                  }}
+                  onDragLeave={() => {
+                    if (
+                      dropTarget?.kind === 'slot' &&
+                      dropTarget.slotIdx === sIdx
+                    ) {
+                      setDropTarget(null);
+                    }
+                  }}
+                  onDrop={dropOnSlot(sIdx)}
                   style={success ? { animationDelay: `${sIdx * 120}ms` } : undefined}
                 >
                   <span className={styles.slotNum}>{sIdx + 1}</span>
                   {block ? (
                     <span className={styles.slotText}>{block.text}</span>
-                  ) : isHint ? (
-                    <span className={styles.slotHintLabel}>Подсказка</span>
                   ) : (
-                    <span className={styles.slotPlaceholder}>пустая ячейка</span>
+                    <>
+                      <span className={styles.slotPlaceholder}>пустая ячейка</span>
+                      <InfoButton
+                        size="sm"
+                        variant="ghost"
+                        className={styles.slotInfoBtn}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          setHintSlot(sIdx);
+                          setHintOpen(true);
+                        }}
+                      />
+                    </>
                   )}
                   {block && result === 'correct' && (
                     <span className={styles.slotStatusIcon}>
@@ -387,29 +355,37 @@ export function UxSequenceGame({
             })}
           </div>
 
-          <div className={styles.poolCol}>
+          <div
+            className={`${styles.poolCol} ${dropTarget?.kind === 'pool' ? styles.poolColDropHover : ''}`}
+            onDragOver={(e) => {
+              if (interactionsLocked) return;
+              if (dragging?.kind !== 'slot') return;
+              e.preventDefault();
+              e.dataTransfer.dropEffect = 'move';
+              if (dropTarget?.kind !== 'pool') setDropTarget({ kind: 'pool' });
+            }}
+            onDragLeave={() => {
+              if (dropTarget?.kind === 'pool') setDropTarget(null);
+            }}
+            onDrop={dropOnPool}
+          >
             <p className={styles.heading}>Шаги</p>
             {available.map((bIdx) => {
-              const isCollapsing = collapsing.has(bIdx);
-              const isSel = selected === bIdx;
+              const isDraggingThis =
+                dragging?.kind === 'pool' && dragging.blockIdx === bIdx;
               return (
                 <div
                   key={bIdx}
-                  ref={(el) => {
-                    if (el) blockRefs.current.set(bIdx, el);
-                    else blockRefs.current.delete(bIdx);
-                  }}
                   className={`${styles.blockWrapper} ${
-                    isCollapsing ? styles.blockWrapperCollapsing : ''
+                    isDraggingThis ? styles.blockDragging : ''
                   }`}
                 >
-                  <div
-                    className={styles.blockInner}
-                    style={{ visibility: isCollapsing ? 'hidden' : 'visible' }}
-                  >
+                  <div className={styles.blockInner}>
                     <div
-                      className={`${styles.block} ${isSel ? styles.blockSelected : ''}`}
-                      onClick={() => selectBlock(bIdx)}
+                      className={styles.block}
+                      draggable={!interactionsLocked}
+                      onDragStart={startDragPool(bIdx)}
+                      onDragEnd={endDrag}
                     >
                       <span className={styles.blockText}>{blocks[bIdx].text}</span>
                       <button
@@ -444,11 +420,11 @@ export function UxSequenceGame({
           </div>
         </div>
 
-        {allPlaced && !checked && !success && (
-          <div className={styles.btnWrap}>
+        <div className={styles.btnWrap}>
+          {allPlaced && !checked && !success && (
             <Button label="Запуск" type="main" onClick={handleCheck} />
-          </div>
-        )}
+          )}
+        </div>
 
         {success && (
           <div className={styles.pizzaRoll}>
@@ -463,10 +439,14 @@ export function UxSequenceGame({
           className={`${styles.overlay} ${overlayClass}`}
           onClick={() => setHintOpen(false)}
         >
-          <div className={styles.hintCard} onClick={(e) => e.stopPropagation()}>
-            <p className={styles.hintTopLabel}>Подсказка · шаг {hintSlot + 1}</p>
-            <p className={styles.hintText}>{hintText}</p>
-            <Button label="Понятно" type="main" onClick={() => setHintOpen(false)} />
+          <div onClick={(e) => e.stopPropagation()}>
+            <PopUp
+              title={`Подсказка · шаг ${hintSlot + 1}`}
+              description={hintText}
+              buttonLabel="Понятно"
+              onButtonClick={() => setHintOpen(false)}
+              compact
+            />
           </div>
         </div>
       )}
@@ -487,16 +467,6 @@ export function UxSequenceGame({
           </div>
         </div>
       )}
-
-      {flyingItems.length > 0 &&
-        createPortal(
-          <>
-            {flyingItems.map((item) => (
-              <FlyingBlock key={item.id} item={item} />
-            ))}
-          </>,
-          document.body,
-        )}
     </Background>
   );
 }

@@ -42,6 +42,8 @@ export interface TaskBlock {
   order: number | null;
   explanation?: string;
   icon?: string;
+  /** Подсказка для ячейки с этим шагом (показывается по тапу на инфо-иконку пустого слота). */
+  hint?: string;
 }
 
 export interface TaskPair {

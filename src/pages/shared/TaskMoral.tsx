@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, type ReactNode } from 'react';
 import { useNavigate } from 'react-router';
 import { Background, PopUp } from '../../components/ui';
 import type { GlossaryTerm, Task } from '../../types/game';
@@ -47,6 +47,21 @@ function parseMoral(text: string): { main: string; question: string | null } {
   return { main: text, question: null };
 }
 
+function renderWithItalic(text: string): ReactNode {
+  const parts: ReactNode[] = [];
+  const regex = /<i>([\s\S]*?)<\/i>/g;
+  let last = 0;
+  let key = 0;
+  let m: RegExpExecArray | null;
+  while ((m = regex.exec(text)) !== null) {
+    if (m.index > last) parts.push(<span key={key++}>{text.slice(last, m.index)}</span>);
+    parts.push(<em key={key++}>{m[1]}</em>);
+    last = m.index + m[0].length;
+  }
+  if (last < text.length) parts.push(<span key={key++}>{text.slice(last)}</span>);
+  return parts.length ? parts : text;
+}
+
 function MoralParagraph({
   text,
   tooltips,
@@ -65,6 +80,9 @@ function MoralParagraph({
         <InstructionRichText text={text} />
       </p>
     );
+  }
+  if (/<i>[\s\S]*?<\/i>/.test(text)) {
+    return <p className={className}>{renderWithItalic(text)}</p>;
   }
   if (!tooltips.length) {
     return <p className={className}>{text}</p>;

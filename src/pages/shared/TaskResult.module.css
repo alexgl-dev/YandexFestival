@@ -62,6 +62,25 @@
   width: 100%;
 }
 
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  margin-top: var(--spacing-sm);
+}
+
+.group:first-child {
+  margin-top: 0;
+}
+
+.groupTitle {
+  font-family: var(--font-family);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-black);
+  margin: 0 0 var(--spacing-xs);
+}
+
 .item {
   display: flex;
   align-items: flex-start;
