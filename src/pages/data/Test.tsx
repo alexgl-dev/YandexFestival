@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, useOutletContext } from 'react-router';
-import { Background, Button, Card } from '../../components/ui';
+import { Background, Button, Card, PopUp } from '../../components/ui';
 
 import type { SectionData } from '../../types/game';
 import styles from './Test.module.css';
@@ -14,7 +14,7 @@ export function Test() {
 
   const [phase, setPhase] = useState<Phase>('intro');
   const [answers, setAnswers] = useState<Record<number, string>>({});
-  const [flipped, setFlipped] = useState<Record<number, boolean>>({});
+  const [popupCell, setPopupCell] = useState<number | null>(null);
   const [questionIndex, setQuestionIndex] = useState(0);
 
   const handleBack = () => navigate(`/${data.slug}`);
@@ -48,9 +48,6 @@ export function Test() {
     }
   };
 
-  const toggleFlip = (cellIndex: number) => {
-    setFlipped((prev) => ({ ...prev, [cellIndex]: !prev[cellIndex] }));
-  };
 
   const getCellData = (cellIndex: number) => {
     if (cellIndex === 4) return null;
@@ -67,7 +64,12 @@ export function Test() {
     return (
       <Background theme="cobalt" orientation="landscape" onBack={handleBack}>
         <div className={styles.wrapper}>
-          <h2 className={styles.title}>Бинго</h2>
+          <Button
+            label="Назад"
+            type="secondary"
+            className={styles.backBtn}
+            onClick={handleBack}
+          />
           <div className={styles.card}>
             <p className={styles.introText}>{bingo.intro}</p>
             <p className={styles.instructionText}>{bingo.instruction}</p>
@@ -103,7 +105,18 @@ export function Test() {
           </div>
 
           <div className={styles.bottomRow}>
-            <h2 className={styles.title}>Бинго</h2>
+            <Button
+              label="Назад"
+              type="secondary"
+              className={styles.backBtn}
+              onClick={() => {
+                if (questionIndex > 0) {
+                  setQuestionIndex((i) => i - 1);
+                } else {
+                  setPhase('intro');
+                }
+              }}
+            />
             <span className={styles.pageCounter}>
               {questionIndex + 1} / {totalQuestions}
             </span>
@@ -139,16 +152,15 @@ export function Test() {
 
               const cellData = getCellData(cellIndex);
               if (!cellData) return null;
-              const { label, question, isMatch } = cellData;
-              const isFlipped = flipped[cellIndex] ?? false;
+              const { label, isMatch } = cellData;
 
               return (
                 <div
                   key={cellIndex}
                   className={styles.cellWrapper}
-                  onClick={() => toggleFlip(cellIndex)}
+                  onClick={() => setPopupCell(cellIndex)}
                 >
-                  <div className={`${styles.cellInner} ${isFlipped ? styles.cellFlipped : ''}`}>
+                  <div className={styles.cellInner}>
                     <div
                       className={styles.cellFront}
                       style={{
@@ -158,9 +170,6 @@ export function Test() {
                       }}
                     >
                       <span className={styles.cellLabel}>{label}</span>
-                    </div>
-                    <div className={styles.cellBack}>
-                      <span className={styles.cellBackText}>{question?.expertAnswer}</span>
                     </div>
                   </div>
                 </div>
@@ -185,6 +194,28 @@ export function Test() {
           />
         </div>
       </div>
+
+      {popupCell !== null && (() => {
+        const cellData = getCellData(popupCell);
+        if (!cellData) return null;
+        return (
+          <div className={styles.overlay} onClick={() => setPopupCell(null)}>
+            <div onClick={(e) => e.stopPropagation()}>
+              <PopUp
+                icon={cellData.isMatch ? 'done' : 'close'}
+                iconColor={cellData.isMatch ? 'blue' : 'red'}
+                title={cellData.label}
+                description={
+                  (cellData.question?.expertAnswer ? `Ответ эксперта: ${cellData.question.expertAnswer}\n\n` : '') +
+                  (cellData.question?.expertComment ?? '')
+                }
+                buttonLabel="Закрыть"
+                onButtonClick={() => setPopupCell(null)}
+              />
+            </div>
+          </div>
+        );
+      })()}
     </Background>
   );
 }

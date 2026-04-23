@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Background, Button, Card } from '../../../components/ui';
+import { Background, Button, Card, PopUp } from '../../../components/ui';
 import type { BingoTest } from '../../../types/game';
 import styles from './BingoGame.module.css';
 
@@ -14,7 +14,7 @@ interface BingoGameProps {
 export function BingoGame({ bingo, onBack, theme = 'cobalt' }: BingoGameProps) {
   const [phase, setPhase] = useState<Phase>('intro');
   const [answers, setAnswers] = useState<Record<number, string>>({});
-  const [flipped, setFlipped] = useState<Record<number, boolean>>({});
+  const [popupCell, setPopupCell] = useState<number | null>(null);
   const [questionIndex, setQuestionIndex] = useState(0);
 
   const totalQuestions = bingo.questions.length;
@@ -35,9 +35,6 @@ export function BingoGame({ bingo, onBack, theme = 'cobalt' }: BingoGameProps) {
     }
   };
 
-  const toggleFlip = (cellIndex: number) => {
-    setFlipped((prev) => ({ ...prev, [cellIndex]: !prev[cellIndex] }));
-  };
 
   // cellIndex 0-3 → question 0-3, cellIndex 4 = center, cellIndex 5-8 → question 4-7
   const getCellData = (cellIndex: number) => {
@@ -56,7 +53,12 @@ export function BingoGame({ bingo, onBack, theme = 'cobalt' }: BingoGameProps) {
     return (
       <Background theme={theme} orientation="landscape" onBack={handleBack}>
         <div className={styles.wrapper}>
-          <h2 className={styles.title}>Бинго</h2>
+          <Button
+            label="Назад"
+            type="secondary"
+            className={styles.backBtn}
+            onClick={handleBack}
+          />
           <div className={styles.card}>
             <p className={styles.introText}>{bingo.intro}</p>
             <p className={styles.instructionText}>{bingo.instruction}</p>
@@ -91,7 +93,18 @@ export function BingoGame({ bingo, onBack, theme = 'cobalt' }: BingoGameProps) {
           </div>
 
           <div className={styles.bottomRow}>
-            <h2 className={styles.title}>Бинго</h2>
+            <Button
+              label="Назад"
+              type="secondary"
+              className={styles.backBtn}
+              onClick={() => {
+                if (questionIndex > 0) {
+                  setQuestionIndex((i) => i - 1);
+                } else {
+                  setPhase('intro');
+                }
+              }}
+            />
             <span className={styles.pageCounter}>
               {questionIndex + 1} / {totalQuestions}
             </span>
@@ -109,14 +122,7 @@ export function BingoGame({ bingo, onBack, theme = 'cobalt' }: BingoGameProps) {
   }
 
   // ── PHASE 3: Result ───────────────────────────────────────────────────────
-  // Find the last flipped cell to show its text in the right panel
-  const lastFlippedCell = Object.entries(flipped)
-    .filter(([, v]) => v)
-    .map(([k]) => Number(k))
-    .at(-1);
-
-  const flippedCellData =
-    lastFlippedCell !== undefined ? getCellData(lastFlippedCell) : null;
+  const popupData = popupCell !== null ? getCellData(popupCell) : null;
 
   return (
     <Background theme={theme} orientation="landscape" onBack={handleBack}>
@@ -140,15 +146,14 @@ export function BingoGame({ bingo, onBack, theme = 'cobalt' }: BingoGameProps) {
               const cellData = getCellData(cellIndex);
               if (!cellData) return null;
               const { question, isMatch } = cellData;
-              const isFlipped = flipped[cellIndex] ?? false;
 
               return (
                 <div
                   key={cellIndex}
                   className={styles.cellWrapper}
-                  onClick={() => toggleFlip(cellIndex)}
+                  onClick={() => setPopupCell(cellIndex)}
                 >
-                  <div className={`${styles.cellInner} ${isFlipped ? styles.cellFlipped : ''}`}>
+                  <div className={styles.cellInner}>
                     <div
                       className={styles.cellFront}
                       style={{
@@ -159,11 +164,6 @@ export function BingoGame({ bingo, onBack, theme = 'cobalt' }: BingoGameProps) {
                     >
                       <span className={styles.cellLabel}>{question?.gridLabel}</span>
                     </div>
-                    <div className={styles.cellBack}>
-                      <span className={styles.cellBackText}>
-                        {question?.expertAnswer}
-                      </span>
-                    </div>
                   </div>
                 </div>
               );
@@ -171,27 +171,16 @@ export function BingoGame({ bingo, onBack, theme = 'cobalt' }: BingoGameProps) {
           </div>
         </div>
 
-        {/* Right — result text / flipped card expert answer */}
+        {/* Right — main Bingo! intro */}
         <div className={styles.resultSide}>
-          {flippedCellData ? (
-            <Card
-              variant={flippedCellData.isMatch ? 'Совпадение!' : 'Не совпало'}
-              title={flippedCellData.question?.gridLabel ?? ''}
-              description={flippedCellData.question?.expertComment ?? flippedCellData.question?.expertAnswer ?? ''}
-              size="m"
-              state="default"
-              className={styles.resultCard}
-            />
-          ) : (
-            <Card
-              variant=""
-              title="Бинго!"
-              description={bingo.resultText}
-              size="m"
-              state="default"
-              className={`${styles.resultCard} ${styles.resultCardMain}`}
-            />
-          )}
+          <Card
+            variant=""
+            title="Бинго!"
+            description={bingo.resultText}
+            size="m"
+            state="default"
+            className={`${styles.resultCard} ${styles.resultCardMain}`}
+          />
           <Button
             label="В главное меню"
             type="main"
@@ -200,6 +189,24 @@ export function BingoGame({ bingo, onBack, theme = 'cobalt' }: BingoGameProps) {
         </div>
 
       </div>
+
+      {popupData && (
+        <div className={styles.overlay} onClick={() => setPopupCell(null)}>
+          <div onClick={(e) => e.stopPropagation()}>
+            <PopUp
+              icon={popupData.isMatch ? 'done' : 'close'}
+              iconColor={popupData.isMatch ? 'blue' : 'red'}
+              title={popupData.question?.gridLabel ?? ''}
+              description={
+                (popupData.question?.expertAnswer ? `Ответ эксперта: ${popupData.question.expertAnswer}\n\n` : '') +
+                (popupData.question?.expertComment ?? '')
+              }
+              buttonLabel="Закрыть"
+              onButtonClick={() => setPopupCell(null)}
+            />
+          </div>
+        </div>
+      )}
     </Background>
   );
 }
