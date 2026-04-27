@@ -7,7 +7,7 @@ export interface PopUpProps {
   icon?: 'close' | 'done';
   iconColor?: 'blue' | 'red';
   title?: string;
-  description: string | ReactNode;
+  description?: string | ReactNode;
   buttonLabel: string;
   onButtonClick?: () => void;
   secondaryButtonLabel?: string;
@@ -38,7 +38,7 @@ export function PopUp({
         )}
         <div className={styles.textBlock}>
           {title && <h2 className={styles.title}>{title}</h2>}
-          <div className={styles.description}>{description}</div>
+          {description && <div className={styles.description}>{description}</div>}
         </div>
       </div>
 

@@ -198,7 +198,7 @@ export function BingoGame({ bingo, onBack, theme = 'cobalt' }: BingoGameProps) {
               iconColor={popupData.isMatch ? 'blue' : 'red'}
               title={popupData.question?.gridLabel ?? ''}
               description={
-                (popupData.question?.expertAnswer ? `Ответ эксперта: ${popupData.question.expertAnswer}\n\n` : '') +
+                (popupData.question?.expertAnswer ? `${popupData.question.expertAnswer}\n\n` : '') +
                 (popupData.question?.expertComment ?? '')
               }
               buttonLabel="Закрыть"

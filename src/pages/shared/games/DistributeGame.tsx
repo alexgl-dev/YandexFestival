@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { Background, PopUp } from '../../../components/ui';
 import type { Task, TaskCategory } from '../../../types/game';
 import { GameInstruction } from '../GameInstruction';
@@ -25,7 +25,7 @@ export function DistributeGame({ task, onComplete, onBack, theme = 'cobalt', ori
   const categories = step?.categories ?? [];
   const items = step?.items ?? [];
 
-  const correctText = step?.resultCorrect ?? 'Потрясающе! Твоё чутьё в области профессий, связанных с разработкой, на высоте!';
+  const correctText = step?.resultCorrect ?? 'Потрясающе!';
   const wrongText = step?.resultWrong ?? 'Ой! Это задача другого специалиста! Попробуй ещё раз, даже если наугад!';
 
   const [currentIdx, setCurrentIdx] = useState(0);
@@ -34,6 +34,7 @@ export function DistributeGame({ task, onComplete, onBack, theme = 'cobalt', ori
   );
   const [activePopup, setActivePopup] = useState<TaskCategory | null>(null);
   const [dropFeedback, setDropFeedback] = useState<DropFeedback>(null);
+  const dismissTimerRef = useRef<number | null>(null);
 
   const currentItem = items[currentIdx] ?? null;
   const isDone = currentIdx >= items.length;
@@ -52,6 +53,10 @@ export function DistributeGame({ task, onComplete, onBack, theme = 'cobalt', ori
   };
 
   const handleFeedbackDismiss = () => {
+    if (dismissTimerRef.current !== null) {
+      window.clearTimeout(dismissTimerRef.current);
+      dismissTimerRef.current = null;
+    }
     const wasCorrect = dropFeedback?.correct === true;
     setDropFeedback(null);
 
@@ -65,6 +70,21 @@ export function DistributeGame({ task, onComplete, onBack, theme = 'cobalt', ori
     }
     // wrong: same task stays, player picks another folder
   };
+
+  useEffect(() => {
+    if (dropFeedback?.correct === true) {
+      dismissTimerRef.current = window.setTimeout(() => {
+        handleFeedbackDismiss();
+      }, 1000);
+      return () => {
+        if (dismissTimerRef.current !== null) {
+          window.clearTimeout(dismissTimerRef.current);
+          dismissTimerRef.current = null;
+        }
+      };
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dropFeedback]);
 
   if (!step) return null;
 
@@ -161,7 +181,7 @@ export function DistributeGame({ task, onComplete, onBack, theme = 'cobalt', ori
             icon={dropFeedback.correct ? 'done' : 'close'}
             iconColor={dropFeedback.correct ? 'blue' : 'red'}
             title={dropFeedback.correct ? 'Потрясающе!' : 'Ой!'}
-            description={dropFeedback.correct ? correctText : wrongText}
+            description={dropFeedback.correct ? undefined : wrongText}
             buttonLabel={dropFeedback.correct ? 'Дальше' : 'Попробуй ещё раз'}
             onButtonClick={handleFeedbackDismiss}
           />

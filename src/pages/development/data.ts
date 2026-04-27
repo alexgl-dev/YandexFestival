@@ -156,7 +156,7 @@ export const developmentSection: SectionData = {
       title: 'Распределение задач',
       mechanic: 'distribute',
       profession: 'all',
-      duration: 4,
+      duration: 10,
       mode: 'group',
       order: 1,
       isLast: false,
@@ -702,7 +702,7 @@ export const developmentSection: SectionData = {
 
 <style>
   .buy-button {
-    background-color: #ff5500; /* Оранжевый фон */
+    background-color: #4161ff; /* Синий фон */
     color: white;              /* Белый текст */
     border: none;
     padding: 15px 30px;

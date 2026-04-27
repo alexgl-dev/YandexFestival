@@ -206,7 +206,7 @@ export function Test() {
                 iconColor={cellData.isMatch ? 'blue' : 'red'}
                 title={cellData.label}
                 description={
-                  (cellData.question?.expertAnswer ? `Ответ эксперта: ${cellData.question.expertAnswer}\n\n` : '') +
+                  (cellData.question?.expertAnswer ? `${cellData.question.expertAnswer}\n\n` : '') +
                   (cellData.question?.expertComment ?? '')
                 }
                 buttonLabel="Закрыть"
