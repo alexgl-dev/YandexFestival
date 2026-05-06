@@ -45,8 +45,9 @@
 }
 
 .item {
-  flex: 0 1 calc((100% - 3 * var(--spacing-lg)) / 4);
+  flex: 0 0 calc((100% - 3 * var(--spacing-lg)) / 4);
   min-width: 0;
+  max-width: calc((100% - 3 * var(--spacing-lg)) / 4);
   display: flex;
   justify-content: center;
 }

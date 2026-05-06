@@ -44,9 +44,9 @@
 }
 
 .item {
-  flex: 1 1 40%;
+  flex: 0 0 calc((100% - var(--spacing-lg)) / 2);
   min-width: 0;
-  max-width: 48%;
+  max-width: calc((100% - var(--spacing-lg)) / 2);
   display: flex;
   justify-content: center;
 }

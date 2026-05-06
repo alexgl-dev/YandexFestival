@@ -912,28 +912,22 @@ export const developmentSection: SectionData = {
 
   videos: [
     {
+      profession: 'alexandr',
+      title: 'Александр',
+      src: '/videos/002/alexandr.mp4',
+      subtitles: '/videos/002/alexandr.vtt',
+    },
+    {
       profession: 'backend-developer',
       title: 'Бэкенд-разработчик',
       src: '/videos/002/backend-developer.mp4',
       subtitles: '/videos/002/backend-developer.vtt',
     },
     {
-      profession: 'frontend-developer',
-      title: 'Фронтенд-разработчик',
-      src: '/videos/002/frontend-developer.mp4',
-      subtitles: '/videos/002/frontend-developer.vtt',
-    },
-    {
-      profession: 'security-specialist',
-      title: 'Специалист по информационной безопасности',
-      src: '/videos/002/security-specialist.mp4',
-      subtitles: '/videos/002/security-specialist.vtt',
-    },
-    {
-      profession: 'devops-engineer',
-      title: 'DevOps-инженер',
-      src: '/videos/002/devops-engineer.mp4',
-      subtitles: '/videos/002/devops-engineer.vtt',
+      profession: 'maxim',
+      title: 'Максим',
+      src: '/videos/002/maxim.mp4',
+      subtitles: '/videos/002/maxim.vtt',
     },
   ],
 
