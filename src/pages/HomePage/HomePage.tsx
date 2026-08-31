@@ -1,41 +1,26 @@
 import { useNavigate } from 'react-router';
 import { Background, Button } from '../../components/ui';
+import { blocks, blockPath } from '../blocks/blocks';
 import styles from './HomePage.module.css';
 
+/** Служебный хаб для разработки: список блоков выставки. Киоски стартуют сразу с /block/:id. */
 export function HomePage() {
   const navigate = useNavigate();
 
   return (
     <Background theme="orange" orientation="landscape" showBackButton={false}>
       <div className={styles.container}>
-        <h1 className={styles.title}>YandexSuperHot</h1>
-        <p className={styles.subtitle}>Интерактивная выставка</p>
+        <h1 className={styles.title}>Фестиваль молодёжи</h1>
+        <p className={styles.subtitle}>Интерактивная выставка — выбери блок</p>
         <div className={styles.sections}>
-          <Button
-            label="Креативный трек"
-            type="main"
-            onClick={() => navigate('/creative')}
-          />
-          <Button
-            label="Разработка"
-            type="main"
-            onClick={() => navigate('/development')}
-          />
-          <Button
-            label="Менеджмент"
-            type="main"
-            onClick={() => navigate('/management')}
-          />
-          <Button
-            label="Работа с данными"
-            type="main"
-            onClick={() => navigate('/data')}
-          />
-          <Button
-            label="Календари"
-            type="main"
-            onClick={() => navigate('/calendars')}
-          />
+          {blocks.map((block) => (
+            <Button
+              key={block.id}
+              label={block.title}
+              type="main"
+              onClick={() => navigate(blockPath(block.id))}
+            />
+          ))}
         </div>
       </div>
     </Background>

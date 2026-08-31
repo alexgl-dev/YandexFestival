@@ -13,6 +13,7 @@ export function CalendarsMenu() {
         { label: 'Менеджмент', onClick: () => navigate('/calendars/management') },
         { label: 'Креативный трек', onClick: () => navigate('/calendars/creative') },
       ]}
+      onBack={() => navigate('/block/management')}
     />
   );
 }

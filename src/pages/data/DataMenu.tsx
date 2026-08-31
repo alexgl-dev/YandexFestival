@@ -14,6 +14,7 @@ export function DataMenu() {
         { label: 'Истории яндексоидов', onClick: () => navigate('/data/videos') },
         { label: 'Бинго-знакомство', onClick: () => navigate('/data/test') },
       ]}
+      onBack={() => navigate('/block/data')}
     />
   );
 }

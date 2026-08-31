@@ -1,4 +1,12 @@
-export type Mechanic = 'choose' | 'find' | 'sequence' | 'categorize' | 'distribute' | 'match' | 'label' | 'mark' | 'catch' | 'quiz' | 'bingo' | 'calendar';
+export type Mechanic =
+  | 'choose' | 'find' | 'sequence' | 'categorize' | 'distribute' | 'match' | 'label' | 'mark' | 'catch' | 'quiz' | 'bingo' | 'calendar'
+  // Механики трека «Информатика во всём» (перенос из yandex-informatika)
+  | 'video-choice'   // выбор ролика из списка → полноэкранный плеер (тифлокомментарий)
+  | 'audio-match'    // прослушать аудио → сопоставить с картинкой (альт-текст)
+  | 'compare'        // одна картинка + кнопки-фильтры «глазами другого»
+  | 'timeline'       // шкала времени с ползунком (история рекламы)
+  | 'builder'        // конструктор из выпадающих параметров → результат-картинка (собери робота)
+  | 'count';         // посчитай объекты на фото и сравни с ИИ (Data Set)
 export type Mode = 'group' | 'solo';
 export type Feedback = 'instant' | 'onComplete';
 
@@ -33,6 +41,10 @@ export interface TaskOption {
   details?: string[];
   /** Пол персонажа — для согласования местоимений в кнопках/подписях. */
   gender?: 'm' | 'f';
+  /** video-choice: путь к ролику, который запускается по выбору этой опции. */
+  video?: string;
+  /** compare: идентификатор визуального фильтра (myopia | colorblind | cataract | glaucoma | macular). */
+  filterId?: string;
 }
 
 export interface TaskBlock {
@@ -44,6 +56,29 @@ export interface TaskBlock {
   icon?: string;
   /** Подсказка для ячейки с этим шагом (показывается по тапу на инфо-иконку пустого слота). */
   hint?: string;
+  /** timeline: иллюстрация эпохи (опционально). */
+  image?: string;
+}
+
+/** builder: один выпадающий параметр конструктора. */
+export interface BuilderField {
+  id: string;
+  label: string;
+  options: string[];
+}
+
+/** count: одна фотография для подсчёта объектов. */
+export interface CountItem {
+  image: string;
+  /** Та же фотография с разметкой нейросети. */
+  segmented: string;
+  /** Сколько объектов на самом деле. */
+  actual: number;
+  /** Сколько нашла нейросеть. */
+  detected: number;
+  /** Время нейросети, мс. */
+  aiTimeMs: number;
+  comment?: string;
 }
 
 export interface TaskPair {
@@ -198,6 +233,16 @@ export interface TaskStep {
   resultCorrect?: string;
   resultWrong?: string;
   calendarCards?: CalendarCardData[];
+  /** builder: параметры конструктора. */
+  builderFields?: BuilderField[];
+  /** builder: картинки-результаты (выдаются по кругу / по хэшу выбора). */
+  resultImages?: string[];
+  /** count: пул фотографий. */
+  countItems?: CountItem[];
+  /** count: сколько случайных фото показать за прохождение (по умолчанию все). */
+  sampleSize?: number;
+  /** Что считаем — подпись для count («автомобили»). */
+  countLabel?: string;
 }
 
 export interface Task {
@@ -265,6 +310,8 @@ export interface SectionData {
   title: string;
   theme: 'cobalt' | 'orange';
   orientation: 'landscape' | 'portrait';
+  /** Id блока выставки (см. src/pages/blocks/blocks.ts) — куда ведёт «назад» из меню раздела. */
+  block?: string;
   professions: Profession[];
   description: string;
   tasks: Task[];

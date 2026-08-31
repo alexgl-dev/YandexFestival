@@ -36,6 +36,17 @@ import { Test as DataTest } from './pages/data/Test';
 import { CalendarsLayout } from './pages/calendars/CalendarsLayout';
 import { CalendarsMenu } from './pages/calendars/CalendarsMenu';
 import { CalendarView } from './pages/calendars/CalendarView';
+import { BlockMenu } from './pages/blocks/BlockMenu';
+import { InformaticsLayout } from './pages/informatics/InformaticsLayout';
+import { InformaticsMenu } from './pages/informatics/InformaticsMenu';
+import { InformaticsTaskPage } from './pages/informatics/InformaticsTaskPage';
+import { InformaticsVideos } from './pages/informatics/InformaticsVideos';
+import { accessSection } from './pages/informatics/access/data';
+import { advertisingSection } from './pages/informatics/advertising/data';
+import { mlSection } from './pages/informatics/ml/data';
+import { aiSection } from './pages/informatics/ai/data';
+
+const informaticsSections = [accessSection, advertisingSection, mlSection, aiSection];
 
 function App() {
   return (
@@ -43,6 +54,16 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/ui-kit" element={<TestScreen />} />
+        {/* Меню блока выставки — стартовый экран устройства */}
+        <Route path="/block/:blockId" element={<BlockMenu />} />
+        {/* Разделы трека «Информатика во всём» — generic-страницы, данные пропом */}
+        {informaticsSections.map((section) => (
+          <Route key={section.slug} path={`/${section.slug}`} element={<InformaticsLayout data={section} />}>
+            <Route index element={<InformaticsMenu />} />
+            <Route path="tasks/:taskId" element={<InformaticsTaskPage />} />
+            <Route path="videos" element={<InformaticsVideos />} />
+          </Route>
+        ))}
         <Route path="/creative" element={<CreativeLayout />}>
           <Route index element={<CreativeMenu />} />
           <Route path="description" element={<Description />} />

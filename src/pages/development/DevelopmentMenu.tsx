@@ -14,6 +14,7 @@ export function DevelopmentMenu() {
         { label: 'Истории яндексоидов', onClick: () => navigate('/development/videos') },
         { label: 'Бинго-знакомство', onClick: () => navigate('/development/test') },
       ]}
+      onBack={() => navigate('/block/development')}
     />
   );
 }

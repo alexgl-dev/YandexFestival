@@ -22,6 +22,13 @@ import { UxSequenceGame } from './games/UxSequenceGame';
 import { CalendarGame } from './games/CalendarGame';
 import { CalendarGamePortrait } from './games/CalendarGamePortrait';
 import { FactorXGame } from './games/FactorXGame';
+import { QuizGame } from './games/QuizGame';
+import { VideoChoiceGame } from './games/VideoChoiceGame';
+import { AudioMatchGame } from './games/AudioMatchGame';
+import { CompareGame } from './games/CompareGame';
+import { TimelineGame } from './games/TimelineGame';
+import { BuilderGame } from './games/BuilderGame';
+import { CountGame } from './games/CountGame';
 import { GamePlaceholder } from './GamePlaceholder';
 
 interface GameRouterProps {
@@ -96,6 +103,21 @@ export function GameRouter({ task, onComplete, onBack, theme = 'orange', orienta
       return orientation === 'portrait'
         ? <CalendarGamePortrait task={task} onComplete={onComplete} onBack={onBack} theme={theme} />
         : <CalendarGame task={task} onComplete={onComplete} onBack={onBack} theme={theme} />;
+    // --- Механики трека «Информатика во всём» ---
+    case 'quiz':
+      return <QuizGame task={task} onComplete={onComplete} onBack={onBack} theme={theme} orientation={orientation} />;
+    case 'video-choice':
+      return <VideoChoiceGame task={task} onComplete={onComplete} onBack={onBack} theme={theme} orientation={orientation} />;
+    case 'audio-match':
+      return <AudioMatchGame task={task} onComplete={onComplete} onBack={onBack} theme={theme} orientation={orientation} />;
+    case 'compare':
+      return <CompareGame task={task} onComplete={onComplete} onBack={onBack} theme={theme} orientation={orientation} />;
+    case 'timeline':
+      return <TimelineGame task={task} onComplete={onComplete} onBack={onBack} theme={theme} orientation={orientation} />;
+    case 'builder':
+      return <BuilderGame task={task} onComplete={onComplete} onBack={onBack} theme={theme} orientation={orientation} />;
+    case 'count':
+      return <CountGame task={task} onComplete={onComplete} onBack={onBack} theme={theme} orientation={orientation} />;
     default:
       return <GamePlaceholder task={task} onComplete={onComplete} theme={theme} orientation={orientation} />;
   }

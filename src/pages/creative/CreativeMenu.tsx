@@ -14,6 +14,7 @@ export function CreativeMenu() {
         { label: 'Истории яндексоидов', onClick: () => navigate('/creative/videos') },
         { label: 'Бинго-знакомство', onClick: () => navigate('/creative/test') },
       ]}
+      onBack={() => navigate('/block/creative')}
     />
   );
 }

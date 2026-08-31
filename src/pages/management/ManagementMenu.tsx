@@ -14,6 +14,7 @@ export function ManagementMenu() {
         { label: 'Истории яндексоидов', onClick: () => navigate('/management/videos') },
         { label: 'Бинго-знакомство', onClick: () => navigate('/management/test') },
       ]}
+      onBack={() => navigate('/block/management')}
     />
   );
 }
