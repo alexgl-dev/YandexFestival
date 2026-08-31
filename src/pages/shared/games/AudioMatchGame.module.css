@@ -1,0 +1,126 @@
+/* AudioMatchGame */
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-2xl);
+  width: 100%;
+  max-width: 90%;
+  margin: 0 auto;
+  box-sizing: border-box;
+  font-family: var(--font-family);
+  padding: var(--spacing-2xl) 0;
+}
+
+.prompt {
+  font-family: var(--font-family);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-white);
+  text-align: center;
+  margin: 0;
+}
+
+/* ── Images row ── */
+
+.imagesRow {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: stretch;
+  justify-content: center;
+  gap: var(--spacing-lg);
+  width: 100%;
+}
+
+.imageCard {
+  width: 260px;
+  height: 260px;
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  border: var(--border-width-md) solid transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-lg);
+  box-sizing: border-box;
+  cursor: pointer;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
+  user-select: none;
+}
+
+.imageCard:active {
+  transform: scale(0.97);
+}
+
+.image {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+}
+
+.imageHint {
+  border-color: var(--color-blue);
+  box-shadow: 0 0 0 var(--border-width-sm) var(--color-blue);
+}
+
+.imageDragOver {
+  border-color: var(--color-blue);
+  box-shadow: 0 0 0 var(--border-width-md) var(--color-blue);
+  transform: scale(1.03);
+}
+
+/* ── Audio buttons ── */
+
+.buttonsColumn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-md);
+  width: 100%;
+}
+
+.audioButton {
+  width: 100%;
+  max-width: var(--width-content);
+  box-sizing: border-box;
+  padding: var(--spacing-md) var(--spacing-xl);
+  border-radius: var(--radius-full);
+  background: var(--color-white);
+  color: var(--color-black);
+  border: var(--border-width-md) solid transparent;
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  text-align: center;
+  cursor: pointer;
+  user-select: none;
+  touch-action: none;
+  transition: border-color 0.2s ease, background-color 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+}
+
+.audioButtonSelected {
+  border-color: var(--color-blue);
+  box-shadow: 0 0 0 var(--border-width-sm) var(--color-blue);
+}
+
+.audioButtonDragging {
+  transform: scale(0.96);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);
+}
+
+.audioButtonWrong {
+  border-color: var(--color-red);
+  animation: shake 0.5s ease;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-10px); }
+  40% { transform: translateX(10px); }
+  60% { transform: translateX(-8px); }
+  80% { transform: translateX(8px); }
+}

@@ -262,7 +262,12 @@ export function BacklogGame({
   const handlePointerMove = useCallback(
     (e: React.PointerEvent) => {
       if (!card || card.pointerId !== e.pointerId) return;
-      const dx = e.clientX - card.dragStartX;
+      // Convert screen px drag delta to layout px (see SwipeGame.tsx for the same fix).
+      // Measured off parentElement (styles.field, untransformed) rather than the card itself,
+      // which carries its own drag translate/rotate transform.
+      const wrapper = e.currentTarget.parentElement;
+      const scale = wrapper && wrapper.offsetWidth ? wrapper.getBoundingClientRect().width / wrapper.offsetWidth : 1;
+      const dx = (e.clientX - card.dragStartX) / (scale || 1);
       setCardTranslateX(dx);
     },
     [card],

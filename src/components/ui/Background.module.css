@@ -1,5 +1,16 @@
+/* --- Scene: viewport-filling frame the fixed-size screen scales inside --- */
+.scene {
+  position: fixed;
+  inset: 0;
+  overflow: hidden;
+  background: var(--color-black);
+}
+
 .root {
-  position: relative;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform-origin: top left;
   overflow: hidden;
   font-family: var(--font-family);
 }

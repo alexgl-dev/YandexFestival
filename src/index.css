@@ -1,8 +1,14 @@
 @import './tokens/tokens.css';
 
+html,
+body {
+  overflow: hidden;
+}
+
 body {
   margin: 0;
   font-family: var(--font-family);
+  background: var(--color-black);
 }
 
 /* ── Design system scrollbar ─────────────────────────────────────────────────

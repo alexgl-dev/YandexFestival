@@ -1,0 +1,115 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-lg);
+  width: 100%;
+  max-width: 92%;
+  max-height: 88%;
+  margin: 0 auto;
+  padding: var(--spacing-md) 0;
+  font-family: var(--font-family);
+  box-sizing: border-box;
+}
+
+.wrapperPortrait {
+  max-width: 90%;
+}
+
+.prompt {
+  font-family: var(--font-family);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-white);
+  text-align: center;
+  margin: 0;
+  max-width: 80%;
+  letter-spacing: var(--letter-spacing-xs);
+  line-height: var(--line-height-normal);
+}
+
+/* === Options row: Card size="m" side by side (landscape) or stacked (portrait) === */
+
+.optionsRow {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: stretch;
+  justify-content: center;
+  gap: var(--spacing-xl);
+  width: 100%;
+  /* Smaller Card title so multi-line poems fit inside the card, still readable */
+  --card-title-size: var(--font-size-sm);
+  --card-desc-size: var(--font-size-xs);
+}
+
+.optionsRowPortrait {
+  flex-direction: column;
+  align-items: center;
+}
+
+.optionColumn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-sm);
+  flex: 1 1 0;
+  min-width: 420px;
+  max-width: 620px;
+}
+
+.optionsRowPortrait .optionColumn {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+/* Preserve poem line breaks — Card title renders as an <h3>, safe to target
+   without knowing its CSS-module hash since h3 is a plain element selector. */
+.optionColumn h3 {
+  white-space: pre-line;
+  text-align: left;
+}
+
+.optionColumn > button {
+  width: 100%;
+}
+
+.answerButtonDisabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+/* === Counter "N / total" === */
+
+.counter {
+  font-family: var(--font-family);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-white);
+  margin: 0;
+}
+
+/* === Popup overlay (matches Background 1920×1080 / 1080×1920, no fixed/100vh) === */
+
+.overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+}
+
+.overlayLandscape {
+  width: 1920px;
+  height: 1080px;
+}
+
+.overlayPortrait {
+  width: 1080px;
+  height: 1920px;
+}

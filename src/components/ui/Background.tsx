@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react';
 import styles from './Background.module.css';
 import { IconButton } from './IconButton';
+import { useFitScale } from './useFitScale';
 
 export interface BackgroundProps {
   theme: 'cobalt' | 'orange';
@@ -30,23 +31,29 @@ export function Background({
   contentClassName,
 }: BackgroundProps) {
   const bgSrc = bgMap[`${theme}-${orientation}`];
+  const { scale, offsetX, offsetY } = useFitScale(orientation);
 
   return (
-    <div className={`${styles.root} ${styles[orientation]} ${className ?? ''}`}>
-      <img src={bgSrc} alt="" className={styles.bgImage} />
-
-      {showBackButton && (
-        <div className={styles.backButton}>
-          <IconButton type="back" variant={theme === 'orange' ? 'orange' : 'light'} size={orientation === 'portrait' ? 'md' : 'lg'} onClick={onBack} />
-        </div>
-      )}
-
+    <div className={styles.scene}>
       <div
-        className={
-          contentClassName ? `${styles.content} ${contentClassName}` : styles.content
-        }
+        className={`${styles.root} ${styles[orientation]} ${className ?? ''}`}
+        style={{ transform: `translate(${offsetX}px, ${offsetY}px) scale(${scale})` }}
       >
-        {children}
+        <img src={bgSrc} alt="" className={styles.bgImage} />
+
+        {showBackButton && (
+          <div className={styles.backButton}>
+            <IconButton type="back" variant={theme === 'orange' ? 'orange' : 'light'} size={orientation === 'portrait' ? 'md' : 'lg'} onClick={onBack} />
+          </div>
+        )}
+
+        <div
+          className={
+            contentClassName ? `${styles.content} ${contentClassName}` : styles.content
+          }
+        >
+          {children}
+        </div>
       </div>
     </div>
   );

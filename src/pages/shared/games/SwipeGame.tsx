@@ -203,7 +203,13 @@ export function SwipeGame({
   const handlePointerMove = useCallback((e: React.PointerEvent<HTMLDivElement>, id: number) => {
     const card = cardsRef.current.get(id);
     if (!card || card.state !== 'dragging' || card.pointerId !== e.pointerId) return;
-    card.dragX = e.clientX - card.dragStartX;
+    // Convert screen px drag delta to layout px: the card's own transform lives inside the
+    // scaled Background, so a raw clientX delta would move it faster/slower than the pointer
+    // once the fit scale != 1. Measure the scale via the untransformed wrapper (parentElement),
+    // not the card itself (it carries this same drag transform, which would skew the ratio).
+    const wrapper = e.currentTarget.parentElement;
+    const scale = wrapper && wrapper.offsetWidth ? wrapper.getBoundingClientRect().width / wrapper.offsetWidth : 1;
+    card.dragX = (e.clientX - card.dragStartX) / (scale || 1);
     const rotate = card.dragX * 0.035;
     const el = cardElsRef.current.get(id);
     if (el) {

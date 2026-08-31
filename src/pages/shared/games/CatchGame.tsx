@@ -58,12 +58,15 @@ export function CatchGame({
   const wrapperRef = useRef<HTMLDivElement>(null);
   const bugCheckIntervalRef = useRef<number>(0);
 
-  // Initialize catcher position to center
+  // Initialize catcher position to center.
+  // NB: offsetWidth (layout px inside the scaled Background), not getBoundingClientRect
+  // (visual/screen px) — the catcher/bug positions are rendered via `left: Npx` inside the
+  // scaled .root, so they must stay in layout-space units regardless of the fit scale.
   useEffect(() => {
     if (wrapperRef.current) {
-      const rect = wrapperRef.current.getBoundingClientRect();
-      setGameAreaWidth(rect.width);
-      setCatcherX(rect.width / 2);
+      const width = wrapperRef.current.offsetWidth;
+      setGameAreaWidth(width);
+      setCatcherX(width / 2);
     }
   }, []);
 
@@ -198,22 +201,26 @@ export function CatchGame({
     }
   }, [currentIndex, objects.length, results, onComplete, spawnBug]);
 
-  // Pointer handling for catcher movement
+  // Pointer handling for catcher movement.
+  // Convert screen px (clientX) to layout px via offsetWidth/rect.width — same ratio trick
+  // as calendarSlotMath.ts — so this keeps working once Background applies a fit scale.
   const handlePointerDown = useCallback((e: React.PointerEvent) => {
     if (showPopup) return;
-    const rect = wrapperRef.current?.getBoundingClientRect();
-    if (!rect) return;
-    const x = e.clientX - rect.left;
-    setCatcherX(Math.max(CATCHER_WIDTH / 2, Math.min(x, rect.width - CATCHER_WIDTH / 2)));
+    const el = wrapperRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const x = (e.clientX - rect.left) * (el.offsetWidth / rect.width);
+    setCatcherX(Math.max(CATCHER_WIDTH / 2, Math.min(x, el.offsetWidth - CATCHER_WIDTH / 2)));
   }, [showPopup]);
 
   const handlePointerMove = useCallback((e: React.PointerEvent) => {
     if (showPopup) return;
     if (e.buttons === 0 && e.pointerType === 'mouse') return; // only track when pressed for mouse
-    const rect = wrapperRef.current?.getBoundingClientRect();
-    if (!rect) return;
-    const x = e.clientX - rect.left;
-    setCatcherX(Math.max(CATCHER_WIDTH / 2, Math.min(x, rect.width - CATCHER_WIDTH / 2)));
+    const el = wrapperRef.current;
+    if (!el) return;
+    const rect = el.getBoundingClientRect();
+    const x = (e.clientX - rect.left) * (el.offsetWidth / rect.width);
+    setCatcherX(Math.max(CATCHER_WIDTH / 2, Math.min(x, el.offsetWidth - CATCHER_WIDTH / 2)));
   }, [showPopup]);
 
   if (!step) return null;

@@ -1,0 +1,152 @@
+/* TimelineGame — vertical scale (left) + era card (right) */
+
+.layout {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  width: 88%;
+  height: 80%;
+  margin: 0 auto;
+  gap: var(--spacing-2xl);
+  box-sizing: border-box;
+}
+
+/* ══ Track column ══ */
+
+.trackCol {
+  flex-shrink: 0;
+  width: 120px;
+  display: flex;
+  align-items: stretch;
+  justify-content: center;
+  padding: var(--spacing-2xl) 0;
+  box-sizing: border-box;
+}
+
+.track {
+  position: relative;
+  width: 64px;
+  height: 100%;
+  touch-action: none;
+  cursor: pointer;
+}
+
+.trackLine {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  transform: translateX(-50%);
+  background: rgba(255, 255, 255, 0.35);
+  border-radius: var(--radius-full);
+  pointer-events: none;
+}
+
+.tick {
+  position: absolute;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  transform: translate(-50%, -50%);
+  border-radius: var(--radius-full);
+  background: var(--color-white);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.tickActive {
+  background: var(--color-black);
+}
+
+.thumb {
+  position: absolute;
+  left: 50%;
+  width: 56px;
+  height: 56px;
+  transform: translate(-50%, -50%);
+  border-radius: var(--radius-full);
+  background: var(--color-black);
+  border: 6px solid var(--color-white);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* ══ Card column ══ */
+
+.cardCol {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+  gap: var(--spacing-lg);
+}
+
+.counter {
+  font-family: var(--font-family);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-regular);
+  color: rgba(255, 255, 255, 0.7);
+  letter-spacing: var(--letter-spacing-xs);
+  margin: 0;
+  text-align: center;
+}
+
+.card {
+  background: var(--color-white);
+  border-radius: var(--radius-lg);
+  padding: var(--spacing-xl);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  min-height: 0;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
+}
+
+.badge {
+  align-self: flex-start;
+  background: var(--color-blue);
+  color: var(--color-white);
+  font-family: var(--font-family);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--letter-spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-lg);
+  border-radius: var(--radius-full);
+}
+
+.description {
+  max-height: 420px;
+  overflow-y: auto;
+  padding-right: var(--spacing-sm);
+}
+
+.descriptionText {
+  font-family: var(--font-family);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-text-primary);
+  line-height: var(--line-height-relaxed);
+  margin: 0;
+}
+
+.navRow {
+  display: flex;
+  flex-direction: row;
+  gap: var(--spacing-md);
+}
+
+.navRow > * {
+  flex: 1;
+}
+
+.navDisabled {
+  opacity: 0.4;
+  pointer-events: none;
+}
