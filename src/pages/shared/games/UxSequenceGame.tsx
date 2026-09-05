@@ -422,7 +422,7 @@ export function UxSequenceGame({
 
         <div className={styles.btnWrap}>
           {allPlaced && !checked && !success && (
-            <Button label="Запуск" type="main" onClick={handleCheck} />
+            <Button label="Запуск" type="secondary" onClick={handleCheck} />
           )}
         </div>
 
@@ -461,7 +461,7 @@ export function UxSequenceGame({
             </p>
             <Button
               label="Попробовать ещё раз"
-              type="main"
+              type="secondary"
               onClick={hardReset}
             />
           </div>

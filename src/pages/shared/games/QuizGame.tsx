@@ -126,7 +126,7 @@ export function QuizGame({ task, onComplete, onBack, theme = 'cobalt', orientati
                 />
                 <Button
                   label="Это Алиса"
-                  type="main"
+                  type="secondary"
                   onClick={() => handleSelect(index)}
                   className={isDisabled ? styles.answerButtonDisabled : ''}
                 />

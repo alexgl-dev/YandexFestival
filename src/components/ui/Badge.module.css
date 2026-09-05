@@ -1,28 +1,35 @@
+/* Badge — Figma badge / Type=filled (28:594), filled 2 (28:598), outline (28:600) */
+
 .badge {
   display: inline-flex;
   align-items: center;
-  gap: 0;
-  padding: 15px var(--spacing-xl);
-  border-radius: var(--radius-full);
-  font-family: var(--font-family);
-  font-size: 32px;
+  padding: 15px var(--spacing-md);
+  border-radius: var(--radius-md);
+  font-family: var(--font-family-text);
+  font-size: var(--font-size-md);
   font-weight: var(--font-weight-regular);
-  letter-spacing: var(--letter-spacing-sm);
-  line-height: 1;
+  letter-spacing: var(--letter-spacing-tight);
+  line-height: var(--line-height-tight);
   white-space: nowrap;
   box-sizing: border-box;
 }
 
 .filled {
-  background-color: var(--color-blue);
+  background-color: var(--color-blue-scene);
   color: var(--color-white);
-  border: none;
+}
+
+.filled_pill {
+  background-color: var(--color-blue-scene);
+  color: var(--color-white);
+  border-radius: var(--radius-full);
+  font-weight: var(--font-weight-medium);
 }
 
 .outline {
   background-color: var(--color-white);
   color: var(--color-black);
-  border: var(--border-width-md) solid var(--color-blue);
+  border: var(--border-width-sm) solid var(--color-grey-card);
 }
 
 .icon {
@@ -38,7 +45,7 @@
 }
 
 .icon img {
-  height: 1em;
-  width: 12px;
   display: block;
+  width: var(--size-icon-xs);
+  height: var(--size-icon-xs);
 }

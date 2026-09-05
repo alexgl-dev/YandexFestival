@@ -253,7 +253,7 @@ export function SequenceGame({ task, onComplete, onBack, theme = 'orange', orien
 
         {!checked && allPlaced && (
           <div className={styles.btnWrap}>
-            <Button label="Проверить" type="main" onClick={handleCheck} />
+            <Button label="Проверить" type="secondary" onClick={handleCheck} />
           </div>
         )}
       </div>

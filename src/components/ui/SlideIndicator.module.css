@@ -1,0 +1,21 @@
+.root {
+  position: relative;
+  width: 126px;
+  height: 16px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-grey-card);
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.filled {
+  background-color: var(--color-black);
+}
+
+.fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  border-radius: var(--radius-full);
+  background-color: var(--color-white);
+  transition: width 0.2s ease;
+}

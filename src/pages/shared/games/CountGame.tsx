@@ -157,7 +157,7 @@ export function CountGame({ task, onComplete, onBack, theme = 'cobalt', orientat
                 <div className={styles.keypadRow}>
                   <span className={styles.keySpacer} />
                   <Button label="0" type="secondary" onClick={() => handleDigit('0')} className={styles.key} />
-                  <Button label="⌫" type="main" onClick={handleBackspace} className={styles.key} />
+                  <Button label="⌫" type="secondary" onClick={handleBackspace} className={styles.key} />
                 </div>
               </div>
             </div>
@@ -187,14 +187,14 @@ export function CountGame({ task, onComplete, onBack, theme = 'cobalt', orientat
         {phase === 'input' ? (
           <Button
             label="Проверить"
-            type="main"
+            type="secondary"
             onClick={handleCheck}
             className={`${styles.actionButton} ${!answer ? styles.actionButtonDisabled : ''}`}
           />
         ) : (
           <Button
             label={isLastRound ? 'Результаты' : 'Дальше'}
-            type="main"
+            type="secondary"
             onClick={handleNext}
             className={styles.actionButton}
           />

@@ -77,7 +77,7 @@ export function TaskResult({ results, onContinue, theme = 'orange', orientation 
               : results.map((r, i) => renderItem(r, i))}
           </div>
           <div className={styles.buttonWrap}>
-            <Button label="Далее" type="main" onClick={onContinue} />
+            <Button label="Далее" type="big_white" onClick={onContinue} />
           </div>
         </div>
       </div>

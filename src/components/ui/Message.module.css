@@ -1,0 +1,32 @@
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 870px;
+  max-width: 100%;
+  padding: var(--spacing-2xl);
+  border-radius: var(--radius-ml);
+  background-color: var(--color-white);
+  font-family: var(--font-family-text);
+  box-sizing: border-box;
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-family-wide);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--letter-spacing-tight);
+  line-height: var(--line-height-tight);
+  color: var(--color-black);
+}
+
+.description {
+  margin: 0;
+  max-width: 700px;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-regular);
+  letter-spacing: var(--letter-spacing-tight);
+  line-height: var(--line-height-tight);
+  color: var(--color-grey-dark);
+}

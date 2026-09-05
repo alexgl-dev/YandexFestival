@@ -2,6 +2,7 @@ import type { ReactNode } from 'react';
 import styles from './PopUp.module.css';
 import { Icon } from './Icon';
 import { Button } from './Button';
+import { IconButton } from './IconButton';
 
 export interface PopUpProps {
   icon?: 'close' | 'done';
@@ -13,10 +14,16 @@ export interface PopUpProps {
   onButtonClick?: () => void;
   secondaryButtonLabel?: string;
   onSecondaryButtonClick?: () => void;
+  /** Если задан — в правом верхнем углу появляется круглая кнопка «закрыть» (Figma: Icon button 90). */
+  onClose?: () => void;
   className?: string;
   compact?: boolean;
 }
 
+/**
+ * PopUp по Figma «OUT_Яндекс Музей» (PopUp / Type=White): белая плашка 960,
+ * иллюстрация 120, заголовок YS Text Wide 60, текст 40, кнопки Main Button 131.
+ */
 export function PopUp({
   icon,
   iconColor = 'blue',
@@ -27,10 +34,11 @@ export function PopUp({
   onButtonClick,
   secondaryButtonLabel,
   onSecondaryButtonClick,
+  onClose,
   className,
   compact,
 }: PopUpProps) {
-  // Кастомные иконки вместо стандартных done/close
+  // Иллюстрации из макета: грустный / весёлый смайл вместо стандартных done/close
   const resolvedIconSrc =
     iconSrc ??
     (icon === 'close'
@@ -41,6 +49,8 @@ export function PopUp({
 
   return (
     <div className={`${styles.root} ${compact ? styles.compact : ''} ${className ?? ''}`}>
+      {onClose && <IconButton type="close" onClick={onClose} className={styles.closeBtn} />}
+
       <div className={styles.topContent}>
         {(icon || resolvedIconSrc) && (
           <div className={styles.iconArea}>
@@ -58,6 +68,7 @@ export function PopUp({
       </div>
 
       <div className={styles.buttonWrap}>
+        <Button label={buttonLabel} type="blue" onClick={onButtonClick} className={styles.primaryBtn} />
         {secondaryButtonLabel && (
           <Button
             label={secondaryButtonLabel}
@@ -66,7 +77,6 @@ export function PopUp({
             className={styles.secondaryBtn}
           />
         )}
-        <Button label={buttonLabel} type="blue" onClick={onButtonClick} />
       </div>
     </div>
   );

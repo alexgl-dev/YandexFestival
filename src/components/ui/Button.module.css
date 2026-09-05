@@ -1,110 +1,115 @@
+/* Button — Figma «OUT_Яндекс Музей», Main Button (узлы 28:1060…67:1382).
+   Main/Secondary/Outline: текст 36, padding 20/30. Big_*: 908 wide, текст 50, padding 36/52.
+   Big_bottom: 960×160, иконка 56 + текст Medium 40. Все — pill (radius 999). */
+
 .button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: var(--spacing-md);
+  gap: 12px;
   border-radius: var(--radius-full);
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-lg);
   font-weight: var(--font-weight-regular);
+  line-height: normal;
   padding: var(--spacing-md) var(--spacing-xl);
   border: none;
   cursor: pointer;
   white-space: nowrap;
   box-sizing: border-box;
-  transition: background-color 0.15s ease;
-  line-height: normal;
+  transition: background-color 0.15s ease, color 0.15s ease;
 }
 
-/* === Main === */
+/* === Main: синяя === */
 .main {
-  background-color: var(--color-black);
-  color: var(--color-white);
-  min-height: 130px;
-  max-width: 100%;
-  width: 100%;
-}
-
-.main.pressed,
-.main:active {
-  background-color: var(--color-black-pressed);
-}
-
-/* === Blue (PopUp primary) === */
-.blue {
   background-color: var(--color-blue-scene);
   color: var(--color-white);
-  min-height: 130px;
-  min-width: 100%;
+}
+.main.pressed,
+.main:active {
+  background-color: var(--color-blue-light);
 }
 
-.blue.pressed,
-.blue:active {
-  background-color: var(--color-blue-pressed);
-}
-
-/* === Secondary === */
+/* === Secondary: белая === */
 .secondary {
-  background-color: var(--color-grey-secondary);
+  background-color: var(--color-white);
   color: var(--color-black);
 }
 .secondary.pressed,
 .secondary:active {
-  background-color: var(--color-grey-disabled);
-  color: var(--color-black-pressed);
+  background-color: var(--color-grey-card);
 }
 
-/* === Outline === */
+/* === Outline: прозрачная, серый бордер === */
 .outline {
   background-color: transparent;
-  color: var(--color-white);
-  border: var(--border-width-md) solid var(--color-blue);
+  color: var(--color-black);
+  border: var(--border-width-sm) solid var(--color-grey-card);
 }
 .outline.pressed,
 .outline:active {
-  background-color: var(--color-blue);
+  background-color: var(--color-blue-scene);
+  border-color: var(--color-blue-scene);
   color: var(--color-white);
 }
 
-/* === Big === */
+/* === Big / Big_white / Big_blue: 908×131, текст 50 === */
+.big,
+.big_white,
+.big_blue {
+  width: var(--button-big-width, 908px);
+  max-width: 100%;
+  min-height: 131px;
+  padding: 36px 52px;
+  font-size: var(--font-size-3xl);
+}
+
 .big {
-  width: var(--width-content);
-  padding: var(--spacing-md) var(--spacing-xl);
   background-color: transparent;
-  color: var(--color-text-primary);
-  border: var(--border-width-md) solid var(--color-blue);
-  font-family: 'YS Text Web', var(--font-family);
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-medium);
-  text-align: center;
-  box-shadow: 0 2.9px 5.8px rgba(36, 36, 36, 0.25);
+  color: var(--color-black);
+  border: var(--border-width-sm) solid var(--color-black);
 }
 .big.pressed,
 .big:active {
-  background-color: var(--color-blue);
-  border-color: var(--color-blue);
+  background-color: var(--color-black);
   color: var(--color-white);
 }
 
-/* === Big bottom === */
+.big_white {
+  background-color: var(--color-white);
+  color: var(--color-black);
+}
+.big_white.pressed,
+.big_white:active {
+  background-color: var(--color-grey-card);
+}
+
+.big_blue {
+  background-color: var(--color-blue-scene);
+  color: var(--color-white);
+}
+.big_blue.pressed,
+.big_blue:active {
+  background-color: var(--color-blue-light);
+}
+
+/* === Big_bottom: 960×160, белая с синим бордером === */
 .big_bottom {
   width: var(--width-content);
   height: 160px;
+  gap: var(--spacing-md);
   padding: var(--spacing-2xl);
   background-color: var(--color-white);
   color: var(--color-black);
-  border: var(--border-width-md) solid var(--color-blue);
-  border-radius: var(--radius-lg) 0 0 0;
-  font-family: var(--font-family);
+  border: 3px solid var(--color-blue-scene);
   font-size: var(--font-size-xl);
   font-weight: var(--font-weight-medium);
-  letter-spacing: var(--letter-spacing-sm);
-  justify-content: flex-start;
+  letter-spacing: var(--letter-spacing-tight);
 }
 .big_bottom.pressed,
 .big_bottom:active {
-  background-color: var(--color-blue);
-  border-color: var(--color-blue);
+  background-color: var(--color-blue-scene);
+  border: var(--border-width-md) solid var(--color-blue-scene);
   color: var(--color-white);
 }
 
@@ -112,4 +117,19 @@
   display: flex;
   align-items: center;
   flex-shrink: 0;
+}
+
+.arrow {
+  display: block;
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  transform: rotate(90deg);
+}
+
+.big .arrow,
+.big_white .arrow,
+.big_blue .arrow {
+  width: 65px;
+  height: 65px;
 }

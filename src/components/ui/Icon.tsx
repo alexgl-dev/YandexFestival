@@ -7,41 +7,40 @@ export interface IconProps {
   className?: string;
 }
 
+/** Figma «OUT_Яндекс Музей», Icon: XS=36 (People, Clock), S=40, M=56 (Done, Close) */
 const sizeMap: Record<IconProps['size'], number> = {
-  xs: 30,
-  s: 44,
-  m: 80,
+  xs: 36,
+  s: 40,
+  m: 56,
 };
 
-/* People and Clock are flat icons (no circle background in SVG) */
+/* People и Clock — плоские иконки без круга */
 const flatIcons = new Set(['people', 'clock']);
+
+function iconSrc({ name, color, size }: Pick<IconProps, 'name' | 'color' | 'size'>): string {
+  if (name === 'people' || name === 'clock') {
+    // Из Figma есть white и blue; red нет — берём blue
+    return `/icons/figma/icon-${name}-${color === 'white' ? 'white' : 'blue'}.svg`;
+  }
+  const circleSize = size === 'm' ? 'm' : 's';
+  if (name === 'done' && color !== 'red') {
+    return `/icons/figma/icon-done-${color}-${circleSize}.svg`;
+  }
+  // close (все цвета) и done red — прежние иконки проекта, тот же глиф «круг + крест/галочка»
+  return `/icons/icon-${name}-${color}-${circleSize}.svg`;
+}
 
 export function Icon({ name, color, size, className }: IconProps) {
   const px = sizeMap[size];
   const isFlat = flatIcons.has(name);
 
-  if (isFlat) {
-    return (
-      <img
-        src={`/icons/icon-${name}-${color}-${size}.svg`}
-        alt={name}
-        width={px}
-        height={px}
-        className={`${styles.flat} ${className ?? ''}`}
-      />
-    );
-  }
-
   return (
-    <div
-      className={`${styles.circle} ${styles[color]} ${className ?? ''}`}
-      style={{ width: px, height: px }}
-    >
-      <img
-        src={`/icons/icon-${name}-${color}-${size}.svg`}
-        alt={name}
-        className={styles.icon}
-      />
-    </div>
+    <img
+      src={iconSrc({ name, color, size })}
+      alt={name}
+      width={px}
+      height={px}
+      className={`${styles.icon} ${isFlat ? styles.flat : ''} ${name === 'clock' ? styles.clock : ''} ${className ?? ''}`}
+    />
   );
 }

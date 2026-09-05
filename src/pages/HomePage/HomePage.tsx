@@ -17,7 +17,7 @@ export function HomePage() {
             <Button
               key={block.id}
               label={block.title}
-              type="main"
+              type="secondary"
               onClick={() => navigate(blockPath(block.id))}
             />
           ))}

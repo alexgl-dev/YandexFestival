@@ -1,12 +1,14 @@
+/* ListItem — Figma List item 28:502 (Default) / 28:513 (Pressed), list item 28:481 (L) */
+
 .root {
   display: flex;
   align-items: center;
   justify-content: space-between;
   width: 100%;
   min-height: 88px;
-  padding: var(--spacing-sm) var(--spacing-lg);
-  border-radius: var(--radius-lg);
-  font-family: var(--font-family);
+  padding: 15px;
+  border-radius: var(--radius-md);
+  font-family: var(--font-family-text);
   cursor: pointer;
   user-select: none;
   box-sizing: border-box;
@@ -15,35 +17,112 @@
   -webkit-tap-highlight-color: transparent;
 }
 
-.root:focus-visible {
-  box-shadow: inset 0 0 0 3px var(--color-blue);
+.root:focus-visible,
+.rootL:focus-visible {
+  box-shadow: inset 0 0 0 3px var(--color-blue-scene);
 }
 
 .default {
-  background-color: var(--color-grey-light);
+  background-color: var(--color-white);
 }
 
 .pressed {
-  background-color: var(--color-grey-disabled);
+  background-color: var(--color-grey-card);
 }
 
+/* Название — в pill-обёртке 15/22 */
 .title {
-  font-size: var(--font-size-list);
-  font-weight: var(--font-weight-regular);
-  color: var(--color-text-primary);
-  line-height: 1.2;
+  padding: 15px 22px;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-tight);
+  line-height: var(--line-height-tight);
+  color: var(--color-black);
 }
 
 .right {
   display: flex;
   align-items: center;
-  gap: var(--spacing-sm);
+  gap: var(--spacing-xs);
   flex-shrink: 0;
 }
 
+.peopleWrap {
+  display: flex;
+  align-items: center;
+  padding: 0 var(--spacing-sm);
+}
+
+.time {
+  display: flex;
+  align-items: center;
+}
+
 .duration {
-  font-size: var(--font-size-sm);
+  padding: 15px 22px 15px 12px;
+  font-size: 22px;
   font-weight: var(--font-weight-regular);
-  color: var(--color-text-primary);
+  letter-spacing: var(--letter-spacing-tight);
+  line-height: var(--line-height-tight);
+  color: var(--color-black);
   white-space: nowrap;
+}
+
+/* --- L: плашка 1230 --- */
+.rootL {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-2xl);
+  width: 100%;
+  max-width: 1230px;
+  padding: var(--spacing-2xl);
+  border-radius: var(--radius-ml);
+  font-family: var(--font-family-text);
+  cursor: pointer;
+  user-select: none;
+  box-sizing: border-box;
+  outline: none;
+}
+
+.leftL {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  min-width: 0;
+}
+
+.textL {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 0;
+}
+
+.titleL {
+  margin: 0;
+  font-family: var(--font-family-wide);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--letter-spacing-tight);
+  line-height: var(--line-height-tight);
+  color: var(--color-black);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.descriptionL {
+  margin: 0;
+  max-width: 664px;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-regular);
+  letter-spacing: var(--letter-spacing-tight);
+  line-height: var(--line-height-tight);
+  color: var(--color-grey-dark);
+}
+
+.iconL {
+  display: flex;
+  flex-shrink: 0;
 }

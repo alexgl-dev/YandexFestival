@@ -2,30 +2,21 @@ import styles from './CheckList.module.css';
 
 export interface CheckListProps {
   checked: boolean;
+  /** blue — синий бордер / синяя галочка; black — серый бордер / чёрная галочка */
+  type?: 'blue' | 'black';
   className?: string;
 }
 
-export function CheckList({ checked, className }: CheckListProps) {
-  return (
-    <div
-      className={`${styles.circle} ${checked ? styles.checked : styles.unchecked} ${className ?? ''}`}
-    >
-      {checked && (
-        <svg
-          className={styles.checkmark}
-          viewBox="0 0 24 24"
-          fill="none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
-          <path
-            d="M5 12.5L9.5 17L19 7"
-            stroke="currentColor"
-            strokeWidth="2.5"
-            strokeLinecap="round"
-            strokeLinejoin="round"
-          />
-        </svg>
-      )}
-    </div>
-  );
+/** Check list по Figma (28:491…28:498): квадрат 44, radius 8, бордер 2; checked — SVG из макета */
+export function CheckList({ checked, type = 'blue', className }: CheckListProps) {
+  if (checked) {
+    return (
+      <img
+        src={`/icons/figma/checklist-true-${type}.svg`}
+        alt="выбрано"
+        className={`${styles.box} ${className ?? ''}`}
+      />
+    );
+  }
+  return <div className={`${styles.box} ${styles.unchecked} ${styles[type]} ${className ?? ''}`} />;
 }

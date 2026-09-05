@@ -15,10 +15,11 @@
   top: var(--offset-logo-top-landscape);
 }
 
+/* Figma «Меню» (58:993): пункты — Main Button / Big_white 780 wide, gap 36 */
 .nav {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-lg);
+  gap: 36px;
   align-items: center;
 }
 
@@ -27,13 +28,13 @@
   align-items: center;
   justify-content: center;
   padding: 36px 52px;
-  min-width: 735px;
+  min-width: 780px;
   border: none;
   border-radius: var(--radius-full);
-  background-color: var(--color-grey-light);
+  background-color: var(--color-white);
   color: var(--color-black);
-  font-family: var(--font-family);
-  font-size: 60px;
+  font-family: var(--font-family-text);
+  font-size: var(--font-size-3xl);
   font-weight: var(--font-weight-regular);
   line-height: normal;
   white-space: nowrap;
@@ -42,10 +43,6 @@
   transition: background-color 0.15s ease;
 }
 
-.menuItem:hover {
-  background-color: var(--color-grey-secondary);
-}
-
 .menuItem:active {
-  background-color: var(--color-grey-disabled);
+  background-color: var(--color-grey-card);
 }

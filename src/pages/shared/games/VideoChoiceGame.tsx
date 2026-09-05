@@ -58,7 +58,7 @@ export function VideoChoiceGame({ task, onComplete, onBack, theme = 'orange', or
         </div>
 
         <div className={styles.finishWrap}>
-          <Button label="Завершить" type="main" onClick={handleFinish} />
+          <Button label="Завершить" type="secondary" onClick={handleFinish} />
         </div>
       </div>
 

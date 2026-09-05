@@ -532,7 +532,7 @@ export function AnomalyDetectiveGame({
             )}
             <Button
               label="Сверить графики"
-              type="main"
+              type="secondary"
               onClick={handlePopupAction}
             />
           </div>

@@ -1,40 +1,56 @@
 import styles from './IconButton.module.css';
 
 export interface IconButtonProps {
-  type: 'back' | 'play' | 'pause';
+  type: 'back' | 'play' | 'pause' | 'close';
+  /** default — синяя полупрозрачная (Back/Blue); light — белая полупрозрачная (White); orange — как light */
   variant?: 'default' | 'light' | 'orange';
   pressed?: boolean;
+  /** Оставлен для совместимости: у «Назад» размер в макете один — 326×124 */
   size?: 'sm' | 'md' | 'lg';
   onClick?: () => void;
   className?: string;
 }
 
-const defaultSize: Record<IconButtonProps['type'], 'sm' | 'lg'> = {
-  back: 'lg',
-  play: 'sm',
-  pause: 'sm',
-};
+/**
+ * Icon button по Figma «OUT_Яндекс Музей» (28:614…77:491):
+ * back — pill «← Назад» (стрелка 81×66 + YS Text Medium 45), blur-фон;
+ * play/pause — pill 110×76; close — белый круг 90 с крестом.
+ */
+export function IconButton({ type, variant = 'default', pressed, onClick, className }: IconButtonProps) {
+  const variantClass = variant === 'default' ? styles.blue : styles.light;
 
-function getSrc(type: IconButtonProps['type']) {
   if (type === 'back') {
-    return '/icons/icon-back.svg';
+    return (
+      <button
+        type="button"
+        className={`${styles.back} ${variantClass} ${pressed ? styles.pressed : ''} ${className ?? ''}`}
+        onClick={onClick}
+      >
+        <img src="/icons/figma/back-arrow-white.svg" alt="" className={styles.backArrow} />
+        <span className={styles.backLabel}>Назад</span>
+      </button>
+    );
   }
-  return `/icons/iconbtn-${type}.svg`;
-}
 
-export function IconButton({ type, size, onClick, className }: IconButtonProps) {
-  const resolvedSize = size ?? defaultSize[type];
-  const isBack = type === 'back';
-  const px = resolvedSize === 'lg' ? 96 : resolvedSize === 'md' ? 74 : 63;
+  if (type === 'close') {
+    return (
+      <button
+        type="button"
+        className={`${styles.close} ${className ?? ''}`}
+        onClick={onClick}
+        aria-label="Закрыть"
+      />
+    );
+  }
 
   return (
     <button
-      className={`${styles.button} ${isBack ? styles.buttonBack : ''} ${className ?? ''}`}
-      style={isBack ? undefined : { width: px, height: px }}
-      onClick={onClick}
       type="button"
+      className={`${styles.media} ${type === 'play' ? styles.play : styles.pause} ${className ?? ''}`}
+      onClick={onClick}
+      aria-label={type === 'play' ? 'Играть' : 'Пауза'}
     >
-      <img src={getSrc(type)} alt={type} className={styles.icon} />
+      {type === 'pause' && <img src="/icons/figma/pause-bars-white.svg" alt="" className={styles.pauseBars} />}
     </button>
   );
 }

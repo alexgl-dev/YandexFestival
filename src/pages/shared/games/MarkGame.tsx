@@ -159,11 +159,11 @@ function UxReviewGame({
             {!checked ? (
               <Button
                 label="Отправить в работу"
-                type="main"
+                type="secondary"
                 onClick={handleCheck}
               />
             ) : (
-              <Button label="Далее" type="main" onClick={handleComplete} />
+              <Button label="Далее" type="secondary" onClick={handleComplete} />
             )}
           </div>
         </div>
@@ -309,7 +309,7 @@ export function MarkGame({ task, onComplete, onBack, theme = 'orange', orientati
 
         {!checked && markers.length > 0 && (
           <div className={styles.footer}>
-            <Button label="Проверить" type="main" onClick={handleCheck} />
+            <Button label="Проверить" type="secondary" onClick={handleCheck} />
           </div>
         )}
 

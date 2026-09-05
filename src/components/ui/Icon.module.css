@@ -1,40 +1,15 @@
-.circle {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: var(--radius-full);
-  flex-shrink: 0;
-}
-
-.white {
-  background-color: var(--color-white);
-}
-
-.blue {
-  background-color: transparent;
-}
-
-.blue .icon {
-  width: 100%;
-  height: 100%;
-}
-
-.red {
-  background-color: transparent;
-}
-
-.red .icon {
-  width: 100%;
-  height: 100%;
-}
-
 .icon {
-  width: 60%;
-  height: 60%;
+  display: block;
+  flex-shrink: 0;
   object-fit: contain;
+  box-sizing: border-box;
 }
 
 .flat {
-  flex-shrink: 0;
   object-fit: contain;
+}
+
+/* Clock в макете занимает 83% бокса 36px (inset 8.33%) */
+.clock {
+  padding: 3px;
 }

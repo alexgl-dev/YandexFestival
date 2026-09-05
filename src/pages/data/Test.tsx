@@ -76,7 +76,7 @@ export function Test() {
             <p className={styles.introText}>{bingo.intro}</p>
             <p className={styles.instructionText}>{bingo.instruction}</p>
           </div>
-          <Button label="Начать" type="main" onClick={() => setPhase('questions')} />
+          <Button label="Начать" type="big_white" onClick={() => setPhase('questions')} />
         </div>
       </Background>
     );
@@ -116,7 +116,7 @@ export function Test() {
             {currentAnswer && (
               <Button
                 label={isLastQuestion && allAnswered ? 'Посмотреть результат' : 'Далее'}
-                type="main"
+                type="secondary"
                 onClick={handleNext}
               />
             )}
@@ -182,7 +182,7 @@ export function Test() {
           />
           <Button
             label="В главное меню"
-            type="main"
+            type="secondary"
             onClick={() => navigate(`/${data.slug}`)}
           />
         </div>

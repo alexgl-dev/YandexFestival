@@ -27,6 +27,39 @@
   font-display: swap;
 }
 
+/* Figma 2026 (OUT_Яндекс Музей): текст — YS Text, заголовки — YS Text Wide */
+@font-face {
+  font-family: 'YS Text';
+  src: url('../assets/fonts/YS Text-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'YS Text';
+  src: url('../assets/fonts/YS Text-Medium.ttf') format('truetype');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'YS Text';
+  src: url('../assets/fonts/YS Text-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'YS Text Wide';
+  src: url('../assets/fonts/YS Text Wide-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   /* === Colors === */
 
@@ -41,6 +74,18 @@
   --color-grey-light: #F4F4F4;
   --color-grey-secondary: #E3E2E0;
   --color-grey-disabled: #C0C0C0;
+  /* Figma 2026 (OUT_Яндекс Музей): Grey / Dark grey */
+  --color-grey-card: #DFE3E7;
+  --color-grey-dark: #373940;
+  --color-blue-light: #6196FD;          /* pressed синих кнопок */
+  --color-blue-pressed-dark: #404663;   /* pressed кнопки «Назад» на синем */
+  --color-overlay-blue-20: rgba(66, 97, 255, 0.2);   /* фон кнопки «Назад» */
+  --color-overlay-white-20: rgba(255, 255, 255, 0.2); /* фон play/pause и белой «Назад» */
+  --color-overlay-black-20: rgba(0, 0, 0, 0.2);
+  /* Figma 2026: тинты из палитры (свотчи 28:1118, 28:1120, 28:1123) */
+  --color-tint-blue: #D8DCFF;
+  --color-tint-cream: #FFF8E1;
+  --color-tint-pink: #FFD8E3;
   --color-orange: #FB4E14;
   --color-red: #FF3300;
   --color-green: #40B551;
@@ -69,6 +114,12 @@
 
   /* === Typography === */
   --font-family: 'YS Geo', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  /* Figma 2026: основной текст и широкие заголовки */
+  --font-family-text: 'YS Text', 'YS Geo', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-family-wide: 'YS Text Wide', 'YS Text', 'YS Geo', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-size-5xl: 60px;
+  --letter-spacing-2xs: -0.16px;
+  --letter-spacing-lg: -0.6px;
 
   --font-size-xs: 24px;
   --font-size-sm: 28px;
@@ -97,6 +148,10 @@
   /* === Radius === */
   --radius-xs: 5px;
   --radius-sm: 8px;
+  /* Figma 2026: картинка в карточке 10, Card L 20, Card M / PopUp 30 */
+  --radius-image: 10px;
+  --radius-md: 20px;
+  --radius-ml: 30px;
   --radius-lg: 32px;
   --radius-full: 999px;
 
@@ -128,9 +183,10 @@
   --color-bg-brand-translucent: rgba(66, 97, 255, 0.15);
 
   /* === Icon Sizes === */
-  --size-icon-xs: 30px;
-  --size-icon-s: 44px;
-  --size-icon-m: 80px;
+  /* Figma 2026: Icon XS=36 (people/clock), S=40, M=56 */
+  --size-icon-xs: 36px;
+  --size-icon-s: 40px;
+  --size-icon-m: 56px;
 
   /* === Component Widths === */
   --width-content: 960px;

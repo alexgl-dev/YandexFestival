@@ -228,7 +228,7 @@ export function LabelGame({
           </div>
           <Button
             label="Готово"
-            type="main"
+            type="secondary"
             onClick={handleSubmit}
             className={!allAnswered ? styles.finishDisabled : ''}
           />

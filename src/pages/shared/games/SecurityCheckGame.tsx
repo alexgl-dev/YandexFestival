@@ -112,7 +112,7 @@ export function SecurityCheckGame({
               <Button
                 key={label.id}
                 label={label.title}
-                type="main"
+                type="secondary"
                 onClick={() => handleVerdict(label.id)}
                 className={isDanger ? styles.btnDanger : styles.btnSafe}
               />

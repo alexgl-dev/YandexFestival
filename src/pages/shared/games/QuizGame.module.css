@@ -42,6 +42,11 @@
   /* Smaller Card title so multi-line poems fit inside the card, still readable */
   --card-title-size: var(--font-size-sm);
   --card-desc-size: var(--font-size-xs);
+  /* Стихи длинные — метка над текстом, а не слева (см. Card.module.css) */
+  --card-m-direction: column;
+  --card-m-label-width: auto;
+  --card-m-gap: var(--spacing-md);
+  --card-m-min-height: 0;
 }
 
 .optionsRowPortrait {

@@ -295,7 +295,7 @@ export function ChatSignalsGame({ task, onComplete, onBack, theme = 'orange', or
               })}
             </div>
             <div className={styles.resultActions}>
-              <Button label="Далее" type="main" onClick={() => onComplete([buildResult()])} />
+              <Button label="Далее" type="secondary" onClick={() => onComplete([buildResult()])} />
             </div>
           </div>
         </div>

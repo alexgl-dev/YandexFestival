@@ -33,7 +33,7 @@ export function Menu({
     >
       {showLogo && (
         <img
-          src="/icons/logo.svg"
+          src="/icons/figma/logo-white.svg"
           alt=""
           className={`${styles.logo} ${orientation === 'landscape' ? styles.logoLandscape : styles.logoPortrait}`}
         />

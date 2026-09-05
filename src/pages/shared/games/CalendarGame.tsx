@@ -388,7 +388,7 @@ export function CalendarGame({ task, onComplete, onBack, theme = 'orange' }: Pro
 
           {!showResult && allPlaced && (
             <div className={styles.checkWrap}>
-              <Button label="Проверить" type="main" onClick={handleCheck} />
+              <Button label="Проверить" type="secondary" onClick={handleCheck} />
             </div>
           )}
         </div>

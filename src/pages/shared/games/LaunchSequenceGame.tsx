@@ -553,7 +553,7 @@ export function LaunchSequenceGame({
 
         {allPlaced && !checked && !animating && (
           <div className={styles.btnWrap}>
-            <Button label="Проверить" type="main" onClick={handleCheck} />
+            <Button label="Проверить" type="secondary" onClick={handleCheck} />
           </div>
         )}
       </div>

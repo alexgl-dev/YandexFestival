@@ -11,6 +11,15 @@ body {
   background: var(--color-black);
 }
 
+/* Figma 2026: все заголовки (названия заданий, шапки экранов) — YS Text Wide Bold.
+   !important — чтобы перебить font-family в .module.css заголовков без правки 40+ файлов. */
+h1,
+h2,
+h3 {
+  font-family: var(--font-family-wide) !important;
+  font-weight: var(--font-weight-bold) !important;
+}
+
 /* ── Design system scrollbar ─────────────────────────────────────────────────
    Usage: add class "ui-scrollbar" to any scrollable container.
    Track: white pill, inset from edges.

@@ -1,176 +1,170 @@
+/* Card — Figma «OUT_Яндекс Музей», Card / State=*, Size=L|M (узлы 28:525…28:565).
+   L: 400×386, padding 28, radius 20, картинка 344×194 radius 10.
+   M: 884×240, padding 40, radius 30, колонка метки 140 + текст 560. */
+
 .root {
   display: flex;
-  flex-direction: column;
-  gap: var(--card-l-root-gap, 30px);
-  align-items: center;
-  justify-content: space-between;
-  border-radius: var(--radius-lg);
-  font-family: var(--font-family);
+  position: relative;
+  font-family: var(--font-family-text);
+  color: var(--color-black);
   overflow: hidden;
   box-sizing: border-box;
   cursor: pointer;
   user-select: none;
-  transition: opacity 0.2s ease, background-color 0.2s ease;
+  transition: background-color 0.2s ease, opacity 0.2s ease;
 }
 
 /* --- Sizes --- */
 
 .size_l {
-  width: var(--card-l-width, 580px);
-  padding: var(--card-l-padding, var(--spacing-2xl));
+  flex-direction: column;
+  align-items: stretch;
+  gap: var(--card-l-root-gap, 20px);
+  width: var(--card-l-width, 400px);
+  padding: var(--card-l-padding, 28px);
+  border-radius: var(--radius-md);
 }
 
+/* Игры могут переключить раскладку: --card-m-direction: column (метка над текстом),
+   --card-m-label-width, --card-m-gap, --card-m-min-height — для коротких/узких карточек */
 .size_m {
+  flex-direction: var(--card-m-direction, row);
+  align-items: flex-start;
+  gap: var(--card-m-gap, var(--spacing-2xl));
   width: 100%;
-  padding: var(--spacing-2xl);
+  min-height: var(--card-m-min-height, 240px);
+  padding: var(--card-m-padding, var(--spacing-2xl));
+  border-radius: var(--radius-ml);
+  border: 3px solid transparent;
 }
 
 /* --- States --- */
 
-.default {
-  background-color: var(--color-grey-light);
-  border: var(--border-width-md) solid transparent;
+.default,
+.pressed,
+.wrong {
+  background-color: var(--color-white);
+}
+
+.size_m.default {
+  border-color: var(--color-grey-card);
+}
+
+.size_m.pressed,
+.flipped {
+  background-color: var(--color-blue-scene);
+  color: var(--color-white);
 }
 
 .disabled {
-  background-color: var(--color-grey-light);
-  border: var(--border-width-md) solid transparent;
+  background-color: var(--color-grey-card);
   opacity: 0.6;
   pointer-events: none;
 }
 
-.flipped {
-  background-color: var(--color-blue);
-  border: var(--border-width-md) solid transparent;
-}
-
-.wrong {
-  background-color: var(--color-white);
-  border: var(--border-width-md) solid transparent;
-}
-
-.pressed {
-  background-color: var(--color-grey-light);
-  border: var(--border-width-md) solid var(--color-blue);
-}
-
-/* --- Top section (L default/disabled): header + text with bigger gap --- */
+/* --- L: метка + подсказка, заголовок + описание --- */
 
 .topSection {
   display: flex;
   flex-direction: column;
-  gap: var(--card-l-top-gap, 50px);
+  gap: var(--card-l-top-gap, 32px);
   width: 100%;
   flex-shrink: 0;
 }
-
-/* --- Flipped content (L): icon + text --- */
 
 .flippedContent {
   display: flex;
   flex-direction: column;
-  gap: var(--card-l-top-gap, var(--spacing-xl));
+  gap: var(--card-l-top-gap, 20px);
   align-items: flex-start;
   width: 100%;
   flex-shrink: 0;
 }
-
-/* --- Header --- */
 
 .header {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
+  gap: var(--spacing-sm);
   width: 100%;
   flex-shrink: 0;
-}
-
-.size_m .header {
-  margin-bottom: var(--spacing-xl);
+  white-space: nowrap;
 }
 
 .variant {
-  font-size: var(--font-size-xs);
+  font-size: var(--font-size-2xs);
   font-weight: var(--font-weight-regular);
-  color: var(--color-text-primary);
-  text-transform: uppercase;
-  letter-spacing: var(--letter-spacing-xs);
+  letter-spacing: var(--letter-spacing-2xs);
   line-height: var(--line-height-tight);
-  white-space: nowrap;
-}
-
-.flipped .variant {
-  color: var(--color-white);
+  text-transform: uppercase;
 }
 
 .hint {
-  font-size: var(--font-size-xs);
+  font-size: var(--font-size-2xs);
   font-weight: var(--font-weight-regular);
-  color: var(--color-text-muted);
-  letter-spacing: var(--letter-spacing-xs);
-  white-space: nowrap;
+  letter-spacing: var(--letter-spacing-2xs);
+  line-height: var(--line-height-tight);
+  color: var(--color-blue-scene);
+  text-align: right;
 }
 
 .hintHidden {
   visibility: hidden;
 }
 
-.iconHidden {
-  visibility: hidden;
-}
-
-/* --- Text block --- */
-
 .textBlock {
   display: flex;
   flex-direction: column;
-  gap: var(--spacing-sm);
+  gap: 12px;
   align-items: flex-start;
   width: 100%;
+  min-width: 0;
 }
 
 .title {
   margin: 0;
-  font-size: var(--card-title-size, var(--font-size-xl));
-  font-weight: var(--font-weight-medium);
-  color: var(--color-text-primary);
-  letter-spacing: var(--letter-spacing-sm);
+  font-family: var(--font-family-wide);
+  font-size: var(--card-title-size, var(--font-size-xs));
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--letter-spacing-xs);
   line-height: var(--line-height-tight);
-}
-
-.flipped .title {
-  color: var(--color-white);
+  overflow-wrap: break-word;
 }
 
 .description {
   margin: 0;
-  font-size: var(--card-desc-size, var(--font-size-xs));
+  font-size: var(--card-desc-size, var(--font-size-2xs));
   font-weight: var(--font-weight-regular);
-  color: var(--color-text-primary);
-  letter-spacing: var(--letter-spacing-xs);
-  line-height: var(--line-height-normal);
+  letter-spacing: var(--letter-spacing-2xs);
+  line-height: var(--line-height-tight);
+  overflow-wrap: break-word;
 }
 
-.flipped .description {
-  color: var(--color-white);
+.stateIcon {
+  display: block;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
 }
 
-/* --- Image area (L only) --- */
+/* --- L: картинка --- */
 
 .imageArea {
   flex-shrink: 0;
   width: 100%;
-  height: var(--card-l-image-height, 282px);
-  border-radius: var(--radius-sm);
+  height: var(--card-l-image-height, 194px);
+  border-radius: var(--radius-image);
   overflow: hidden;
+  background-color: var(--color-grey-light);
 }
 
 .flipped .imageArea,
 .wrong .imageArea {
-  height: var(--card-l-revealed-image-height, var(--card-l-image-height, 282px));
+  height: var(--card-l-revealed-image-height, var(--card-l-image-height, 194px));
 }
 
 .image {
+  display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
@@ -179,5 +173,56 @@
 .placeholder {
   width: 100%;
   height: 100%;
-  background-color: var(--color-grey-secondary);
+  background-color: var(--color-grey-light);
+}
+
+/* --- M: колонка метки + колонка текста + галочка --- */
+
+.labelColumn {
+  flex: 0 0 var(--card-m-label-width, 140px);
+  padding-top: 10px;
+}
+
+.size_m .variant {
+  font-size: var(--font-size-xs);
+  letter-spacing: var(--letter-spacing-xs);
+}
+
+.size_m .textBlock {
+  flex: 1 1 0;
+  gap: var(--spacing-md);
+  max-width: 560px;
+}
+
+/* Галочка pressed — в правом верхнем углу (Figma: 45px, отступ 40), место под неё не резервируем,
+   чтобы узкие карточки в играх не теряли ширину текста */
+.size_m .stateIcon {
+  position: absolute;
+  top: var(--spacing-2xl);
+  right: var(--spacing-2xl);
+  width: 45px;
+  height: 45px;
+}
+
+.size_m.pressed .textBlock {
+  padding-right: 65px;
+}
+
+.size_m .title {
+  font-size: var(--card-title-size, var(--font-size-3xl));
+  letter-spacing: var(--letter-spacing-md);
+}
+
+.size_m .description {
+  font-size: var(--card-desc-size, var(--font-size-xs));
+  letter-spacing: var(--letter-spacing-xs);
+  color: var(--color-grey-dark);
+}
+
+.size_m.pressed .description {
+  color: var(--color-white);
+}
+
+.iconHidden {
+  visibility: hidden;
 }

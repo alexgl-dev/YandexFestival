@@ -114,7 +114,7 @@ export function BuilderGame({ task, onComplete, onBack, theme = 'orange', orient
 
           <div className={styles.actions}>
             <Button label="Сбросить" type="secondary" onClick={handleReset} />
-            <Button label="Генерация" type="main" onClick={handleGenerate} />
+            <Button label="Генерация" type="secondary" onClick={handleGenerate} />
           </div>
         </div>
       ) : (
@@ -122,7 +122,7 @@ export function BuilderGame({ task, onComplete, onBack, theme = 'orange', orient
           <div className={styles.resultImageFrame}>
             <img src={resultImage ?? ''} alt="Твой робот" className={styles.resultImage} />
           </div>
-          <Button label="Готово" type="main" onClick={handleDone} />
+          <Button label="Готово" type="secondary" onClick={handleDone} />
         </div>
       )}
 
@@ -147,7 +147,7 @@ export function BuilderGame({ task, onComplete, onBack, theme = 'orange', orient
                   <Button
                     key={option}
                     label={option}
-                    type="main"
+                    type="secondary"
                     pressed={isChosen}
                     onClick={() => handleSelect(activeField.id, option)}
                     className={styles.pickerBtn}

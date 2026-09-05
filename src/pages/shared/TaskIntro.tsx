@@ -68,7 +68,7 @@ export function TaskIntro({ task, onStart, onBack, theme = 'orange', orientation
 
         </div>
 
-        <Button label="Начать" type="main" onClick={onStart} />
+        <Button label="Начать" type="big_white" onClick={onStart} />
       </div>
 
       {activeTooltip && (

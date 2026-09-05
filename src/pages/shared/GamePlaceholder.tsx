@@ -33,7 +33,7 @@ export function GamePlaceholder({ task, onComplete, theme = 'orange', orientatio
           <p className={styles.description}>
             Механика «{task.mechanic}» — в разработке
           </p>
-          <Button label="Пропустить" type="main" onClick={handleSkip} />
+          <Button label="Пропустить" type="big_white" onClick={handleSkip} />
         </div>
       </div>
     </Background>

@@ -124,7 +124,7 @@ export function TimelineGame({ task, onComplete, onBack, theme = 'orange', orien
             <Button label="Вперёд" type="secondary" onClick={goNext} className={index === lastIndex ? styles.navDisabled : ''} />
           </div>
 
-          <Button label="Завершить исследование" type="main" onClick={handleFinish} />
+          <Button label="Завершить исследование" type="secondary" onClick={handleFinish} />
         </div>
       </div>
     </Background>

@@ -5,6 +5,7 @@ export interface CardProps {
   variant: string;
   title: string;
   description: string;
+  /** L: синяя подсказка справа от метки («Нажми, чтобы выбрать»). В disabled скрыта, место сохраняется. */
   hint?: string;
   image?: string;
   state?: 'default' | 'disabled' | 'flipped' | 'wrong' | 'pressed';
@@ -13,6 +14,15 @@ export interface CardProps {
   onClick?: () => void;
 }
 
+/** Иконки из Figma (Card / Icon Done_white): 40px для L flipped, 45px для M pressed */
+const DONE_ICON_L = '/icons/figma/card-done-white-40.svg';
+const DONE_ICON_M = '/icons/figma/card-done-white-45.svg';
+
+/**
+ * Card по Figma «OUT_Яндекс Музей» (Card / State=*, Size=L|M).
+ * L — вертикальная с картинкой; flipped = синяя с белой галочкой, wrong = белая с красным крестом.
+ * M — горизонтальная: метка слева, заголовок + описание справа; pressed = синяя с галочкой.
+ */
 export function Card({
   variant,
   title,
@@ -29,6 +39,12 @@ export function Card({
   const isRevealed = isFlipped || isWrong;
   const isPressed = state === 'pressed';
 
+  const imageArea = (
+    <div className={styles.imageArea}>
+      {image ? <img src={image} alt={title} className={styles.image} /> : <div className={styles.placeholder} />}
+    </div>
+  );
+
   return (
     <div
       className={`${styles.root} ${styles[`size_${size}`]} ${styles[state]} ${className ?? ''}`}
@@ -36,29 +52,25 @@ export function Card({
       role={onClick ? 'button' : undefined}
       tabIndex={onClick ? 0 : undefined}
     >
-      {/* Revealed L (flipped correct / wrong): icon + text + image */}
+      {/* L revealed (flipped / wrong): иконка + текст + картинка */}
       {isRevealed && size === 'l' && (
         <>
           <div className={styles.flippedContent}>
             {isFlipped ? (
-              <Icon name="done" color="white" size="s" />
+              <img src={DONE_ICON_L} alt="" className={styles.stateIcon} />
             ) : (
-              <Icon name="close" color="red" size="m" />
+              <Icon name="close" color="red" size="s" />
             )}
             <div className={styles.textBlock}>
               <h3 className={styles.title}>{title}</h3>
               <p className={styles.description}>{description}</p>
             </div>
           </div>
-          {image && (
-            <div className={styles.imageArea}>
-              <img src={image} alt={title} className={styles.image} />
-            </div>
-          )}
+          {imageArea}
         </>
       )}
 
-      {/* Default/Disabled L: header + text + image */}
+      {/* L default / disabled: метка + подсказка, текст, картинка */}
       {!isRevealed && size === 'l' && (
         <>
           <div className={styles.topSection}>
@@ -75,29 +87,24 @@ export function Card({
               </div>
             )}
           </div>
-          <div className={styles.imageArea}>
-            {image ? (
-              <img src={image} alt={title} className={styles.image} />
-            ) : (
-              <div className={styles.placeholder} />
-            )}
-          </div>
+          {imageArea}
         </>
       )}
 
-      {/* M: header + text (no image) */}
+      {/* M: метка слева, текст справа, галочка в pressed */}
       {size === 'm' && (
         <>
-          <div className={styles.header}>
-            <span className={styles.variant}>{variant}</span>
-            <span className={isPressed ? undefined : styles.iconHidden}>
-              <Icon name="done" color="blue" size="s" />
-            </span>
-          </div>
+          {/* Колонка метки (140px) только при непустом variant — узкие карточки в играх идут без неё */}
+          {variant && (
+            <div className={styles.labelColumn}>
+              <span className={styles.variant}>{variant}</span>
+            </div>
+          )}
           <div className={styles.textBlock}>
             <h3 className={styles.title}>{title}</h3>
-            <p className={styles.description}>{description}</p>
+            {description && <p className={styles.description}>{description}</p>}
           </div>
+          {isPressed && <img src={DONE_ICON_M} alt="" className={styles.stateIcon} />}
         </>
       )}
     </div>

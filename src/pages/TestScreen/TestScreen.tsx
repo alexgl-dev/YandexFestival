@@ -15,11 +15,16 @@ import {
   Container,
   Background,
   Menu,
+  Message,
+  SlideIndicator,
 } from '../../components/ui';
 import { CalendarGame } from '../shared/games/CalendarGame';
 import { CalendarGamePortrait } from '../shared/games/CalendarGamePortrait';
 import { CalendarDayPortrait } from '../shared/games/CalendarDayPortrait';
 import type { Task } from '../../types/game';
+import { GameInstruction } from '../shared/GameInstruction';
+import { StagePreview } from './StagePreview';
+import { TaskPlayground } from './TaskPlayground';
 import styles from './TestScreen.module.css';
 
 const CALENDAR_DAY_MOCK = {
@@ -68,9 +73,31 @@ export function TestScreen() {
       <div className={styles.header}>
         <h1 className={styles.title}>UI Kit Preview</h1>
       </div>
+      <nav className={styles.toc}>
+          <a href="#sec-badge" className={styles.tocLink}>Badge</a>
+          <a href="#sec-button" className={styles.tocLink}>Button</a>
+          <a href="#sec-card-size-l" className={styles.tocLink}>Card size="l"</a>
+          <a href="#sec-listitem" className={styles.tocLink}>ListItem</a>
+          <a href="#sec-player" className={styles.tocLink}>Player</a>
+          <a href="#sec-player-orientation-vertical" className={styles.tocLink}>Player orientation="vertical"</a>
+          <a href="#sec-popup" className={styles.tocLink}>PopUp</a>
+          <a href="#sec-icon" className={styles.tocLink}>Icon</a>
+          <a href="#sec-iconbutton" className={styles.tocLink}>IconButton</a>
+          <a href="#sec-infobutton" className={styles.tocLink}>InfoButton</a>
+          <a href="#sec-checklist" className={styles.tocLink}>CheckList</a>
+          <a href="#sec-progressbar" className={styles.tocLink}>ProgressBar</a>
+          <a href="#sec-message" className={styles.tocLink}>Message</a>
+          <a href="#sec-illustration" className={styles.tocLink}>Illustration</a>
+          <a href="#sec-container" className={styles.tocLink}>Container</a>
+          <a href="#sec-calendar" className={styles.tocLink}>Calendar*</a>
+          <a href="#sec-background" className={styles.tocLink}>Background</a>
+          <a href="#sec-menu" className={styles.tocLink}>Menu</a>
+          <a href="#sec-gameinstruction" className={styles.tocLink}>GameInstruction</a>
+          <a href="#sec-tasks" className={styles.tocLink}>Задания</a>
+      </nav>
 
       {/* 2. Badges */}
-      <div className={styles.section}>
+      <div className={styles.section} id="sec-badge">
         <h2 className={styles.sectionTitle}>Badge</h2>
         <div className={styles.buttonsRow}>
           <div className={styles.labeled}>
@@ -82,14 +109,22 @@ export function TestScreen() {
             <Code>{'<Badge label="Групповое" type="filled" icon={<Icon name="people" color="white" size="xs" />} />'}</Code>
           </div>
           <div className={styles.labeled}>
+            <Badge label="Групповое" type="filled_pill" />
+            <Code>{'<Badge label="Групповое" type="filled_pill" />  // Figma filled 2: pill, Medium'}</Code>
+          </div>
+          <div className={styles.labeled}>
             <Badge label="Групповое" type="outline" icon={<Icon name="people" color="blue" size="xs" />} />
             <Code>{'<Badge label="Групповое" type="outline" icon={<Icon name="people" color="blue" size="xs" />} />'}</Code>
+          </div>
+          <div className={styles.labeled}>
+            <Badge label="5 минут" type="filled" icon={<Icon name="clock" color="white" size="xs" />} />
+            <Code>{'<Badge label="5 минут" type="filled" icon={<Icon name="clock" color="white" size="xs" />} />'}</Code>
           </div>
         </div>
       </div>
 
       {/* 3. Buttons */}
-      <div className={styles.section}>
+      <div className={styles.section} id="sec-button">
         <h2 className={styles.sectionTitle}>Button</h2>
         <div className={styles.buttonsRow}>
           <div className={styles.labeled}>
@@ -101,12 +136,16 @@ export function TestScreen() {
             <Code>{'<Button label="Вторичная" type="secondary" />'}</Code>
           </div>
           <div className={styles.labeled}>
-            <Button label="Контурная" type="outline" onClick={() => {}} />
-            <Code>{'<Button label="Контурная" type="outline" />'}</Code>
+            <div className={styles.whitePlate}>
+              <Button label="Контурная" type="outline" onClick={() => {}} />
+            </div>
+            <Code>{'<Button label="Контурная" type="outline" />  // для белых плашек'}</Code>
           </div>
           <div className={styles.labeled}>
-            <Button label="Большая" type="big" icon={<Icon name="done" color="white" size="s" />} onClick={() => {}} />
-            <Code>{'<Button label="Большая" type="big" icon={<Icon name="done" color="white" size="s" />} />'}</Code>
+            <div className={styles.whitePlate}>
+              <Button label="Большая" type="big" onClick={() => {}} />
+            </div>
+            <Code>{'<Button label="Большая" type="big" />  // бордер чёрный, pressed — чёрная'}</Code>
           </div>
           <div className={styles.labeled}>
             <Button label="Описание" type="big_bottom" onClick={() => {}} />
@@ -116,24 +155,46 @@ export function TestScreen() {
             <Button label="Нажатая" type="main" pressed onClick={() => {}} />
             <Code>{'<Button label="Нажатая" type="main" pressed />'}</Code>
           </div>
+          <div className={styles.labeled}>
+            <Button label="Графический дизайнер" type="main" arrow onClick={() => {}} />
+            <Code>{'<Button label="..." type="main" arrow />  // Icon=Yes'}</Code>
+          </div>
+          <div className={styles.labeled}>
+            <div className={styles.whitePlate}>
+              <Button label="Пропустить задание" type="big" arrow onClick={() => {}} />
+            </div>
+            <Code>{'<Button label="Пропустить задание" type="big" arrow />'}</Code>
+          </div>
+          <div className={styles.labeled}>
+            <Button label="Смотреть" type="big_white" onClick={() => {}} />
+            <Code>{'<Button label="Смотреть" type="big_white" />'}</Code>
+          </div>
+          <div className={styles.labeled}>
+            <Button label="Смотреть" type="big_blue" onClick={() => {}} />
+            <Code>{'<Button label="Смотреть" type="big_blue" />  // primary в PopUp'}</Code>
+          </div>
+          <div className={styles.labeled}>
+            <Button label="Согласен" type="big_bottom" icon={<Icon name="done" color="blue" size="m" />} onClick={() => {}} />
+            <Code>{'<Button label="Согласен" type="big_bottom" icon={<Icon name="done" color="blue" size="m" />} />'}</Code>
+          </div>
         </div>
       </div>
 
       {/* 4. Cards L */}
-      <div className={styles.section}>
+      <div className={styles.section} id="sec-card-size-l">
         <h2 className={styles.sectionTitle}>Card size="l"</h2>
         <div className={styles.cardsRow}>
           <div className={styles.labeled}>
             <Card
               variant="ВАРИАНТ А"
               title="Яркий и игривый"
-              description="Пастельные цвета, круглые формы"
+              description="Пастельные цвета, круглые формы, большие буквы"
               hint="Нажми, чтобы выбрать"
               state="default"
               size="l"
               onClick={() => {}}
             />
-            <Code>{'<Card variant="..." title="..." description="..." hint="..." state="default" size="l" />'}</Code>
+            <Code>{'<Card variant="..." title="..." description="..." hint="..." state="default" size="l" />  // Figma 28:525'}</Code>
           </div>
           <div className={styles.labeled}>
             <Card
@@ -149,13 +210,13 @@ export function TestScreen() {
           <div className={styles.labeled}>
             <Card
               variant="ВАРИАНТ В"
-              title="Минимализм"
-              description="Чистые формы, много воздуха"
+              title="Верно!"
+              description="Легкость и веселье отлично передают атмосферу мороженого"
               state="flipped"
               size="l"
               onClick={() => {}}
             />
-            <Code>{'<Card ... state="flipped" size="l" />'}</Code>
+            <Code>{'<Card ... state="flipped" size="l" />  // Figma 28:542'}</Code>
           </div>
           <div className={styles.labeled}>
             <Card
@@ -171,24 +232,24 @@ export function TestScreen() {
         </div>
 
         <h2 className={styles.sectionTitle} style={{ marginTop: 32 }}>Card size="m"</h2>
-        <div className={styles.cardsRow} style={{ flexDirection: 'column', gap: 16, gridTemplateColumns: '1fr' }}>
+        <div className={styles.cardsRow} style={{ flexDirection: 'column', gap: 16, gridTemplateColumns: '1fr', maxWidth: 884 }}>
           <div className={styles.labeled}>
-            <Card variant="ВАРИАНТ А" title="Заголовок" description="Описание карточки" state="default" size="m" onClick={() => {}} />
-            <Code>{'<Card variant="..." title="..." description="..." state="default" size="m" />'}</Code>
+            <Card variant="ВАРИАНТ А" title="Заголовок" description="Фото — есть посмотри внимательнее на страницу товара" state="default" size="m" onClick={() => {}} />
+            <Code>{'<Card variant="..." title="..." description="..." state="default" size="m" />  // Figma 28:549'}</Code>
           </div>
           <div className={styles.labeled}>
-            <Card variant="ВАРИАНТ А" title="Заголовок" description="Описание карточки" state="disabled" size="m" />
-            <Code>{'<Card ... state="disabled" size="m" />'}</Code>
+            <Card variant="ВАРИАНТ А" title="Заголовок" description="Фото — есть посмотри внимательнее на страницу товара" state="disabled" size="m" />
+            <Code>{'<Card ... state="disabled" size="m" />  // Figma 28:557'}</Code>
           </div>
           <div className={styles.labeled}>
-            <Card variant="ВАРИАНТ А" title="Заголовок" description="Описание карточки" state="pressed" size="m" onClick={() => {}} />
-            <Code>{'<Card ... state="pressed" size="m" />'}</Code>
+            <Card variant="ВАРИАНТ А" title="Заголовок" description="Фото — есть посмотри внимательнее на страницу товара" state="pressed" size="m" onClick={() => {}} />
+            <Code>{'<Card ... state="pressed" size="m" />  // Figma 28:565'}</Code>
           </div>
         </div>
       </div>
 
       {/* 5. ListItems */}
-      <div className={styles.section}>
+      <div className={styles.section} id="sec-listitem">
         <h2 className={styles.sectionTitle}>ListItem</h2>
         <div className={styles.listItems}>
           <div className={styles.labeled}>
@@ -204,10 +265,21 @@ export function TestScreen() {
             <Code>{'<ListItem title="..." duration="3 минут" showPeople state="pressed" />'}</Code>
           </div>
         </div>
+        <div className={styles.labeled} style={{ marginTop: 24 }}>
+          <ListItem
+            size="l"
+            badge="Фишинг"
+            title="Срочно: подтвердите данные карты"
+            description="support@sberbank-security-alert.ru"
+            icon={<Icon name="close" color="blue" size="m" />}
+            onClick={() => {}}
+          />
+          <Code>{'<ListItem size="l" badge="Фишинг" title="..." description="..." icon={<Icon name="close" color="blue" size="m" />} />  // Figma 28:481'}</Code>
+        </div>
       </div>
 
       {/* 6. Player */}
-      <div className={styles.section}>
+      <div className={styles.section} id="sec-player">
         <h2 className={styles.sectionTitle}>Player</h2>
         <div className={styles.playerWrap} style={{ display: 'flex', gap: 24, flexWrap: 'wrap' }}>
           <div className={styles.labeled}>
@@ -226,7 +298,7 @@ export function TestScreen() {
       </div>
 
       {/* 6b. Player Vertical */}
-      <div className={styles.section}>
+      <div className={styles.section} id="sec-player-orientation-vertical">
         <h2 className={styles.sectionTitle}>Player orientation="vertical"</h2>
         <div style={{ display: 'flex', gap: 24, flexWrap: 'wrap', alignItems: 'flex-start' }}>
           <div className={styles.labeled}>
@@ -245,9 +317,22 @@ export function TestScreen() {
       </div>
 
       {/* 7. PopUp trigger */}
-      <div className={styles.section}>
+      <div className={styles.section} id="sec-popup">
         <h2 className={styles.sectionTitle}>PopUp</h2>
-        <Button label="Показать попап" type="main" onClick={() => setShowPopUp(true)} />
+        <div className={styles.labeled} style={{ marginBottom: 32 }}>
+          <PopUp
+            icon="close"
+            title="Не совсем..."
+            description={'Фото — есть посмотри внимательнее\nна страницу товара'}
+            buttonLabel="Попробовать снова"
+            secondaryButtonLabel="Отменить"
+            onButtonClick={() => {}}
+            onSecondaryButtonClick={() => {}}
+            onClose={() => {}}
+          />
+          <Code>{'<PopUp icon="close" title="Не совсем..." description="..." buttonLabel="Попробовать снова" secondaryButtonLabel="Отменить" onClose={...} />  // Figma 28:574 Type=White'}</Code>
+        </div>
+        <Button label="Показать попап в оверлее" type="main" onClick={() => setShowPopUp(true)} />
         <Code>{'<PopUp icon="close" iconColor="red" title="..." description="..." buttonLabel="Попробовать снова" />'}</Code>
       </div>
 
@@ -267,7 +352,7 @@ export function TestScreen() {
       )}
 
       {/* 8. Icons */}
-      <div className={styles.section}>
+      <div className={styles.section} id="sec-icon">
         <h2 className={styles.sectionTitle}>Icon</h2>
         <div className={styles.iconsRow}>
           <div className={styles.iconLabel}>
@@ -298,7 +383,7 @@ export function TestScreen() {
       </div>
 
       {/* 9. IconButtons */}
-      <div className={styles.section}>
+      <div className={styles.section} id="sec-iconbutton">
         <h2 className={styles.sectionTitle}>IconButton</h2>
         <div className={styles.iconButtonsRow}>
           <div className={styles.labeled}>
@@ -317,11 +402,19 @@ export function TestScreen() {
             <IconButton type="pause" size="sm" onClick={() => {}} />
             <Code>{'<IconButton type="pause" size="sm" />'}</Code>
           </div>
+          <div className={styles.labeled}>
+            <IconButton type="back" pressed onClick={() => {}} />
+            <Code>{'<IconButton type="back" pressed />'}</Code>
+          </div>
+          <div className={styles.labeled}>
+            <IconButton type="close" onClick={() => {}} />
+            <Code>{'<IconButton type="close" />'}</Code>
+          </div>
         </div>
       </div>
 
       {/* 9b. InfoButton */}
-      <div className={styles.section}>
+      <div className={styles.section} id="sec-infobutton">
         <h2 className={styles.sectionTitle}>InfoButton</h2>
         <div className={styles.iconButtonsRow}>
           <div className={styles.labeled}>
@@ -352,7 +445,7 @@ export function TestScreen() {
       </div>
 
       {/* 10. CheckList */}
-      <div className={styles.section}>
+      <div className={styles.section} id="sec-checklist">
         <h2 className={styles.sectionTitle}>CheckList</h2>
         <div className={styles.checklistRow}>
           <div className={styles.labeled}>
@@ -369,11 +462,19 @@ export function TestScreen() {
             </div>
             <Code>{'<CheckList checked={false} />'}</Code>
           </div>
+          <div className={styles.labeled}>
+            <div className={styles.checklistItem}>
+              <CheckList checked type="black" />
+              <CheckList checked={false} type="black" />
+              <span>Type=Black</span>
+            </div>
+            <Code>{'<CheckList checked type="black" />'}</Code>
+          </div>
         </div>
       </div>
 
       {/* 11. ProgressBar */}
-      <div className={styles.section}>
+      <div className={styles.section} id="sec-progressbar">
         <h2 className={styles.sectionTitle}>ProgressBar</h2>
         <div className={styles.progressBars}>
           <div className={styles.labeled}>
@@ -381,14 +482,35 @@ export function TestScreen() {
             <Code>{'<ProgressBar type="mini" progress={60} />'}</Code>
           </div>
           <div className={styles.labeled}>
-            <ProgressBar type="main" progress={45} currentTime="01:23" totalTime="03:45" />
-            <Code>{'<ProgressBar type="main" progress={45} currentTime="01:23" totalTime="03:45" />'}</Code>
+            <ProgressBar type="mini" progress={59} segments={4} current={2} />
+            <Code>{'<ProgressBar type="mini" progress={59} segments={4} current={2} />  // Figma Mini: Slide Indicator × 4'}</Code>
+          </div>
+          <div className={styles.labeled}>
+            <ProgressBar type="main" progress={50} label="Загрузка данных 50%" />
+            <Code>{'<ProgressBar type="main" progress={50} label="Загрузка данных 50%" />'}</Code>
+          </div>
+          <div className={styles.labeled}>
+            <div className={styles.iconsRow}>
+              <SlideIndicator state="default" />
+              <SlideIndicator state="progress" progress={59} />
+              <SlideIndicator state="filled" />
+            </div>
+            <Code>{'<SlideIndicator state="default | progress | filled" progress={59} />'}</Code>
           </div>
         </div>
       </div>
 
+      {/* 11b. Message */}
+      <div className={styles.section} id="sec-message">
+        <h2 className={styles.sectionTitle}>Message</h2>
+        <div className={styles.labeled}>
+          <Message title="Заголовок" description="Подготовка инструментов" />
+          <Code>{'<Message title="Заголовок" description="Подготовка инструментов" />  // Figma 28:396'}</Code>
+        </div>
+      </div>
+
       {/* 12. Illustrations */}
-      <div className={styles.section}>
+      <div className={styles.section} id="sec-illustration">
         <h2 className={styles.sectionTitle}>Illustration</h2>
         <div className={styles.illustrationsRow}>
           <div className={styles.labeled}>
@@ -404,118 +526,95 @@ export function TestScreen() {
             <Code>{'<Illustration type="keyboard-stickers" size={250} />'}</Code>
           </div>
         </div>
+        <h3 className={styles.subTitle}>Figma: линейные иллюстрации 160×160 (чёрные, на светлом фоне)</h3>
+        <div className={styles.illustrationsRow} style={{ background: 'var(--color-white)', padding: 24, borderRadius: 24 }}>
+          {(['bag', 'calculator', 'calendar', 'computer', 'cup', 'faces', 'hanger', 'hoodie', 'horse', 'negative', 'people', 'percent', 'playstation', 'positive', 'projector', 'thumbs-up', 'wand', 'wc'] as const).map((t) => (
+            <div key={t} className={styles.iconLabel} style={{ color: 'var(--color-grey-dark)' }}>
+              <Illustration type={t} size={120} />
+              <span>{t}</span>
+            </div>
+          ))}
+        </div>
+        <Code>{'<Illustration type="bag" />  // 18 типов из Figma, size по умолчанию 160'}</Code>
       </div>
 
       {/* 13. Container */}
-      <div className={styles.section}>
+      <div className={styles.section} id="sec-container">
         <h2 className={styles.sectionTitle}>Container</h2>
         <div className={styles.containerRow}>
           <div className={styles.labeled}>
-            <Container size="m" state="default">
-              <span style={{ fontFamily: 'var(--font-family)', fontSize: 'var(--font-size-sm)' }}>
-                Контейнер с содержимым (M)
-              </span>
-            </Container>
-            <Code>{'<Container size="m" state="default">{children}</Container>'}</Code>
+            <Container size="m" state="default" />
+            <Code>{'<Container size="m" state="default" />  // синяя, «Открыть приложение»'}</Code>
+          </div>
+          <div className={styles.labeled}>
+            <Container size="m" state="empty" />
+            <Code>{'<Container size="m" state="empty" />  // серый бордер'}</Code>
           </div>
           <div className={styles.labeled}>
             <Container size="l" state="empty" />
-            <Code>{'<Container size="l" state="empty" />'}</Code>
+            <Code>{'<Container size="l" state="empty" />  // пунктир, «Перетащи сюда ненужные шаги»'}</Code>
           </div>
         </div>
       </div>
 
-      {/* 14. CalendarGame */}
-      <div className={styles.section}>
-        <h2 className={styles.sectionTitle}>CalendarGame</h2>
-        <div className={styles.labeled}>
-          <div style={{ transform: 'scale(0.5)', transformOrigin: 'top left', width: 1920 * 0.5, height: 1080 * 0.5 }}>
-            <CalendarGame
-              task={CALENDAR_MOCK_TASK}
-              theme="orange"
-              onComplete={() => {}}
-              onBack={() => {}}
-            />
+      {/* 14. Календарные игры */}
+      <div className={styles.section} id="sec-calendar">
+        <h2 className={styles.sectionTitle}>CalendarGame / CalendarGamePortrait / CalendarDayPortrait</h2>
+        <div className={styles.stagesRow}>
+          <div className={styles.labeled}>
+            <StagePreview orientation="landscape" width={960}>
+              <CalendarGame task={CALENDAR_MOCK_TASK} theme="cobalt" onComplete={() => {}} onBack={() => {}} />
+            </StagePreview>
+            <Code>{'<CalendarGame task={task} theme="cobalt" onComplete={...} onBack={...} />'}</Code>
           </div>
-          <Code>{'<CalendarGame task={task} theme="orange" onComplete={...} onBack={...} />'}</Code>
+          <div className={styles.labeled}>
+            <StagePreview orientation="portrait" width={360}>
+              <CalendarGamePortrait task={CALENDAR_MOCK_TASK} theme="orange" onComplete={() => {}} onBack={() => {}} />
+            </StagePreview>
+            <Code>{'<CalendarGamePortrait task={task} theme="orange" onComplete={...} onBack={...} />'}</Code>
+          </div>
+          <div className={styles.labeled}>
+            <StagePreview orientation="portrait" width={360}>
+              <CalendarDayPortrait cards={CALENDAR_DAY_MOCK.cards as never} theme="orange" onBack={() => {}} />
+            </StagePreview>
+            <Code>{'<CalendarDayPortrait day={day} cards={cards} theme="orange" onBack={...} />'}</Code>
+          </div>
         </div>
       </div>
 
-      {/* 14b. CalendarGamePortrait */}
-      <div className={styles.section}>
-        <h2 className={styles.sectionTitle}>CalendarGamePortrait (9:16)</h2>
-        <div className={styles.labeled}>
-          <div style={{ transform: 'scale(0.35)', transformOrigin: 'top left', width: 1080 * 0.35, height: 1920 * 0.35 }}>
-            <CalendarGamePortrait
-              task={CALENDAR_MOCK_TASK}
-              theme="orange"
-              onComplete={() => {}}
-              onBack={() => {}}
-            />
-          </div>
-          <Code>{'<CalendarGamePortrait task={task} theme="orange" onComplete={...} onBack={...} />'}</Code>
-        </div>
-      </div>
-
-      {/* 14c. CalendarDayPortrait */}
-      <div className={styles.section}>
-        <h2 className={styles.sectionTitle}>CalendarDayPortrait (9:16, 1 день)</h2>
-        <div className={styles.labeled}>
-          <div style={{ transform: 'scale(0.35)', transformOrigin: 'top left', width: 1080 * 0.35, height: 1920 * 0.35 }}>
-            <CalendarDayPortrait
-              cards={CALENDAR_DAY_MOCK.cards as never}
-              theme="orange"
-              onBack={() => {}}
-            />
-          </div>
-          <Code>{'<CalendarDayPortrait day={day} cards={cards} theme="orange" onBack={...} />'}</Code>
-        </div>
-      </div>
-
-      {/* 15. Background + Menu */}
-      <div className={styles.section}>
+      {/* 15. Background */}
+      <div className={styles.section} id="sec-background">
         <h2 className={styles.sectionTitle}>Background</h2>
-        <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap' }}>
+        <div className={styles.stagesRow}>
           <div className={styles.labeled}>
-            <div style={{ transform: 'scale(0.35)', transformOrigin: 'top left', width: 1920 * 0.35, height: 1080 * 0.35 }}>
-              <Background theme="orange" orientation="landscape" onBack={() => {}}>
-                <span style={{ color: 'white', fontSize: 48, fontFamily: 'var(--font-family)' }}>Cobalt</span>
+            <StagePreview orientation="landscape" width={640}>
+              <Background theme="cobalt" orientation="landscape" onBack={() => {}}>
+                <span className={styles.stageLabel}>cobalt · landscape</span>
               </Background>
-            </div>
-            <Code>{'<Background theme="orange" orientation="landscape" onBack={...}>{children}</Background>'}</Code>
+            </StagePreview>
+            <Code>{'<Background theme="cobalt" orientation="landscape" onBack={...}>{children}</Background>'}</Code>
           </div>
           <div className={styles.labeled}>
-            <div style={{ transform: 'scale(0.35)', transformOrigin: 'top left', width: 1920 * 0.35, height: 1080 * 0.35 }}>
-              <Background theme="orange" orientation="landscape" onBack={() => {}}>
-                <span style={{ color: 'white', fontSize: 48, fontFamily: 'var(--font-family)' }}>Orange</span>
+            <StagePreview orientation="portrait" width={360}>
+              <Background theme="orange" orientation="portrait" onBack={() => {}}>
+                <span className={styles.stageLabel}>orange · portrait</span>
               </Background>
-            </div>
-            <Code>{'<Background theme="orange" orientation="landscape" onBack={...}>{children}</Background>'}</Code>
+            </StagePreview>
+            <Code>{'<Background theme="orange" orientation="portrait" onBack={...}>{children}</Background>'}</Code>
           </div>
         </div>
+      </div>
 
-        <h2 className={styles.sectionTitle} style={{ marginTop: 32 }}>Menu</h2>
-        <div style={{ display: 'flex', gap: 32, flexWrap: 'wrap' }}>
+      {/* 16. Menu */}
+      <div className={styles.section} id="sec-menu">
+        <h2 className={styles.sectionTitle}>Menu</h2>
+        <div className={styles.stagesRow}>
           <div className={styles.labeled}>
-            <div style={{ transform: 'scale(0.35)', transformOrigin: 'top left', width: 1920 * 0.35, height: 1080 * 0.35 }}>
+            <StagePreview orientation="landscape" width={640}>
               <Menu
-                theme="orange"
+                theme="cobalt"
                 orientation="landscape"
-                items={[
-                  { label: 'Описание направления' },
-                  { label: 'Задачи на' },
-                  { label: 'Истории яндексоидов' },
-                  { label: 'Бинго-знакомство' },
-                ]}
-              />
-            </div>
-            <Code>{'<Menu theme="orange" items={[{ label: "...", onClick: ... }, ...]} />'}</Code>
-          </div>
-          <div className={styles.labeled}>
-            <div style={{ transform: 'scale(0.35)', transformOrigin: 'top left', width: 1920 * 0.35, height: 1080 * 0.35 }}>
-              <Menu
-                theme="orange"
-                orientation="landscape"
+                onBack={() => {}}
                 items={[
                   { label: 'Описание направления' },
                   { label: 'Задачи на день' },
@@ -523,10 +622,45 @@ export function TestScreen() {
                   { label: 'Бинго-знакомство' },
                 ]}
               />
-            </div>
-            <Code>{'<Menu theme="orange" items={[{ label: "...", onClick: ... }, ...]} />'}</Code>
+            </StagePreview>
+            <Code>{'<Menu theme="cobalt" orientation="landscape" onBack={...} items={[{ label, onClick }, ...]} />'}</Code>
+          </div>
+          <div className={styles.labeled}>
+            <StagePreview orientation="portrait" width={360}>
+              <Menu
+                theme="orange"
+                orientation="portrait"
+                items={[
+                  { label: 'Тифлокомментарий' },
+                  { label: 'Альтернативный текст' },
+                  { label: 'Глазами другого' },
+                ]}
+              />
+            </StagePreview>
+            <Code>{'<Menu theme="orange" orientation="portrait" items={[...]} />  // без onBack — нет кнопки назад'}</Code>
           </div>
         </div>
+      </div>
+
+      {/* 17. GameInstruction */}
+      <div className={styles.section} id="sec-gameinstruction">
+        <h2 className={styles.sectionTitle}>GameInstruction</h2>
+        <div className={styles.stagesRow}>
+          <div className={styles.labeled}>
+            <StagePreview orientation="landscape" width={640}>
+              <Background theme="cobalt" orientation="landscape" onBack={() => {}}>
+                <GameInstruction instruction="Перетащи задачи к нужному специалисту. Нажми «Начать», чтобы закрыть подсказку — она снова откроется по кнопке «i»." />
+              </Background>
+            </StagePreview>
+            <Code>{'<GameInstruction instruction="..." />  // внутри Background; InfoButton открывает оверлей повторно'}</Code>
+          </div>
+        </div>
+      </div>
+
+      {/* 18. Задания: intro → игра → мораль → результат */}
+      <div className={styles.section} id="sec-tasks">
+        <h2 className={styles.sectionTitle}>Задания (TaskIntro → GameRouter → TaskMoral / TaskResult)</h2>
+        <TaskPlayground />
       </div>
     </div>
   );

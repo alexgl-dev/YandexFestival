@@ -302,7 +302,7 @@ export function FactorXGame({ task, onComplete, onBack, theme = 'cobalt' }: Prop
             </ul>
 
             <div className={styles.resultsFooter}>
-              <Button label="Дальше" type="main" onClick={handleFinish} />
+              <Button label="Дальше" type="secondary" onClick={handleFinish} />
             </div>
           </div>
         </div>

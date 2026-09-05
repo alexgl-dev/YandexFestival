@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 
 export type FitOrientation = 'landscape' | 'portrait';
 
-const STAGE_SIZE: Record<FitOrientation, { width: number; height: number }> = {
+export const STAGE_SIZE: Record<FitOrientation, { width: number; height: number }> = {
   landscape: { width: 1920, height: 1080 },
   portrait: { width: 1080, height: 1920 },
 };

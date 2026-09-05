@@ -1,5 +1,6 @@
 import { useRef, useEffect, useState } from 'react';
 import styles from './Player.module.css';
+import { IconButton } from './IconButton';
 
 export interface PlayerProps {
   title: string;
@@ -7,9 +8,9 @@ export interface PlayerProps {
   orientation?: 'horizontal' | 'vertical';
   thumbnail?: string;
   src?: string;
-  /** Показывать верхнюю плашку с названием (по умолчанию true). */
+  /** Показывать название в левом нижнем углу (по умолчанию true). */
   showTitle?: boolean;
-  // These remain for non-video usage (fake timer mode)
+  // Для режима без видео (фейковый таймер)
   currentTime?: string;
   totalTime?: string;
   progress?: number;
@@ -24,6 +25,10 @@ function formatTime(seconds: number) {
   return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
 }
 
+/**
+ * Player по Figma «OUT_Яндекс Музей» (28:582 Default, 28:585 Playing): 420×236, radius 30, тень,
+ * название YS Text Medium 20 внизу слева, кнопка play/pause 110×76 по центру, таймлайн внизу при воспроизведении.
+ */
 export function Player({
   title,
   state = 'default',
@@ -46,7 +51,6 @@ export function Player({
   const isFullscreen = state === 'fullscreen';
   const hasVideo = Boolean(src);
 
-  // Sync external state → video element
   useEffect(() => {
     const video = videoRef.current;
     if (!video) return;
@@ -76,11 +80,7 @@ export function Player({
     : (progress ?? 0);
 
   return (
-    <div
-      className={`${styles.root} ${styles[orientation]} ${className ?? ''}`}
-      onClick={handleClick}
-    >
-      {/* Real video element */}
+    <div className={`${styles.root} ${styles[orientation]} ${className ?? ''}`} onClick={handleClick}>
       {hasVideo && (
         <video
           ref={videoRef}
@@ -94,28 +94,21 @@ export function Player({
         />
       )}
 
-      {/* Static thumbnail (non-video) */}
-      {!hasVideo && thumbnail && (
-        <img src={thumbnail} alt="" className={styles.bgImage} />
-      )}
+      {!hasVideo && thumbnail && <img src={thumbnail} alt="" className={styles.bgImage} />}
 
       <div className={styles.bgOverlay} />
 
-      {/* Title bar */}
-      {!isFullscreen && showTitle && (
-        <div className={styles.titleBar}>
-          <span className={styles.title}>{title}</span>
+      {/* Кнопка play / pause по центру */}
+      {!isFullscreen && (
+        <div className={styles.control}>
+          <IconButton type={isPlaying ? 'pause' : 'play'} />
         </div>
       )}
 
-      {/* Play icon overlay — shown when not playing */}
-      {!isFullscreen && !isPlaying && (
-        <div className={styles.playOverlay}>
-          <div className={styles.playIcon} />
-        </div>
-      )}
+      {/* Название — внизу слева (в default), уступает место таймлайну при воспроизведении */}
+      {!isFullscreen && showTitle && !isPlaying && <span className={styles.title}>{title}</span>}
 
-      {/* Timeline — slides in when playing, slides out when stopped */}
+      {/* Таймлайн — внизу при воспроизведении */}
       <div className={`${styles.timeline} ${isPlaying ? styles.timelineVisible : ''}`}>
         <span className={styles.time}>{displayCurrentTime}</span>
         <div className={styles.track}>

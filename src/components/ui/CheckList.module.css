@@ -1,26 +1,21 @@
-.circle {
-  width: var(--size-icon-s);
-  height: var(--size-icon-s);
-  border-radius: var(--radius-full);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.box {
+  display: block;
+  width: 44px;
+  height: 44px;
   flex-shrink: 0;
   box-sizing: border-box;
 }
 
 .unchecked {
-  background-color: transparent;
-  border: var(--border-width-sm) solid var(--color-grey-disabled);
+  border-radius: var(--radius-sm);
+  border: var(--border-width-sm) solid var(--color-blue-scene);
+  background: transparent;
 }
 
-.checked {
-  background-color: var(--color-blue);
-  border: none;
-  color: var(--color-white);
+.black {
+  border-color: var(--color-grey-card);
 }
 
-.checkmark {
-  width: 24px;
-  height: 24px;
+.blue {
+  border-color: var(--color-blue-scene);
 }

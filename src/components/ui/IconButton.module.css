@@ -1,20 +1,110 @@
-.button {
+/* Icon button — Figma 28:703 (Back/Blue), 28:792 (White), 28:614 (Play), 28:617 (Pause), 77:491 (Close) */
+
+/* --- Back: pill «← Назад», 326×124 --- */
+.back {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  height: 124px;
+  padding: 14px var(--spacing-2xl);
+  border: none;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  backdrop-filter: blur(32.7px);
+  -webkit-backdrop-filter: blur(32.7px);
+  font-family: var(--font-family-text);
+  transition: background-color 0.15s ease;
+}
+
+.blue {
+  background-color: var(--color-overlay-blue-20);
+}
+
+.light {
+  background-color: var(--color-overlay-white-20);
+}
+
+.back.blue.pressed,
+.back.blue:active {
+  background-color: var(--color-blue-pressed-dark);
+}
+
+.back.light.pressed,
+.back.light:active {
+  background-color: var(--color-overlay-black-20);
+}
+
+.backArrow {
+  display: block;
+  width: 81px;
+  height: 66px;
+  flex-shrink: 0;
+}
+
+.backLabel {
+  font-size: 45px;
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-tight);
+  line-height: var(--line-height-tight);
+  color: var(--color-white);
+  white-space: nowrap;
+}
+
+/* --- Play / Pause: pill 110×76 --- */
+.media {
   display: flex;
   align-items: center;
   justify-content: center;
-  border: none;
-  cursor: pointer;
+  width: 110px;
+  height: 76px;
   padding: 0;
+  border: none;
+  border-radius: var(--radius-full);
+  background-color: var(--color-overlay-white-20);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  cursor: pointer;
   flex-shrink: 0;
-  background: none;
 }
 
-.buttonBack {
-  width: var(--width-back-button);
-  height: var(--height-back-button);
+.play {
+  background: url('/icons/figma/iconbtn-play.svg') center / 100% 100% no-repeat;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
 }
 
-.icon {
-  width: 100%;
-  height: 100%;
+.pauseBars {
+  display: block;
+  width: 30px;
+  height: 35px;
+}
+
+/* --- Close: белый круг 90 с синим крестом --- */
+.close {
+  position: relative;
+  width: 90px;
+  height: 90px;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-full);
+  background-color: var(--color-white);
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.close::before,
+.close::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 44px;
+  height: 5px;
+  border-radius: var(--radius-full);
+  background-color: var(--color-blue-scene);
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.close::after {
+  transform: translate(-50%, -50%) rotate(-45deg);
 }

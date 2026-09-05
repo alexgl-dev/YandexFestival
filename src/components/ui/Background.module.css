@@ -6,6 +6,13 @@
   background: var(--color-blue-scene);
 }
 
+/* Встроенный режим (/ui-kit): сцена в потоке документа, размер = сцена × scale */
+.sceneEmbedded {
+  position: relative;
+  inset: auto;
+  flex: none;
+}
+
 .root {
   position: absolute;
   top: 0;

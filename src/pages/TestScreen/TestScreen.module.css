@@ -1,5 +1,6 @@
 .page {
-  min-height: 100vh;
+  height: 100vh;
+  overflow-y: auto;
   background: var(--color-black);
   color: var(--color-white);
   font-family: var(--font-family);
@@ -154,4 +155,122 @@
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+}
+
+/* Белая подложка для компонентов с чёрным текстом (outline, big) */
+.whitePlate {
+  display: inline-flex;
+  padding: 16px;
+  border-radius: 24px;
+  background: var(--color-white);
+}
+
+/* === Оглавление === */
+.toc {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 16px;
+  margin: -32px 0 48px;
+}
+
+.tocLink {
+  color: var(--color-grey-secondary);
+  font-size: var(--font-size-2xs);
+  text-decoration: none;
+  padding: 4px 10px;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: var(--radius-full);
+}
+
+.tocLink:hover {
+  color: var(--color-white);
+  border-color: var(--color-blue);
+}
+
+/* === Превью сцен (StagePreview) === */
+.stagesRow {
+  display: flex;
+  gap: 32px;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+.stageLabel {
+  color: var(--color-white);
+  font-size: var(--font-size-3xl);
+  font-family: var(--font-family);
+}
+
+/* === Плейграунд заданий === */
+.pickerRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 16px;
+  zoom: 0.5;
+}
+
+.pickerMeta {
+  margin: 0 0 16px;
+  font-size: var(--font-size-2xs);
+  color: var(--color-grey-secondary);
+}
+
+.pickerMeta code {
+  color: var(--color-white);
+}
+
+.subTitle {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--color-grey-secondary);
+  margin: 40px 0 16px;
+}
+
+.mechanicIndex {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.mechanicRow {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 16px;
+  align-items: baseline;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  padding-top: 8px;
+}
+
+.mechanicName {
+  font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+  font-size: 14px;
+  color: var(--color-white);
+}
+
+.mechanicTasks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 12px;
+}
+
+.mechanicLink {
+  background: none;
+  border: none;
+  padding: 2px 0;
+  cursor: pointer;
+  font-family: var(--font-family);
+  font-size: var(--font-size-2xs);
+  color: var(--color-grey-secondary);
+}
+
+.mechanicLink:hover,
+.mechanicLinkActive {
+  color: var(--color-white);
+  text-decoration: underline;
+}
+
+.mechanicSection {
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 13px;
 }

@@ -467,7 +467,7 @@ export function CodeSequenceGame({
                 {renderBubble('popup')}
                 <Button
                   label="Закрыть"
-                  type="main"
+                  type="secondary"
                   onClick={() => {
                     setBriefingOpen(false);
                     setTooltip(null);
