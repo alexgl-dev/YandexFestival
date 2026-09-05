@@ -34,6 +34,7 @@
   --color-blue: #4161FF;
   --color-blue-dark: #2530A2;
   --color-blue-pressed: #2D44B9;
+  --color-blue-scene: #1D69FC;
   --color-black: #141414;
   --color-black-pressed: #242424;
   --color-white: #FFFFFF;
@@ -133,6 +134,12 @@
 
   /* === Component Widths === */
   --width-content: 960px;
+  --width-logo: 343px;
+  --height-logo: 104px;
+  --offset-logo-top-portrait: 300px;
+  --offset-logo-top-landscape: 70px;
+  --width-back-button: 200px;
+  --height-back-button: auto;
   --width-player-h: 420px;
   --height-player-h: 236px;
   --width-player-v: 540px;

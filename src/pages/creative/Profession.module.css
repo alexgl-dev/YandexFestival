@@ -93,6 +93,10 @@
   cursor: pointer;
 }
 
+.navArrowIconLeft {
+  transform: rotate(180deg);
+}
+
 /* Popup overlay */
 .overlay {
   position: fixed;

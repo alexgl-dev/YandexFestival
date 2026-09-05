@@ -252,7 +252,7 @@ export function DistributeGame({ task, onComplete, onBack, theme = 'cobalt', ori
           <PopUp
             icon={dropFeedback.correct ? 'done' : 'close'}
             iconColor={dropFeedback.correct ? 'blue' : 'red'}
-            title={dropFeedback.correct ? 'Потрясающе!' : 'Ой!'}
+            title={dropFeedback.correct ? 'Потрясающе!' : 'Не совсем...'}
             description={dropFeedback.correct ? undefined : wrongText}
             buttonLabel={dropFeedback.correct ? 'Дальше' : 'Попробуй ещё раз'}
             onButtonClick={handleFeedbackDismiss}

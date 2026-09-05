@@ -1,3 +1,20 @@
+.logo {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  width: var(--width-logo);
+  height: var(--height-logo);
+  pointer-events: none;
+}
+
+.logoPortrait {
+  top: var(--offset-logo-top-portrait);
+}
+
+.logoLandscape {
+  top: var(--offset-logo-top-landscape);
+}
+
 .nav {
   display: flex;
   flex-direction: column;

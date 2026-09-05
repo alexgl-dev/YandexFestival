@@ -9,6 +9,11 @@
   background: none;
 }
 
+.buttonBack {
+  width: var(--width-back-button);
+  height: var(--height-back-button);
+}
+
 .icon {
   width: 100%;
   height: 100%;

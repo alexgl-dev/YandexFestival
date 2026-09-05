@@ -3,7 +3,7 @@ import styles from './Button.module.css';
 
 export interface ButtonProps {
   label: string;
-  type?: 'main' | 'secondary' | 'outline' | 'big' | 'big_bottom';
+  type?: 'main' | 'blue' | 'secondary' | 'outline' | 'big' | 'big_bottom';
   pressed?: boolean;
   onClick?: () => void;
   icon?: ReactNode;

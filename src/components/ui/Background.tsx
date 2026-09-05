@@ -15,10 +15,8 @@ export interface BackgroundProps {
 }
 
 const bgMap = {
-  'cobalt-landscape': '/backgrounds/bg-cobalt-landscape.png',
-  'cobalt-portrait': '/backgrounds/bg-cobalt-portrait.png',
-  'orange-landscape': '/backgrounds/bg-orange-landscape.png',
-  'orange-portrait': '/backgrounds/bg-orange-portrait.png',
+  landscape: '/backgrounds/Меню.jpg',
+  portrait: '/backgrounds/Экран 3.png',
 } as const;
 
 export function Background({
@@ -30,7 +28,7 @@ export function Background({
   className,
   contentClassName,
 }: BackgroundProps) {
-  const bgSrc = bgMap[`${theme}-${orientation}`];
+  const bgSrc = bgMap[orientation];
   const { scale, offsetX, offsetY } = useFitScale(orientation);
 
   return (

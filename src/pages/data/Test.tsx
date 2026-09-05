@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, useOutletContext } from 'react-router';
-import { Background, Button, Card, PopUp } from '../../components/ui';
+import { Background, Button, Card, IconButton, PopUp } from '../../components/ui';
 
 import type { SectionData } from '../../types/game';
 import styles from './Test.module.css';
@@ -49,6 +49,14 @@ export function Test() {
   };
 
 
+  const handleQuestionBack = () => {
+    if (questionIndex > 0) {
+      setQuestionIndex((i) => i - 1);
+    } else {
+      setPhase('intro');
+    }
+  };
+
   const getCellData = (cellIndex: number) => {
     if (cellIndex === 4) return null;
     const labelIndex = cellIndex < 4 ? cellIndex : cellIndex - 1;
@@ -64,12 +72,6 @@ export function Test() {
     return (
       <Background theme="cobalt" orientation="landscape" onBack={handleBack}>
         <div className={styles.wrapper}>
-          <Button
-            label="Назад"
-            type="secondary"
-            className={styles.backBtn}
-            onClick={handleBack}
-          />
           <div className={styles.card}>
             <p className={styles.introText}>{bingo.intro}</p>
             <p className={styles.instructionText}>{bingo.instruction}</p>
@@ -105,21 +107,12 @@ export function Test() {
           </div>
 
           <div className={styles.bottomRow}>
-            <Button
-              label="Назад"
-              type="secondary"
-              className={styles.backBtn}
-              onClick={() => {
-                if (questionIndex > 0) {
-                  setQuestionIndex((i) => i - 1);
-                } else {
-                  setPhase('intro');
-                }
-              }}
-            />
-            <span className={styles.pageCounter}>
-              {questionIndex + 1} / {totalQuestions}
-            </span>
+            <div className={styles.bottomLeft}>
+              <IconButton type="back" size="lg" onClick={handleQuestionBack} />
+              <span className={styles.pageCounter}>
+                {questionIndex + 1} / {totalQuestions}
+              </span>
+            </div>
             {currentAnswer && (
               <Button
                 label={isLastQuestion && allAnswered ? 'Посмотреть результат' : 'Далее'}

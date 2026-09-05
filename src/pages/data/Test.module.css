@@ -81,6 +81,14 @@
   font-weight: var(--font-weight-medium);
   color: var(--color-white);
   opacity: 0.7;
+  white-space: nowrap;
+}
+
+.bottomLeft {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
+  margin-right: auto;
 }
 
 .questionPrompt {
@@ -108,19 +116,9 @@
 .bottomRow {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: var(--spacing-lg);
   width: 100%;
-}
-
-.bottomRow .title {
-  margin-right: auto;
-}
-
-.backBtn {
-  margin-right: auto;
-  align-self: flex-start;
-  background-color: var(--color-white) !important;
-  color: var(--color-black) !important;
 }
 
 /* === Phase 3: Result === */

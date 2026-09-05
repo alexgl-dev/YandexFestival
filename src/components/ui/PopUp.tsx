@@ -6,6 +6,7 @@ import { Button } from './Button';
 export interface PopUpProps {
   icon?: 'close' | 'done';
   iconColor?: 'blue' | 'red';
+  iconSrc?: string;
   title?: string;
   description?: string | ReactNode;
   buttonLabel: string;
@@ -19,6 +20,7 @@ export interface PopUpProps {
 export function PopUp({
   icon,
   iconColor = 'blue',
+  iconSrc,
   title,
   description,
   buttonLabel,
@@ -28,12 +30,25 @@ export function PopUp({
   className,
   compact,
 }: PopUpProps) {
+  // Кастомные иконки вместо стандартных done/close
+  const resolvedIconSrc =
+    iconSrc ??
+    (icon === 'close'
+      ? '/icons/icon-red.svg'
+      : icon === 'done'
+        ? '/icons/icon-happe.svg'
+        : undefined);
+
   return (
     <div className={`${styles.root} ${compact ? styles.compact : ''} ${className ?? ''}`}>
       <div className={styles.topContent}>
-        {icon && (
+        {(icon || resolvedIconSrc) && (
           <div className={styles.iconArea}>
-            <Icon name={icon} color={iconColor} size="m" />
+            {resolvedIconSrc ? (
+              <img src={resolvedIconSrc} alt="" className={styles.customIcon} />
+            ) : (
+              <Icon name={icon!} color={iconColor} size="m" />
+            )}
           </div>
         )}
         <div className={styles.textBlock}>
@@ -44,9 +59,14 @@ export function PopUp({
 
       <div className={styles.buttonWrap}>
         {secondaryButtonLabel && (
-          <Button label={secondaryButtonLabel} type="secondary" onClick={onSecondaryButtonClick} />
+          <Button
+            label={secondaryButtonLabel}
+            type="secondary"
+            onClick={onSecondaryButtonClick}
+            className={styles.secondaryBtn}
+          />
         )}
-        <Button label={buttonLabel} type="main" onClick={onButtonClick} />
+        <Button label={buttonLabel} type="blue" onClick={onButtonClick} />
       </div>
     </div>
   );

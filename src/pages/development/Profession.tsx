@@ -84,12 +84,21 @@ export function Profession() {
         <div className={styles.navigation}>
           {prev && (
             <span onClick={() => navigate(`/${data.slug}/description/${prev.id}`)} className={styles.navLink}>
-              <Badge label={`← ${prev.title}`} type="outline" />
+              <Badge
+                label={prev.title}
+                type="outline"
+                icon={<img src="/icons/icon-arrow.svg" alt="" className={styles.navArrowIconLeft} />}
+              />
             </span>
           )}
           {next && (
             <span onClick={() => navigate(`/${data.slug}/description/${next.id}`)} className={styles.navLink}>
-              <Badge label={`${next.title} →`} type="outline" />
+              <Badge
+                label={next.title}
+                type="outline"
+                icon={<img src="/icons/icon-arrow.svg" alt="" />}
+                iconPosition="end"
+              />
             </span>
           )}
         </div>

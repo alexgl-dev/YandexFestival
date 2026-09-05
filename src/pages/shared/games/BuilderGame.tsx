@@ -137,7 +137,7 @@ export function BuilderGame({ task, onComplete, onBack, theme = 'orange', orient
                 onClick={() => setActiveFieldId(null)}
                 aria-label="Закрыть"
               >
-                <Icon name="close" color="red" size="s" />
+                <Icon name="close" color="red" size="m" />
               </button>
             </div>
             <div className={`${styles.pickerOptions} ui-scrollbar`}>

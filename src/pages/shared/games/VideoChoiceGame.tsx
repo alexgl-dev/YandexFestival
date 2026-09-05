@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { Background, Button } from '../../../components/ui';
+import { Background, Button, Player } from '../../../components/ui';
 import type { Task } from '../../../types/game';
 import { GameInstruction } from '../GameInstruction';
 import styles from './VideoChoiceGame.module.css';
@@ -46,7 +46,12 @@ export function VideoChoiceGame({ task, onComplete, onBack, theme = 'orange', or
         <div className={styles.options}>
           {options.map((option, index) => (
             <div key={index} className={styles.optionItem}>
-              <Button label={option.text || `Вариант ${index + 1}`} type="big" onClick={() => setPlayingIndex(index)} />
+              <Button
+                label={option.text || `Вариант ${index + 1}`}
+                type="big"
+                className={styles.optionButton}
+                onClick={() => setPlayingIndex(index)}
+              />
               {option.name && <p className={styles.optionName}>{option.name}</p>}
             </div>
           ))}
@@ -63,15 +68,17 @@ export function VideoChoiceGame({ task, onComplete, onBack, theme = 'orange', or
           role="presentation"
           onClick={closeVideo}
         >
-          <video
-            key={playingOption.video}
-            className={styles.video}
-            src={playingOption.video}
-            autoPlay
-            playsInline
-            controls={false}
-            onEnded={closeVideo}
-          />
+          <div className={styles.videoInner} onClick={(e) => e.stopPropagation()}>
+            <Player
+              title={playingOption.name || playingOption.text || ''}
+              state="playing"
+              orientation="horizontal"
+              src={playingOption.video}
+              showTitle={false}
+              onPause={closeVideo}
+              className={styles.player}
+            />
+          </div>
         </div>
       )}
     </Background>

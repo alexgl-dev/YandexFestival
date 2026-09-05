@@ -5,7 +5,7 @@
   flex-direction: column;
   width: 100%;
   height: 100%;
-  padding: 40px 80px 140px;
+  padding: 120px 80px 140px;
   box-sizing: border-box;
   gap: var(--spacing-lg);
 }
@@ -17,7 +17,7 @@
   align-items: center;
   justify-content: space-between;
   flex-shrink: 0;
-  width: 80%;
+  width: 90%;
   align-self: center;
   min-height: 72px;
 }
@@ -66,8 +66,8 @@
 /* ══ Main row: photo + input/compare ══ */
 
 .mainRow {
-  flex: 1;
-  min-height: 0;
+  /* flex: 1; */
+  height: 680px;
   display: flex;
   align-items: stretch;
   justify-content: center;
@@ -209,8 +209,9 @@
 .actionButton {
   position: absolute;
   left: 50%;
-  bottom: 48px;
+  bottom: 20px;
   transform: translateX(-50%);
+  width: 500px !important;
 }
 
 .actionButtonDisabled {

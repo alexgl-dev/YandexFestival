@@ -3,7 +3,7 @@
   position: fixed;
   inset: 0;
   overflow: hidden;
-  background: var(--color-black);
+  background: var(--color-blue-scene);
 }
 
 .root {

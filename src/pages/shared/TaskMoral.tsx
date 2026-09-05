@@ -13,6 +13,7 @@ interface TaskMoralProps {
   sectionSlug: string;
   theme?: 'cobalt' | 'orange';
   orientation?: 'landscape' | 'portrait';
+  showTasksMenu?: boolean;
 }
 
 function parseMoral(text: string): { main: string; question: string | null } {
@@ -107,7 +108,15 @@ function MoralParagraph({
   );
 }
 
-export function TaskMoral({ task, onNext, isLast, sectionSlug, theme = 'orange', orientation = 'portrait' }: TaskMoralProps) {
+export function TaskMoral({
+  task,
+  onNext,
+  isLast,
+  sectionSlug,
+  theme = 'orange',
+  orientation = 'portrait',
+  showTasksMenu = true,
+}: TaskMoralProps) {
   const navigate = useNavigate();
   const { main, question } = parseMoral(task.moral);
   const moralTooltips = task.moralTooltips ?? [];
@@ -138,8 +147,8 @@ export function TaskMoral({ task, onNext, isLast, sectionSlug, theme = 'orange',
         description={description}
         buttonLabel={isLast ? 'В меню' : 'Следующее задание'}
         onButtonClick={onNext}
-        secondaryButtonLabel="Меню заданий"
-        onSecondaryButtonClick={() => navigate(`/${sectionSlug}/tasks`)}
+        secondaryButtonLabel={showTasksMenu ? 'Меню заданий' : undefined}
+        onSecondaryButtonClick={showTasksMenu ? () => navigate(`/${sectionSlug}/tasks`) : undefined}
       />
       {activeTooltip && (
         <div className={styles.overlay} onClick={() => setActiveTooltip(null)}>

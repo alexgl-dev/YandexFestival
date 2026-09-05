@@ -61,6 +61,7 @@ function TaskFlow({ task, data }: { task: Task; data: SectionData }) {
           sectionSlug={data.slug}
           theme={data.theme}
           orientation={data.orientation}
+          showTasksMenu={false}
         />
       );
   }

@@ -20,10 +20,27 @@
 .main {
   background-color: var(--color-black);
   color: var(--color-white);
+  min-height: 130px;
+  max-width: 100%;
+  width: 100%;
 }
+
 .main.pressed,
 .main:active {
   background-color: var(--color-black-pressed);
+}
+
+/* === Blue (PopUp primary) === */
+.blue {
+  background-color: var(--color-blue-scene);
+  color: var(--color-white);
+  min-height: 130px;
+  min-width: 100%;
+}
+
+.blue.pressed,
+.blue:active {
+  background-color: var(--color-blue-pressed);
 }
 
 /* === Secondary === */

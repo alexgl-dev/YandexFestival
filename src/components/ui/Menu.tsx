@@ -12,6 +12,7 @@ export interface MenuProps {
   items: MenuItem[];
   onBack?: () => void;
   className?: string;
+  showLogo?: boolean;
 }
 
 export function Menu({
@@ -20,6 +21,7 @@ export function Menu({
   items,
   onBack,
   className,
+  showLogo = true,
 }: MenuProps) {
   return (
     <Background
@@ -29,6 +31,13 @@ export function Menu({
       onBack={onBack}
       className={className}
     >
+      {showLogo && (
+        <img
+          src="/icons/logo.svg"
+          alt=""
+          className={`${styles.logo} ${orientation === 'landscape' ? styles.logoLandscape : styles.logoPortrait}`}
+        />
+      )}
       <nav className={styles.nav}>
         {items.map((item, i) => (
           <button

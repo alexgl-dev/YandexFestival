@@ -31,3 +31,14 @@
   margin-right: var(--spacing-sm);
   flex-shrink: 0;
 }
+
+.iconEnd {
+  margin-left: var(--spacing-sm);
+  margin-right: 0;
+}
+
+.icon img {
+  height: 1em;
+  width: 12px;
+  display: block;
+}

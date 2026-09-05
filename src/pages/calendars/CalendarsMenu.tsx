@@ -7,6 +7,7 @@ export function CalendarsMenu() {
     <Menu
       theme="cobalt"
       orientation="portrait"
+      showLogo={true}
       items={[
         { label: 'Разработка', onClick: () => navigate('/calendars/development') },
         { label: 'Работа с данными', onClick: () => navigate('/calendars/data') },

@@ -169,7 +169,7 @@ export function CountGame({ task, onComplete, onBack, theme = 'cobalt', orientat
             </div>
 
             <div className={styles.compareCard}>
-              <Icon name={isCorrect ? 'done' : 'close'} color={isCorrect ? 'blue' : 'red'} size="s" />
+              <Icon name={isCorrect ? 'done' : 'close'} color={isCorrect ? 'blue' : 'red'} size="m" />
               <p className={styles.compareLine}>
                 Ты: <strong>{answer}</strong> за <strong>{submittedSeconds}</strong> {pluralSeconds(submittedSeconds)}
               </p>

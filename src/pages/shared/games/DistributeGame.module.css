@@ -21,6 +21,7 @@
   grid-template-rows: 1fr 1fr;
   column-gap: 80px;
   row-gap: var(--spacing-lg);
+  margin-top: 200px;
 }
 
 /* ══ Specialist cell ══ */
@@ -59,7 +60,7 @@
 }
 
 .profileRowCompact .specName {
-  font-size: var(--font-size-2xs);
+  font-size: var(--font-size-md);
 }
 
 .profileRowCompact .infoMark {
@@ -127,11 +128,12 @@
   background: rgba(255, 255, 255, 0.15);
   border-radius: var(--radius-lg);
   padding: 0 var(--spacing-md);
+
 }
 
 .specName {
   font-family: var(--font-family);
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-xl);
   font-weight: var(--font-weight-medium);
   color: var(--color-white);
   line-height: 1.2;
