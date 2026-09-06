@@ -72,7 +72,21 @@ export function TaskIntro({ task, onStart, onBack, theme = 'orange', orientation
 
         </div>
 
-        <Button label={t("Начать")} type="big_white" onClick={onStart} />
+        <div className={styles.actions}>
+          <Button
+            label={t(task.introButtonLabel ?? 'Начать')}
+            type="big_white"
+            onClick={onStart}
+          />
+          {task.introSecondaryButtonLabel && (
+            <Button
+              label={t(task.introSecondaryButtonLabel)}
+              type="big"
+              pressed
+              onClick={onBack}
+            />
+          )}
+        </div>
       </div>
 
       {activeTooltip && (

@@ -260,6 +260,10 @@ export interface Task {
   feedback: Feedback;
   intro: string;
   introTooltips?: GlossaryTerm[];
+  /** Подпись основной кнопки на экране intro (по умолчанию «Начать»). */
+  introButtonLabel?: string;
+  /** Вторая кнопка на intro («Посмотрю позже» и т.п.) — ведёт назад в меню. */
+  introSecondaryButtonLabel?: string;
   instruction?: string;
   steps: TaskStep[];
   moral: string;
