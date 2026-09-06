@@ -48,7 +48,7 @@ export const blocks: BlockData[] = [
     items: [
       { label: 'Интервью с аналитиком', to: '/data/videos' },
       { label: 'Работа с данными', to: '/data' },
-      { label: 'ML-инженер', to: '/ml' },
+      { label: 'ML-инженер', to: '/ml/tasks/dataset' },
     ],
   },
   {
@@ -59,7 +59,7 @@ export const blocks: BlockData[] = [
     items: [
       { label: 'Разработка', to: '/development' },
       { label: 'Интервью с разработчиком', to: '/development/videos' },
-      { label: 'AI-тренер', to: '/ai' },
+      { label: 'AI-тренер', to: '/ai/tasks/poems' },
     ],
   },
 ];

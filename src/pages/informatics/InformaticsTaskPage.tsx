@@ -5,6 +5,7 @@ import type { SectionData, Task } from '../../types/game';
 import { TaskIntro } from '../shared/TaskIntro';
 import { TaskMoral } from '../shared/TaskMoral';
 import { GameRouter } from '../shared/GameRouter';
+import { blockPath } from '../blocks/blocks';
 
 type Phase = 'intro' | 'game' | 'moral';
 
@@ -31,7 +32,13 @@ function TaskFlow({ task, data }: { task: Task; data: SectionData }) {
   const navigate = useNavigate();
   const [phase, setPhase] = useState<Phase>('intro');
 
-  const goToMenu = () => navigate(`/${data.slug}`);
+  // Если в разделе всего одно задание, меню раздела — лишний экран из одного
+  // пункта: и вход, и выход из задания идут напрямую в меню блока выставки.
+  const visibleTaskCount = data.tasks.filter((t) => !t.hidden).length;
+  const goToMenu = () =>
+    visibleTaskCount <= 1 && data.block
+      ? navigate(blockPath(data.block))
+      : navigate(`/${data.slug}`);
 
   switch (phase) {
     case 'intro':
