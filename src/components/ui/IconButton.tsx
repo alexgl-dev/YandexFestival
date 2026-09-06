@@ -7,6 +7,8 @@ export interface IconButtonProps {
   pressed?: boolean;
   /** Оставлен для совместимости: у «Назад» размер один — 245×93 */
   size?: 'sm' | 'md' | 'lg';
+  /** Показывать подпись «Назад» (false — только стрелка, для landscape) */
+  showLabel?: boolean;
   onClick?: () => void;
   className?: string;
 }
@@ -16,18 +18,26 @@ export interface IconButtonProps {
  * back — pill «← Назад» (стрелка 60×50 + YS Text Medium 36), blur-фон;
  * play/pause — pill 110×76; close — белый круг 90 с крестом.
  */
-export function IconButton({ type, variant = 'default', pressed, onClick, className }: IconButtonProps) {
+export function IconButton({
+  type,
+  variant = 'default',
+  pressed,
+  showLabel = true,
+  onClick,
+  className,
+}: IconButtonProps) {
   const variantClass = variant === 'default' ? styles.blue : styles.light;
 
   if (type === 'back') {
     return (
       <button
         type="button"
-        className={`${styles.back} ${variantClass} ${pressed ? styles.pressed : ''} ${className ?? ''}`}
+        className={`${styles.back} ${!showLabel ? styles.backIconOnly : ''} ${variantClass} ${pressed ? styles.pressed : ''} ${className ?? ''}`}
         onClick={onClick}
+        aria-label="Назад"
       >
         <img src="/icons/figma/back-arrow-white.svg" alt="" className={styles.backArrow} />
-        <span className={styles.backLabel}>Назад</span>
+        {showLabel && <span className={styles.backLabel}>Назад</span>}
       </button>
     );
   }

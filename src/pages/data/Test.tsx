@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, useOutletContext } from 'react-router';
-import { Background, Button, Card, IconButton, PopUp } from '../../components/ui';
+import { Background, Button, Card, PopUp } from '../../components/ui';
 
 import type { SectionData } from '../../types/game';
 import styles from './Test.module.css';
@@ -108,7 +108,7 @@ export function Test() {
 
           <div className={styles.bottomRow}>
             <div className={styles.bottomLeft}>
-              <IconButton type="back" size="lg" onClick={handleQuestionBack} />
+              <Button label="Назад" type="secondary" onClick={handleQuestionBack} />
               <span className={styles.pageCounter}>
                 {questionIndex + 1} / {totalQuestions}
               </span>

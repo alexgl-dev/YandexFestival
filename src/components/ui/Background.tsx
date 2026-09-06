@@ -53,7 +53,13 @@ export function Background({
 
         {showBackButton && (
           <div className={styles.backButton}>
-            <IconButton type="back" variant={theme === 'orange' ? 'orange' : 'light'} size={orientation === 'portrait' ? 'md' : 'lg'} onClick={onBack} />
+            <IconButton
+              type="back"
+              variant={theme === 'orange' ? 'orange' : 'light'}
+              size={orientation === 'portrait' ? 'md' : 'lg'}
+              showLabel={orientation === 'portrait'}
+              onClick={onBack}
+            />
           </div>
         )}
 

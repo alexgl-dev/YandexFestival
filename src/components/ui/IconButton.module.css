@@ -41,6 +41,13 @@
   flex-shrink: 0;
 }
 
+.backIconOnly {
+  width: 93px;
+  padding: 9px;
+  justify-content: center;
+  gap: 0;
+}
+
 .backLabel {
   font-size: var(--font-size-lg);
   font-weight: var(--font-weight-medium);
