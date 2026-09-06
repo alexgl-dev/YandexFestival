@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useState } from 'react';
-import { Background, Button, Icon } from '../../../components/ui';
+import { Background, Button, IconButton } from '../../../components/ui';
 import type { Task } from '../../../types/game';
 import { GameInstruction } from '../GameInstruction';
 import styles from './BuilderGame.module.css';
@@ -96,18 +96,19 @@ export function BuilderGame({ task, onComplete, onBack, theme = 'orange', orient
               const value = selections[field.id];
               const invalid = invalidFields.has(field.id);
               return (
-                <button
+                <div
                   key={field.id}
-                  type="button"
                   data-field={field.id}
                   className={`${styles.fieldRow} ${invalid ? styles.fieldRowInvalid : ''}`}
-                  onClick={() => setActiveFieldId(field.id)}
                 >
                   <span className={styles.fieldLabel}>{field.label}</span>
-                  <span className={value ? styles.fieldValue : styles.fieldValuePlaceholder}>
-                    {value ?? 'Выбрать'}
-                  </span>
-                </button>
+                  <Button
+                    label={value ?? 'Выбрать'}
+                    type={value ? 'main' : 'outline'}
+                    onClick={() => setActiveFieldId(field.id)}
+                    className={styles.fieldSelectBtn}
+                  />
+                </div>
               );
             })}
           </div>
@@ -129,17 +130,8 @@ export function BuilderGame({ task, onComplete, onBack, theme = 'orange', orient
       {activeField && (
         <div className={`${styles.overlay} ${overlayClass}`} onClick={() => setActiveFieldId(null)}>
           <div className={styles.picker} onClick={(e) => e.stopPropagation()}>
-            <div className={styles.pickerHeader}>
-              <span className={styles.pickerTitle}>{activeField.label}</span>
-              <button
-                type="button"
-                className={styles.pickerClose}
-                onClick={() => setActiveFieldId(null)}
-                aria-label="Закрыть"
-              >
-                <Icon name="close" color="red" size="m" />
-              </button>
-            </div>
+            <IconButton type="close" onClick={() => setActiveFieldId(null)} className={styles.pickerClose} />
+            <h2 className={styles.pickerTitle}>{activeField.label}</h2>
             <div className={`${styles.pickerOptions} ui-scrollbar`}>
               {activeField.options.map((option) => {
                 const isChosen = selections[activeField.id] === option;
@@ -147,7 +139,7 @@ export function BuilderGame({ task, onComplete, onBack, theme = 'orange', orient
                   <Button
                     key={option}
                     label={option}
-                    type="secondary"
+                    type="outline"
                     pressed={isChosen}
                     onClick={() => handleSelect(activeField.id, option)}
                     className={styles.pickerBtn}

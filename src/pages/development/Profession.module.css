@@ -54,7 +54,7 @@
 .sectionHeading {
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-bold);
-  color: var(--color-text-muted);
+  color: var(--color-black);
   letter-spacing: var(--letter-spacing-xs);
   line-height: var(--line-height-tight);
   margin: 0;
@@ -98,6 +98,11 @@
 
 .navArrowIconLeft {
   transform: rotate(180deg);
+  width: 15px !important;
+}
+
+.navArrowIconRight {
+  width: 15px !important;
 }
 
 /* Popup overlay */

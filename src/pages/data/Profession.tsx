@@ -90,7 +90,7 @@ export function Profession() {
               <Badge
                 label={next.title}
                 type="outline"
-                icon={<img src="/icons/icon-arrow.svg" alt="" />}
+                icon={<img src="/icons/icon-arrow.svg" alt="" className={styles.navArrowIconRight} />}
                 iconPosition="end"
               />
             </span>
