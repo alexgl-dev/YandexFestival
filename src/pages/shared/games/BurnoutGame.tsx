@@ -130,7 +130,7 @@ export function BurnoutGame({
     orientation === 'landscape' ? styles.overlayLandscape : styles.overlayPortrait;
 
   return (
-    <Background theme={theme} orientation={orientation} onBack={onBack}>
+    <Background theme={theme} orientation={orientation} onBack={onBack} backShowLabel={false}>
       <GameInstruction instruction={task.instruction} />
       <div className={styles.wrapper}>
         {step.prompt && <h2 className={styles.prompt}>{step.prompt}</h2>}

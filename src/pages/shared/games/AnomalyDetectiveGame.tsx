@@ -434,7 +434,7 @@ export function AnomalyDetectiveGame({
   })();
 
   return (
-    <Background theme={theme} orientation={orientation} onBack={onBack}>
+    <Background theme={theme} orientation={orientation} onBack={onBack} backShowLabel={false}>
       <GameInstruction instruction={task.instruction} />
       <div className={styles.wrapper}>
         <p className={styles.prompt}>{promptText}</p>

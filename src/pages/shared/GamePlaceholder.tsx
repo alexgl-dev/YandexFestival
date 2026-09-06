@@ -24,7 +24,7 @@ export function GamePlaceholder({ task, onComplete, theme = 'orange', orientatio
   };
 
   return (
-    <Background theme={theme} orientation={orientation}>
+    <Background theme={theme} orientation={orientation} backShowLabel={false}>
       <GameInstruction instruction={task.instruction} />
       <div className={styles.wrapper}>
         <div className={styles.content}>

@@ -225,7 +225,7 @@ export function AudioMatchGame({ task, onComplete, onBack, theme = 'orange', ori
   if (!step) return null;
 
   return (
-    <Background theme={theme} orientation={orientation} onBack={onBack}>
+    <Background theme={theme} orientation={orientation} onBack={onBack} backShowLabel={false}>
       <GameInstruction instruction={task.instruction} />
       <div className={styles.wrapper}>
         {step.prompt && <p className={styles.prompt}>{step.prompt}</p>}

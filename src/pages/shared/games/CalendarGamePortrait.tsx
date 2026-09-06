@@ -186,7 +186,7 @@ export function CalendarGamePortrait({ task, onComplete, onBack, theme = 'orange
       <GameInstruction instruction={task.instruction} />
       <div className={styles.wrapper}>
         <div className={styles.backRow}>
-          <IconButton type="back" variant="orange" size="md" onClick={onBack} />
+          <IconButton type="back" variant="orange" size="md" showLabel={false} onClick={onBack} />
         </div>
         <div className={styles.layout}>
 

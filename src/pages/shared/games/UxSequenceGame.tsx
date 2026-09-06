@@ -268,7 +268,7 @@ export function UxSequenceGame({
     orientation === 'landscape' ? styles.overlayLandscape : styles.overlayPortrait;
 
   return (
-    <Background theme={theme} orientation={orientation} onBack={onBack}>
+    <Background theme={theme} orientation={orientation} onBack={onBack} backShowLabel={false}>
       <GameInstruction instruction={task.instruction} />
       <div className={styles.page}>
         <div className={styles.columns}>
@@ -394,7 +394,7 @@ export function UxSequenceGame({
                         onClick={(e) => trashBlock(bIdx, e)}
                         aria-label="Удалить"
                       >
-                        <Icon name="close" color="red" size="s" />
+                        <Icon name="close" color="blue" size="s" />
                       </button>
                     </div>
                   </div>

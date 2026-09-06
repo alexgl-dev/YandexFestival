@@ -136,7 +136,7 @@ export function DistributeGame({ task, onComplete, onBack, theme = 'cobalt', ori
   if (!step) return null;
 
   return (
-    <Background theme={theme} orientation={orientation} onBack={onBack}>
+    <Background theme={theme} orientation={orientation} onBack={onBack} backShowLabel={false}>
       <GameInstruction
         instruction={task.instruction ?? task.intro}
         initialOpen={task.instruction?.trim() ? undefined : false}
@@ -162,28 +162,47 @@ export function DistributeGame({ task, onComplete, onBack, theme = 'cobalt', ori
             const hasDescription = !!cat.description?.trim();
 
             return (
-              <div key={cat.id} className={styles.specialistCell}>
+              <div
+                key={cat.id}
+                className={`${styles.specialistCell} ${isTarget ? styles.specialistCellTarget : ''}`}
+                onClick={() => handleFolderClick(cat.id)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    handleFolderClick(cat.id);
+                  }
+                }}
+                role="button"
+                tabIndex={isTarget ? 0 : -1}
+                aria-label={`Назначить задачу: ${cat.title}`}
+              >
 
                 {/* Profile row */}
                 <div className={`${styles.profileRow} ${useCompactProfiles ? styles.profileRowCompact : ''}`}>
-                  {/* <div className={styles.avatarWrap}>
-                    {cat.avatar
-                      ? <img src={cat.avatar} alt={cat.title} className={styles.avatarImg} />
-                      : <span className={styles.avatarFallback}>{cat.title.charAt(0)}</span>
-                    }
-                  </div> */}
-                  {hasDescription ? (
-                    <button
-                      className={styles.specNameBtn}
-                      onClick={(e) => { e.stopPropagation(); setActivePopup(activePopup?.id === cat.id ? null : cat); }}
-                    >
-                      <span className={styles.specName}>{cat.title}</span>
-                      <span className={styles.infoMark}>?</span>
-                    </button>
-                  ) : (
-                    <div className={styles.specNameStatic}>
-                      <span className={styles.specName}>{cat.title}</span>
+                  {cat.avatar ? (
+                    <div className={styles.avatarWrap}>
+                      <img src={cat.avatar} alt="" className={styles.avatarImg} />
                     </div>
+                  ) : !cat.image ? (
+                    <div className={styles.avatarWrap}>
+                      <span className={styles.avatarFallback}>{cat.title.charAt(0)}</span>
+                    </div>
+                  ) : null}
+                  <div className={styles.specNameStatic}>
+                    <span className={styles.specName}>{cat.title}</span>
+                  </div>
+                  {hasDescription && (
+                    <button
+                      type="button"
+                      className={styles.infoBtn}
+                      aria-label={`О профессии: ${cat.title}`}
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        setActivePopup(activePopup?.id === cat.id ? null : cat);
+                      }}
+                    >
+                      ?
+                    </button>
                   )}
                 </div>
 
@@ -191,7 +210,6 @@ export function DistributeGame({ task, onComplete, onBack, theme = 'cobalt', ori
                 <div
                   className={`${styles.folderCard} ${isTarget ? styles.folderCardTarget : ''}`}
                   style={!cat.image && cat.color ? { background: cat.color } : undefined}
-                  onClick={() => handleFolderClick(cat.id)}
                 >
                   {cat.image && (
                     <img src={cat.image} alt="" className={styles.folderIcon} />

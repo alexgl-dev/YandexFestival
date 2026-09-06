@@ -57,7 +57,7 @@
 .optionColumn {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
   gap: var(--spacing-sm);
   flex: 1 1 0;
   min-width: 420px;
@@ -73,12 +73,20 @@
 /* Preserve poem line breaks — Card title renders as an <h3>, safe to target
    without knowing its CSS-module hash since h3 is a plain element selector. */
 .optionColumn h3 {
+  font-family: var(--font-family-text) !important;
+  font-weight: var(--font-weight-medium) !important;
   white-space: pre-line;
   text-align: left;
 }
 
+.optionColumn > :first-child {
+  width: 100% !important;
+}
+
 .optionColumn > button {
   width: 100%;
+  margin-top: auto;
+  flex-shrink: 0;
 }
 
 .answerButtonDisabled {

@@ -97,7 +97,7 @@ function UxReviewGame({
     : {};
 
   return (
-    <Background theme={theme} orientation={orientation} onBack={onBack}>
+    <Background theme={theme} orientation={orientation} onBack={onBack} backShowLabel={false}>
       <div className={styles.uxWrapper}>
 
         {/* Mockup */}
@@ -282,7 +282,7 @@ export function MarkGame({ task, onComplete, onBack, theme = 'orange', orientati
   const lastResult = results[results.length - 1];
 
   return (
-    <Background theme={theme} orientation={orientation} onBack={onBack}>
+    <Background theme={theme} orientation={orientation} onBack={onBack} backShowLabel={false}>
       <GameInstruction instruction={task.instruction} />
       <div className={styles.wrapper}>
         <div className={styles.content}>

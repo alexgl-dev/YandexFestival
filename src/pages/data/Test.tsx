@@ -21,7 +21,7 @@ export function Test() {
 
   if (!bingo) {
     return (
-      <Background theme="cobalt" orientation="landscape" onBack={handleBack}>
+      <Background theme="cobalt" orientation="landscape" onBack={handleBack} backShowLabel={false}>
         <div className={styles.wrapper}>
           <h2 className={styles.title}>Бинго</h2>
           <p className={styles.placeholder}>Бинго в разработке</p>
@@ -70,7 +70,7 @@ export function Test() {
   // PHASE 1: INTRO
   if (phase === 'intro') {
     return (
-      <Background theme="cobalt" orientation="landscape" onBack={handleBack}>
+      <Background theme="cobalt" orientation="landscape" onBack={handleBack} backShowLabel={false}>
         <div className={styles.wrapper}>
           <div className={styles.card}>
             <p className={styles.introText}>{bingo.intro}</p>
@@ -85,7 +85,7 @@ export function Test() {
   // PHASE 2: QUESTIONS (1 per page)
   if (phase === 'questions') {
     return (
-      <Background theme="cobalt" orientation="landscape" onBack={handleBack}>
+      <Background theme="cobalt" orientation="landscape" onBack={handleBack} backShowLabel={false}>
         <div className={styles.questionsLayout}>
           <p className={styles.questionPrompt}>{currentQuestion.prompt}</p>
 
@@ -128,7 +128,7 @@ export function Test() {
 
   // PHASE 3: RESULT
   return (
-    <Background theme="cobalt" orientation="landscape" onBack={handleBack}>
+    <Background theme="cobalt" orientation="landscape" onBack={handleBack} backShowLabel={false}>
       <div className={styles.resultLayout}>
         <div className={styles.gridSide}>
           <div className={styles.bingoGrid}>

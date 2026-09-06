@@ -86,7 +86,7 @@ export function BuilderGame({ task, onComplete, onBack, theme = 'orange', orient
   const overlayClass = orientation === 'landscape' ? styles.overlayLandscape : styles.overlayPortrait;
 
   return (
-    <Background theme={theme} orientation={orientation} onBack={onBack}>
+    <Background theme={theme} orientation={orientation} onBack={onBack} backShowLabel={false}>
       <GameInstruction instruction={task.instruction} initialOpen={false} />
 
       {!isDone ? (

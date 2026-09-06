@@ -79,7 +79,7 @@ export function TimelineGame({ task, onComplete, onBack, theme = 'orange', orien
   if (!current) return null;
 
   return (
-    <Background theme={theme} orientation={orientation} onBack={onBack}>
+    <Background theme={theme} orientation={orientation} onBack={onBack} backShowLabel={false}>
       <GameInstruction instruction={task.instruction} />
       <div className={styles.layout}>
         <div className={styles.trackCol}>

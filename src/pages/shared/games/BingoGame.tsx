@@ -51,19 +51,13 @@ export function BingoGame({ bingo, onBack, theme = 'cobalt' }: BingoGameProps) {
   // ── PHASE 1: Intro ────────────────────────────────────────────────────────
   if (phase === 'intro') {
     return (
-      <Background theme={theme} orientation="landscape" onBack={handleBack}>
+      <Background theme={theme} orientation="landscape" onBack={handleBack} backShowLabel={false}>
         <div className={styles.wrapper}>
-          <Button
-            label="Назад"
-            type="secondary"
-            className={styles.backBtn}
-            onClick={handleBack}
-          />
           <div className={styles.card}>
             <p className={styles.introText}>{bingo.intro}</p>
             <p className={styles.instructionText}>{bingo.instruction}</p>
           </div>
-          <Button label="Начать" type="secondary" onClick={() => setPhase('questions')} />
+          <Button label="Начать" type="big_white" onClick={() => setPhase('questions')} />
         </div>
       </Background>
     );
@@ -72,7 +66,7 @@ export function BingoGame({ bingo, onBack, theme = 'cobalt' }: BingoGameProps) {
   // ── PHASE 2: Questions ────────────────────────────────────────────────────
   if (phase === 'questions') {
     return (
-      <Background theme={theme} orientation="landscape" onBack={handleBack}>
+      <Background theme={theme} orientation="landscape" onBack={handleBack} backShowLabel={false}>
         <div className={styles.questionsLayout}>
           <p className={styles.questionPrompt}>{currentQuestion.prompt}</p>
 
@@ -93,21 +87,22 @@ export function BingoGame({ bingo, onBack, theme = 'cobalt' }: BingoGameProps) {
           </div>
 
           <div className={styles.bottomRow}>
-            <Button
-              label="Назад"
-              type="secondary"
-              className={styles.backBtn}
-              onClick={() => {
-                if (questionIndex > 0) {
-                  setQuestionIndex((i) => i - 1);
-                } else {
-                  setPhase('intro');
-                }
-              }}
-            />
-            <span className={styles.pageCounter}>
-              {questionIndex + 1} / {totalQuestions}
-            </span>
+            <div className={styles.bottomLeft}>
+              <Button
+                label="Назад"
+                type="secondary"
+                onClick={() => {
+                  if (questionIndex > 0) {
+                    setQuestionIndex((i) => i - 1);
+                  } else {
+                    setPhase('intro');
+                  }
+                }}
+              />
+              <span className={styles.pageCounter}>
+                {questionIndex + 1} / {totalQuestions}
+              </span>
+            </div>
             {currentAnswer && (
               <Button
                 label={isLastQuestion && allAnswered ? 'Посмотреть результат' : 'Далее'}
@@ -125,7 +120,7 @@ export function BingoGame({ bingo, onBack, theme = 'cobalt' }: BingoGameProps) {
   const popupData = popupCell !== null ? getCellData(popupCell) : null;
 
   return (
-    <Background theme={theme} orientation="landscape" onBack={handleBack}>
+    <Background theme={theme} orientation="landscape" onBack={handleBack} backShowLabel={false}>
       <div className={styles.resultLayout}>
 
         {/* Left — bingo grid */}

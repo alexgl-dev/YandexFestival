@@ -110,7 +110,7 @@ export function CompareGame({ task, onComplete, onBack, theme = 'orange', orient
   }
 
   return (
-    <Background theme={theme} orientation={orientation} onBack={onBack}>
+    <Background theme={theme} orientation={orientation} onBack={onBack} backShowLabel={false}>
       <GameInstruction instruction={task.instruction} />
       <div className={styles.wrapper}>
         <div className={styles.imageContainer}>

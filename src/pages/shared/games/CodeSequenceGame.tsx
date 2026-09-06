@@ -331,6 +331,7 @@ export function CodeSequenceGame({
       orientation={orientation}
       onBack={onBack}
       contentClassName={styles.scrollableBackgroundContent}
+      backShowLabel={false}
     >
       <div className={styles.codeSequenceShell}>
         <GameInstruction instruction={task.instruction} />

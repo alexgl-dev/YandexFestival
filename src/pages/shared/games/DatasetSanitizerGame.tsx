@@ -340,7 +340,7 @@ export function DatasetSanitizerGame({
   const purityPercent = Math.round(purity * 100);
 
   return (
-    <Background theme={theme} orientation={orientation} onBack={onBack}>
+    <Background theme={theme} orientation={orientation} onBack={onBack} backShowLabel={false}>
       <GameInstruction
         instruction={task.instruction}
         onClose={() => setPlayStarted(true)}

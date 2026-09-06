@@ -28,7 +28,7 @@ export function CalendarViewGame({ days, cards, theme = 'cobalt', startHour = 9,
   };
 
   return (
-    <Background theme={theme} orientation="landscape" onBack={onBack}>
+    <Background theme={theme} orientation="landscape" onBack={onBack} backShowLabel={false}>
       <div className={styles.layout}>
 
         <div className={styles.calendarHeader}>

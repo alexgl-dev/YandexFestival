@@ -451,7 +451,7 @@ export function LaunchSequenceGame({
   const prompt = step?.prompt ?? '';
 
   return (
-    <Background theme={theme} orientation={orientation} onBack={onBack}>
+    <Background theme={theme} orientation={orientation} onBack={onBack} backShowLabel={false}>
       <GameInstruction instruction={task.instruction} />
       <div className={styles.wrapper}>
         {/* Top row: placed counter + attempt counter */}

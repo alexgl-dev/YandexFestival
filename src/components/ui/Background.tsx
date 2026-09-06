@@ -14,6 +14,8 @@ export interface BackgroundProps {
   orientation?: 'landscape' | 'portrait';
   showBackButton?: boolean;
   onBack?: () => void;
+  /** Показывать подпись «Назад». В меню — true, в играх — false (чтобы не заезжало). */
+  backShowLabel?: boolean;
   children?: ReactNode;
   className?: string;
   /** Доп. класс для внутренней области (например overflow + выравнивание по верху). */
@@ -30,6 +32,7 @@ export function Background({
   orientation = 'landscape',
   showBackButton = true,
   onBack,
+  backShowLabel = true,
   children,
   className,
   contentClassName,
@@ -57,7 +60,7 @@ export function Background({
               type="back"
               variant={theme === 'orange' ? 'orange' : 'light'}
               size={orientation === 'portrait' ? 'md' : 'lg'}
-              showLabel={orientation === 'portrait'}
+              showLabel={backShowLabel}
               onClick={onBack}
             />
           </div>

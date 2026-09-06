@@ -106,7 +106,7 @@ export function CountGame({ task, onComplete, onBack, theme = 'cobalt', orientat
   const isCorrect = Number(answer) === current.actual;
 
   return (
-    <Background theme={theme} orientation={orientation} onBack={onBack}>
+    <Background theme={theme} orientation={orientation} onBack={onBack} backShowLabel={false}>
       <GameInstruction instruction={task.instruction} onOpenChange={setInstructionOpen} />
 
       <div className={styles.layout}>

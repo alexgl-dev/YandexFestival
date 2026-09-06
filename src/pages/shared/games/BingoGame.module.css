@@ -6,7 +6,7 @@
   gap: var(--spacing-2xl);
   padding: var(--spacing-2xl) 0;
   width: 100%;
-  max-width: 80%;
+  max-width: var(--width-content);
   margin: 0 auto;
   box-sizing: border-box;
   font-family: var(--font-family);
@@ -100,19 +100,16 @@
 .bottomRow {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: var(--spacing-lg);
   width: 100%;
 }
 
-.bottomRow .title {
+.bottomLeft {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-lg);
   margin-right: auto;
-}
-
-.backBtn {
-  margin-right: auto;
-  align-self: flex-start;
-  background-color: var(--color-white) !important;
-  color: var(--color-black) !important;
 }
 
 /* === Phase 3: Result — landscape two-column layout === */

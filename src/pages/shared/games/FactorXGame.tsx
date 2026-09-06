@@ -145,7 +145,7 @@ export function FactorXGame({ task, onComplete, onBack, theme = 'cobalt' }: Prop
   const totalVotes = tally.yes + tally.no;
 
   return (
-    <Background theme={theme} orientation="landscape" onBack={onBack}>
+    <Background theme={theme} orientation="landscape" onBack={onBack} backShowLabel={false}>
       <GameInstruction instruction={task.instruction} onOpenChange={setInstructionOpen} />
       {!done && (
         <div className={styles.layout}>

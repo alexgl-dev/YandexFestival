@@ -21,7 +21,7 @@ export function TaskIntro({ task, onStart, onBack, theme = 'orange', orientation
   const segments = parseGlossarySegments(task.intro, task.introTooltips ?? []);
 
   return (
-    <Background theme={theme} orientation={orientation} onBack={onBack}>
+    <Background theme={theme} orientation={orientation} onBack={onBack} backShowLabel={false}>
       {task.id === 'shopping-list' && (
         <div className={styles.floatingRobot}>
           <img src="/illustrations/robot-blue.png" alt="Робот" />

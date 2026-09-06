@@ -40,7 +40,7 @@ export function VideoChoiceGame({ task, onComplete, onBack, theme = 'orange', or
   const playingOption = playingIndex !== null ? options[playingIndex] : null;
 
   return (
-    <Background theme={theme} orientation={orientation} onBack={onBack}>
+    <Background theme={theme} orientation={orientation} onBack={onBack} backShowLabel={false}>
       <GameInstruction instruction={task.instruction} />
       <div className={styles.wrapper}>
         <div className={styles.options}>

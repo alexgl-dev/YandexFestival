@@ -109,7 +109,7 @@ export function ChooseGame({ task, onComplete, onBack, theme = 'orange', orienta
   const selectedOption = selected !== null ? options[selected] : null;
 
   return (
-    <Background theme={theme} orientation={orientation} onBack={onBack}>
+    <Background theme={theme} orientation={orientation} onBack={onBack} backShowLabel={false}>
       <GameInstruction instruction={task.instruction} />
       <div className={styles.wrapper}>
         {!isImageMode && step.prompt && (

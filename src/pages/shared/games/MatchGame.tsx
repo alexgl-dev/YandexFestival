@@ -398,7 +398,7 @@ export function MatchGame({
   const bubblePair = speechBubbleIndex !== null ? pairs[speechBubbleIndex] : null;
 
   return (
-    <Background theme={theme} orientation={orientation} onBack={onBack}>
+    <Background theme={theme} orientation={orientation} onBack={onBack} backShowLabel={false}>
       <GameInstruction instruction={task.instruction} initialOpen={!!task.instruction?.trim()} />
       <div className={`${styles.wrapper} ${isLanguagesIntro ? styles.languagesIntro : ''}`}>
         {step?.prompt && <p className={styles.prompt}>{step.prompt}</p>}

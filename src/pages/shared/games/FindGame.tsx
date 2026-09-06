@@ -113,7 +113,7 @@ export function FindGame({ task, onComplete, onBack, theme = 'orange', orientati
   const selectedOption = selected !== null ? options[selected] : null;
 
   return (
-    <Background theme={theme} orientation={orientation} onBack={onBack}>
+    <Background theme={theme} orientation={orientation} onBack={onBack} backShowLabel={false}>
       <GameInstruction instruction={task.instruction} />
       <div className={styles.wrapper}>
         {step.prompt && (() => {

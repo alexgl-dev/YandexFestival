@@ -86,7 +86,7 @@ export function QuizGame({ task, onComplete, onBack, theme = 'cobalt', orientati
 
   if (phase === 'summary') {
     return (
-      <Background theme={theme} orientation={orientation} onBack={onBack}>
+      <Background theme={theme} orientation={orientation} onBack={onBack} backShowLabel={false}>
         <div className={overlayClass}>
           <PopUp
             icon="done"
@@ -104,7 +104,7 @@ export function QuizGame({ task, onComplete, onBack, theme = 'cobalt', orientati
   if (!step) return null;
 
   return (
-    <Background theme={theme} orientation={orientation} onBack={onBack}>
+    <Background theme={theme} orientation={orientation} onBack={onBack} backShowLabel={false}>
       <GameInstruction instruction={task.instruction} />
       <div className={`${styles.wrapper} ${orientation === 'portrait' ? styles.wrapperPortrait : ''}`}>
         {step.prompt && <p className={styles.prompt}>{step.prompt}</p>}

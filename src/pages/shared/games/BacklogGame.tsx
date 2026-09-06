@@ -294,7 +294,7 @@ export function BacklogGame({
   const progressText = `${Math.min(currentIdx + (popup && popup.kind === 'comment' ? 1 : 0), objects.length)}/${objects.length}`;
 
   return (
-    <Background theme={theme} orientation={orientation} onBack={onBack}>
+    <Background theme={theme} orientation={orientation} onBack={onBack} backShowLabel={false}>
       <GameInstruction
         instruction={task.instruction}
         initialOpen

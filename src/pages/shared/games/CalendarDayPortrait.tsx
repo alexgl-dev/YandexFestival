@@ -135,7 +135,7 @@ export function CalendarDayPortrait({
         <div className={styles.wrapper}>
 
           <div className={styles.leftColumn}>
-            <IconButton type="back" variant="light" size="lg" onClick={onBack} />
+            <IconButton type="back" variant="light" size="lg" showLabel={false} onClick={onBack} />
           </div>
 
           <div className={styles.rightColumn}>

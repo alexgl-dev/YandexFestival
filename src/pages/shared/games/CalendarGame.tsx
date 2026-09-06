@@ -168,7 +168,7 @@ export function CalendarGame({ task, onComplete, onBack, theme = 'orange' }: Pro
   if (!step) return null;
 
   return (
-    <Background theme={theme} orientation="landscape" onBack={onBack}>
+    <Background theme={theme} orientation="landscape" onBack={onBack} backShowLabel={false}>
       <GameInstruction instruction={task.instruction} />
       <div className={styles.gameRoot}>
         {step.prompt && <p className={styles.prompt}>{step.prompt}</p>}

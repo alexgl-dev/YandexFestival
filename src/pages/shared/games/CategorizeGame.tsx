@@ -98,10 +98,15 @@ export function CategorizeGame({ task, onComplete, onBack, theme = 'cobalt', ori
     }
   }, [popup, selectedItem, tryPlace]);
 
-  const handleDragStart = useCallback((itemIndex: number) => {
-    if (popup) return;
+  const handleDragStart = useCallback((itemIndex: number, e: React.DragEvent<HTMLDivElement>) => {
+    if (popup) {
+      e.preventDefault();
+      return;
+    }
     setDraggedItem(itemIndex);
     setSelectedItem(null);
+    const el = e.currentTarget;
+    e.dataTransfer.setDragImage(el, el.offsetWidth / 2, el.offsetHeight / 2);
   }, [popup]);
 
   const handleDragEnd = useCallback(() => {
@@ -171,7 +176,7 @@ export function CategorizeGame({ task, onComplete, onBack, theme = 'cobalt', ori
   if (!step) return null;
 
   return (
-    <Background theme={theme} orientation={orientation} onBack={onBack}>
+    <Background theme={theme} orientation={orientation} onBack={onBack} backShowLabel={false}>
       <GameInstruction instruction={task.instruction} />
       <div className={styles.wrapper}>
         {step.prompt && <p className={styles.instruction}>{step.prompt}</p>}
@@ -273,7 +278,7 @@ export function CategorizeGame({ task, onComplete, onBack, theme = 'cobalt', ori
                 style={{ ['--rot' as string]: `${rot}deg` }}
                 draggable
                 onClick={() => handleItemClick(idx)}
-                onDragStart={() => handleDragStart(idx)}
+                onDragStart={(e) => handleDragStart(idx, e)}
                 onDragEnd={handleDragEnd}
               >
                 <InfoButton

@@ -273,7 +273,7 @@ export function SwipeGame({
   const succeeded = purityCount >= Math.ceil(totalCards * 0.6);
 
   return (
-    <Background theme={theme} orientation={orientation} onBack={onBack}>
+    <Background theme={theme} orientation={orientation} onBack={onBack} backShowLabel={false}>
       <GameInstruction instruction={task.instruction} />
       <div className={styles.wrapper}>
 

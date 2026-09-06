@@ -89,7 +89,7 @@ export function SecurityCheckGame({
   if (!step || !currentItem || !email) return null;
 
   return (
-    <Background theme={theme} orientation={orientation} onBack={onBack}>
+    <Background theme={theme} orientation={orientation} onBack={onBack} backShowLabel={false}>
       <GameInstruction instruction={task.instruction} />
 
       <div className={styles.wrapper}>

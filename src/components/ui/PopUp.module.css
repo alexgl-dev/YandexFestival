@@ -6,9 +6,9 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 65px;
+  gap: 50px;
   width: var(--width-content);
-  max-height: fit-content;
+  max-height: 100vh;
   padding: var(--spacing-2xl);
   border-radius: var(--radius-ml);
   background-color: var(--color-white);
@@ -24,9 +24,9 @@
   align-items: center;
   width: 100%;
   padding-top: 55px;
+  
   flex: 1 1 auto;
   min-height: 0;
-  overflow: hidden;
 }
 
 .iconArea {
@@ -51,6 +51,8 @@
   width: 100%;
   color: var(--color-black);
   text-align: center;
+  overflow-y: scroll;
+
 }
 
 .title {
