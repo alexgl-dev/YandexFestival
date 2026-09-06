@@ -8,12 +8,12 @@
   width: 100%;
   height: 100%;
   padding: var(--spacing-2xl) var(--spacing-2xl);
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   box-sizing: border-box;
 }
 
 .prompt {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-xl);
   font-weight: var(--font-weight-medium);
   color: var(--color-white);
@@ -77,7 +77,7 @@
 }
 
 .graphTitle {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
   color: var(--color-text-muted);
@@ -87,7 +87,7 @@
 }
 
 .graphHint {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-regular);
   color: var(--color-black);
@@ -108,14 +108,14 @@
 }
 
 .tickLabel {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: 34px;
   fill: var(--color-black);
   letter-spacing: -0.3px;
 }
 
 .monthLabel {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: 36px;
   fill: var(--color-black);
   letter-spacing: -0.3px;
@@ -235,7 +235,7 @@
   flex-direction: column;
   gap: var(--spacing-lg);
   align-items: flex-start;
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   box-sizing: border-box;
   box-shadow: 0 24px 64px rgba(0, 0, 0, 0.4);
 }
@@ -247,7 +247,7 @@
 }
 
 .wowTitle {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-2xl);
   font-weight: var(--font-weight-medium);
   color: var(--color-black);
@@ -256,7 +256,7 @@
 }
 
 .wowDescription {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-regular);
   color: var(--color-text-primary);
@@ -286,7 +286,7 @@
 }
 
 .wordTooltipText {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-regular);
   color: var(--color-text-primary);

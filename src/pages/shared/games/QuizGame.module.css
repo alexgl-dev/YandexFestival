@@ -9,7 +9,7 @@
   max-height: 88%;
   margin: 0 auto;
   padding: var(--spacing-md) 0;
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   box-sizing: border-box;
 }
 
@@ -18,7 +18,7 @@
 }
 
 .prompt {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-lg);
   font-weight: var(--font-weight-medium);
   color: var(--color-white);
@@ -97,7 +97,7 @@
 /* === Counter "N / total" === */
 
 .counter {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-lg);
   font-weight: var(--font-weight-medium);
   color: var(--color-white);

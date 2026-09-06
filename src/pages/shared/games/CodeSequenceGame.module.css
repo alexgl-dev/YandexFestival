@@ -30,14 +30,14 @@
   align-self: stretch;
   margin: 0 auto;
   padding: var(--spacing-2xl) 0 calc(var(--spacing-2xl) * 2);
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   box-sizing: border-box;
   justify-content: flex-start;
   overflow: visible;
 }
 
 .gameHeading {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-lg);
   font-weight: var(--font-weight-medium);
   color: var(--color-white);
@@ -62,7 +62,7 @@
   margin: 0 auto;
   padding: var(--spacing-2xl) 0;
   min-height: 100%;
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   box-sizing: border-box;
 }
 
@@ -129,7 +129,7 @@
 }
 
 .instructionBtn {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
   color: var(--color-white);
@@ -207,7 +207,7 @@
 }
 
 .bubbleText {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-regular);
   color: var(--color-black);
@@ -217,7 +217,7 @@
 }
 
 .bubblePromptItalic {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-regular);
   font-style: normal;
@@ -234,7 +234,7 @@
 /* Tappable term */
 .termBtn {
   display: inline;
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: inherit;
   font-weight: var(--font-weight-medium);
   color: var(--color-blue);
@@ -279,7 +279,7 @@
 /* ── Zone labels ── */
 
 .zoneLabel {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-xl);
   font-weight: var(--font-weight-medium);
   color: var(--color-white);
@@ -358,7 +358,7 @@
 }
 
 .poolEmpty {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-sm);
   color: var(--color-white);
   opacity: 0.5;
@@ -401,7 +401,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
   flex-shrink: 0;
@@ -465,7 +465,7 @@
 }
 
 .slotPlaceholder {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-sm);
   color: var(--color-white);
   opacity: 0.6;

@@ -7,7 +7,7 @@
   margin: 0 auto;
   height: 100%;
   padding: 0;
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   box-sizing: border-box;
 }
 
@@ -74,7 +74,7 @@
 }
 
 .groupTitle {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-medium);
   color: var(--color-black);

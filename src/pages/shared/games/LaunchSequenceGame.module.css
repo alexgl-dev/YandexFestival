@@ -9,7 +9,7 @@
   margin: 0 auto;
   padding: var(--spacing-xl) 0 var(--spacing-2xl);
   gap: var(--spacing-xl);
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   box-sizing: border-box;
 }
 
@@ -23,7 +23,7 @@
 }
 
 .counter {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
   color: var(--color-white);
@@ -32,7 +32,7 @@
 }
 
 .attemptCounter {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
   color: var(--color-white);
@@ -49,7 +49,7 @@
 /* ── Prompt with inline tooltips ── */
 
 .prompt {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
   color: var(--color-white);
@@ -84,7 +84,7 @@
 }
 
 .wordTooltipText {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-xs);
   color: var(--color-text-primary);
   margin: 0;
@@ -119,7 +119,7 @@
 }
 
 .wordTooltipCardText {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-sm);
   color: var(--color-text-primary);
   text-align: center;
@@ -139,7 +139,7 @@
 .poolEmpty {
   grid-column: 1 / -1;
   text-align: center;
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-sm);
   color: var(--color-white);
   opacity: 0.5;
@@ -211,7 +211,7 @@
 .poolTitle {
   position: relative;
   z-index: 1;
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
   color: var(--color-text-primary);
@@ -238,7 +238,7 @@
 }
 
 .timelineHeading {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-lg);
   font-weight: var(--font-weight-bold);
   color: var(--color-white);
@@ -377,7 +377,7 @@
 .slotTitle {
   position: relative;
   z-index: 1;
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
   color: var(--color-text-primary);
@@ -391,7 +391,7 @@
 .slotNumber {
   position: relative;
   z-index: 1;
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-xl);
   font-weight: var(--font-weight-medium);
   color: var(--color-white);
@@ -422,7 +422,7 @@
 }
 
 .parallelLabel {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-2xs);
   font-weight: var(--font-weight-medium);
   color: var(--color-blue);
@@ -441,7 +441,7 @@
 /* ── Duration hint ── */
 
 .durationHint {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
   color: var(--color-white);
@@ -504,7 +504,7 @@
 }
 
 .descTitle {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-xl);
   font-weight: var(--font-weight-bold);
   color: var(--color-text-primary);
@@ -514,7 +514,7 @@
 }
 
 .descBody {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-regular);
   color: var(--color-text-primary);
@@ -531,7 +531,7 @@
   border: none;
   border-radius: var(--radius-lg);
   padding: var(--spacing-sm) var(--spacing-2xl);
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-bold);
   cursor: pointer;
@@ -564,7 +564,7 @@
   background: var(--color-overlay-red);
   border: var(--border-width-md) solid var(--color-red);
   color: var(--color-red);
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-2xl);
   font-weight: var(--font-weight-bold);
   display: flex;
@@ -574,7 +574,7 @@
 }
 
 .errorTitle {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-xl);
   font-weight: var(--font-weight-bold);
   color: var(--color-text-primary);
@@ -583,7 +583,7 @@
 }
 
 .errorBody {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-regular);
   color: var(--color-text-primary);
@@ -599,7 +599,7 @@
   border: none;
   border-radius: var(--radius-lg);
   padding: var(--spacing-sm) var(--spacing-2xl);
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-bold);
   cursor: pointer;
@@ -613,7 +613,7 @@
 /* ── Error attempts hint ── */
 
 .errorAttempts {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-xs);
   color: var(--color-grey-disabled);
   text-align: center;
@@ -644,7 +644,7 @@
   background: var(--color-overlay-red);
   border: var(--border-width-md) solid var(--color-red);
   color: var(--color-red);
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-2xl);
   font-weight: var(--font-weight-bold);
   display: flex;
@@ -654,7 +654,7 @@
 }
 
 .failedTitle {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-lg);
   font-weight: var(--font-weight-bold);
   color: var(--color-text-primary);
@@ -664,7 +664,7 @@
 }
 
 .failedBody {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-sm);
   color: var(--color-text-primary);
   text-align: center;
@@ -675,7 +675,7 @@
 }
 
 .failedHeading {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-xl);
   font-weight: var(--font-weight-bold);
   color: var(--color-text-primary);
@@ -708,7 +708,7 @@
 
 .correctStepTitle {
   margin: 0;
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-bold);
   color: var(--color-text-primary);
@@ -718,7 +718,7 @@
 
 .correctStepBody {
   margin: 0;
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-regular);
   color: var(--color-text-primary);
@@ -728,7 +728,7 @@
 }
 
 .failedMoral {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-bold);
   color: var(--color-text-primary);
@@ -744,7 +744,7 @@
 /* ── Completion question ── */
 
 .completeQuestion {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
   color: var(--color-text-primary);
@@ -787,7 +787,7 @@
 }
 
 .completeTitle {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-3xl);
   font-weight: var(--font-weight-bold);
   color: var(--color-text-primary);
@@ -798,7 +798,7 @@
 }
 
 .completeSubtitle {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-xl);
   font-weight: var(--font-weight-medium);
   color: var(--color-blue);
@@ -807,7 +807,7 @@
 }
 
 .completeStat {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-regular);
   color: var(--color-text-muted);
@@ -822,7 +822,7 @@
   border: none;
   border-radius: var(--radius-lg);
   padding: var(--spacing-sm) var(--spacing-2xl);
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-bold);
   cursor: pointer;

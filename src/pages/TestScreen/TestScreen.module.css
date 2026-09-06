@@ -3,7 +3,7 @@
   overflow-y: auto;
   background: var(--color-black);
   color: var(--color-white);
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   padding: 60px 80px;
   box-sizing: border-box;
 }
@@ -198,7 +198,7 @@
 .stageLabel {
   color: var(--color-white);
   font-size: var(--font-size-3xl);
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
 }
 
 /* === Плейграунд заданий === */
@@ -259,7 +259,7 @@
   border: none;
   padding: 2px 0;
   cursor: pointer;
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-2xs);
   color: var(--color-grey-secondary);
 }

@@ -3,7 +3,7 @@
   width: 100%;
   height: 100%;
   overflow: hidden;
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
 }
 
 /* ── Counter ─────────────────────────────────────────────────── */
@@ -25,7 +25,7 @@
 }
 
 .counterLabel {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-2xs);
   font-weight: var(--font-weight-medium);
   color: var(--color-text-muted);
@@ -34,7 +34,7 @@
 }
 
 .counterValue {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-xl);
   font-weight: var(--font-weight-bold);
   color: var(--color-black);
@@ -48,7 +48,7 @@
   top: calc(var(--spacing-2xl) + 140px);
   left: 50%;
   transform: translateX(-50%);
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-lg);
   font-weight: var(--font-weight-medium);
   color: var(--color-white);
@@ -79,7 +79,7 @@
   bottom: var(--spacing-2xl);
   left: 50%;
   transform: translateX(-50%);
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-regular);
   color: var(--color-white);
@@ -138,7 +138,7 @@
 }
 
 .stickerTitle {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: 44px;
   font-weight: var(--font-weight-medium);
   line-height: 1.15;
@@ -203,7 +203,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: 56px;
   font-weight: var(--font-weight-bold);
   color: var(--color-white);
@@ -220,7 +220,7 @@
 
 .commentTitle {
   margin: 0;
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-2xl);
   font-weight: var(--font-weight-bold);
   color: var(--color-black);
@@ -230,7 +230,7 @@
 
 .commentText {
   margin: 0;
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-regular);
   color: var(--color-black);
@@ -247,7 +247,7 @@
   color: var(--color-white);
   border: none;
   border-radius: var(--radius-full);
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-medium);
   letter-spacing: var(--letter-spacing-xs);
@@ -256,7 +256,7 @@
 
 .commentHint {
   margin: 0;
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-2xs);
   font-weight: var(--font-weight-regular);
   color: var(--color-text-muted);
@@ -288,7 +288,7 @@
 
 .glossaryWord {
   margin: 0;
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-xl);
   font-weight: var(--font-weight-bold);
   color: var(--color-black);
@@ -298,7 +298,7 @@
 
 .glossaryDef {
   margin: 0;
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-regular);
   color: var(--color-black);
@@ -324,7 +324,7 @@
 
 .finalTitle {
   margin: 0;
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-3xl);
   font-weight: var(--font-weight-bold);
   color: var(--color-black);
@@ -335,7 +335,7 @@
 
 .finalScore {
   margin: 0;
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-medium);
   color: var(--color-text-muted);
@@ -344,7 +344,7 @@
 
 .finalText {
   margin: 0;
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-regular);
   color: var(--color-black);
@@ -371,7 +371,7 @@
 
 .mistakesHeading {
   margin: 0;
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-bold);
   color: var(--color-black);
@@ -392,7 +392,7 @@
 
 .mistakeTitle {
   margin: 0;
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-bold);
   color: var(--color-black);
@@ -414,7 +414,7 @@
   flex-wrap: wrap;
   align-items: center;
   gap: var(--spacing-xs);
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-medium);
   letter-spacing: var(--letter-spacing-xs);
@@ -435,7 +435,7 @@
 
 .mistakeComment {
   margin: 0;
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-regular);
   font-style: italic;

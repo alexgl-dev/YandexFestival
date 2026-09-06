@@ -23,7 +23,7 @@
 }
 
 .stepCounter {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-medium);
   color: rgba(255, 255, 255, 0.65);
@@ -37,7 +37,7 @@
 }
 
 .timerLabel {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-medium);
   color: rgba(255, 255, 255, 0.65);
@@ -56,7 +56,7 @@
 }
 
 .timerNum {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-bold);
   color: var(--color-white);
@@ -92,7 +92,7 @@
 
 .prompt {
   margin: 0;
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-medium);
   color: var(--color-black);
@@ -131,7 +131,7 @@
   border-radius: var(--radius-sm);
   border: var(--border-width-sm) solid var(--color-grey-secondary);
   background: var(--color-grey-light);
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-2xl, var(--font-size-xl));
   font-weight: var(--font-weight-bold);
   color: var(--color-black);
@@ -183,7 +183,7 @@
 
 .compareLine {
   margin: 0;
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-sm);
   color: var(--color-text-primary);
   text-align: center;
@@ -197,7 +197,7 @@
 
 .comment {
   margin: 0;
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-xs);
   color: var(--color-text-muted);
   text-align: center;

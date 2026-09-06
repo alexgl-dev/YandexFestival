@@ -7,7 +7,7 @@
   width: 100%;
   max-width: 90%;
   margin: 0 auto;
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   padding: var(--spacing-xl) 0 0;
   box-sizing: border-box;
   gap: var(--spacing-lg);
@@ -16,7 +16,7 @@
 }
 
 .instruction {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-lg);
   font-weight: var(--font-weight-medium);
   color: var(--color-white);
@@ -75,7 +75,7 @@
 }
 
 .placedChipText {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-2xs);
   color: var(--color-black);
   text-align: center;
@@ -139,7 +139,7 @@
 }
 
 .columnTitle {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-lg);
   font-weight: var(--font-weight-medium);
   color: var(--color-white);
@@ -244,7 +244,7 @@
 }
 
 .cardText {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
   color: var(--color-black);

@@ -7,7 +7,7 @@
   max-width: 80%;
   margin: 0 auto;
   box-sizing: border-box;
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   flex: 1;
   min-height: 0;
   align-items: center;

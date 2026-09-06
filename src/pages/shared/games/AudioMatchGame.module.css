@@ -10,12 +10,12 @@
   max-width: 90%;
   margin: 0 auto;
   box-sizing: border-box;
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   padding: var(--spacing-2xl) 0;
 }
 
 .prompt {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-medium);
   color: var(--color-white);
@@ -92,7 +92,7 @@
   background: var(--color-white);
   color: var(--color-black);
   border: var(--border-width-md) solid transparent;
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
   text-align: center;

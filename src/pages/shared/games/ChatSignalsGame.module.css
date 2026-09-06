@@ -9,7 +9,7 @@
   align-self: stretch;
   margin: 0 auto;
   padding: var(--spacing-2xl) 0 var(--spacing-lg);
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   box-sizing: border-box;
   min-height: 0;
 }
@@ -40,7 +40,7 @@
   background: var(--color-white);
   border-radius: var(--radius-full);
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-medium);
   color: var(--color-black);
@@ -95,7 +95,7 @@
 }
 
 .chatTitle {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
   color: var(--color-black);
@@ -104,7 +104,7 @@
 }
 
 .chatSub {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-xs);
   color: var(--color-text-muted);
   margin: 4px 0 0;
@@ -160,7 +160,7 @@
 }
 
 .messageAuthor {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-medium);
   color: var(--color-black);
@@ -168,7 +168,7 @@
 }
 
 .messageTime {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: 18px;
   color: var(--color-text-muted);
   line-height: var(--line-height-tight);
@@ -182,7 +182,7 @@
   border: var(--border-width-sm) solid var(--color-grey-secondary);
   border-radius: var(--radius-lg);
   padding: var(--spacing-md) var(--spacing-lg);
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-regular);
   color: var(--color-black);
@@ -257,7 +257,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-xl);
   font-weight: var(--font-weight-medium);
   color: var(--color-white);
@@ -291,7 +291,7 @@
   transform: translateX(-50%);
   background: var(--color-black);
   color: var(--color-white);
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
   padding: var(--spacing-md) var(--spacing-2xl);
@@ -340,7 +340,7 @@
 }
 
 .tooltipText {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-regular);
   color: var(--color-black);
@@ -369,7 +369,7 @@
 }
 
 .resultTitle {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-2xl);
   font-weight: var(--font-weight-medium);
   color: var(--color-black);
@@ -423,7 +423,7 @@
   right: var(--spacing-lg);
   background: var(--color-red);
   color: var(--color-white);
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: 20px;
   font-weight: var(--font-weight-medium);
   padding: 2px 12px;
@@ -431,7 +431,7 @@
 }
 
 .signalQuote {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: 20px;
   font-weight: var(--font-weight-medium);
   color: var(--color-black);
@@ -447,7 +447,7 @@
 }
 
 .signalLabel {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: 18px;
   font-weight: var(--font-weight-medium);
   color: var(--color-text-muted);
@@ -455,7 +455,7 @@
 }
 
 .signalText {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: 18px;
   font-weight: var(--font-weight-regular);
   color: var(--color-black);

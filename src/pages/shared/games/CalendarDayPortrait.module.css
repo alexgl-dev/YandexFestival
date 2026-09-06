@@ -87,7 +87,7 @@
   padding: var(--spacing-lg) var(--spacing-xl);
   background: var(--color-white);
   border-radius: var(--radius-lg);
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-regular);
   color: var(--color-black);
@@ -107,7 +107,7 @@
 
 .outroParagraph {
   margin: 0;
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-regular);
   color: var(--color-black);
@@ -137,7 +137,7 @@
   align-items: center;
   gap: var(--spacing-xs);
   padding: var(--spacing-xs) 0;
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
   color: var(--color-white);
@@ -154,7 +154,7 @@
 }
 
 .dayHeaderAbbr {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-xl);
   font-weight: var(--font-weight-bold);
   color: var(--color-white);
@@ -163,7 +163,7 @@
 }
 
 .dayHeaderDate {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-xl);
   font-weight: var(--font-weight-medium);
   color: var(--color-white);
@@ -193,7 +193,7 @@
   left: var(--spacing-xs);
   transform: translateY(-50%);
   text-align: left;
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-bold);
   color: var(--color-white);
@@ -264,7 +264,7 @@
 }
 
 .cardTitle {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-medium);
   color: var(--color-text-primary);
@@ -309,7 +309,7 @@
 .cardPeregovorka {
   display: block;
   margin-top: 2px;
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: 14px;
   font-weight: var(--font-weight-regular);
   color: #808080;
@@ -318,7 +318,7 @@
 }
 
 .cardDuration {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-regular);
   color: var(--color-text-primary);
@@ -373,7 +373,7 @@
   display: flex;
   align-items: center;
   gap: var(--spacing-xs);
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-lg);
   font-weight: var(--font-weight-regular);
   color: var(--color-text-muted);
@@ -381,7 +381,7 @@
 }
 
 .tooltipTitle {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-lg);
   font-weight: var(--font-weight-bold);
   color: var(--color-text-primary);
@@ -391,7 +391,7 @@
 }
 
 .tooltipText {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-md);
   color: var(--color-text-primary);
   margin: 0;
@@ -426,7 +426,7 @@
 }
 
 .glossaryTitle {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
   color: var(--color-black);
@@ -435,7 +435,7 @@
 }
 
 .glossaryDefinition {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-regular);
   color: var(--color-black);

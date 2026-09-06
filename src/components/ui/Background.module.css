@@ -19,7 +19,7 @@
   left: 0;
   transform-origin: top left;
   overflow: hidden;
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
 }
 
 /* --- Orientation --- */

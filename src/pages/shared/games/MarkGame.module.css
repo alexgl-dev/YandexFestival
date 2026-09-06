@@ -9,7 +9,7 @@
   height: 100%;
   padding: 32px 40px 0;
   box-sizing: border-box;
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   gap: var(--spacing-lg);
   overflow: hidden;
 }
@@ -27,7 +27,7 @@
 }
 
 .reviewsTitle {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-xl);
   font-weight: var(--font-weight-bold);
   color: var(--color-white);
@@ -134,7 +134,7 @@
 }
 
 .instruction {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-xs);
   color: var(--color-black);
   text-align: left;
@@ -163,7 +163,7 @@
   max-width: 80%;
   margin: 0 auto;
   padding: var(--spacing-2xl) 0;
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   box-sizing: border-box;
 }
 

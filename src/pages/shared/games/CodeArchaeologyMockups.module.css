@@ -12,7 +12,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   box-sizing: border-box;
 }
 
@@ -23,7 +23,7 @@
   color: var(--color-white);
   padding: 18px 44px;
   border-radius: 999px;
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: 32px;
   font-weight: var(--font-weight-regular);
   text-align: center;
@@ -51,7 +51,7 @@
   display: flex;
   align-items: center;
   color: var(--color-black);
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: 20px;
   font-weight: var(--font-weight-regular);
   box-shadow: 0 2px 9.9px rgba(0, 0, 0, 0.05);
@@ -71,7 +71,7 @@
 
 .errorText {
   color: #e31111;
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: 14px;
   margin: 0;
   padding-left: 22px;
@@ -86,7 +86,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: 20px;
   min-width: 200px;
   box-sizing: border-box;
@@ -128,7 +128,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: 20px;
   font-weight: var(--font-weight-regular);
   border-radius: 28px;
@@ -146,7 +146,7 @@
   display: flex;
   align-items: center;
   color: var(--color-black);
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: 20px;
 }
 
@@ -183,7 +183,7 @@
   flex-direction: column;
   gap: 6px;
   color: var(--color-black);
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
 }
 
 .productName {

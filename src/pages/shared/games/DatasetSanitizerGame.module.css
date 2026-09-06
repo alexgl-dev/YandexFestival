@@ -3,7 +3,7 @@
   width: 100%;
   height: 100%;
   overflow: hidden;
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
 }
 
 /* ── Top controls (meter + timer + ?) ───────────────────────── */
@@ -27,7 +27,7 @@
 }
 
 .timerLabel {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-2xs);
   font-weight: var(--font-weight-medium);
   color: var(--color-text-muted);
@@ -36,7 +36,7 @@
 }
 
 .timerValue {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-xl);
   font-weight: var(--font-weight-bold);
   color: var(--color-black);
@@ -141,7 +141,7 @@
 }
 
 .cardHeaderLabel {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-2xs);
   font-weight: var(--font-weight-medium);
   color: var(--color-text-muted);
@@ -150,7 +150,7 @@
 }
 
 .cardName {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-2xl);
   font-weight: var(--font-weight-bold);
   color: var(--color-black);
@@ -172,7 +172,7 @@
   justify-content: space-between;
   align-items: baseline;
   gap: var(--spacing-sm);
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-normal);
 }
@@ -202,7 +202,7 @@
   background: var(--color-black);
   color: var(--color-white);
   border-radius: var(--radius-lg);
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-regular);
   line-height: var(--line-height-normal);
@@ -254,7 +254,7 @@
 
 .glossaryTitle {
   margin: 0;
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-2xl);
   font-weight: var(--font-weight-bold);
   color: var(--color-black);
@@ -281,7 +281,7 @@
 }
 
 .glossaryWord {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-bold);
   color: var(--color-blue);
@@ -289,7 +289,7 @@
 }
 
 .glossaryDef {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-regular);
   color: var(--color-black);
@@ -303,7 +303,7 @@
   color: var(--color-white);
   border: none;
   border-radius: var(--radius-full);
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-medium);
   cursor: pointer;

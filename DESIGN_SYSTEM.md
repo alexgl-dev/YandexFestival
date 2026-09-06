@@ -216,7 +216,7 @@ Menu: логотип `/icons/figma/logo-white.svg` 343×104, пункты — Bi
 ## Структура
 
 ```
-src/assets/fonts/     — YS Text (Regular/Medium/Bold), YS Text Wide (Bold), YS Geo (легаси)
+src/assets/fonts/     — YS Text (Regular/Medium/Bold), YS Text Wide (Bold)
 src/components/ui/    — все UI-компоненты + index.ts
 src/tokens/           — tokens.css + theme.ts
 src/pages/TestScreen/ — /ui-kit: витрина + StagePreview + TaskPlayground (все механики на реальных данных)

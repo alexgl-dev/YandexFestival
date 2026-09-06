@@ -16,7 +16,7 @@
 }
 
 .prompt {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-lg);
   font-weight: var(--font-weight-medium);
   color: var(--color-white);
@@ -109,7 +109,7 @@
 /* ---- Shared ---- */
 
 .heading {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-lg);
   font-weight: var(--font-weight-bold);
   color: var(--color-white);
@@ -117,7 +117,7 @@
 }
 
 .empty {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-xs);
   color: var(--color-white);
   opacity: 0.5;
@@ -168,7 +168,7 @@
 }
 
 .flyingBlockText {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-list);
   font-weight: var(--font-weight-regular);
   color: var(--color-text-primary);

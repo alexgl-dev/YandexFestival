@@ -9,7 +9,7 @@
   width: 100%;
   height: 100%;
   box-sizing: border-box;
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   padding: var(--spacing-2xl) var(--spacing-lg);
 }
 
@@ -45,7 +45,7 @@
 
 .optionName {
   margin: 0;
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
   color: var(--color-white);

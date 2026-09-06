@@ -9,11 +9,11 @@
   margin: 0 auto;
   padding: var(--spacing-xl) 0;
   box-sizing: border-box;
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
 }
 
 .counter {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
   color: var(--color-white);
@@ -84,7 +84,7 @@
   flex-direction: row;
   align-items: flex-start;
   gap: var(--spacing-sm);
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-xs);
   line-height: var(--line-height-normal);
   color: var(--color-black);
@@ -116,7 +116,7 @@
 }
 
 .emailBlock {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-xs);
   line-height: var(--line-height-relaxed);
   color: var(--color-black);
@@ -176,7 +176,7 @@
   border-radius: var(--radius-full);
   background: var(--color-black);
   color: var(--color-white);
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-2xs);
   font-weight: var(--font-weight-bold);
   vertical-align: middle;
@@ -194,7 +194,7 @@
   background: var(--color-black);
   color: var(--color-white);
   border-radius: var(--radius-sm);
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-2xs);
   font-weight: var(--font-weight-regular);
   line-height: var(--line-height-relaxed);
@@ -240,7 +240,7 @@
   border: var(--border-width-sm) solid var(--color-grey-secondary);
   border-radius: var(--radius-sm);
   cursor: pointer;
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-2xs);
   font-weight: var(--font-weight-medium);
   color: var(--color-black);
@@ -311,7 +311,7 @@
 
 .instructionTitle {
   margin: 0;
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-2xl);
   font-weight: var(--font-weight-bold);
   color: var(--color-black);
@@ -327,7 +327,7 @@
 
 .instructionLine {
   margin: 0;
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-xs);
   line-height: var(--line-height-relaxed);
   color: var(--color-black);

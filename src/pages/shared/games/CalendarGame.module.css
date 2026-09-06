@@ -20,7 +20,7 @@
 
 .prompt {
   flex-shrink: 0;
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-lg);
   font-weight: var(--font-weight-medium);
   color: var(--color-white);
@@ -59,7 +59,7 @@
 }
 
 .poolTitle {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-medium);
   color: var(--color-white);
@@ -129,7 +129,7 @@
 }
 
 .poolCardTitle {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: 20px;
   font-weight: var(--font-weight-medium);
   color: var(--color-text-primary);
@@ -146,7 +146,7 @@
 }
 
 .poolCardDurationText {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: 20px;
   font-weight: var(--font-weight-regular);
   color: var(--color-text-primary);
@@ -154,7 +154,7 @@
 }
 
 .wrongNote {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-2xs);
   color: var(--color-red);
   margin: 0;
@@ -215,7 +215,7 @@
 }
 
 .dayHeaderAbbr {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-bold);
   color: var(--color-white);
@@ -224,7 +224,7 @@
 }
 
 .dayHeaderDate {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-medium);
   color: var(--color-white);
@@ -255,7 +255,7 @@
   position: absolute;
   left: 0;
   transform: translateY(-50%);
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-bold);
   color: var(--color-white);
@@ -331,7 +331,7 @@
   display: flex;
   align-items: flex-start;
   padding: var(--spacing-xs);
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-2xs);
   font-weight: var(--font-weight-medium);
   color: var(--color-white);
@@ -405,7 +405,7 @@
 }
 
 .cardTitle {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-2xs);
   font-weight: var(--font-weight-medium);
   color: var(--color-text-primary);
@@ -427,7 +427,7 @@
 }
 
 .placedCardDuration {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-2xs);
   font-weight: var(--font-weight-regular);
   color: var(--color-text-primary);
@@ -436,7 +436,7 @@
 }
 
 .cardTime {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-2xs);
   font-weight: var(--font-weight-regular);
   color: rgba(255, 255, 255, 0.75);
@@ -491,7 +491,7 @@
   display: flex;
   align-items: center;
   gap: var(--spacing-xs);
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-lg);
   font-weight: var(--font-weight-regular);
   color: var(--color-text-muted);
@@ -499,7 +499,7 @@
 }
 
 .tooltipTitle {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-lg);
   font-weight: var(--font-weight-bold);
   color: var(--color-text-primary);
@@ -509,7 +509,7 @@
 }
 
 .tooltipText {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-md);
   color: var(--color-text-primary);
   margin: 0;
@@ -524,7 +524,7 @@
   border: none;
   border-radius: var(--radius-lg);
   padding: var(--spacing-sm) var(--spacing-2xl);
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-bold);
   cursor: pointer;

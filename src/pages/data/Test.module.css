@@ -9,7 +9,7 @@
   max-width: var(--width-content);
   margin: 0 auto;
   box-sizing: border-box;
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
 }
 
 .title {
@@ -42,7 +42,7 @@
 }
 
 .introText {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-medium);
   color: var(--color-black);
@@ -51,7 +51,7 @@
 }
 
 .instructionText {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-regular);
   color: var(--color-black);
@@ -71,12 +71,12 @@
   max-width: 80%;
   margin: 0 auto;
   box-sizing: border-box;
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   align-items: center;
 }
 
 .pageCounter {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-medium);
   color: var(--color-white);
@@ -92,7 +92,7 @@
 }
 
 .questionPrompt {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-xl);
   font-weight: var(--font-weight-medium);
   color: var(--color-white);
@@ -134,7 +134,7 @@
   height: 100%;
   margin: 0 auto;
   box-sizing: border-box;
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
 }
 
 .gridSide {
@@ -194,7 +194,7 @@
 }
 
 .cellLabel {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-bold);
   color: var(--color-white);
@@ -208,7 +208,7 @@
 }
 
 .cellBackText {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-medium);
   color: var(--color-black);
@@ -233,7 +233,7 @@
 }
 
 .cellCenterBadge {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-2xs);
   font-weight: var(--font-weight-bold);
   color: var(--color-white);
@@ -246,7 +246,7 @@
 }
 
 .cellCenterName {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-bold);
   color: var(--color-black);
@@ -256,7 +256,7 @@
 }
 
 .cellCenterRole {
-  font-family: var(--font-family);
+  font-family: var(--font-family-text);
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-regular);
   color: var(--color-black);
