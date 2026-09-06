@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Background, PopUp } from '../../../components/ui';
 import type { Task, TaskCategory, TaskItem } from '../../../types/game';
 import { GameInstruction } from '../GameInstruction';
@@ -52,6 +53,7 @@ function getGridColumns(count: number, taskId?: string): number {
 }
 
 export function DistributeGame({ task, onComplete, onBack, theme = 'cobalt', orientation = 'landscape' }: GameProps) {
+  const { t } = useTranslation('sharedGames2');
   const step = task.steps[0];
   const categories = step?.categories ?? [];
 
@@ -65,8 +67,8 @@ export function DistributeGame({ task, onComplete, onBack, theme = 'cobalt', ori
     return base;
   });
 
-  const correctText = step?.resultCorrect ?? 'Потрясающе!';
-  const wrongText = step?.resultWrong ?? 'Ой! Это задача другого специалиста! Попробуй ещё раз, даже если наугад!';
+  const correctText = t(step?.resultCorrect ?? "Потрясающе!");
+  const wrongText = t(step?.resultWrong ?? "Ой! Это задача другого специалиста! Попробуй ещё раз, даже если наугад!");
 
   const gridCols = getGridColumns(categories.length, task.id);
   const gridRows = categories.length > 0 ? Math.ceil(categories.length / gridCols) : 1;
@@ -174,7 +176,7 @@ export function DistributeGame({ task, onComplete, onBack, theme = 'cobalt', ori
                 }}
                 role="button"
                 tabIndex={isTarget ? 0 : -1}
-                aria-label={`Назначить задачу: ${cat.title}`}
+                aria-label={t("Назначить задачу: {{title}}", { title: t(cat.title) })}
               >
 
                 {/* Profile row */}
@@ -185,17 +187,17 @@ export function DistributeGame({ task, onComplete, onBack, theme = 'cobalt', ori
                     </div>
                   ) : !cat.image ? (
                     <div className={styles.avatarWrap}>
-                      <span className={styles.avatarFallback}>{cat.title.charAt(0)}</span>
+                      <span className={styles.avatarFallback}>{t(cat.title).charAt(0)}</span>
                     </div>
                   ) : null}
                   <div className={styles.specNameStatic}>
-                    <span className={styles.specName}>{cat.title}</span>
+                    <span className={styles.specName}>{t(cat.title)}</span>
                   </div>
                   {hasDescription && (
                     <button
                       type="button"
                       className={styles.infoBtn}
-                      aria-label={`О профессии: ${cat.title}`}
+                      aria-label={t("О профессии: {{title}}", { title: t(cat.title) })}
                       onClick={(e) => {
                         e.stopPropagation();
                         setActivePopup(activePopup?.id === cat.id ? null : cat);
@@ -228,7 +230,7 @@ export function DistributeGame({ task, onComplete, onBack, theme = 'cobalt', ori
         {!isDone && currentItem && (
           <div className={styles.taskArea} onClick={(e) => e.stopPropagation()}>
             <p className={styles.taskCounter}>{currentIdx + 1} / {items.length}</p>
-            {currentItem.title && <p className={styles.taskTitle}>{currentItem.title}</p>}
+            {currentItem.title && <p className={styles.taskTitle}>{t(currentItem.title)}</p>}
             <div className={styles.taskCard}>
               {(() => {
                 const lines = (currentItem.text ?? '').split('\n').map((l) => l.trim()).filter(Boolean);
@@ -236,12 +238,12 @@ export function DistributeGame({ task, onComplete, onBack, theme = 'cobalt', ori
                   return (
                     <div className={styles.taskLines}>
                       {lines.map((line, i) => (
-                        <p key={i} className={styles.taskLine}>{line}</p>
+                        <p key={i} className={styles.taskLine}>{t(line)}</p>
                       ))}
                     </div>
                   );
                 }
-                return <p className={styles.taskText}>{lines[0] ?? currentItem.title ?? ''}</p>;
+                return <p className={styles.taskText}>{t(lines[0] ?? currentItem.title ?? '')}</p>;
               })()}
             </div>
           </div>
@@ -258,14 +260,14 @@ export function DistributeGame({ task, onComplete, onBack, theme = 'cobalt', ori
             <div className={styles.specPopupHeader}>
               {activePopup.avatar && (
                 <div className={styles.specPopupAvatar}>
-                  <img src={activePopup.avatar} alt={activePopup.title} className={styles.avatarImg} />
+                  <img src={activePopup.avatar} alt={t(activePopup.title)} className={styles.avatarImg} />
                 </div>
               )}
-              <span className={styles.specPopupTitle}>{activePopup.title}</span>
+              <span className={styles.specPopupTitle}>{t(activePopup.title)}</span>
             </div>
-            <p className={styles.specPopupText}>{activePopup.description}</p>
+            <p className={styles.specPopupText}>{activePopup.description && t(activePopup.description)}</p>
             <button className={styles.specPopupClose} onClick={() => setActivePopup(null)}>
-              Закрыть
+              {t("Закрыть")}
             </button>
           </div>
         </div>
@@ -277,9 +279,9 @@ export function DistributeGame({ task, onComplete, onBack, theme = 'cobalt', ori
           <PopUp
             icon={dropFeedback.correct ? 'done' : 'close'}
             iconColor={dropFeedback.correct ? 'blue' : 'red'}
-            title={dropFeedback.correct ? 'Потрясающе!' : 'Не совсем...'}
+            title={dropFeedback.correct ? t("Потрясающе!") : t("Не совсем...")}
             description={dropFeedback.correct ? undefined : wrongText}
-            buttonLabel={dropFeedback.correct ? 'Дальше' : 'Попробуй ещё раз'}
+            buttonLabel={dropFeedback.correct ? t("Дальше") : t("Попробуй ещё раз")}
             onButtonClick={handleFeedbackDismiss}
           />
         </div>

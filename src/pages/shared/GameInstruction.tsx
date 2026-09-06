@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { InfoButton, PopUp } from '../../components/ui';
 import { parseInstructionWithBoldMarkup } from './instructionMarkup';
 import styles from './GameInstruction.module.css';
@@ -14,6 +15,7 @@ interface GameInstructionProps {
 }
 
 export function GameInstruction({ instruction, initialOpen, onClose, onOpenChange }: GameInstructionProps) {
+  const { t } = useTranslation('sharedOther');
   const hasInstruction = !!instruction?.trim();
   const [open, setOpen] = useState(
     initialOpen !== undefined ? initialOpen : hasInstruction,
@@ -48,16 +50,16 @@ export function GameInstruction({ instruction, initialOpen, onClose, onOpenChang
         >
           <div role="presentation" onClick={(e) => e.stopPropagation()}>
             <PopUp
-              title="Инструкция"
+              title={t("Инструкция")}
               description={parseInstructionWithBoldMarkup(
-                instruction ?? '',
+                t(instruction ?? ''),
                 (term, definition) => setActiveTerm({ term, definition }),
                 'gi',
                 styles.termBtn,
                 styles.instructionLead,
                 styles.instructionItalic,
               )}
-              buttonLabel="Начать"
+              buttonLabel={t("Начать")}
               onButtonClick={close}
             />
           </div>
@@ -67,7 +69,7 @@ export function GameInstruction({ instruction, initialOpen, onClose, onOpenChang
                 <PopUp
                   title={activeTerm.term.charAt(0).toUpperCase() + activeTerm.term.slice(1)}
                   description={activeTerm.definition}
-                  buttonLabel="Понятно"
+                  buttonLabel={t("Понятно")}
                   onButtonClick={() => setActiveTerm(null)}
                   compact
                 />

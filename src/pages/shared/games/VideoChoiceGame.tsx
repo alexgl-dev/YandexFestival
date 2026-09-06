@@ -1,4 +1,5 @@
 import { useCallback, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Background, Button, Player } from '../../../components/ui';
 import type { Task } from '../../../types/game';
 import { GameInstruction } from '../GameInstruction';
@@ -25,6 +26,7 @@ interface GameProps {
  * По окончании ролика (или тапу по нему) — возврат к выбору. «Завершить» — под списком.
  */
 export function VideoChoiceGame({ task, onComplete, onBack, theme = 'orange', orientation = 'portrait' }: GameProps) {
+  const { t } = useTranslation('sharedGames2');
   const step = task.steps[0];
   const options = step?.options ?? [];
 
@@ -33,8 +35,8 @@ export function VideoChoiceGame({ task, onComplete, onBack, theme = 'orange', or
   const closeVideo = useCallback(() => setPlayingIndex(null), []);
 
   const handleFinish = useCallback(() => {
-    onComplete([{ answer: 'Просмотр', correct: true, explanation: '' }]);
-  }, [onComplete]);
+    onComplete([{ answer: t("Просмотр"), correct: true, explanation: '' }]);
+  }, [onComplete, t]);
 
   const overlaySizeClass = orientation === 'landscape' ? styles.overlayLandscape : styles.overlayPortrait;
   const playingOption = playingIndex !== null ? options[playingIndex] : null;
@@ -47,18 +49,18 @@ export function VideoChoiceGame({ task, onComplete, onBack, theme = 'orange', or
           {options.map((option, index) => (
             <div key={index} className={styles.optionItem}>
               <Button
-                label={option.text || `Вариант ${index + 1}`}
+                label={option.text ? t(option.text) : t("Вариант {{n}}", { n: index + 1 })}
                 type="big"
                 className={styles.optionButton}
                 onClick={() => setPlayingIndex(index)}
               />
-              {option.name && <p className={styles.optionName}>{option.name}</p>}
+              {option.name && <p className={styles.optionName}>{t(option.name)}</p>}
             </div>
           ))}
         </div>
 
         <div className={styles.finishWrap}>
-          <Button label="Завершить" type="secondary" onClick={handleFinish} />
+          <Button label={t("Завершить")} type="secondary" onClick={handleFinish} />
         </div>
       </div>
 
@@ -70,7 +72,7 @@ export function VideoChoiceGame({ task, onComplete, onBack, theme = 'orange', or
         >
           <div className={styles.videoInner} onClick={(e) => e.stopPropagation()}>
             <Player
-              title={playingOption.name || playingOption.text || ''}
+              title={playingOption.name ? t(playingOption.name) : playingOption.text ? t(playingOption.text) : ''}
               state="playing"
               orientation="horizontal"
               src={playingOption.video}

@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useId, useMemo, useRef, useState, type CSSProperties } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Background, Button } from '../../../components/ui';
 import type { Task } from '../../../types/game';
 import { GameInstruction } from '../GameInstruction';
@@ -29,6 +30,7 @@ const HINT_INTERVAL_MS = 900;
  * После просмотра всех пяти — автозавершение.
  */
 export function CompareGame({ task, onComplete, onBack, theme = 'orange', orientation = 'portrait' }: GameProps) {
+  const { t } = useTranslation('sharedGames1');
   const step = task.steps[0];
   const options = useMemo(() => step?.options ?? [], [step]);
   const baseImage = step?.image;
@@ -137,13 +139,13 @@ export function CompareGame({ task, onComplete, onBack, theme = 'orange', orient
           )}
         </div>
 
-        {activeOption && <p className={styles.explanation}>{activeOption.explanation}</p>}
+        {activeOption && <p className={styles.explanation}>{t(activeOption.explanation)}</p>}
 
         <div className={styles.buttonsRow}>
           {options.map((option, index) => (
             <Button
               key={index}
-              label={option.text || `Вариант ${index + 1}`}
+              label={option.text ? t(option.text) : t("Вариант {{n}}", { n: index + 1 })}
               type="secondary"
               pressed={activeIndex === index}
               className={hintIndex === index ? styles.hintPulse : undefined}

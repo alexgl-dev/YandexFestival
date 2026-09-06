@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Background, Button, Icon, IconButton, InfoButton, PopUp } from '../../../components/ui';
 import type { Task, CalendarCardData } from '../../../types/game';
 import { getWeekDays } from '../../../utils/calendarDays';
@@ -9,13 +10,13 @@ import styles from './CalendarGamePortrait.module.css';
 const SLOT_COUNT = 18;    // 9:00 → 18:00
 const PADDING_V  = 48;    // space before 9:00 and after 18:00
 
-const formatDuration = (slots: number) => {
+const formatDuration = (slots: number, t: (key: string, opts?: Record<string, unknown>) => string) => {
   const min = slots * 30;
-  if (min < 60) return `${min} минут`;
+  if (min < 60) return t("{{min}} минут", { min });
   const h = min / 60;
-  if (h === 1) return '1 час';
-  if (h < 5) return `${h} часа`;
-  return `${h} часов`;
+  if (h === 1) return t("1 час");
+  if (h < 5) return t("{{h}} часа", { h });
+  return t("{{h}} часов", { h });
 };
 
 const slotToTime = (slot: number) => {
@@ -63,6 +64,7 @@ interface Props {
 type Placement = { day: string; startSlot: number };
 
 export function CalendarGamePortrait({ task, onComplete, onBack, theme = 'orange' }: Props) {
+  const { t } = useTranslation('sharedGames1');
   const step = task.steps[0];
   const allCards: CalendarCardData[] = step?.calendarCards ?? [];
   const taskCards = allCards.filter(c => !c.isAnchor);
@@ -192,7 +194,7 @@ export function CalendarGamePortrait({ task, onComplete, onBack, theme = 'orange
 
         {/* ══ LEFT: fixed task pool ══ */}
         <div className={styles.pool}>
-          <p className={styles.poolTitle}>Задачи</p>
+          <p className={styles.poolTitle}>{t("Задачи")}</p>
           <div className={styles.poolList}>
             {taskCards.map(card => {
               const placed = !!placements[card.id];
@@ -231,7 +233,7 @@ export function CalendarGamePortrait({ task, onComplete, onBack, theme = 'orange
                   }}
                 >
                   <div className={styles.poolCardHeader}>
-                    <p className={styles.poolCardTitle}>{card.title}</p>
+                    <p className={styles.poolCardTitle}>{t(card.title)}</p>
                     <InfoButton
                       size="sm"
                       variant="dark"
@@ -240,10 +242,10 @@ export function CalendarGamePortrait({ task, onComplete, onBack, theme = 'orange
                   </div>
                   <div className={styles.poolCardDurationRow}>
                     <Icon name="clock" color="blue" size="xs" />
-                    <span className={styles.poolCardDurationText}>{formatDuration(card.durationSlots)}</span>
+                    <span className={styles.poolCardDurationText}>{formatDuration(card.durationSlots, t)}</span>
                   </div>
                   {ok === false && !placements[card.id] && (
-                    <p className={styles.wrongNote}>{card.wrongExplanation}</p>
+                    <p className={styles.wrongNote}>{t(card.wrongExplanation ?? '')}</p>
                   )}
                 </div>
               );
@@ -252,7 +254,7 @@ export function CalendarGamePortrait({ task, onComplete, onBack, theme = 'orange
 
           {!showResult && allPlaced && (
             <div className={styles.checkWrap}>
-              <Button label="Проверить" type="secondary" onClick={handleCheck} />
+              <Button label={t("Проверить")} type="secondary" onClick={handleCheck} />
             </div>
           )}
         </div>
@@ -266,7 +268,7 @@ export function CalendarGamePortrait({ task, onComplete, onBack, theme = 'orange
               className={styles.dayNavBtn}
               disabled={activeDayIdx === 0}
               onClick={() => setActiveDayIdx(i => Math.max(0, i - 1))}
-              aria-label="Предыдущий день"
+              aria-label={t("Предыдущий день")}
             >
               <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
                 <polyline points="15 6 9 12 15 18" />
@@ -281,7 +283,7 @@ export function CalendarGamePortrait({ task, onComplete, onBack, theme = 'orange
               className={styles.dayNavBtn}
               disabled={activeDayIdx === DAYS.length - 1}
               onClick={() => setActiveDayIdx(i => Math.min(DAYS.length - 1, i + 1))}
-              aria-label="Следующий день"
+              aria-label={t("Следующий день")}
             >
               <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
                 <polyline points="9 6 15 12 9 18" />
@@ -347,10 +349,10 @@ export function CalendarGamePortrait({ task, onComplete, onBack, theme = 'orange
                         className={`${styles.previewCard} ${compact ? styles.eventCardCompact : ''}`}
                         style={{ top: PADDING_V + previewSlots[0] * slotH + 2, height: previewSlots.length * slotH - 4 }}
                       >
-                        <span className={`${styles.cardTitle} ${compact ? styles.cardTitleClamped : ''}`}>{draggingCard.title}</span>
+                        <span className={`${styles.cardTitle} ${compact ? styles.cardTitleClamped : ''}`}>{t(draggingCard.title)}</span>
                         <div className={styles.cardMeta}>
                           <Icon name="clock" color="blue" size="xs" />
-                          <span className={styles.cardDuration}>{formatDuration(draggingCard.durationSlots)}</span>
+                          <span className={styles.cardDuration}>{formatDuration(draggingCard.durationSlots, t)}</span>
                         </div>
                       </div>
                     );
@@ -365,10 +367,10 @@ export function CalendarGamePortrait({ task, onComplete, onBack, theme = 'orange
                         style={{ top: PADDING_V + (card.anchorStartSlot ?? 0) * slotH + 2, height: card.durationSlots * slotH - 4 }}
                         onClick={e => { e.stopPropagation(); setTooltipCard(card); }}
                       >
-                        <span className={`${styles.cardTitle} ${compact ? styles.cardTitleClamped : ''}`}>{card.title}</span>
+                        <span className={`${styles.cardTitle} ${compact ? styles.cardTitleClamped : ''}`}>{t(card.title)}</span>
                         <div className={styles.cardMeta}>
                           <Icon name="clock" color="blue" size="xs" />
-                          <span className={styles.cardDuration}>{formatDuration(card.durationSlots)}</span>
+                          <span className={styles.cardDuration}>{formatDuration(card.durationSlots, t)}</span>
                         </div>
                       </div>
                     );
@@ -399,10 +401,10 @@ export function CalendarGamePortrait({ task, onComplete, onBack, theme = 'orange
                         onDragEnd={() => { setDraggingId(null); setHoverSlot(null); }}
                         onClick={e => handlePlacedCardClick(card.id, e)}
                       >
-                        <span className={`${styles.cardTitle} ${compact ? styles.cardTitleClamped : ''}`}>{card.title}</span>
+                        <span className={`${styles.cardTitle} ${compact ? styles.cardTitleClamped : ''}`}>{t(card.title)}</span>
                         <div className={styles.cardMeta}>
                           <Icon name="clock" color="blue" size="xs" />
-                          <span className={styles.cardDuration}>{formatDuration(card.durationSlots)}</span>
+                          <span className={styles.cardDuration}>{formatDuration(card.durationSlots, t)}</span>
                         </div>
                         {!lockedCorrect && <span className={styles.removeHint}>✕</span>}
                       </div>
@@ -421,19 +423,19 @@ export function CalendarGamePortrait({ task, onComplete, onBack, theme = 'orange
         <div className={styles.overlay} onClick={() => setTooltipCard(null)}>
           <div onClick={e => e.stopPropagation()}>
             <PopUp
-              title={tooltipCard.title}
+              title={t(tooltipCard.title)}
               description={
                 <div className={styles.tooltipDescription}>
                   {!tooltipCard.isAnchor && (
                     <div className={styles.tooltipDuration}>
                       <Icon name="clock" color="blue" size="xs" />
-                      <span>{formatDuration(tooltipCard.durationSlots)}</span>
+                      <span>{formatDuration(tooltipCard.durationSlots, t)}</span>
                     </div>
                   )}
-                  <span>{tooltipCard.tooltip}</span>
+                  <span>{t(tooltipCard.tooltip)}</span>
                 </div>
               }
-              buttonLabel="Понятно"
+              buttonLabel={t("Понятно")}
               onButtonClick={() => setTooltipCard(null)}
             />
           </div>
@@ -445,13 +447,13 @@ export function CalendarGamePortrait({ task, onComplete, onBack, theme = 'orange
           <PopUp
             icon={allCorrect ? 'done' : 'close'}
             iconColor={allCorrect ? 'blue' : 'red'}
-            title={allCorrect ? 'Неделя спланирована точно!' : `${correctCount} из ${taskCards.length} верно`}
+            title={allCorrect ? t("Неделя спланирована точно!") : t("{{correctCount}} из {{total}} верно", { correctCount, total: taskCards.length })}
             description={
               allCorrect
-                ? 'Петя успел передать дела до отпуска, презентация готова к хуралу, стажёр получил инструктаж, а команда пообедала вместе.'
-                : 'Неверные задачи вернулись в список слева. Там же написано, что не так. Верные остались в календаре — расставь остальное заново и снова нажми «Проверить».'
+                ? t("Петя успел передать дела до отпуска, презентация готова к хуралу, стажёр получил инструктаж, а команда пообедала вместе.")
+                : t("Неверные задачи вернулись в список слева. Там же написано, что не так. Верные остались в календаре — расставь остальное заново и снова нажми «Проверить».")
             }
-            buttonLabel={allCorrect ? 'Результаты' : 'Посмотреть ошибки'}
+            buttonLabel={allCorrect ? t("Результаты") : t("Посмотреть ошибки")}
             onButtonClick={() => {
               setShowResult(false);
               if (allCorrect) onComplete([{ correct: true, answer: '', explanation: '' }]);

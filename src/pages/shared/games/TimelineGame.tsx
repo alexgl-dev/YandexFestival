@@ -1,4 +1,5 @@
 import { useCallback, useMemo, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Background, Button } from '../../../components/ui';
 import type { Task } from '../../../types/game';
 import { GameInstruction } from '../GameInstruction';
@@ -25,6 +26,7 @@ interface GameProps {
  * Индекс 0 — самая ранняя эпоха (верх шкалы), последний индекс — настоящее время (низ шкалы).
  */
 export function TimelineGame({ task, onComplete, onBack, theme = 'orange', orientation = 'portrait' }: GameProps) {
+  const { t } = useTranslation('sharedGames2');
   const step = task.steps[0];
 
   const blocks = useMemo(
@@ -69,12 +71,12 @@ export function TimelineGame({ task, onComplete, onBack, theme = 'orange', orien
   const handleFinish = useCallback(() => {
     onComplete([
       {
-        answer: current?.text ?? '',
+        answer: current?.text ? t(current.text) : '',
         correct: true,
-        explanation: 'Исследование истории рекламы завершено.',
+        explanation: t("Исследование истории рекламы завершено."),
       },
     ]);
-  }, [current, onComplete]);
+  }, [current, onComplete, t]);
 
   if (!current) return null;
 
@@ -99,7 +101,7 @@ export function TimelineGame({ task, onComplete, onBack, theme = 'orange', orien
                 className={`${styles.tick} ${i === index ? styles.tickActive : ''}`}
                 style={{ top: lastIndex > 0 ? `${(i / lastIndex) * 100}%` : '0%' }}
                 onClick={() => setIndex(i)}
-                aria-label={block.text}
+                aria-label={t(block.text ?? '')}
               />
             ))}
             <div
@@ -113,18 +115,18 @@ export function TimelineGame({ task, onComplete, onBack, theme = 'orange', orien
           <p className={styles.counter}>{index + 1} / {blocks.length}</p>
 
           <div className={styles.card}>
-            <span className={styles.badge}>{current.text}</span>
+            <span className={styles.badge}>{t(current.text ?? '')}</span>
             <div className={`${styles.description} ui-scrollbar`}>
-              <p className={styles.descriptionText}>{current.description}</p>
+              <p className={styles.descriptionText}>{t(current.description ?? '')}</p>
             </div>
           </div>
 
           <div className={styles.navRow}>
-            <Button label="Назад" type="secondary" onClick={goPrev} className={index === 0 ? styles.navDisabled : ''} />
-            <Button label="Вперёд" type="secondary" onClick={goNext} className={index === lastIndex ? styles.navDisabled : ''} />
+            <Button label={t("Назад")} type="secondary" onClick={goPrev} className={index === 0 ? styles.navDisabled : ''} />
+            <Button label={t("Вперёд")} type="secondary" onClick={goNext} className={index === lastIndex ? styles.navDisabled : ''} />
           </div>
 
-          <Button label="Завершить исследование" type="secondary" onClick={handleFinish} />
+          <Button label={t("Завершить исследование")} type="secondary" onClick={handleFinish} />
         </div>
       </div>
     </Background>

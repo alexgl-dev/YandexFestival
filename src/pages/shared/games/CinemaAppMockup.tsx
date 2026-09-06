@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import styles from './CinemaAppMockup.module.css';
 
 export type CinemaZoneId =
@@ -43,6 +44,7 @@ export function CinemaAppMockup({
   zoneResults,
   onZoneClick,
 }: CinemaAppMockupProps) {
+  const { t } = useTranslation('sharedGames1');
   const interactive = !!onZoneClick;
 
   const zoneClass = (id: CinemaZoneId) => {
@@ -89,7 +91,7 @@ export function CinemaAppMockup({
             className={`${styles.regBtn} ${zoneClass('reg-btn')}`}
             onClick={click('reg-btn')}
           >
-            зарегистрироваться
+            {t("зарегистрироваться")}
             {badge('reg-btn')}
           </span>
 
@@ -138,7 +140,7 @@ export function CinemaAppMockup({
       </div>
 
       {/* ─── Section heading ─── */}
-      <p className={styles.heading}>Как купить билет</p>
+      <p className={styles.heading}>{t("Как купить билет")}</p>
 
       {/* ─── Step cards row ─── */}
       <div className={styles.stepsRow}>
@@ -157,7 +159,7 @@ export function CinemaAppMockup({
             <circle cx="15" cy="36" r="2" fill="#fbcb2a" />
             <circle cx="24" cy="36" r="2" fill="#fbcb2a" />
           </svg>
-          <span className={styles.stepLabel}>Выберите дату</span>
+          <span className={styles.stepLabel}>{t("Выберите дату")}</span>
           {badge('calendar-dates')}
         </div>
 
@@ -172,7 +174,7 @@ export function CinemaAppMockup({
             <line x1="6" y1="20" x2="42" y2="20" stroke="rgba(255,255,255,0.22)" strokeWidth="3.2" />
             <line x1="12" y1="30" x2="20" y2="30" stroke="rgba(255,255,255,0.22)" strokeWidth="2.4" strokeLinecap="round" />
           </svg>
-          <span className={styles.stepLabelPale}>Оплатите билет</span>
+          <span className={styles.stepLabelPale}>{t("Оплатите билет")}</span>
           {badge('payment-btn')}
         </div>
 
@@ -187,7 +189,7 @@ export function CinemaAppMockup({
             <line x1="16" y1="42" x2="32" y2="42" stroke="#fbcb2a" strokeWidth="3.2" strokeLinecap="round" />
             <line x1="24" y1="34" x2="24" y2="42" stroke="#fbcb2a" strokeWidth="3.2" />
           </svg>
-          <span className={styles.stepLabel}>Идите в кино</span>
+          <span className={styles.stepLabel}>{t("Идите в кино")}</span>
           {badge('purchase-steps')}
         </div>
       </div>
@@ -197,7 +199,7 @@ export function CinemaAppMockup({
         className={`${styles.scheduleBtn} ${zoneClass('schedule-btn')}`}
         onClick={click('schedule-btn')}
       >
-        <span>Расписание фильмов</span>
+        <span>{t("Расписание фильмов")}</span>
         <span className={styles.scheduleArrow}>→</span>
         {badge('schedule-btn')}
       </div>

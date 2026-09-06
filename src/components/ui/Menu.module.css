@@ -46,3 +46,39 @@
 .menuItem:active {
   background-color: var(--color-grey-card);
 }
+
+/* --- Language switcher: pill top-right, mirrors back button offsets --- */
+.languageSwitcher {
+  position: absolute;
+  top: var(--spacing-2xl);
+  right: var(--spacing-2xl);
+  z-index: 2;
+  display: flex;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-xs);
+  border-radius: var(--radius-full);
+  background-color: var(--color-overlay-white-20);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+}
+
+.langButton {
+  min-width: 76px;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  border: none;
+  border-radius: var(--radius-full);
+  background-color: transparent;
+  color: var(--color-white);
+  font-family: var(--font-family-text);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-tight);
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+}
+
+.langButtonActive,
+.langButton:active {
+  background-color: var(--color-white);
+  color: var(--color-black);
+}

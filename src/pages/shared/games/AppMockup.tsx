@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import styles from './AppMockup.module.css';
 import { ZONES, ZONE_RECTS } from './appMockupZones';
 
@@ -14,6 +15,7 @@ interface AppMockupProps {
 }
 
 export function AppMockup({ selectedZones, selectedOrder, zoneResults, onZoneClick }: AppMockupProps) {
+  const { t } = useTranslation('sharedGames1');
   const visualSelectedZones = FORCE_ALL_SELECTED
     ? new Set<string>(ZONES.map((z) => z.id))
     : selectedZones;
@@ -61,7 +63,7 @@ export function AppMockup({ selectedZones, selectedOrder, zoneResults, onZoneCli
       <div className={styles.header}>
         <span className={styles.logo}>CINEMA GO</span>
         <div className={styles.regBtn}>
-          Зарегистрироваться
+          {t("Зарегистрироваться")}
         </div>
       </div>
 
@@ -69,7 +71,7 @@ export function AppMockup({ selectedZones, selectedOrder, zoneResults, onZoneCli
       <div className={styles.heroBlock}>
         <img
           src="/assets/games/001/ux-review-hero.png"
-          alt="Афиша фильма"
+          alt={t("Афиша фильма")}
           className={styles.heroImg}
         />
         <div className={styles.description} />
@@ -79,7 +81,7 @@ export function AppMockup({ selectedZones, selectedOrder, zoneResults, onZoneCli
       <div className={styles.profileRow}>
         <img
           src="/assets/games/001/ux-review-profile.png"
-          alt="Профиль и заголовок"
+          alt={t("Профиль и заголовок")}
           className={styles.profileImg}
         />
       </div>
@@ -88,7 +90,7 @@ export function AppMockup({ selectedZones, selectedOrder, zoneResults, onZoneCli
       <div className={styles.steps}>
         <img
           src="/assets/games/001/ux-review-steps.png"
-          alt="Шаги покупки билета"
+          alt={t("Шаги покупки билета")}
           className={styles.stepsImg}
         />
       </div>
@@ -97,7 +99,7 @@ export function AppMockup({ selectedZones, selectedOrder, zoneResults, onZoneCli
       <div className={styles.buttons}>
         <img
           src="/assets/games/001/ux-review-buttons.png"
-          alt="Кнопки"
+          alt={t("Кнопки")}
           className={styles.buttonsImg}
         />
       </div>
@@ -106,7 +108,7 @@ export function AppMockup({ selectedZones, selectedOrder, zoneResults, onZoneCli
       <div className={styles.promo}>
         <img
           src="/assets/games/001/ux-review-promo.png"
-          alt="Акция"
+          alt={t("Акция")}
           className={styles.promoImg}
         />
       </div>
@@ -115,7 +117,7 @@ export function AppMockup({ selectedZones, selectedOrder, zoneResults, onZoneCli
       <div className={styles.bottomNav}>
         <img
           src="/assets/games/001/ux-review-nav.png"
-          alt="Навигация"
+          alt={t("Навигация")}
           className={styles.navImg}
         />
       </div>

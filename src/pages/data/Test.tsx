@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, useOutletContext } from 'react-router';
+import { useTranslation } from 'react-i18next';
 import { Background, Button, Card, PopUp } from '../../components/ui';
 
 import type { SectionData } from '../../types/game';
@@ -11,6 +12,7 @@ export function Test() {
   const navigate = useNavigate();
   const data = useOutletContext<SectionData>();
   const bingo = data.bingo;
+  const { t } = useTranslation('data');
 
   const [phase, setPhase] = useState<Phase>('intro');
   const [answers, setAnswers] = useState<Record<number, string>>({});
@@ -23,8 +25,8 @@ export function Test() {
     return (
       <Background theme="cobalt" orientation="landscape" onBack={handleBack} backShowLabel={false}>
         <div className={styles.wrapper}>
-          <h2 className={styles.title}>Бинго</h2>
-          <p className={styles.placeholder}>Бинго в разработке</p>
+          <h2 className={styles.title}>{t("Бинго")}</h2>
+          <p className={styles.placeholder}>{t("Бинго в разработке")}</p>
         </div>
       </Background>
     );
@@ -73,10 +75,10 @@ export function Test() {
       <Background theme="cobalt" orientation="landscape" onBack={handleBack} backShowLabel={false}>
         <div className={styles.wrapper}>
           <div className={styles.card}>
-            <p className={styles.introText}>{bingo.intro}</p>
-            <p className={styles.instructionText}>{bingo.instruction}</p>
+            <p className={styles.introText}>{t(bingo.intro)}</p>
+            <p className={styles.instructionText}>{t(bingo.instruction)}</p>
           </div>
-          <Button label="Начать" type="big_white" onClick={() => setPhase('questions')} />
+          <Button label={t("Начать")} type="big_white" onClick={() => setPhase('questions')} />
         </div>
       </Background>
     );
@@ -87,16 +89,16 @@ export function Test() {
     return (
       <Background theme="cobalt" orientation="landscape" onBack={handleBack} backShowLabel={false}>
         <div className={styles.questionsLayout}>
-          <p className={styles.questionPrompt}>{currentQuestion.prompt}</p>
+          <p className={styles.questionPrompt}>{t(currentQuestion.prompt)}</p>
 
           <div className={styles.optionsGrid}>
             {currentQuestion.options.map((option) => {
-              
+
               return (
                 <Card
                   key={option}
                   variant=""
-                  title={option}
+                  title={t(option)}
                   description=""
                   size="m"
                   state={currentAnswer === option ? 'pressed' : 'default'}
@@ -108,14 +110,14 @@ export function Test() {
 
           <div className={styles.bottomRow}>
             <div className={styles.bottomLeft}>
-              <Button label="Назад" type="secondary" onClick={handleQuestionBack} />
+              <Button label={t("Назад")} type="secondary" onClick={handleQuestionBack} />
               <span className={styles.pageCounter}>
                 {questionIndex + 1} / {totalQuestions}
               </span>
             </div>
             {currentAnswer && (
               <Button
-                label={isLastQuestion && allAnswered ? 'Посмотреть результат' : 'Далее'}
+                label={isLastQuestion && allAnswered ? t("Посмотреть результат") : t("Далее")}
                 type="secondary"
                 onClick={handleNext}
               />
@@ -136,9 +138,9 @@ export function Test() {
               if (cellIndex === 4) {
                 return (
                   <div key={cellIndex} className={styles.cellCenter}>
-                    <span className={styles.cellCenterBadge}>Эксперт</span>
-                    <span className={styles.cellCenterName}>{bingo.expert.name}</span>
-                    <span className={styles.cellCenterRole}>{bingo.expert.role}</span>
+                    <span className={styles.cellCenterBadge}>{t("Эксперт")}</span>
+                    <span className={styles.cellCenterName}>{t(bingo.expert.name)}</span>
+                    <span className={styles.cellCenterRole}>{t(bingo.expert.role)}</span>
                   </div>
                 );
               }
@@ -162,7 +164,7 @@ export function Test() {
                           : 'var(--color-orange)',
                       }}
                     >
-                      <span className={styles.cellLabel}>{label}</span>
+                      <span className={styles.cellLabel}>{t(label)}</span>
                     </div>
                   </div>
                 </div>
@@ -174,14 +176,14 @@ export function Test() {
         <div className={styles.resultSide}>
           <Card
             variant=""
-            title="Бинго!"
-            description={bingo.resultText}
+            title={t("Бинго!")}
+            description={t(bingo.resultText)}
             size="m"
             state="default"
             className={`${styles.resultCard} ${styles.resultCardMain}`}
           />
           <Button
-            label="В главное меню"
+            label={t("В главное меню")}
             type="secondary"
             onClick={() => navigate(`/${data.slug}`)}
           />
@@ -197,12 +199,12 @@ export function Test() {
               <PopUp
                 icon={cellData.isMatch ? 'done' : 'close'}
                 iconColor={cellData.isMatch ? 'blue' : 'red'}
-                title={cellData.label}
+                title={t(cellData.label)}
                 description={
-                  (cellData.question?.expertAnswer ? `${cellData.question.expertAnswer}\n\n` : '') +
-                  (cellData.question?.expertComment ?? '')
+                  (cellData.question?.expertAnswer ? `${t(cellData.question.expertAnswer)}\n\n` : '') +
+                  (cellData.question?.expertComment ? t(cellData.question.expertComment) : '')
                 }
-                buttonLabel="Закрыть"
+                buttonLabel={t("Закрыть")}
                 onButtonClick={() => setPopupCell(null)}
               />
             </div>

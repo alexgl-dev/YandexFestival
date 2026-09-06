@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Background, Card, PopUp } from '../../../components/ui';
 import type { Task, TaskOption } from '../../../types/game';
 import { GameInstruction } from '../GameInstruction';
@@ -18,9 +19,10 @@ interface GameProps {
   orientation?: 'landscape' | 'portrait';
 }
 
-const VARIANT_LABELS = ['Вариант A', 'Вариант B', 'Вариант C', 'Вариант D', 'Вариант E', 'Вариант F'];
+const VARIANT_LETTERS = ['A', 'B', 'C', 'D', 'E', 'F'];
 
 export function FindGame({ task, onComplete, onBack, theme = 'orange', orientation = 'portrait' }: GameProps) {
+  const { t } = useTranslation('sharedGames2');
   const [currentStep, setCurrentStep] = useState(0);
   const [selected, setSelected] = useState<number | null>(null);
   const [disabledOptions, setDisabledOptions] = useState<Set<number>>(new Set());
@@ -37,6 +39,9 @@ export function FindGame({ task, onComplete, onBack, theme = 'orange', orientati
   const totalSteps = steps.length;
   const isLastStep = currentStep >= totalSteps - 1;
 
+  const variantLabel = (index: number) =>
+    VARIANT_LETTERS[index] ? t("Вариант {{letter}}", { letter: VARIANT_LETTERS[index] }) : t("Вариант {{n}}", { n: index + 1 });
+
   const handleSelect = useCallback((index: number) => {
     if (disabledOptions.has(index)) return;
     if (selected !== null) return;
@@ -52,13 +57,13 @@ export function FindGame({ task, onComplete, onBack, theme = 'orange', orientati
 
     if (option.correct) {
       const result: GameResult = {
-        answer: option.text || VARIANT_LABELS[index] || `Вариант ${index + 1}`,
+        answer: option.text ? t(option.text) : variantLabel(index),
         correct: true,
-        explanation: option.explanation,
+        explanation: t(option.explanation),
       };
       setResults((prev) => [...prev, result]);
     }
-  }, [selected, disabledOptions, options, task.feedback]);
+  }, [selected, disabledOptions, options, task.feedback, t]);
 
   const handlePopupAction = useCallback(() => {
     setShowPopup(false);
@@ -98,15 +103,15 @@ export function FindGame({ task, onComplete, onBack, theme = 'orange', orientati
   }, [selected, disabledOptions]);
 
   const getPopupDescription = useCallback((option: TaskOption): string => {
-    if (option.correct) return option.explanation;
+    if (option.correct) return t(option.explanation);
     // first wrong attempt: show hint (prefer per-option hint, fallback to step-level);
     // subsequent wrong attempts: show specific explanation of the clicked option
     const wrongCount = wrongCountPerStep[currentStep] ?? 0;
     if (wrongCount === 0) {
-      return option.hint ?? step?.hints ?? option.explanation;
+      return t(option.hint ?? step?.hints ?? option.explanation);
     }
-    return option.explanation;
-  }, [wrongCountPerStep, currentStep, step]);
+    return t(option.explanation);
+  }, [wrongCountPerStep, currentStep, step, t]);
 
   if (!step) return null;
 
@@ -121,8 +126,8 @@ export function FindGame({ task, onComplete, onBack, theme = 'orange', orientati
           const [appName, ...rest] = lines;
           return (
             <div className={styles.promptBlock}>
-              {appName && <p className={styles.promptAppName}>{appName}</p>}
-              {rest.length > 0 && <p className={styles.prompt}>{rest.join('\n')}</p>}
+              {appName && <p className={styles.promptAppName}>{t(appName)}</p>}
+              {rest.length > 0 && <p className={styles.prompt}>{t(rest.join('\n'))}</p>}
             </div>
           );
         })()}
@@ -132,7 +137,7 @@ export function FindGame({ task, onComplete, onBack, theme = 'orange', orientati
             {step.image ? (
               <img
                 src={step.image}
-                alt={step.prompt || 'Изображение Задачи на день'}
+                alt={step.prompt ? t(step.prompt) : t("Изображение Задачи на день")}
                 className={styles.image}
               />
             ) : (
@@ -144,8 +149,8 @@ export function FindGame({ task, onComplete, onBack, theme = 'orange', orientati
             {options.map((option, index) => (
               <Card
                 key={index}
-                variant={VARIANT_LABELS[index] || `Вариант ${index + 1}`}
-                title={option.text || ''}
+                variant={variantLabel(index)}
+                title={option.text ? t(option.text) : ''}
                 description=""
                 hint={option.hint}
                 size="m"
@@ -161,12 +166,12 @@ export function FindGame({ task, onComplete, onBack, theme = 'orange', orientati
             <PopUp
               icon={selectedOption.correct ? 'done' : 'close'}
               iconColor={selectedOption.correct ? 'blue' : 'red'}
-              title={selectedOption.correct ? 'Верно!' : 'Не совсем...'}
+              title={selectedOption.correct ? t("Верно!") : t("Не совсем...")}
               description={getPopupDescription(selectedOption)}
               buttonLabel={
                 selectedOption.correct
-                  ? (isLastStep ? 'Результаты' : 'Дальше')
-                  : 'Попробуй ещё раз'
+                  ? (isLastStep ? t("Результаты") : t("Дальше"))
+                  : t("Попробуй ещё раз")
               }
               onButtonClick={handlePopupAction}
             />

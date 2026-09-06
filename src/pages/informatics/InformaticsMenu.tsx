@@ -1,4 +1,5 @@
 import { useNavigate, useOutletContext } from 'react-router';
+import { useTranslation } from 'react-i18next';
 import { Menu } from '../../components/ui';
 import type { SectionData } from '../../types/game';
 import { blockPath } from '../blocks/blocks';
@@ -9,15 +10,16 @@ import { blockPath } from '../blocks/blocks';
  */
 export function InformaticsMenu() {
   const navigate = useNavigate();
+  const { t } = useTranslation('informatics');
   const data = useOutletContext<SectionData>();
 
   const items = [
     ...(data.videos.length > 0
-      ? [{ label: 'Познакомься со специалистом', onClick: () => navigate(`/${data.slug}/videos`) }]
+      ? [{ label: t("Познакомься со специалистом"), onClick: () => navigate(`/${data.slug}/videos`) }]
       : []),
     ...data.tasks
-      .filter((t) => !t.hidden)
-      .map((t) => ({ label: t.title, onClick: () => navigate(`/${data.slug}/tasks/${t.id}`) })),
+      .filter((task) => !task.hidden)
+      .map((task) => ({ label: t(task.title), onClick: () => navigate(`/${data.slug}/tasks/${task.id}`) })),
   ];
 
   return (

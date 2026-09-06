@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback, useMemo, useRef, type ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Background, Button, PopUp } from '../../../components/ui';
 import type { Task } from '../../../types/game';
 import { GameInstruction } from '../GameInstruction';
@@ -109,6 +110,7 @@ export function CodeSequenceGame({
   theme = 'cobalt',
   orientation = 'landscape',
 }: GameProps) {
+  const { t } = useTranslation('sharedGames1');
   const step = task.steps[0];
   const blocks = step?.blocks ?? [];
   const briefingSource = (
@@ -275,18 +277,19 @@ export function CodeSequenceGame({
     return {
       correct: allCorrect,
       answer: slots
-        .map((idx) => (idx !== null ? blocks[idx].text || `Блок ${idx + 1}` : '?'))
+        .map((idx) => (idx !== null ? blocks[idx].text || t("Блок {{n}}", { n: idx + 1 }) : '?'))
         .join(' → '),
       explanation: allCorrect
-        ? 'Правильная последовательность!'
-        : 'Правильный порядок: ' +
-          blocks
-            .filter((b) => b.order !== null)
-            .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
-            .map((b) => b.text || '')
-            .join(' → '),
+        ? t("Правильная последовательность!")
+        : t("Правильный порядок: {{sequence}}", {
+            sequence: blocks
+              .filter((b) => b.order !== null)
+              .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
+              .map((b) => b.text || '')
+              .join(' → '),
+          }),
     };
-  }, [slotResults, slots, blocks]);
+  }, [slotResults, slots, blocks, t]);
 
   const overlayDimClass =
     orientation === 'portrait' ? styles.overlayPortrait : styles.overlayLandscape;
@@ -345,9 +348,9 @@ export function CodeSequenceGame({
                 setTooltip(null);
                 setBriefingOpen(true);
               }}
-              aria-label="Открыть подсказку робота"
+              aria-label={t("Открыть подсказку робота")}
             >
-              <img src={robotSrc} alt="Робот" className={styles.robotImg} />
+              <img src={robotSrc} alt={t("Робот")} className={styles.robotImg} />
             </button>
             <button
               type="button"
@@ -358,7 +361,7 @@ export function CodeSequenceGame({
                 setBriefingOpen(true);
               }}
             >
-              Инструкция
+              {t("Инструкция")}
             </button>
           </div>
         ) : null}
@@ -369,7 +372,7 @@ export function CodeSequenceGame({
         ) : null}
         <div className={styles.playArea}>
         <div className={styles.poolRow}>
-          <p className={styles.zoneLabel}>Кусочки кода</p>
+          <p className={styles.zoneLabel}>{t("Кусочки кода")}</p>
           <div className={styles.pool}>
             {pool.map((bIdx, pos) => {
               if (bIdx === null) return null;
@@ -402,7 +405,7 @@ export function CodeSequenceGame({
         </div>
 
         <div className={styles.slotsRow}>
-          <p className={styles.zoneLabel}>Правильный порядок</p>
+          <p className={styles.zoneLabel}>{t("Правильный порядок")}</p>
           <div className={styles.slots}>
             {slots.map((bIdx, sIdx) => {
               const result = slotResults[sIdx];
@@ -438,7 +441,7 @@ export function CodeSequenceGame({
                       renderCodeBlock(bIdx, false)
                     ) : (
                       <span className={styles.slotPlaceholder}>
-                        {selected !== null ? 'Отпусти здесь' : 'Шаг ' + (sIdx + 1)}
+                        {selected !== null ? t("Отпусти здесь") : t("Шаг {{n}}", { n: sIdx + 1 })}
                       </span>
                     )}
                   </div>
@@ -462,12 +465,12 @@ export function CodeSequenceGame({
           <div className={styles.briefingModal} onClick={(e) => e.stopPropagation()}>
             <div className={styles.briefingModalRow}>
               <div className={`${styles.robot} ${styles.robotMedium} ${styles[`mood_${mood}`]}`}>
-                <img src={robotSrc} alt="Робот" className={styles.robotImg} />
+                <img src={robotSrc} alt={t("Робот")} className={styles.robotImg} />
               </div>
               <div className={styles.briefingBubbleCol}>
                 {renderBubble('popup')}
                 <Button
-                  label="Закрыть"
+                  label={t("Закрыть")}
                   type="secondary"
                   onClick={() => {
                     setBriefingOpen(false);
@@ -485,11 +488,11 @@ export function CodeSequenceGame({
           <PopUp
             icon={getResult().correct ? 'done' : 'close'}
             iconColor={getResult().correct ? 'blue' : 'red'}
-            title={getResult().correct ? 'Потрясающе!' : 'Ой, не получилось!'}
+            title={getResult().correct ? t("Потрясающе!") : t("Ой, не получилось!")}
             description={getResult().correct
-              ? 'Благодаря тебе робот спасён! И никто не останется голодным ;-)'
-              : 'Сейчас не получилось, но ты совсем близко к правильной цепочке. Попробуй что-то поменять!'}
-            buttonLabel={getResult().correct ? 'Далее' : 'Попробовать ещё раз'}
+              ? t("Благодаря тебе робот спасён! И никто не останется голодным ;-)")
+              : t("Сейчас не получилось, но ты совсем близко к правильной цепочке. Попробуй что-то поменять!")}
+            buttonLabel={getResult().correct ? t("Далее") : t("Попробовать ещё раз")}
             onButtonClick={() => {
               if (getResult().correct) {
                 setShowPopup(false);
@@ -511,7 +514,7 @@ export function CodeSequenceGame({
             <PopUp
               title={tooltip.term.charAt(0).toUpperCase() + tooltip.term.slice(1)}
               description={tooltip.tip}
-              buttonLabel="Понятно"
+              buttonLabel={t("Понятно")}
               onButtonClick={() => setTooltip(null)}
               compact
             />

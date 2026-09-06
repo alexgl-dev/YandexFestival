@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import styles from './IconButton.module.css';
 
 export interface IconButtonProps {
@@ -26,6 +27,7 @@ export function IconButton({
   onClick,
   className,
 }: IconButtonProps) {
+  const { t } = useTranslation('common');
   const variantClass = variant === 'default' ? styles.blue : styles.light;
 
   if (type === 'back') {
@@ -34,10 +36,10 @@ export function IconButton({
         type="button"
         className={`${styles.back} ${!showLabel ? styles.backIconOnly : ''} ${variantClass} ${pressed ? styles.pressed : ''} ${className ?? ''}`}
         onClick={onClick}
-        aria-label="Назад"
+        aria-label={t("Назад")}
       >
         <img src="/icons/figma/back-arrow-white.svg" alt="" className={styles.backArrow} />
-        {showLabel && <span className={styles.backLabel}>Назад</span>}
+        {showLabel && <span className={styles.backLabel}>{t("Назад")}</span>}
       </button>
     );
   }
@@ -48,7 +50,7 @@ export function IconButton({
         type="button"
         className={`${styles.close} ${className ?? ''}`}
         onClick={onClick}
-        aria-label="Закрыть"
+        aria-label={t("Закрыть")}
       />
     );
   }
@@ -58,7 +60,7 @@ export function IconButton({
       type="button"
       className={`${styles.media} ${type === 'play' ? styles.play : styles.pause} ${className ?? ''}`}
       onClick={onClick}
-      aria-label={type === 'play' ? 'Играть' : 'Пауза'}
+      aria-label={type === 'play' ? t("Играть") : t("Пауза")}
     >
       {type === 'pause' && <img src="/icons/figma/pause-bars-white.svg" alt="" className={styles.pauseBars} />}
     </button>

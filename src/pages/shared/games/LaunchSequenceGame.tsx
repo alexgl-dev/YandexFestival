@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Background, Button, InfoButton, PopUp } from '../../../components/ui';
 import type { Task, TaskBlock } from '../../../types/game';
 import { GameInstruction } from '../GameInstruction';
@@ -152,6 +153,7 @@ export function LaunchSequenceGame({
   theme = 'orange',
   orientation = 'portrait',
 }: GameProps) {
+  const { t } = useTranslation('sharedGames2');
   const step = task.steps[0];
   const blocks = step?.blocks ?? [];
   const validIndices = blocks
@@ -283,7 +285,7 @@ export function LaunchSequenceGame({
 
         if (breakAt !== null) break;
 
-        const t = setTimeout(() => {
+        const timer = setTimeout(() => {
           if (groupCorrect) {
             setLitSlots((prev) => new Set([...prev, ...group]));
           } else {
@@ -296,7 +298,7 @@ export function LaunchSequenceGame({
             setLitWrongSlots((prev) => new Set([...prev, ...wrongInGroup]));
           }
         }, delay);
-        timers.push(t);
+        timers.push(timer);
 
         if (!groupCorrect) {
           breakAt = gi;
@@ -365,14 +367,14 @@ export function LaunchSequenceGame({
         if (newCount >= MAX_ATTEMPTS) {
           setShowFailed(true);
         } else {
-          setErrorMsg(ATTEMPT_HINTS[newCount - 1] ?? ATTEMPT_HINTS[ATTEMPT_HINTS.length - 1]);
+          setErrorMsg(t(ATTEMPT_HINTS[newCount - 1] ?? ATTEMPT_HINTS[ATTEMPT_HINTS.length - 1]));
           setShowError(true);
         }
       }
     };
 
-    const t = setTimeout(() => runAnimation(results, handleDone), 350);
-    timersRef.current.push(t);
+    const timer = setTimeout(() => runAnimation(results, handleDone), 350);
+    timersRef.current.push(timer);
   }, [allPlaced, checked, animating, slots, blocks, runAnimation, attemptCount]);
 
   const handleComplete = useCallback(() => {
@@ -382,7 +384,7 @@ export function LaunchSequenceGame({
         answer: slots
           .map((bIdx) => (bIdx !== null ? blocks[bIdx].text || '' : ''))
           .join(' → '),
-        explanation: 'Верная последовательность! Продукт запущен за 4 месяца.',
+        explanation: t("Верная последовательность! Продукт запущен за 4 месяца."),
       },
     ]);
   }, [slots, blocks, onComplete]);
@@ -435,7 +437,7 @@ export function LaunchSequenceGame({
           {block ? (
             <>
               <img src="/assets/games/003/launch/card-shape.svg" alt="" className={styles.slotBg} draggable={false} />
-              <p className={styles.slotTitle}>{block.text}</p>
+              <p className={styles.slotTitle}>{t(block.text ?? '')}</p>
             </>
           ) : (
             <>
@@ -457,10 +459,10 @@ export function LaunchSequenceGame({
         {/* Top row: placed counter + attempt counter */}
         <div className={styles.topRow}>
           <p className={styles.counter}>
-            Размещено: <span className={styles.counterNum}>{placedCount}</span> из {slotCount}
+            {t("Размещено:")} <span className={styles.counterNum}>{placedCount}</span> {t("из {{slotCount}}", { slotCount })}
           </p>
           <p className={styles.attemptCounter}>
-            Ошибки: <span className={styles.counterNum}>{attemptCount}</span>/{MAX_ATTEMPTS}
+            {t("Ошибки:")} <span className={styles.counterNum}>{attemptCount}</span>/{MAX_ATTEMPTS}
           </p>
         </div>
 
@@ -483,7 +485,7 @@ export function LaunchSequenceGame({
               <div key={bIdx} className={[styles.poolCardOuter, isSel ? styles.poolCardSelected : ''].filter(Boolean).join(' ')} style={{ transform: `rotate(${rot}deg)` }}>
                 <div className={styles.poolCard} onClick={() => handlePoolTap(bIdx)}>
                   <img src="/assets/games/003/launch/card-shape.svg" alt="" className={styles.poolCardBg} draggable={false} />
-                  <p className={styles.poolTitle}>{block.text}</p>
+                  <p className={styles.poolTitle}>{t(block.text ?? '')}</p>
                 </div>
                 <InfoButton size="sm" variant="dark" className={styles.infoBtn} onClick={(e) => handleInfoTap(bIdx, e)} />
               </div>
@@ -500,7 +502,7 @@ export function LaunchSequenceGame({
                 <div key={bIdx} className={[styles.poolCardOuter, isSel ? styles.poolCardSelected : ''].filter(Boolean).join(' ')} style={{ transform: `rotate(${rot}deg)` }}>
                   <div className={styles.poolCard} onClick={() => handlePoolTap(bIdx)}>
                     <img src="/assets/games/003/launch/card-shape.svg" alt="" className={styles.poolCardBg} draggable={false} />
-                    <p className={styles.poolTitle}>{block.text}</p>
+                    <p className={styles.poolTitle}>{t(block.text ?? '')}</p>
                   </div>
                   <InfoButton size="sm" variant="dark" className={styles.infoBtn} onClick={(e) => handleInfoTap(bIdx, e)} />
                 </div>
@@ -511,7 +513,7 @@ export function LaunchSequenceGame({
 
         {/* Timeline */}
         <div className={styles.timelineSection}>
-          <p className={styles.timelineHeading}>Таймлайн проекта</p>
+          <p className={styles.timelineHeading}>{t("Таймлайн проекта")}</p>
 
           <div className={styles.slotsGrid}>
             {renderSlot(0)}
@@ -544,16 +546,16 @@ export function LaunchSequenceGame({
 
           <p className={styles.durationHint}>
             {animating || showComplete
-              ? 'Продукт запускается за 4 месяца!'
+              ? t("Продукт запускается за 4 месяца!")
               : allPlaced
-                ? 'Готово — нажми «Проверить»'
+                ? t("Готово — нажми «Проверить»")
                 : ''}
           </p>
         </div>
 
         {allPlaced && !checked && !animating && (
           <div className={styles.btnWrap}>
-            <Button label="Проверить" type="secondary" onClick={handleCheck} />
+            <Button label={t("Проверить")} type="secondary" onClick={handleCheck} />
           </div>
         )}
       </div>
@@ -566,11 +568,11 @@ export function LaunchSequenceGame({
         >
           <div onClick={(e) => e.stopPropagation()}>
             <PopUp
-              title={blocks[descriptionFor]?.text ?? ''}
+              title={t(blocks[descriptionFor]?.text ?? '')}
               description={
                 <>
                   {renderTooltips(
-                    blocks[descriptionFor]?.description ?? '',
+                    blocks[descriptionFor]?.description ? t(blocks[descriptionFor]!.description!) : '',
                     setWordTooltip,
                     styles.tooltipWord,
                   )}
@@ -587,7 +589,7 @@ export function LaunchSequenceGame({
                   )}
                 </>
               }
-              buttonLabel="Понятно"
+              buttonLabel={t("Понятно")}
               onButtonClick={() => { setDescriptionFor(null); setWordTooltip(null); }}
             />
           </div>
@@ -602,9 +604,9 @@ export function LaunchSequenceGame({
         >
           <div onClick={(e) => e.stopPropagation()}>
             <PopUp
-              title={`Шаг ${slotHintFor + 1}`}
-              description={SLOT_HINTS[slotHintFor]}
-              buttonLabel="Понятно"
+              title={t("Шаг {{n}}", { n: slotHintFor + 1 })}
+              description={SLOT_HINTS[slotHintFor] ? t(SLOT_HINTS[slotHintFor]) : ''}
+              buttonLabel={t("Понятно")}
               onButtonClick={() => setSlotHintFor(null)}
             />
           </div>
@@ -620,7 +622,7 @@ export function LaunchSequenceGame({
           <div onClick={(e) => e.stopPropagation()}>
             <PopUp
               description={wordTooltip}
-              buttonLabel="Понятно"
+              buttonLabel={t("Понятно")}
               onButtonClick={() => setWordTooltip(null)}
               compact
             />
@@ -634,15 +636,15 @@ export function LaunchSequenceGame({
           <PopUp
             icon="close"
             iconColor="red"
-            title="Не совсем..."
+            title={t("Не совсем...")}
             description={
               <>
                 <span>{errorMsg}</span>
                 {'\n\n'}
-                <span>Осталось попыток: {MAX_ATTEMPTS - attemptCount}</span>
+                <span>{t("Осталось попыток: {{n}}", { n: MAX_ATTEMPTS - attemptCount })}</span>
               </>
             }
-            buttonLabel="Попробовать снова"
+            buttonLabel={t("Попробовать снова")}
             onButtonClick={() => doReset(false)}
           />
         </div>
@@ -654,26 +656,26 @@ export function LaunchSequenceGame({
           <PopUp
             icon="close"
             iconColor="red"
-            title="А вот как стоило расставить этапы, по мнению реальных проджект-менеджеров."
+            title={t("А вот как стоило расставить этапы, по мнению реальных проджект-менеджеров.")}
             description={
               <>
                 <div className={styles.correctStepsList}>
                   {CORRECT_STEPS.map((s) => (
                     <div key={s.title} className={styles.correctStepItem}>
-                      <p className={styles.correctStepTitle}>{s.title}</p>
-                      <p className={styles.correctStepBody}>{s.body}</p>
+                      <p className={styles.correctStepTitle}>{t(s.title)}</p>
+                      <p className={styles.correctStepBody}>{t(s.body)}</p>
                     </div>
                   ))}
                 </div>
                 <p className={styles.failedMoral}>
-                  Правильный запуск экономит время и деньги, но ошибки случаются — для этого и стоит учиться.
+                  {t("Правильный запуск экономит время и деньги, но ошибки случаются — для этого и стоит учиться.")}
                 </p>
                 <p className={styles.failedBody}>
-                  А если бы тебе пришлось запускать видеоблог, из каких этапов состоял бы твой запуск?
+                  {t("А если бы тебе пришлось запускать видеоблог, из каких этапов состоял бы твой запуск?")}
                 </p>
               </>
             }
-            buttonLabel="Попробовать ещё раз"
+            buttonLabel={t("Попробовать ещё раз")}
             onButtonClick={() => doReset(true)}
           />
         </div>
@@ -685,9 +687,9 @@ export function LaunchSequenceGame({
           <PopUp
             icon="done"
             iconColor="blue"
-            title="Поздравляем!"
-            description="Тебе удалось правильно расставить все этапы. Продукт запущен за 4 месяца."
-            buttonLabel="Далее"
+            title={t("Поздравляем!")}
+            description={t("Тебе удалось правильно расставить все этапы. Продукт запущен за 4 месяца.")}
+            buttonLabel={t("Далее")}
             onButtonClick={handleComplete}
           />
         </div>

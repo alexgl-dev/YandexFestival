@@ -1,4 +1,5 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Background, Button, Icon, InfoButton, PopUp } from '../../../components/ui';
 import type { Task } from '../../../types/game';
 import { GameInstruction } from '../GameInstruction';
@@ -46,6 +47,7 @@ export function UxSequenceGame({
   theme = 'orange',
   orientation = 'portrait',
 }: GameProps) {
+  const { t } = useTranslation('sharedGames2');
   const step = task.steps[0];
   const blocks = step?.blocks ?? [];
   const slotCount = blocks.filter((b) => b.order !== null).length;
@@ -217,25 +219,26 @@ export function UxSequenceGame({
 
     if (allCorrect) {
       setSuccess(true);
-      const t = setTimeout(() => {
+      const successExplanation = t("Верная последовательность заказа!");
+      const timer = setTimeout(() => {
         onComplete([
           {
             correct: true,
             answer: slots
               .map((bIdx) => (bIdx !== null ? blocks[bIdx].text || '' : ''))
               .join(' → '),
-            explanation: 'Верная последовательность заказа!',
+            explanation: successExplanation,
           },
         ]);
       }, SUCCESS_DELAY);
-      timersRef.current.push(t);
+      timersRef.current.push(timer);
       return;
     }
 
     const newErrorCount = errorCount + 1;
     const firstWrong = results.findIndex((r) => r === 'wrong');
 
-    const t = setTimeout(() => {
+    const retryTimer = setTimeout(() => {
       // Возвращаем в пул только неверно поставленные блоки; верные оставляем на местах.
       const wrongBlocks = slots.filter(
         (bIdx, sIdx): bIdx is number => bIdx !== null && results[sIdx] === 'wrong',
@@ -256,7 +259,7 @@ export function UxSequenceGame({
         setHintSlot(firstWrong);
       }
     }, CHECK_DELAY);
-    timersRef.current.push(t);
+    timersRef.current.push(retryTimer);
   }, [allPlaced, checked, slots, blocks, errorCount, slotCount, onComplete]);
 
   const hintText =
@@ -273,7 +276,7 @@ export function UxSequenceGame({
       <div className={styles.page}>
         <div className={styles.columns}>
           <div className={styles.slotsCol}>
-            <p className={styles.heading}>Путь пользователя</p>
+            <p className={styles.heading}>{t("Путь пользователя")}</p>
             {slots.map((bIdx, sIdx) => {
               const block = bIdx !== null ? blocks[bIdx] : null;
               const result = slotResults[sIdx];
@@ -324,10 +327,10 @@ export function UxSequenceGame({
                 >
                   <span className={styles.slotNum}>{sIdx + 1}</span>
                   {block ? (
-                    <span className={styles.slotText}>{block.text}</span>
+                    <span className={styles.slotText}>{t(block.text ?? '')}</span>
                   ) : (
                     <>
-                      <span className={styles.slotPlaceholder}>пустая ячейка</span>
+                      <span className={styles.slotPlaceholder}>{t("пустая ячейка")}</span>
                       <InfoButton
                         size="sm"
                         variant="ghost"
@@ -369,7 +372,7 @@ export function UxSequenceGame({
             }}
             onDrop={dropOnPool}
           >
-            <p className={styles.heading}>Шаги</p>
+            <p className={styles.heading}>{t("Шаги")}</p>
             {available.map((bIdx) => {
               const isDraggingThis =
                 dragging?.kind === 'pool' && dragging.blockIdx === bIdx;
@@ -387,12 +390,12 @@ export function UxSequenceGame({
                       onDragStart={startDragPool(bIdx)}
                       onDragEnd={endDrag}
                     >
-                      <span className={styles.blockText}>{blocks[bIdx].text}</span>
+                      <span className={styles.blockText}>{t(blocks[bIdx].text ?? '')}</span>
                       <button
                         type="button"
                         className={styles.blockClose}
                         onClick={(e) => trashBlock(bIdx, e)}
-                        aria-label="Удалить"
+                        aria-label={t("Удалить")}
                       >
                         <Icon name="close" color="blue" size="s" />
                       </button>
@@ -404,15 +407,15 @@ export function UxSequenceGame({
 
             {trashed.length > 0 && (
               <>
-                <p className={styles.trashHeading}>Удалённые шаги</p>
+                <p className={styles.trashHeading}>{t("Удалённые шаги")}</p>
                 {trashed.map((bIdx) => (
                   <div
                     key={bIdx}
                     className={styles.trashedBlock}
                     onClick={() => restoreBlock(bIdx)}
                   >
-                    <span className={styles.trashedText}>{blocks[bIdx].text}</span>
-                    <span className={styles.restoreLabel}>Вернуть ↺</span>
+                    <span className={styles.trashedText}>{t(blocks[bIdx].text ?? '')}</span>
+                    <span className={styles.restoreLabel}>{t("Вернуть ↺")}</span>
                   </div>
                 ))}
               </>
@@ -422,7 +425,7 @@ export function UxSequenceGame({
 
         <div className={styles.btnWrap}>
           {allPlaced && !checked && !success && (
-            <Button label="Запуск" type="secondary" onClick={handleCheck} />
+            <Button label={t("Запуск")} type="secondary" onClick={handleCheck} />
           )}
         </div>
 
@@ -441,9 +444,9 @@ export function UxSequenceGame({
         >
           <div onClick={(e) => e.stopPropagation()}>
             <PopUp
-              title={`Подсказка · шаг ${hintSlot + 1}`}
-              description={hintText}
-              buttonLabel="Понятно"
+              title={t("Подсказка · шаг {{step}}", { step: hintSlot + 1 })}
+              description={hintText ? t(hintText) : hintText}
+              buttonLabel={t("Понятно")}
               onButtonClick={() => setHintOpen(false)}
               compact
             />
@@ -455,12 +458,12 @@ export function UxSequenceGame({
       {showMoralFailure && (
         <div className={`${styles.overlay} ${overlayClass}`}>
           <div className={styles.moralCard}>
-            <h3 className={styles.moralTitle}>Давай ещё раз</h3>
+            <h3 className={styles.moralTitle}>{t("Давай ещё раз")}</h3>
             <p className={styles.moralText}>
-              {task.moralFailure || task.moral}
+              {t(task.moralFailure || task.moral || '')}
             </p>
             <Button
-              label="Попробовать ещё раз"
+              label={t("Попробовать ещё раз")}
               type="secondary"
               onClick={hardReset}
             />

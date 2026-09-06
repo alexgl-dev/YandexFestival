@@ -1,7 +1,10 @@
+import i18n from '../i18n';
+
 const DAY_IDS  = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'] as const;
-const DAY_ABBRS = ['Пн',  'Вт',  'Ср',  'Чт',  'Пт',  'Сб',  'Вс'];
+const DAY_ABBRS_RU = ['Пн',  'Вт',  'Ср',  'Чт',  'Пт',  'Сб',  'Вс'];
+const DAY_ABBRS_EN = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 // Fixed story dates: 14–20 марта (пн–вс)
-const DAY_DATES = [
+const DAY_DATES_RU = [
   '14 марта',
   '15 марта',
   '16 марта',
@@ -10,21 +13,33 @@ const DAY_DATES = [
   '19 марта',
   '20 марта',
 ];
+const DAY_DATES_EN = [
+  'March 14',
+  'March 15',
+  'March 16',
+  'March 17',
+  'March 18',
+  'March 19',
+  'March 20',
+];
 
 type DayId = typeof DAY_IDS[number];
 
 export interface CalendarDay {
   id: DayId;
   abbr: string;
-  date: string; // "14 марта"
+  date: string; // "14 марта" / "March 14"
 }
 
 /** Mon–Wed (or any count) — static story dates (14 марта = понедельник). */
 export function getWeekDays(count = 3): CalendarDay[] {
+  const en = i18n.language === 'en';
+  const abbrs = en ? DAY_ABBRS_EN : DAY_ABBRS_RU;
+  const dates = en ? DAY_DATES_EN : DAY_DATES_RU;
   return Array.from({ length: count }, (_, i) => ({
     id: DAY_IDS[i],
-    abbr: DAY_ABBRS[i],
-    date: DAY_DATES[i],
+    abbr: abbrs[i],
+    date: dates[i],
   }));
 }
 

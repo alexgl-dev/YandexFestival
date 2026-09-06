@@ -1,4 +1,5 @@
 import { useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Background, Button, Card, PopUp } from '../../../components/ui';
 import type { Task, TaskOption } from '../../../types/game';
 import { GameInstruction } from '../GameInstruction';
@@ -38,6 +39,7 @@ type Phase = 'question' | 'summary';
  * В конце — сводный PopUp «Ты угадал X из N» → onComplete.
  */
 export function QuizGame({ task, onComplete, onBack, theme = 'cobalt', orientation = 'landscape' }: GameProps) {
+  const { t } = useTranslation('sharedGames2');
   const steps = task.steps;
   const totalSteps = steps.length;
 
@@ -64,7 +66,7 @@ export function QuizGame({ task, onComplete, onBack, theme = 'cobalt', orientati
 
   const handlePopupNext = () => {
     if (selected !== null && selectedOption) {
-      const label = VARIANT_LABELS[selected] || `Вариант ${selected + 1}`;
+      const label = t(VARIANT_LABELS[selected] || `Вариант ${selected + 1}`);
       setResults((prev) => [
         ...prev,
         { answer: label, correct: selectedOption.correct, explanation: selectedOption.explanation },
@@ -91,9 +93,9 @@ export function QuizGame({ task, onComplete, onBack, theme = 'cobalt', orientati
           <PopUp
             icon="done"
             iconColor="blue"
-            title="Готово!"
-            description={`Ты угадал ${correctCount} из ${totalSteps}`}
-            buttonLabel="Результаты"
+            title={t("Готово!")}
+            description={t("Ты угадал {{correctCount}} из {{totalSteps}}", { correctCount, totalSteps })}
+            buttonLabel={t("Результаты")}
             onButtonClick={handleFinish}
           />
         </div>
@@ -107,7 +109,7 @@ export function QuizGame({ task, onComplete, onBack, theme = 'cobalt', orientati
     <Background theme={theme} orientation={orientation} onBack={onBack} backShowLabel={false}>
       <GameInstruction instruction={task.instruction} />
       <div className={`${styles.wrapper} ${orientation === 'portrait' ? styles.wrapperPortrait : ''}`}>
-        {step.prompt && <p className={styles.prompt}>{step.prompt}</p>}
+        {step.prompt && <p className={styles.prompt}>{t(step.prompt)}</p>}
 
         <div className={`${styles.optionsRow} ${orientation === 'portrait' ? styles.optionsRowPortrait : ''}`}>
           {shuffledOptions.map((option, index) => {
@@ -117,15 +119,15 @@ export function QuizGame({ task, onComplete, onBack, theme = 'cobalt', orientati
             return (
               <div key={index} className={styles.optionColumn}>
                 <Card
-                  variant={VARIANT_LABELS[index] || `Вариант ${index + 1}`}
-                  title={option.text || ''}
+                  variant={t(VARIANT_LABELS[index] || `Вариант ${index + 1}`)}
+                  title={t(option.text || '')}
                   description=""
                   size="m"
                   state={state}
                   onClick={() => handleSelect(index)}
                 />
                 <Button
-                  label="Это Алиса"
+                  label={t("Это Алиса")}
                   type="secondary"
                   onClick={() => handleSelect(index)}
                   className={isDisabled ? styles.answerButtonDisabled : ''}
@@ -145,9 +147,9 @@ export function QuizGame({ task, onComplete, onBack, theme = 'cobalt', orientati
           <PopUp
             icon={selectedOption.correct ? 'done' : 'close'}
             iconColor={selectedOption.correct ? 'blue' : 'red'}
-            title={selectedOption.correct ? 'Верно!' : 'Не совсем...'}
-            description={selectedOption.explanation}
-            buttonLabel="Дальше"
+            title={selectedOption.correct ? t("Верно!") : t("Не совсем...")}
+            description={t(selectedOption.explanation)}
+            buttonLabel={t("Дальше")}
             onButtonClick={handlePopupNext}
           />
         </div>

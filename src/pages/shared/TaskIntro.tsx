@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Background, Badge, Button, Icon, PopUp } from '../../components/ui';
 import type { Task, GlossaryTerm } from '../../types/game';
 import { parseGlossarySegments } from './parseGlossarySegments';
@@ -14,21 +15,24 @@ interface TaskIntroProps {
 }
 
 export function TaskIntro({ task, onStart, onBack, theme = 'orange', orientation = 'portrait' }: TaskIntroProps) {
-  const modeLabel = task.mode === 'group' ? 'Групповое' : 'Индивидуальное';
+  const { t } = useTranslation('sharedOther');
+  const modeLabel = task.mode === 'group' ? t("Групповое") : t("Индивидуальное");
   const durationLabel = minutesLabel(task.duration);
   const [activeTooltip, setActiveTooltip] = useState<GlossaryTerm | null>(null);
 
-  const segments = parseGlossarySegments(task.intro, task.introTooltips ?? []);
+  // Глоссарий подсвечивается только для русского текста: перевод — это цельная
+  // строка из словаря, подстрочный поиск терминов по ней не производится.
+  const segments = parseGlossarySegments(t(task.intro), task.introTooltips ?? []);
 
   return (
     <Background theme={theme} orientation={orientation} onBack={onBack} backShowLabel={false}>
       {task.id === 'shopping-list' && (
         <div className={styles.floatingRobot}>
-          <img src="/illustrations/robot-blue.png" alt="Робот" />
+          <img src="/illustrations/robot-blue.png" alt={t("Робот")} />
         </div>
       )}
       <div className={styles.wrapper}>
-        <h2 className={styles.title}>{task.title}</h2>
+        <h2 className={styles.title}>{t(task.title)}</h2>
 
         <div className={styles.card}>
           <div className={styles.badges}>
@@ -47,7 +51,7 @@ export function TaskIntro({ task, onStart, onBack, theme = 'orange', orientation
           </div>
 
           {task.subtitle && (
-            <p className={styles.subtitle}>{task.subtitle}</p>
+            <p className={styles.subtitle}>{t(task.subtitle)}</p>
           )}
 
           <p className={styles.intro}>
@@ -68,7 +72,7 @@ export function TaskIntro({ task, onStart, onBack, theme = 'orange', orientation
 
         </div>
 
-        <Button label="Начать" type="big_white" onClick={onStart} />
+        <Button label={t("Начать")} type="big_white" onClick={onStart} />
       </div>
 
       {activeTooltip && (
@@ -77,7 +81,7 @@ export function TaskIntro({ task, onStart, onBack, theme = 'orange', orientation
             <PopUp
               title={activeTooltip.word.charAt(0).toUpperCase() + activeTooltip.word.slice(1)}
               description={activeTooltip.definition}
-              buttonLabel="Понятно"
+              buttonLabel={t("Понятно")}
               onButtonClick={() => setActiveTooltip(null)}
               compact
             />

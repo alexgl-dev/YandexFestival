@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { Background, Badge, Button } from '../../components/ui';
 import type { Task } from '../../types/game';
 import { GameInstruction } from './GameInstruction';
@@ -17,9 +18,10 @@ interface GamePlaceholderProps {
 }
 
 export function GamePlaceholder({ task, onComplete, theme = 'orange', orientation = 'portrait' }: GamePlaceholderProps) {
+  const { t } = useTranslation('sharedOther');
   const handleSkip = () => {
     onComplete([
-      { answer: 'Демо-ответ', correct: true, explanation: 'Механика в разработке' },
+      { answer: t("Демо-ответ"), correct: true, explanation: t("Механика в разработке") },
     ]);
   };
 
@@ -28,12 +30,12 @@ export function GamePlaceholder({ task, onComplete, theme = 'orange', orientatio
       <GameInstruction instruction={task.instruction} />
       <div className={styles.wrapper}>
         <div className={styles.content}>
-          <h2 className={styles.title}>{task.title}</h2>
+          <h2 className={styles.title}>{t(task.title)}</h2>
           <Badge label={task.mechanic} type="outline" />
           <p className={styles.description}>
-            Механика «{task.mechanic}» — в разработке
+            {t("Механика «{{mechanic}}» — в разработке", { mechanic: task.mechanic })}
           </p>
-          <Button label="Пропустить" type="big_white" onClick={handleSkip} />
+          <Button label={t("Пропустить")} type="big_white" onClick={handleSkip} />
         </div>
       </div>
     </Background>

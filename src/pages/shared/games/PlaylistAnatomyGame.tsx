@@ -1,4 +1,5 @@
 import { useState, useRef, useLayoutEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Background, PopUp, Badge, InfoButton } from '../../../components/ui';
 import type { Task } from '../../../types/game';
 import { GameInstruction } from '../GameInstruction';
@@ -61,6 +62,7 @@ function getZoneUnder(cx: number, cy: number): string | null {
 }
 
 export function PlaylistAnatomyGame({ task, onComplete, onBack, theme = 'cobalt', orientation = 'landscape' }: GameProps) {
+  const { t } = useTranslation('sharedGames2');
   const step = task.steps[0];
   const categories = step?.categories ?? [];
   const items = step?.items ?? [];
@@ -197,7 +199,7 @@ export function PlaylistAnatomyGame({ task, onComplete, onBack, theme = 'cobalt'
           }
           return next;
         });
-        setExplanation({ text: item?.explanation ?? '', zoneId });
+        setExplanation({ text: item?.explanation ? t(item.explanation) : '', zoneId });
       } else {
         // Wrong zone: shake animation
         if (el) {
@@ -219,11 +221,11 @@ export function PlaylistAnatomyGame({ task, onComplete, onBack, theme = 'cobalt'
         .map((zoneId) => {
           const cat = categories.find((c) => c.id === zoneId);
           const indices = placements[zoneId] || [];
-          return `${cat?.title || zoneId}: ${indices.map((i) => items[i]?.text || '').join(', ')}`;
+          return `${cat?.title ? t(cat.title) : zoneId}: ${indices.map((i) => (items[i]?.text ? t(items[i].text) : '')).join(', ')}`;
         })
         .join(' | '),
       correct: true,
-      explanation: 'Все карточки разложены верно!',
+      explanation: t("Все карточки разложены верно!"),
     }];
     onComplete(results);
   }
@@ -246,8 +248,8 @@ export function PlaylistAnatomyGame({ task, onComplete, onBack, theme = 'cobalt'
             className={styles.card}
             onPointerDown={(e) => handleCardPointerDown(e, idx)}
           >
-            <span className={styles.cardLabel}>Факт</span>
-            <span className={styles.cardText}>{item.text}</span>
+            <span className={styles.cardLabel}>{t("Факт")}</span>
+            <span className={styles.cardText}>{t(item.text ?? '')}</span>
           </div>
         ))}
 
@@ -271,7 +273,7 @@ export function PlaylistAnatomyGame({ task, onComplete, onBack, theme = 'cobalt'
                 )}
                 <div className={styles.zoneTextBlock}>
                   <div className={styles.zoneTitleRow}>
-                    <span className={styles.zoneTitle}>{cat?.title ?? zoneId}</span>
+                    <span className={styles.zoneTitle}>{cat?.title ? t(cat.title) : zoneId}</span>
                     {cat?.tooltip && (
                       <InfoButton
                         size="sm"
@@ -285,7 +287,7 @@ export function PlaylistAnatomyGame({ task, onComplete, onBack, theme = 'cobalt'
                     )}
                   </div>
                   {cat?.description && (
-                    <span className={styles.zoneDesc}>{cat.description}</span>
+                    <span className={styles.zoneDesc}>{t(cat.description)}</span>
                   )}
                 </div>
               </div>
@@ -294,7 +296,7 @@ export function PlaylistAnatomyGame({ task, onComplete, onBack, theme = 'cobalt'
                   <Badge
                     key={itemIdx}
                     type="filled"
-                    label={items[itemIdx]?.text ?? ''}
+                    label={items[itemIdx]?.text ? t(items[itemIdx].text) : ''}
                     className={styles.zoneChip}
                   />
                 ))}
@@ -309,9 +311,9 @@ export function PlaylistAnatomyGame({ task, onComplete, onBack, theme = 'cobalt'
             <PopUp
               icon="done"
               iconColor="blue"
-              title="Верно!"
+              title={t("Верно!")}
               description={<InstructionRichText text={explanation.text} />}
-              buttonLabel="Продолжить"
+              buttonLabel={t("Продолжить")}
               onButtonClick={() => setExplanation(null)}
             />
           </div>
@@ -323,9 +325,9 @@ export function PlaylistAnatomyGame({ task, onComplete, onBack, theme = 'cobalt'
             <PopUp
               icon="done"
               iconColor="blue"
-              title="Все карточки разложены!"
-              description="Отлично! Переходим дальше."
-              buttonLabel="Завершить"
+              title={t("Все карточки разложены!")}
+              description={t("Отлично! Переходим дальше.")}
+              buttonLabel={t("Завершить")}
               onButtonClick={handleComplete}
             />
           </div>
@@ -339,9 +341,9 @@ export function PlaylistAnatomyGame({ task, onComplete, onBack, theme = 'cobalt'
             <div className={styles.overlay} onClick={() => setInfoZone(null)}>
               <div onClick={(e) => e.stopPropagation()}>
                 <PopUp
-                  title={cat.title}
-                  description={cat.tooltip}
-                  buttonLabel="Понятно"
+                  title={t(cat.title)}
+                  description={t(cat.tooltip)}
+                  buttonLabel={t("Понятно")}
                   onButtonClick={() => setInfoZone(null)}
                   compact
                 />

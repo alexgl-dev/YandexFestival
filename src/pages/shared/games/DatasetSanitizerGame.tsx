@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Background, PopUp } from '../../../components/ui';
 import type { CatchObject, Task } from '../../../types/game';
 import { GameInstruction } from '../GameInstruction';
@@ -26,9 +27,6 @@ const SWIPE_THRESHOLD = 160;
 const CARD_WIDTH = 460;
 const CARD_HEIGHT = 300;
 const TOAST_DURATION_MS = 2800;
-
-const WRONG_SWIPE_TEXT = 'Осторожно! Эта запись в порядке. Попробуй найти другую, с логической ошибкой.';
-const MISSED_TRASH_TEXT = 'Будь осторожнее! В базу попали некорректные данные.';
 
 // ── State types ─────────────────────────────────────────────────
 interface ActiveCard {
@@ -71,6 +69,7 @@ export function DatasetSanitizerGame({
   theme = 'cobalt',
   orientation = 'landscape',
 }: GameProps) {
+  const { t } = useTranslation('sharedGames2');
   const step = task.steps[0];
   const fieldWidth = orientation === 'landscape' ? 1920 : 1080;
   const fieldHeight = orientation === 'landscape' ? 1080 : 1920;
@@ -162,26 +161,26 @@ export function DatasetSanitizerGame({
       const correct = userSaidTrash === isTrash;
 
       resultsRef.current.push({
-        answer: card.obj.title,
+        answer: t(card.obj.title),
         correct,
-        explanation: card.obj.description || '',
+        explanation: card.obj.description ? t(card.obj.description) : '',
       });
 
       if (correct) {
         setCorrectCount((c) => c + 1);
         if (isTrash) {
           // Swiped a real trash → show the type tooltip
-          addToast('correctTrash', card.obj.description || 'Мусорная запись удалена.', card.x, card.y);
+          addToast('correctTrash', card.obj.description ? t(card.obj.description) : t("Мусорная запись удалена."), card.x, card.y);
         }
         // (silent) Clean card fell through — no toast, positive silent
       } else {
         setWrongCount((c) => c + 1);
         if (decision === 'swiped') {
           // Swiped a clean card
-          addToast('wrongSwipe', WRONG_SWIPE_TEXT, card.x, card.y);
+          addToast('wrongSwipe', t("Осторожно! Эта запись в порядке. Попробуй найти другую, с логической ошибкой."), card.x, card.y);
         } else {
           // Missed a trash card (let it fall to the DB)
-          addToast('missedTrash', MISSED_TRASH_TEXT, card.x, fieldHeight - 260);
+          addToast('missedTrash', t("Будь осторожнее! В базу попали некорректные данные."), card.x, fieldHeight - 260);
         }
       }
     },
@@ -356,7 +355,7 @@ export function DatasetSanitizerGame({
           <div
             className={styles.meterMop}
             style={{ left: `${purityPercent}%` }}
-            aria-label={`Чистота данных: ${purityPercent}%`}
+            aria-label={t("Чистота данных: {{percent}}%", { percent: purityPercent })}
           >
             <span role="img" aria-hidden>🧹</span>
           </div>
@@ -364,7 +363,7 @@ export function DatasetSanitizerGame({
 
         {/* ── Timer (centered below the meter) ── */}
         <div className={styles.timer}>
-          <span className={styles.timerLabel}>Осталось</span>
+          <span className={styles.timerLabel}>{t("Осталось")}</span>
           <span className={styles.timerValue}>{timeStr}</span>
         </div>
 
@@ -388,13 +387,13 @@ export function DatasetSanitizerGame({
         ))}
 
         {/* ── Toasts (tooltips) ── */}
-        {toasts.map((t) => (
+        {toasts.map((toast) => (
           <div
-            key={t.id}
+            key={toast.id}
             className={styles.toast}
-            style={{ left: t.x, top: t.y }}
+            style={{ left: toast.x, top: toast.y }}
           >
-            {t.text}
+            {t(toast.text)}
           </div>
         ))}
       </div>
@@ -414,16 +413,17 @@ export function DatasetSanitizerGame({
 
 // ── Profile card body ──────────────────────────────────────────
 function ProfileCardBody({ obj }: { obj: CatchObject }) {
+  const { t } = useTranslation('sharedGames2');
   const f = obj.fields;
   return (
     <>
       <div className={styles.cardHeader}>
-        <span className={styles.cardHeaderLabel}>Запись в базе</span>
+        <span className={styles.cardHeaderLabel}>{t("Запись в базе")}</span>
       </div>
-      <div className={styles.cardName}>{f?.name ?? obj.title}</div>
+      <div className={styles.cardName}>{f?.name ?? t(obj.title)}</div>
       <div className={styles.cardRows}>
         <div className={styles.cardRow}>
-          <span className={styles.cardRowLabel}>Возраст</span>
+          <span className={styles.cardRowLabel}>{t("Возраст")}</span>
           <span className={styles.cardRowValue}>{f?.age ?? '—'}</span>
         </div>
         <div className={styles.cardRow}>
@@ -431,7 +431,7 @@ function ProfileCardBody({ obj }: { obj: CatchObject }) {
           <span className={styles.cardRowValue}>{f?.email ?? '—'}</span>
         </div>
         <div className={styles.cardRow}>
-          <span className={styles.cardRowLabel}>Город</span>
+          <span className={styles.cardRowLabel}>{t("Город")}</span>
           <span className={styles.cardRowValue}>{f?.city ?? '—'}</span>
         </div>
       </div>
@@ -451,33 +451,41 @@ function FinalOverlay({
   wrongCount: number;
   onContinue: () => void;
 }) {
+  const { t } = useTranslation('sharedGames2');
   let title: string;
   let text: string;
   let iconName: 'done' | 'close';
 
   if (purity >= 0.98) {
-    title = 'Датасет проверен!';
-    text =
-      'Тебе удалось поймать весь мусор и не тронуть ни одной корректной записи. База данных готова к анализу.';
+    title = t("Датасет проверен!");
+    text = t(
+      "Тебе удалось поймать весь мусор и не тронуть ни одной корректной записи. База данных готова к анализу."
+    );
     iconName = 'done';
   } else if (purity >= 0.7) {
-    title = 'Датасет проверен!';
-    text =
-      'Тебе удалось поймать большую часть мусора. Но кое-что просочилось, и это повлияет на точность анализа.';
+    title = t("Датасет проверен!");
+    text = t(
+      "Тебе удалось поймать большую часть мусора. Но кое-что просочилось, и это повлияет на точность анализа."
+    );
     iconName = 'done';
   } else if (purity > 0.2) {
-    title = 'Датасет проверен!';
-    text =
-      'Тебе удалось отловить часть мусора! Но, так как кое-что было пропущено, базу рановато допускать к анализу.';
+    title = t("Датасет проверен!");
+    text = t(
+      "Тебе удалось отловить часть мусора! Но, так как кое-что было пропущено, базу рановато допускать к анализу."
+    );
     iconName = 'close';
   } else {
-    title = 'Датасет проверен!';
-    text =
-      'В базу попало слишком много мусора. С такими данными анализ даст ложные результаты. Но есть и хорошая новость: ты потренировался сортировать данные и в следующий раз делать это будет гораздо проще!';
+    title = t("Датасет проверен!");
+    text = t(
+      "В базу попало слишком много мусора. С такими данными анализ даст ложные результаты. Но есть и хорошая новость: ты потренировался сортировать данные и в следующий раз делать это будет гораздо проще!"
+    );
     iconName = 'close';
   }
 
-  const scoreLine = `Верных решений: ${correctCount} · Ошибок: ${wrongCount}`;
+  const scoreLine = t("Верных решений: {{correct}} · Ошибок: {{wrong}}", {
+    correct: correctCount,
+    wrong: wrongCount,
+  });
 
   return (
     <div className={styles.overlay}>
@@ -486,7 +494,7 @@ function FinalOverlay({
         iconColor={iconName === 'done' ? 'blue' : 'red'}
         title={title}
         description={`${text}\n\n${scoreLine}`}
-        buttonLabel="Результаты"
+        buttonLabel={t("Результаты")}
         onButtonClick={onContinue}
       />
     </div>

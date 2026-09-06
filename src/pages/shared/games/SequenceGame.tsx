@@ -1,5 +1,6 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
 import { createPortal } from 'react-dom';
+import { useTranslation } from 'react-i18next';
 import { Background, Button, ListItem, PopUp } from '../../../components/ui';
 import type { Task } from '../../../types/game';
 import { GameInstruction } from '../GameInstruction';
@@ -34,6 +35,7 @@ const FLY_DURATION = 420;
 const COLLAPSE_DURATION = 300;
 
 function FlyingBlock({ item }: { item: FlyingItem }) {
+  const { t } = useTranslation('sharedGames2');
   const [moved, setMoved] = useState(false);
 
   useEffect(() => {
@@ -69,12 +71,13 @@ function FlyingBlock({ item }: { item: FlyingItem }) {
           : '0 16px 40px rgba(0,0,0,0.35)',
       }}
     >
-      <span className={styles.flyingBlockText}>{item.text}</span>
+      <span className={styles.flyingBlockText}>{t(item.text)}</span>
     </div>
   );
 }
 
 export function SequenceGame({ task, onComplete, onBack, theme = 'orange', orientation = 'portrait' }: GameProps) {
+  const { t } = useTranslation('sharedGames2');
   const step = task.steps[0];
   const blocks = step?.blocks ?? [];
   const orderedCount = blocks.filter((b) => b.order !== null).length;
@@ -196,8 +199,10 @@ export function SequenceGame({ task, onComplete, onBack, theme = 'orange', orien
       correct: allCorrect,
       answer: slots.map((idx) => idx !== null ? (blocks[idx].text || '') : '?').join(' → '),
       explanation: allCorrect
-        ? 'Правильная последовательность!'
-        : 'Правильный порядок: ' + blocks.filter((b) => b.order !== null).sort((a, b) => a.order! - b.order!).map((b) => b.text || '').join(' → '),
+        ? t("Правильная последовательность!")
+        : t("Правильный порядок: {{sequence}}", {
+            sequence: blocks.filter((b) => b.order !== null).sort((a, b) => a.order! - b.order!).map((b) => t(b.text || '')).join(' → '),
+          }),
     };
   };
 
@@ -207,7 +212,7 @@ export function SequenceGame({ task, onComplete, onBack, theme = 'orange', orien
       <div className={styles.page}>
         <div className={styles.columns}>
           <div className={styles.left}>
-            <p className={styles.heading}>Доступные шаги</p>
+            <p className={styles.heading}>{t("Доступные шаги")}</p>
             {available.map((bIdx) => {
               const collapsing = collapsingBlocks.has(bIdx);
               return (
@@ -221,7 +226,7 @@ export function SequenceGame({ task, onComplete, onBack, theme = 'orange', orien
                     style={{ visibility: collapsing ? 'hidden' : 'visible' }}
                   >
                     <ListItem
-                      title={blocks[bIdx].text || ''}
+                      title={t(blocks[bIdx].text || '')}
                       state={selected === bIdx ? 'pressed' : 'default'}
                       onClick={() => selectBlock(bIdx)}
                     />
@@ -230,19 +235,19 @@ export function SequenceGame({ task, onComplete, onBack, theme = 'orange', orien
               );
             })}
             {available.length === 0 && !checked && (
-              <p className={styles.empty}>Все размещены</p>
+              <p className={styles.empty}>{t("Все размещены")}</p>
             )}
           </div>
 
           <div className={styles.right}>
-            <p className={styles.heading}>Порядок</p>
+            <p className={styles.heading}>{t("Порядок")}</p>
             {slots.map((bIdx, sIdx) => (
               <div
                 key={`slot-${sIdx}`}
                 ref={(el) => { if (el) slotWrapRefs.current.set(sIdx, el); else slotWrapRefs.current.delete(sIdx); }}
               >
                 <ListItem
-                  title={bIdx !== null ? (blocks[bIdx].text || '') : `Шаг ${sIdx + 1}`}
+                  title={bIdx !== null ? t(blocks[bIdx].text || '') : t("Шаг {{n}}", { n: sIdx + 1 })}
                   state={checked && slotResults[sIdx] === 'correct' ? 'pressed' : 'default'}
                   onClick={() => placeInSlot(sIdx)}
                 />
@@ -253,7 +258,7 @@ export function SequenceGame({ task, onComplete, onBack, theme = 'orange', orien
 
         {!checked && allPlaced && (
           <div className={styles.btnWrap}>
-            <Button label="Проверить" type="secondary" onClick={handleCheck} />
+            <Button label={t("Проверить")} type="secondary" onClick={handleCheck} />
           </div>
         )}
       </div>
@@ -263,9 +268,9 @@ export function SequenceGame({ task, onComplete, onBack, theme = 'orange', orien
           <PopUp
             icon={getResult().correct ? 'done' : 'close'}
             iconColor={getResult().correct ? 'blue' : 'red'}
-            title={getResult().correct ? 'Верно!' : 'Не совсем...'}
-            description={getResult().explanation}
-            buttonLabel="Далее"
+            title={getResult().correct ? t("Верно!") : t("Не совсем...")}
+            description={t(getResult().explanation)}
+            buttonLabel={t("Далее")}
             onButtonClick={() => { setShowPopup(false); onComplete([getResult()]); }}
           />
         </div>

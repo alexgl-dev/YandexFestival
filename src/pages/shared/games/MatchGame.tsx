@@ -1,4 +1,5 @@
 import { useState, useCallback, useMemo, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Background, Button, PopUp } from '../../../components/ui';
 import type { Task, TaskPair } from '../../../types/game';
 import { CodeArchaeologyMockup } from './CodeArchaeologyMockups';
@@ -128,6 +129,7 @@ export function MatchGame({
   theme = 'cobalt',
   orientation = 'landscape',
 }: GameProps) {
+  const { t } = useTranslation('sharedGames2');
   const step = task.steps[0];
   const pairs: TaskPair[] = step?.pairs ?? [];
   const isLanguagesIntro = task.id === 'languages-intro';
@@ -236,7 +238,7 @@ export function MatchGame({
               <img src={left.avatar} alt="" className={styles.compactAvatar} />
             )}
             <div className={styles.charCardInfo}>
-              {left.label && <p className={styles.charCardLabel}>{left.label}</p>}
+              {left.label && <p className={styles.charCardLabel}>{t(left.label)}</p>}
               {left.description && (
                 <div
                   className={styles.speechHintWrap}
@@ -244,7 +246,7 @@ export function MatchGame({
                   onClick={(e) => e.stopPropagation()}
                 >
                   <Button
-                    label="Описание"
+                    label={t("Описание")}
                     type="secondary"
                     className={styles.speechHintBtn}
                     onClick={() => setSpeechBubbleIndex(index)}
@@ -285,13 +287,13 @@ export function MatchGame({
               className={styles.revealBtn}
               onClick={(e) => { e.stopPropagation(); setRevealedHints((p) => new Set([...p, index])); }}
             >
-              {hintLabel || 'Подсказка'}
+              {hintLabel ? t(hintLabel) : t("Подсказка")}
             </button>
           </div>
         ) : (
           <>
-            {left.image && <img src={left.image} alt={left.label || ''} className={styles.cardImage} />}
-            {left.label && <p className={styles.cardLabel}>{left.label}</p>}
+            {left.image && <img src={left.image} alt={left.label ? t(left.label) : ''} className={styles.cardImage} />}
+            {left.label && <p className={styles.cardLabel}>{t(left.label)}</p>}
           </>
         )}
       </div>
@@ -346,7 +348,7 @@ export function MatchGame({
               revealAllChunks(pairIndex);
             }}
           >
-            Подсказка
+            {t("Подсказка")}
           </button>
         )}
 
@@ -362,7 +364,7 @@ export function MatchGame({
                       key={i}
                       type="button"
                       className={styles.hiddenChunk}
-                      aria-label="Показать скрытый фрагмент"
+                      aria-label={t("Показать скрытый фрагмент")}
                       onClick={(e) => {
                         e.stopPropagation();
                         revealChunk(key);
@@ -382,11 +384,11 @@ export function MatchGame({
               <pre className={styles.codeBlock}><code>{right.code}</code></pre>
             )}
             {!right.code && right.image && (
-              <img src={right.image} alt={right.label || ''} className={styles.cardImage} />
+              <img src={right.image} alt={right.label ? t(right.label) : ''} className={styles.cardImage} />
             )}
           </>
         )}
-        {right.label && !isLanguagesIntro && <p className={styles.cardLabel}>{right.label}</p>}
+        {right.label && !isLanguagesIntro && <p className={styles.cardLabel}>{t(right.label)}</p>}
       </div>
     );
   };
@@ -401,7 +403,7 @@ export function MatchGame({
     <Background theme={theme} orientation={orientation} onBack={onBack} backShowLabel={false}>
       <GameInstruction instruction={task.instruction} initialOpen={!!task.instruction?.trim()} />
       <div className={`${styles.wrapper} ${isLanguagesIntro ? styles.languagesIntro : ''}`}>
-        {step?.prompt && <p className={styles.prompt}>{step.prompt}</p>}
+        {step?.prompt && <p className={styles.prompt}>{t(step.prompt)}</p>}
 
         <div className={styles.columns}>
           <div className={`${styles.column} ${styles.columnLeft} ui-scrollbar`}>
@@ -436,7 +438,7 @@ export function MatchGame({
 
             <p className={styles.bubbleText}>
               {parseDescriptionInteractive(
-                bubblePair.left.description || '',
+                bubblePair.left.description ? t(bubblePair.left.description) : '',
                 (term, definition) => setActiveTerm({ term, definition })
               )}
             </p>
@@ -445,7 +447,7 @@ export function MatchGame({
               className={styles.bubbleCloseBtn}
               onClick={() => { setSpeechBubbleIndex(null); setActiveTerm(null); }}
             >
-              Закрыть
+              {t("Закрыть")}
             </button>
           </div>
         </div>
@@ -456,9 +458,9 @@ export function MatchGame({
         <div className={styles.termOverlay} onClick={() => setActiveTerm(null)}>
           <div onClick={(e) => e.stopPropagation()}>
             <PopUp
-              title={activeTerm.term}
-              description={activeTerm.definition}
-              buttonLabel="Понятно"
+              title={t(activeTerm.term)}
+              description={t(activeTerm.definition)}
+              buttonLabel={t("Понятно")}
               onButtonClick={() => setActiveTerm(null)}
               compact
             />
@@ -472,13 +474,13 @@ export function MatchGame({
           <PopUp
             icon={allCorrect ? 'done' : 'close'}
             iconColor={allCorrect ? 'blue' : 'red'}
-            title={allCorrect ? 'Отлично!' : 'Результаты'}
+            title={allCorrect ? t("Отлично!") : t("Результаты")}
             description={
               allCorrect
-                ? (step?.resultCorrect ?? 'Все пары найдены верно!')
-                : `Верных совпадений: ${results.filter((r) => r.correct).length} из ${pairs.length}`
+                ? (step?.resultCorrect ? t(step.resultCorrect) : t("Все пары найдены верно!"))
+                : t("Верных совпадений: {{correct}} из {{total}}", { correct: results.filter((r) => r.correct).length, total: pairs.length })
             }
-            buttonLabel="Далее"
+            buttonLabel={t("Далее")}
             onButtonClick={() => { setShowPopup(false); onComplete(results); }}
           />
         </div>

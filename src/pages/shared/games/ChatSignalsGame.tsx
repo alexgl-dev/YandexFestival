@@ -1,4 +1,5 @@
 import { useState, useCallback, useMemo, useEffect, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Background, Button, IconButton, PopUp } from '../../../components/ui';
 import type { Task, ChatMessage } from '../../../types/game';
 import { GameInstruction } from '../GameInstruction';
@@ -102,6 +103,7 @@ function capitalizeFirst(s: string): string {
 }
 
 export function ChatSignalsGame({ task, onComplete, onBack, theme = 'orange', orientation = 'portrait' }: GameProps) {
+  const { t } = useTranslation('sharedGames1');
   const step = task.steps[0];
   const messages: ChatMessage[] = useMemo(() => step?.messages ?? [], [step]);
   const problemIds = useMemo(() => new Set(messages.filter((m) => m.isProblem).map((m) => m.id)), [messages]);
@@ -140,7 +142,7 @@ export function ChatSignalsGame({ task, onComplete, onBack, theme = 'orange', or
           return next;
         }
         next.add(msg.id);
-        setToast('Сигнал пойман 🎯');
+        setToast(t("Сигнал пойман 🎯"));
         setTimeout(() => setToast(null), 1800);
         if (next.size === total) setTimeout(finish, 900);
         return next;
@@ -156,19 +158,19 @@ export function ChatSignalsGame({ task, onComplete, onBack, theme = 'orange', or
     const correct = hits.length === total && [...selected].every((id) => problemIds.has(id));
     return {
       correct,
-      answer: `Найдено ${hits.length} из ${total}`,
+      answer: t("Найдено {{found}} из {{total}}", { found: hits.length, total }),
       explanation: correct
-        ? 'Все три сигнала пойманы!'
-        : messages.filter((m) => m.isProblem).map((m) => `«${m.text.slice(0, 50)}…»`).join('; '),
+        ? t("Все три сигнала пойманы!")
+        : messages.filter((m) => m.isProblem).map((m) => `«${t(m.text).slice(0, 50)}…»`).join('; '),
     };
   }, [selected, problemIds, messages, total]);
 
   const foundCount = [...selected].filter((id) => problemIds.has(id)).length;
 
   const getResultTitle = () => {
-    if (foundCount === 3) return 'Отлично! Ты читаешь между строк.';
-    if (foundCount >= 1) return 'Тебе удалось кое-что заметить, но риски остались.';
-    return 'К сожалению, ты не заметил проблемы вовремя.';
+    if (foundCount === 3) return t("Отлично! Ты читаешь между строк.");
+    if (foundCount >= 1) return t("Тебе удалось кое-что заметить, но риски остались.");
+    return t("К сожалению, ты не заметил проблемы вовремя.");
   };
 
   const getBubbleClass = (msg: ChatMessage): string => {
@@ -201,7 +203,7 @@ export function ChatSignalsGame({ task, onComplete, onBack, theme = 'orange', or
             </div>
             <div className={styles.counterPill}>
               <span>🚩</span>
-              <span>Сигналов найдено: {foundCount}/{total}</span>
+              <span>{t("Сигналов найдено: {{found}}/{{total}}", { found: foundCount, total })}</span>
             </div>
           </div>
         </div>
@@ -215,8 +217,8 @@ export function ChatSignalsGame({ task, onComplete, onBack, theme = 'orange', or
               <div className={`${styles.avatar} ${styles.avatarSmall} ${styles.avatarDesign}`}>М</div>
             </div>
             <div className={styles.chatTitleBlock}>
-              <p className={styles.chatTitle}>💬 Чат</p>
-              <p className={styles.chatSub}>Денис, Саша, Игорь, Марина · сегодня</p>
+              <p className={styles.chatTitle}>{t("💬 Чат")}</p>
+              <p className={styles.chatSub}>{t("Денис, Саша, Игорь, Марина · сегодня")}</p>
             </div>
           </div>
 
@@ -231,11 +233,11 @@ export function ChatSignalsGame({ task, onComplete, onBack, theme = 'orange', or
                   </div>
                   <div className={styles.messageBody}>
                     <div className={`${styles.messageMeta} ${isPm ? styles.messageMetaPm : ''}`}>
-                      <span className={styles.messageAuthor}>{msg.author}</span>
+                      <span className={styles.messageAuthor}>{t(msg.author)}</span>
                       <span className={styles.messageTime}>{msg.time}</span>
                     </div>
                     <div className={getBubbleClass(msg)} onClick={() => handleTap(msg)} role="button">
-                      {renderMessageText(msg.text, !done ? terms : [], setActiveTerm, styles.termWord)}
+                      {renderMessageText(t(msg.text), !done ? terms : [], setActiveTerm, styles.termWord)}
                     </div>
                   </div>
                 </div>
@@ -251,9 +253,9 @@ export function ChatSignalsGame({ task, onComplete, onBack, theme = 'orange', or
         <div className={styles.overlay} onClick={() => setActiveTerm(null)}>
           <div onClick={(e) => e.stopPropagation()}>
             <PopUp
-              title={activeTerm.term}
-              description={capitalizeFirst(activeTerm.definition)}
-              buttonLabel="Понятно"
+              title={t(activeTerm.term)}
+              description={capitalizeFirst(t(activeTerm.definition))}
+              buttonLabel={t("Понятно")}
               onButtonClick={() => setActiveTerm(null)}
               compact
             />
@@ -270,24 +272,24 @@ export function ChatSignalsGame({ task, onComplete, onBack, theme = 'orange', or
                 const found = selected.has(m.id);
                 return (
                   <div key={m.id} className={`${styles.signalCard} ${found ? styles.signalFound : styles.signalMissed}`}>
-                    {!found && <span className={styles.missedBadge}>Пропущено</span>}
-                    <p className={styles.signalQuote}>«{m.text}»</p>
+                    {!found && <span className={styles.missedBadge}>{t("Пропущено")}</span>}
+                    <p className={styles.signalQuote}>«{t(m.text)}»</p>
                     {m.signalMeaning && (
                       <div className={styles.signalRow}>
-                        <span className={styles.signalLabel}>Что имелось в виду:</span>
-                        <span className={styles.signalText}>{m.signalMeaning}</span>
+                        <span className={styles.signalLabel}>{t("Что имелось в виду:")}</span>
+                        <span className={styles.signalText}>{t(m.signalMeaning)}</span>
                       </div>
                     )}
                     {m.signalConsequence && (
                       <div className={styles.signalRow}>
-                        <span className={styles.signalLabel}>Что случится:</span>
-                        <span className={styles.signalText}>{m.signalConsequence}</span>
+                        <span className={styles.signalLabel}>{t("Что случится:")}</span>
+                        <span className={styles.signalText}>{t(m.signalConsequence)}</span>
                       </div>
                     )}
                     {m.signalAction && (
                       <div className={styles.signalRow}>
-                        <span className={styles.signalLabel}>Что делать PM:</span>
-                        <span className={styles.signalText}>{m.signalAction}</span>
+                        <span className={styles.signalLabel}>{t("Что делать PM:")}</span>
+                        <span className={styles.signalText}>{t(m.signalAction)}</span>
                       </div>
                     )}
                   </div>
@@ -295,7 +297,7 @@ export function ChatSignalsGame({ task, onComplete, onBack, theme = 'orange', or
               })}
             </div>
             <div className={styles.resultActions}>
-              <Button label="Далее" type="secondary" onClick={() => onComplete([buildResult()])} />
+              <Button label={t("Далее")} type="secondary" onClick={() => onComplete([buildResult()])} />
             </div>
           </div>
         </div>

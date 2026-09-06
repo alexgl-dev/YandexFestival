@@ -1,4 +1,5 @@
 import { useState, useCallback, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Background, Button, Card, Icon, PopUp } from '../../../components/ui';
 import type { Task } from '../../../types/game';
 import { GameInstruction } from '../GameInstruction';
@@ -28,6 +29,7 @@ export function LabelGame({
   theme = 'cobalt',
   orientation = 'landscape',
 }: GameProps) {
+  const { t } = useTranslation('sharedGames2');
   const step = task.steps[0];
   const items = step?.items ?? [];
   const labels = step?.labels ?? [];
@@ -149,12 +151,12 @@ export function LabelGame({
                   : isAnswered
                     ? 'pressed'
                     : 'default';
-              const variantLabel = isAnswered && label ? label.title.toUpperCase() : `ПИСЬМО 0${idx + 1}`;
+              const variantLabel = isAnswered && label ? t(label.title).toUpperCase() : t("ПИСЬМО 0{{num}}", { num: idx + 1 });
               return (
                 <Card
                   key={idx}
                   variant={variantLabel}
-                  title={item.content?.description ?? item.title ?? ''}
+                  title={item.content?.description ? t(item.content.description) : item.title ? t(item.title) : ''}
                   description=""
                   size="l"
                   state={state}
@@ -206,13 +208,13 @@ export function LabelGame({
                 {isAnswered && !isWrong && label && (
                   <span className={styles.hotspotBadge}>
                     <Icon name="done" color="white" size="s" />
-                    {label.title}
+                    {t(label.title)}
                   </span>
                 )}
                 {isWrong && (
                   <span className={styles.hotspotBadgeError}>
                     <Icon name="close" color="white" size="s" />
-                    Ошибка
+                    {t("Ошибка")}
                   </span>
                 )}
               </button>
@@ -224,10 +226,10 @@ export function LabelGame({
 
         <div className={styles.footer}>
           <div className={styles.counter}>
-            Размечено: {answeredCount}/{items.length}
+            {t("Размечено: {{answeredCount}}/{{total}}", { answeredCount, total: items.length })}
           </div>
           <Button
-            label="Готово"
+            label={t("Готово")}
             type="secondary"
             onClick={handleSubmit}
             className={!allAnswered ? styles.finishDisabled : ''}
@@ -240,19 +242,21 @@ export function LabelGame({
           <div className={styles.picker} onClick={(e) => e.stopPropagation()}>
             <div className={styles.pickerHeader}>
               <div className={styles.pickerTitle}>
-                Выбери тег{activeItem?.title ? ` для объекта №${(activeIdx ?? 0) + 1}` : ''}
+                {activeItem?.title
+                  ? t("Выбери тег для объекта №{{num}}", { num: (activeIdx ?? 0) + 1 })
+                  : t("Выбери тег")}
               </div>
               <button
                 type="button"
                 className={styles.pickerClose}
                 onClick={handleClosePicker}
-                aria-label="Закрыть"
+                aria-label={t("Закрыть")}
               >
                 <Icon name="close" color="red" size="s" />
               </button>
             </div>
             {activeItem?.boxTip && (
-              <div className={styles.pickerBoxTip}>{activeItem.boxTip}</div>
+              <div className={styles.pickerBoxTip}>{t(activeItem.boxTip)}</div>
             )}
             <div className={styles.pickerOptions}>
               {pickerLabels.map((label) => {
@@ -260,7 +264,7 @@ export function LabelGame({
                 return (
                   <Button
                     key={label.id}
-                    label={label.title}
+                    label={t(label.title)}
                     type={isChosen ? 'big' : 'main'}
                     pressed={isChosen}
                     onClick={() => handlePickLabel(label.id)}
@@ -281,22 +285,22 @@ export function LabelGame({
             title={
               popup.kind === 'success'
                 ? isCardMode
-                  ? 'Автопилот запущен.'
-                  : 'Ты только что сделал дорогу немного безопаснее.'
+                  ? t("Автопилот запущен.")
+                  : t("Ты только что сделал дорогу немного безопаснее.")
                 : isCardMode
-                  ? 'Данные не точны.'
-                  : 'Выполнять движение рискованно.'
+                  ? t("Данные не точны.")
+                  : t("Выполнять движение рискованно.")
             }
             description={
               popup.kind === 'success'
                 ? isCardMode
-                  ? 'Ты правильно классифицировал все объекты.'
-                  : 'Ты только что сделал дорогу немного безопаснее.'
+                  ? t("Ты правильно классифицировал все объекты.")
+                  : t("Ты только что сделал дорогу немного безопаснее.")
                 : isCardMode
-                  ? 'Тапни на карточки с ошибкой, чтобы увидеть подсказку и попробовать ещё раз.'
-                  : 'Он не понимает, что перед ним. Нажми на объекты с ошибкой, чтобы увидеть подсказку.'
+                  ? t("Тапни на карточки с ошибкой, чтобы увидеть подсказку и попробовать ещё раз.")
+                  : t("Он не понимает, что перед ним. Нажми на объекты с ошибкой, чтобы увидеть подсказку.")
             }
-            buttonLabel={popup.kind === 'success' ? 'Результаты' : 'Понятно'}
+            buttonLabel={popup.kind === 'success' ? t("Результаты") : t("Понятно")}
             onButtonClick={handlePopupAction}
           />
         </div>
@@ -307,12 +311,12 @@ export function LabelGame({
           <div onClick={(e) => e.stopPropagation()}>
             <PopUp
               description={parseInstructionMarkup(
-                items[hintFor].explanation,
+                t(items[hintFor].explanation),
                 handleTermClick,
                 `lg-hint-${hintFor}`,
                 styles.termBtn,
               )}
-              buttonLabel="Перевыбрать тег"
+              buttonLabel={t("Перевыбрать тег")}
               onButtonClick={handleHintClose}
             />
           </div>
@@ -325,7 +329,7 @@ export function LabelGame({
             <PopUp
               title={activeTerm.term.charAt(0).toUpperCase() + activeTerm.term.slice(1)}
               description={activeTerm.definition}
-              buttonLabel="Понятно"
+              buttonLabel={t("Понятно")}
               onButtonClick={() => setActiveTerm(null)}
               compact
             />

@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { useTranslation } from 'react-i18next';
 import styles from './CodeArchaeologyMockups.module.css';
 
 interface MockupProps {
@@ -27,23 +28,25 @@ function Container({ children }: { children: ReactNode }) {
 }
 
 function BuyButtonMockup() {
+  const { t } = useTranslation('sharedGames1');
   return (
     <Container>
-      <div className={styles.buyButton}>Купить</div>
+      <div className={styles.buyButton}>{t("Купить")}</div>
     </Container>
   );
 }
 
 function LoginFormMockup() {
+  const { t } = useTranslation('sharedGames1');
   return (
     <Container>
       <div className={styles.loginForm}>
-        <div className={styles.input}>Логин</div>
+        <div className={styles.input}>{t("Логин")}</div>
         <div className={styles.inputGroup}>
-          <div className={`${styles.input} ${styles.inputError}`}>Пароль</div>
-          <p className={styles.errorText}>Вы ввели неверный пароль</p>
+          <div className={`${styles.input} ${styles.inputError}`}>{t("Пароль")}</div>
+          <p className={styles.errorText}>{t("Вы ввели неверный пароль")}</p>
         </div>
-        <div className={styles.signInBtn}>Войти</div>
+        <div className={styles.signInBtn}>{t("Войти")}</div>
       </div>
     </Container>
   );
@@ -79,11 +82,12 @@ function HeartAnimationMockup() {
 }
 
 function DropdownMenuMockup() {
+  const { t } = useTranslation('sharedGames1');
   return (
     <Container>
       <div className={styles.dropdown}>
         <div className={styles.dropdownHeader}>
-          <span>Популярные товары</span>
+          <span>{t("Популярные товары")}</span>
           <svg
             viewBox="0 0 24 24"
             className={styles.chevron}
@@ -99,20 +103,21 @@ function DropdownMenuMockup() {
             />
           </svg>
         </div>
-        <div className={styles.dropdownItem}>Подешевле</div>
-        <div className={styles.dropdownItem}>Подороже</div>
-        <div className={styles.dropdownItem}>Высокий рейтинг</div>
+        <div className={styles.dropdownItem}>{t("Подешевле")}</div>
+        <div className={styles.dropdownItem}>{t("Подороже")}</div>
+        <div className={styles.dropdownItem}>{t("Высокий рейтинг")}</div>
       </div>
     </Container>
   );
 }
 
 function ProductCard({ name, price }: { name: string; price: string }) {
+  const { t } = useTranslation('sharedGames1');
   return (
     <div className={styles.productCard}>
       <div className={styles.productImage} />
       <div className={styles.productInfo}>
-        <p className={styles.productName}>{name}</p>
+        <p className={styles.productName}>{t(name)}</p>
         <p className={styles.productPrice}>
           {price} <span>₽</span>
         </p>

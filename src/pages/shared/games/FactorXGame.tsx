@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Background, Button, Icon, PopUp } from '../../../components/ui';
 import type { Task } from '../../../types/game';
 import { GameInstruction } from '../GameInstruction';
@@ -37,6 +38,7 @@ interface PopupInfo {
 }
 
 export function FactorXGame({ task, onComplete, onBack, theme = 'cobalt' }: Props) {
+  const { t } = useTranslation('sharedGames2');
   const steps = task.steps;
   const totalSteps = steps.length;
 
@@ -131,12 +133,12 @@ export function FactorXGame({ task, onComplete, onBack, theme = 'cobalt' }: Prop
   function getFinalComment() {
     const rate = correctCount / totalSteps;
     if (rate >= 0.75) {
-      return 'Команде удалось правильно отобрать факторы! Вы понимаете, что для обучения ИИ нужны объективные и значимые данные, а не случайные совпадения. Модель готова к работе!';
+      return t("Команде удалось правильно отобрать факторы! Вы понимаете, что для обучения ИИ нужны объективные и значимые данные, а не случайные совпадения. Модель готова к работе!");
     }
     if (rate >= 0.5) {
-      return 'Ваша модель получилась довольно точной. Команде удаётся отличать релевантные факторы от шума, но есть и пространство для роста.';
+      return t("Ваша модель получилась довольно точной. Команде удаётся отличать релевантные факторы от шума, но есть и пространство для роста.");
     }
-    return 'Вашей модели не хватает точности. Вероятно, она перегружена случайными признаками или, наоборот, упускает ключевые. Это частая проблема при сборе данных для ИИ.';
+    return t("Вашей модели не хватает точности. Вероятно, она перегружена случайными признаками или, наоборот, упускает ключевые. Это частая проблема при сборе данных для ИИ.");
   }
 
   if (!step) return null;
@@ -151,18 +153,18 @@ export function FactorXGame({ task, onComplete, onBack, theme = 'cobalt' }: Prop
         <div className={styles.layout}>
           {/* Accuracy bar */}
           <div className={styles.accuracyRow}>
-            <span className={styles.accuracyLabelLeft}>Неточная модель</span>
+            <span className={styles.accuracyLabelLeft}>{t("Неточная модель")}</span>
             <div className={styles.accuracyTrack}>
               <div className={styles.accuracyFill} style={{ width: `${accuracy}%` }} />
             </div>
-            <span className={styles.accuracyLabelRight}>Точная модель</span>
+            <span className={styles.accuracyLabelRight}>{t("Точная модель")}</span>
           </div>
 
           {/* Meta row */}
           <div className={styles.metaRow}>
-            <span className={styles.stepCounter}>Фактор {currentStep + 1} из {totalSteps}</span>
+            <span className={styles.stepCounter}>{t("Фактор {{n}} из {{total}}", { n: currentStep + 1, total: totalSteps })}</span>
             <div className={styles.timerBox}>
-              <span className={styles.timerLabel}>Осталось</span>
+              <span className={styles.timerLabel}>{t("Осталось")}</span>
               <div className={`${styles.timerCircle} ${timerUrgent ? styles.timerUrgent : ''}`}>
                 <span className={styles.timerNum}>{timeLeft}</span>
               </div>
@@ -172,21 +174,21 @@ export function FactorXGame({ task, onComplete, onBack, theme = 'cobalt' }: Prop
           {/* Factor card */}
           <div className={styles.cardArea}>
             <div className={styles.factorCard}>
-              <p className={styles.factorText}>{step.prompt}</p>
+              <p className={styles.factorText}>{t(step.prompt ?? '')}</p>
             </div>
           </div>
 
           {/* Tally */}
           <div className={styles.tallyRow}>
             <div className={styles.tallyChip}>
-              <span className={styles.tallyLabel}>Влияет</span>
+              <span className={styles.tallyLabel}>{t("Влияет")}</span>
               <span className={`${styles.tallyNum} ${styles.tallyNumYes}`}>{tally.yes}</span>
             </div>
             <span className={styles.tallyTotal}>
-              {totalVotes > 0 ? `Голосов: ${totalVotes}` : 'Жми кнопки — голосуйте командой'}
+              {totalVotes > 0 ? t("Голосов: {{count}}", { count: totalVotes }) : t("Жми кнопки — голосуйте командой")}
             </span>
             <div className={styles.tallyChip}>
-              <span className={styles.tallyLabel}>Не влияет</span>
+              <span className={styles.tallyLabel}>{t("Не влияет")}</span>
               <span className={`${styles.tallyNum} ${styles.tallyNumNo}`}>{tally.no}</span>
             </div>
           </div>
@@ -198,14 +200,14 @@ export function FactorXGame({ task, onComplete, onBack, theme = 'cobalt' }: Prop
               onClick={() => handleVote(true)}
               disabled={timeLeft <= 0 || popup !== null}
             >
-              Влияет
+              {t("Влияет")}
             </button>
             <button
               className={`${styles.voteBtn} ${styles.voteBtnNo}`}
               onClick={() => handleVote(false)}
               disabled={timeLeft <= 0 || popup !== null}
             >
-              Не влияет
+              {t("Не влияет")}
             </button>
           </div>
         </div>
@@ -219,17 +221,17 @@ export function FactorXGame({ task, onComplete, onBack, theme = 'cobalt' }: Prop
             iconColor={popup.status === 'correct' ? 'blue' : 'red'}
             title={
               popup.status === 'tie'
-                ? `Правильный ответ: ${popup.correctVote}`
+                ? t("Правильный ответ: {{vote}}", { vote: t(popup.correctVote) })
                 : popup.status === 'correct'
-                  ? 'Верно!'
-                  : 'Не совсем...'
+                  ? t("Верно!")
+                  : t("Не совсем...")
             }
             description={
               popup.status === 'tie'
-                ? `Голоса разделились — модель приняла решение сама.\n\n${popup.explanation}`
-                : popup.explanation
+                ? t("Голоса разделились — модель приняла решение сама.\n\n{{explanation}}", { explanation: t(popup.explanation) })
+                : t(popup.explanation)
             }
-            buttonLabel={isLast ? 'Результаты' : 'Дальше'}
+            buttonLabel={isLast ? t("Результаты") : t("Дальше")}
             onButtonClick={handleNext}
           />
         </div>
@@ -240,9 +242,9 @@ export function FactorXGame({ task, onComplete, onBack, theme = 'cobalt' }: Prop
         <div className={styles.resultsScreen}>
           <div className={styles.resultsCard}>
             <div className={styles.resultsHeader}>
-              <h2 className={styles.resultsTitle}>Обучение модели завершено</h2>
+              <h2 className={styles.resultsTitle}>{t("Обучение модели завершено")}</h2>
               <p className={styles.resultsSummary}>
-                Правильно: <strong>{correctCount}</strong> из {totalSteps} · Точность модели: <strong>{accuracy}%</strong>
+                {t("Правильно:")} <strong>{correctCount}</strong> {t("из")} {totalSteps} · {t("Точность модели:")} <strong>{accuracy}%</strong>
               </p>
               <div className={styles.accuracyTrack}>
                 <div className={styles.accuracyFill} style={{ width: `${accuracy}%` }} />
@@ -267,11 +269,11 @@ export function FactorXGame({ task, onComplete, onBack, theme = 'cobalt' }: Prop
                     {r.status === 'tie' && <span className={styles.resultsItemTieMark}>—</span>}
                   </span>
                   <div className={styles.resultsItemBody}>
-                    <p className={styles.resultsItemFactor}>{r.factor}</p>
+                    <p className={styles.resultsItemFactor}>{t(r.factor)}</p>
                     <p className={styles.resultsItemMeta}>
-                      <span className={styles.resultsItemMetaLabel}>Команда:</span>{' '}
+                      <span className={styles.resultsItemMetaLabel}>{t("Команда:")}</span>{' '}
                       {r.teamVote === null ? (
-                        <span className={styles.resultsItemNeutral}>не определилась</span>
+                        <span className={styles.resultsItemNeutral}>{t("не определилась")}</span>
                       ) : (
                         <span
                           className={
@@ -280,11 +282,11 @@ export function FactorXGame({ task, onComplete, onBack, theme = 'cobalt' }: Prop
                               : styles.resultsVoteNo
                           }
                         >
-                          {r.teamVote}
+                          {t(r.teamVote)}
                         </span>
                       )}
                       <span className={styles.resultsItemMetaSep}>·</span>
-                      <span className={styles.resultsItemMetaLabel}>Правильно:</span>{' '}
+                      <span className={styles.resultsItemMetaLabel}>{t("Правильно:")}</span>{' '}
                       <span
                         className={
                           r.correctVote === 'Влияет'
@@ -292,17 +294,17 @@ export function FactorXGame({ task, onComplete, onBack, theme = 'cobalt' }: Prop
                             : styles.resultsVoteNo
                         }
                       >
-                        {r.correctVote}
+                        {t(r.correctVote)}
                       </span>
                     </p>
-                    <p className={styles.resultsItemExplanation}>{r.explanation}</p>
+                    <p className={styles.resultsItemExplanation}>{t(r.explanation)}</p>
                   </div>
                 </li>
               ))}
             </ul>
 
             <div className={styles.resultsFooter}>
-              <Button label="Дальше" type="secondary" onClick={handleFinish} />
+              <Button label={t("Дальше")} type="secondary" onClick={handleFinish} />
             </div>
           </div>
         </div>

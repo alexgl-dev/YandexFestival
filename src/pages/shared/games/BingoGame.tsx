@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Background, Button, Card, PopUp } from '../../../components/ui';
 import type { BingoTest } from '../../../types/game';
 import styles from './BingoGame.module.css';
@@ -12,6 +13,7 @@ interface BingoGameProps {
 }
 
 export function BingoGame({ bingo, onBack, theme = 'cobalt' }: BingoGameProps) {
+  const { t } = useTranslation('sharedGames1');
   const [phase, setPhase] = useState<Phase>('intro');
   const [answers, setAnswers] = useState<Record<number, string>>({});
   const [popupCell, setPopupCell] = useState<number | null>(null);
@@ -54,10 +56,10 @@ export function BingoGame({ bingo, onBack, theme = 'cobalt' }: BingoGameProps) {
       <Background theme={theme} orientation="landscape" onBack={handleBack} backShowLabel={false}>
         <div className={styles.wrapper}>
           <div className={styles.card}>
-            <p className={styles.introText}>{bingo.intro}</p>
-            <p className={styles.instructionText}>{bingo.instruction}</p>
+            <p className={styles.introText}>{t(bingo.intro)}</p>
+            <p className={styles.instructionText}>{t(bingo.instruction)}</p>
           </div>
-          <Button label="Начать" type="big_white" onClick={() => setPhase('questions')} />
+          <Button label={t("Начать")} type="big_white" onClick={() => setPhase('questions')} />
         </div>
       </Background>
     );
@@ -68,7 +70,7 @@ export function BingoGame({ bingo, onBack, theme = 'cobalt' }: BingoGameProps) {
     return (
       <Background theme={theme} orientation="landscape" onBack={handleBack} backShowLabel={false}>
         <div className={styles.questionsLayout}>
-          <p className={styles.questionPrompt}>{currentQuestion.prompt}</p>
+          <p className={styles.questionPrompt}>{t(currentQuestion.prompt)}</p>
 
           <div className={styles.optionsGrid}>
             {currentQuestion.options.map((option) => {
@@ -76,7 +78,7 @@ export function BingoGame({ bingo, onBack, theme = 'cobalt' }: BingoGameProps) {
                 <Card
                   key={option}
                   variant=""
-                  title={option}
+                  title={t(option)}
                   description=""
                   size="m"
                   state={currentAnswer === option ? 'pressed' : 'default'}
@@ -89,7 +91,7 @@ export function BingoGame({ bingo, onBack, theme = 'cobalt' }: BingoGameProps) {
           <div className={styles.bottomRow}>
             <div className={styles.bottomLeft}>
               <Button
-                label="Назад"
+                label={t("Назад")}
                 type="secondary"
                 onClick={() => {
                   if (questionIndex > 0) {
@@ -105,7 +107,7 @@ export function BingoGame({ bingo, onBack, theme = 'cobalt' }: BingoGameProps) {
             </div>
             {currentAnswer && (
               <Button
-                label={isLastQuestion && allAnswered ? 'Посмотреть результат' : 'Далее'}
+                label={isLastQuestion && allAnswered ? t("Посмотреть результат") : t("Далее")}
                 type="secondary"
                 onClick={handleNext}
               />
@@ -131,9 +133,9 @@ export function BingoGame({ bingo, onBack, theme = 'cobalt' }: BingoGameProps) {
               if (cellIndex === 4) {
                 return (
                   <div key={cellIndex} className={styles.cellCenter}>
-                    <span className={styles.cellCenterBadge}>Эксперт</span>
-                    <span className={styles.cellCenterName}>{bingo.expert.name}</span>
-                    <span className={styles.cellCenterRole}>{bingo.expert.role}</span>
+                    <span className={styles.cellCenterBadge}>{t("Эксперт")}</span>
+                    <span className={styles.cellCenterName}>{t(bingo.expert.name)}</span>
+                    <span className={styles.cellCenterRole}>{t(bingo.expert.role)}</span>
                   </div>
                 );
               }
@@ -157,7 +159,7 @@ export function BingoGame({ bingo, onBack, theme = 'cobalt' }: BingoGameProps) {
                           : 'var(--color-red)',
                       }}
                     >
-                      <span className={styles.cellLabel}>{question?.gridLabel}</span>
+                      <span className={styles.cellLabel}>{question?.gridLabel ? t(question.gridLabel) : ''}</span>
                     </div>
                   </div>
                 </div>
@@ -170,14 +172,14 @@ export function BingoGame({ bingo, onBack, theme = 'cobalt' }: BingoGameProps) {
         <div className={styles.resultSide}>
           <Card
             variant=""
-            title="Бинго!"
-            description={bingo.resultText}
+            title={t("Бинго!")}
+            description={t(bingo.resultText)}
             size="m"
             state="default"
             className={`${styles.resultCard} ${styles.resultCardMain}`}
           />
           <Button
-            label="В главное меню"
+            label={t("В главное меню")}
             type="secondary"
             onClick={onBack}
           />
@@ -191,12 +193,12 @@ export function BingoGame({ bingo, onBack, theme = 'cobalt' }: BingoGameProps) {
             <PopUp
               icon={popupData.isMatch ? 'done' : 'close'}
               iconColor={popupData.isMatch ? 'blue' : 'red'}
-              title={popupData.question?.gridLabel ?? ''}
+              title={popupData.question?.gridLabel ? t(popupData.question.gridLabel) : ''}
               description={
-                (popupData.question?.expertAnswer ? `${popupData.question.expertAnswer}\n\n` : '') +
-                (popupData.question?.expertComment ?? '')
+                (popupData.question?.expertAnswer ? `${t(popupData.question.expertAnswer)}\n\n` : '') +
+                (popupData.question?.expertComment ? t(popupData.question.expertComment) : '')
               }
-              buttonLabel="Закрыть"
+              buttonLabel={t("Закрыть")}
               onButtonClick={() => setPopupCell(null)}
             />
           </div>

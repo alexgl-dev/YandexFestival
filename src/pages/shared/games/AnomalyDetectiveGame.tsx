@@ -1,4 +1,5 @@
 import { useState, useCallback, useMemo } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Background, Button, Card, PopUp } from '../../../components/ui';
 import type { Task, TaskOption } from '../../../types/game';
 import { GameInstruction } from '../GameInstruction';
@@ -101,6 +102,7 @@ function GraphCard({
   wrongPoints,
   compact,
 }: GraphCardProps) {
+  const { t } = useTranslation('sharedGames1');
   const WIDTH = 1540;
   const HEIGHT = compact ? 360 : 720;
   const PAD_TOP = compact ? 40 : 60;
@@ -168,7 +170,7 @@ function GraphCard({
             className={styles.monthLabel}
             textAnchor="middle"
           >
-            {m}
+            {t(m)}
           </text>
         ))}
 
@@ -255,6 +257,7 @@ export function AnomalyDetectiveGame({
   theme = 'cobalt',
   orientation = 'landscape',
 }: GameProps) {
+  const { t } = useTranslation('sharedGames1');
   const options = useMemo<TaskOption[]>(() => {
     const withOptions = task.steps.find((s) => s.options && s.options.length > 0);
     return withOptions?.options ?? [];
@@ -352,7 +355,7 @@ export function AnomalyDetectiveGame({
 
     if (popup.kind === 'success') {
       const result: GameResult = {
-        answer: popup.option.text || 'Верный вариант',
+        answer: popup.option.text || t("Верный вариант"),
         correct: true,
         explanation: popup.option.explanation,
       };
@@ -365,10 +368,10 @@ export function AnomalyDetectiveGame({
 
   const promptText =
     phase === 'find'
-      ? 'Алгоритм обнаружил аномалию. Найди её на графике.'
+      ? t("Алгоритм обнаружил аномалию. Найди её на графике.")
       : phase === 'explain'
-      ? 'Как ты объяснишь этот скачок просмотров?'
-      : 'Сопоставь графики — и всё встанет на свои места.';
+      ? t("Как ты объяснишь этот скачок просмотров?")
+      : t("Сопоставь графики — и всё встанет на свои места.");
 
   const getCardState = (index: number, option: TaskOption): 'default' | 'disabled' | 'pressed' => {
     if (disabledOptions.has(index)) return 'disabled';
@@ -377,8 +380,7 @@ export function AnomalyDetectiveGame({
     return 'default';
   };
 
-  const WOW_DESCRIPTION =
-    'Проверим её с помощью дополнительных данных. Хороший аналитик всегда [верифицирует]{tooltip: "Верифицировать — проверять гипотезу с помощью дополнительных данных или фактов, чтобы подтвердить или опровергнуть её."} [гипотезу]{tooltip: "Гипотеза — предположение, которое ещё не доказано, но кажется правдоподобным и требует проверки."}.';
+  const WOW_DESCRIPTION = t("Проверим её с помощью дополнительных данных. Хороший аналитик всегда [верифицирует]{tooltip: \"Верифицировать — проверять гипотезу с помощью дополнительных данных или фактов, чтобы подтвердить или опровергнуть её.\"} [гипотезу]{tooltip: \"Гипотеза — предположение, которое ещё не доказано, но кажется правдоподобным и требует проверки.\"}.");
 
   const popupProps = (() => {
     if (!popup) return null;
@@ -386,39 +388,39 @@ export function AnomalyDetectiveGame({
       return {
         icon: 'done' as const,
         iconColor: 'blue' as const,
-        title: '14 апреля',
+        title: t("14 апреля"),
         description:
-          '47 219 просмотров за сутки. Это в 11 раз больше нормы, обычный показатель для этого фильма — около 4000 просмотров в день.\n\nКак это можно объяснить?',
-        buttonLabel: 'Выбрать объяснение',
+          t("47 219 просмотров за сутки. Это в 11 раз больше нормы, обычный показатель для этого фильма — около 4000 просмотров в день.\n\nКак это можно объяснить?"),
+        buttonLabel: t("Выбрать объяснение"),
       };
     }
     if (popup.kind === 'extra') {
       return {
         icon: 'done' as const,
         iconColor: 'blue' as const,
-        title: 'Хорошее чутьё!',
+        title: t("Хорошее чутьё!"),
         description:
-          'Аналитик никогда не делает выводы на основе одного источника. Загружаю дополнительные данные...',
-        buttonLabel: 'Смотреть',
+          t("Аналитик никогда не делает выводы на основе одного источника. Загружаю дополнительные данные..."),
+        buttonLabel: t("Смотреть"),
       };
     }
     if (popup.kind === 'decoy') {
       return {
         icon: 'close' as const,
         iconColor: 'red' as const,
-        title: 'Не совсем',
+        title: t("Не совсем"),
         description:
-          'Здесь всё в пределах нормы. Поищи там, где данные ведут себя неожиданно.',
-        buttonLabel: 'Попробовать ещё',
+          t("Здесь всё в пределах нормы. Поищи там, где данные ведут себя неожиданно."),
+        buttonLabel: t("Попробовать ещё"),
       };
     }
     if (popup.kind === 'wrong') {
       return {
         icon: 'close' as const,
         iconColor: 'red' as const,
-        title: 'Не совсем...',
-        description: popup.option.explanation,
-        buttonLabel: 'Попробовать ещё',
+        title: t("Не совсем..."),
+        description: t(popup.option.explanation),
+        buttonLabel: t("Попробовать ещё"),
       };
     }
     if (popup.kind === 'wow') {
@@ -427,9 +429,9 @@ export function AnomalyDetectiveGame({
     return {
       icon: 'done' as const,
       iconColor: 'blue' as const,
-      title: 'Верно!',
-      description: popup.option.explanation,
-      buttonLabel: 'Результаты',
+      title: t("Верно!"),
+      description: t(popup.option.explanation),
+      buttonLabel: t("Результаты"),
     };
   })();
 
@@ -442,7 +444,7 @@ export function AnomalyDetectiveGame({
         <div className={styles.stage}>
           <div className={`${styles.graphs} ${showMentions ? styles.graphsStacked : ''}`}>
             <GraphCard
-              title={VIEWS_TITLE}
+              title={t(VIEWS_TITLE)}
               data={VIEWS}
               ticks={VIEWS_TICKS}
               peakHighlighted
@@ -455,14 +457,14 @@ export function AnomalyDetectiveGame({
             {showMentions && (
               <>
                 <GraphCard
-                  title={MENTIONS_TITLE}
+                  title={t(MENTIONS_TITLE)}
                   data={MENTIONS}
                   ticks={MENTIONS_TICKS}
                   peakHighlighted
                   compact
                 />
                 <p className={styles.graphHint}>
-                  Сравни оба графика. Когда именно начался рост? Как долго он длился? Это поможет понять причину.
+                  {t("Сравни оба графика. Когда именно начался рост? Как долго он длился? Это поможет понять причину.")}
                 </p>
               </>
             )}
@@ -473,8 +475,8 @@ export function AnomalyDetectiveGame({
               {options.map((option, i) => (
                 <Card
                   key={i}
-                  variant={VARIANT_LABELS[i] || `Вариант ${i + 1}`}
-                  title={option.text || ''}
+                  variant={VARIANT_LABELS[i] ? t(VARIANT_LABELS[i]) : t("Вариант {{n}}", { n: i + 1 })}
+                  title={option.text ? t(option.text) : ''}
                   description=""
                   size="m"
                   state={getCardState(i, option)}
@@ -488,7 +490,7 @@ export function AnomalyDetectiveGame({
         {!requestedExtra && phase !== 'find' && (
           <div className={styles.actions}>
             <Button
-              label="🔍 Запросить дополнительные данные"
+              label={t("🔍 Запросить дополнительные данные")}
               type="secondary"
               onClick={handleRequestExtra}
             />
@@ -513,7 +515,7 @@ export function AnomalyDetectiveGame({
         <div className={styles.overlay} onClick={() => { if (!wordTooltip) {} }}>
           <div className={styles.wowPopup}>
             <div className={styles.wowHeader}>
-              <span className={styles.wowTitle}>Интересная версия</span>
+              <span className={styles.wowTitle}>{t("Интересная версия")}</span>
             </div>
             <p className={styles.wowDescription}>
               {renderTooltips(WOW_DESCRIPTION, setWordTooltip, styles.tooltipWord)}
@@ -531,7 +533,7 @@ export function AnomalyDetectiveGame({
               </div>
             )}
             <Button
-              label="Сверить графики"
+              label={t("Сверить графики")}
               type="secondary"
               onClick={handlePopupAction}
             />

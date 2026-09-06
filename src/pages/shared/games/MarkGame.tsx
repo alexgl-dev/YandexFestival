@@ -1,4 +1,5 @@
 import { useState, useCallback, useRef } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Background, Button, Icon, InfoButton, ListItem, PopUp } from '../../../components/ui';
 import type { Task, UxReview } from '../../../types/game';
 import { AppMockup } from './AppMockup';
@@ -41,6 +42,7 @@ function UxReviewGame({
   orientation: 'landscape' | 'portrait';
   onBack: () => void;
 }) {
+  const { t } = useTranslation('sharedGames2');
   const [selectedZones, setSelectedZones] = useState<Set<string>>(new Set());
   const [zoneOrder, setZoneOrder] = useState<string[]>([]);
   const [checked, setChecked] = useState(false);
@@ -81,13 +83,13 @@ function UxReviewGame({
     const wrongCount = [...selectedZones].filter((z) => !problemZones.has(z)).length;
     const foundAll = correctCount === problemZones.size && wrongCount === 0;
     onComplete([{
-      answer: `Найдено ${correctCount} из ${problemZones.size} проблем`,
+      answer: t("Найдено {{count}} из {{total}} проблем", { count: correctCount, total: problemZones.size }),
       correct: foundAll,
       explanation: foundAll
-        ? 'Все проблемные зоны определены верно!'
-        : `Найдено ${correctCount} из ${problemZones.size} проблем`,
+        ? t("Все проблемные зоны определены верно!")
+        : t("Найдено {{count}} из {{total}} проблем", { count: correctCount, total: problemZones.size }),
     }]);
-  }, [selectedZones, problemZones, onComplete]);
+  }, [selectedZones, problemZones, onComplete, t]);
 
   // After check: each zone gets correct/wrong
   const zoneResults: Record<string, 'correct' | 'wrong'> = checked
@@ -110,7 +112,7 @@ function UxReviewGame({
 
         {/* Reviews */}
         <div className={styles.reviewsSection}>
-          <h2 className={styles.reviewsTitle}>Отзывы пользователей</h2>
+          <h2 className={styles.reviewsTitle}>{t("Отзывы пользователей")}</h2>
           <div className={styles.reviewsList}>
             {reviews.map((r) => {
               const s = checked ? reviewStatus(r) : undefined;
@@ -128,7 +130,7 @@ function UxReviewGame({
                     onClick={() => handleReviewClick(r.id)}
                   >
                     <div className={styles.listItemWrap}>
-                      <ListItem title={`«${r.text.replace(/[.!?]+$/, '')}»`} state="default" />
+                      <ListItem title={`«${t(r.text).replace(/[.!?]+$/, '')}»`} state="default" />
                     </div>
                     {s && (
                       <div className={styles.statusGroup}>
@@ -158,12 +160,12 @@ function UxReviewGame({
           <div className={styles.footerRow}>
             {!checked ? (
               <Button
-                label="Отправить в работу"
+                label={t("Отправить в работу")}
                 type="secondary"
                 onClick={handleCheck}
               />
             ) : (
-              <Button label="Далее" type="secondary" onClick={handleComplete} />
+              <Button label={t("Далее")} type="secondary" onClick={handleComplete} />
             )}
           </div>
         </div>
@@ -184,9 +186,9 @@ function UxReviewGame({
               <PopUp
                 icon={isGood ? 'done' : 'close'}
                 iconColor={isGood ? 'blue' : 'red'}
-                title={`«${r.text.replace(/[.!?]+$/, '')}»`}
-                description={r.explanation}
-                buttonLabel="Понятно"
+                title={`«${t(r.text).replace(/[.!?]+$/, '')}»`}
+                description={t(r.explanation)}
+                buttonLabel={t("Понятно")}
                 onButtonClick={() => setExpandedReviewId(null)}
               />
             </div>
@@ -201,6 +203,7 @@ function UxReviewGame({
 // ─── Main MarkGame ────────────────────────────────────────────────────────────
 
 export function MarkGame({ task, onComplete, onBack, theme = 'orange', orientation = 'portrait' }: GameProps) {
+  const { t } = useTranslation('sharedGames2');
   const steps = task.steps;
   const [currentStep, setCurrentStep] = useState(0);
   const step = steps[currentStep];
@@ -258,9 +261,9 @@ export function MarkGame({ task, onComplete, onBack, theme = 'orange', orientati
     );
 
     const stepResult: GameResult = {
-      answer: `Найдено ${hitTargets.length} из ${targets.length}`,
+      answer: t("Найдено {{count}} из {{total}}", { count: hitTargets.length, total: targets.length }),
       correct: hitTargets.length === targets.length,
-      explanation: targets.map((t) => t.explanation).join('; '),
+      explanation: targets.map((target) => t(target.explanation)).join('; '),
     };
     setResults((prev) => [...prev, stepResult]);
     setShowPopup(true);
@@ -288,7 +291,7 @@ export function MarkGame({ task, onComplete, onBack, theme = 'orange', orientati
         <div className={styles.content}>
           <div className={styles.imageContainer} ref={imageRef} onClick={handleImageClick}>
             {step.image && (
-              <img src={step.image} alt={step.prompt || 'Изображение Задачи на день'} className={styles.image} />
+              <img src={step.image} alt={step.prompt ? t(step.prompt) : t("Изображение Задачи на день")} className={styles.image} />
             )}
             {markers.map((marker, i) => {
               const statusClass = markerStatus[i] === 'correct'
@@ -309,7 +312,7 @@ export function MarkGame({ task, onComplete, onBack, theme = 'orange', orientati
 
         {!checked && markers.length > 0 && (
           <div className={styles.footer}>
-            <Button label="Проверить" type="secondary" onClick={handleCheck} />
+            <Button label={t("Проверить")} type="secondary" onClick={handleCheck} />
           </div>
         )}
 
@@ -318,9 +321,9 @@ export function MarkGame({ task, onComplete, onBack, theme = 'orange', orientati
             <PopUp
               icon={lastResult.correct ? 'done' : 'close'}
               iconColor={lastResult.correct ? 'blue' : 'red'}
-              title={lastResult.correct ? 'Верно!' : 'Не совсем...'}
+              title={lastResult.correct ? t("Верно!") : t("Не совсем...")}
               description={lastResult.explanation}
-              buttonLabel={isLastStep ? 'Результаты' : 'Дальше'}
+              buttonLabel={isLastStep ? t("Результаты") : t("Дальше")}
               onButtonClick={handlePopupAction}
             />
           </div>

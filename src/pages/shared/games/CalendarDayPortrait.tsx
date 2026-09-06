@@ -1,17 +1,18 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Background, Icon, IconButton, InfoButton, PopUp } from '../../../components/ui';
 import type { CalendarCardData, GlossaryTerm } from '../../../types/game';
 import { getWeekDays, type CalendarDay } from '../../../utils/calendarDays';
 import { parseGlossarySegments } from '../parseGlossarySegments';
 import styles from './CalendarDayPortrait.module.css';
 
-const formatDuration = (slots: number, durationMin?: number) => {
+const formatDuration = (slots: number, durationMin: number | undefined, t: (key: string, opts?: Record<string, unknown>) => string) => {
   const min = durationMin ?? slots * 30;
-  if (min < 60) return `${min} минут`;
+  if (min < 60) return t("{{min}} минут", { min });
   const h = min / 60;
-  if (h === 1) return '1 час';
-  if (h < 5) return `${h} часа`;
-  return `${h} часов`;
+  if (h === 1) return t("1 час");
+  if (h < 5) return t("{{h}} часа", { h });
+  return t("{{h}} часов", { h });
 };
 
 const slotToTime = (slot: number, startHour: number) => {
@@ -119,6 +120,7 @@ export function CalendarDayPortrait({
   bottomText,
   bottomTextItalic,
 }: Props) {
+  const { t } = useTranslation('sharedGames1');
   const [tooltipCard, setTooltipCard] = useState<CalendarCardData | null>(null);
   const [activeTerm, setActiveTerm] = useState<GlossaryTerm | null>(null);
   const [showIntro, setShowIntro] = useState<boolean>(false);
@@ -211,7 +213,7 @@ export function CalendarDayPortrait({
                           : ''
                     }`}
                   >
-                    {renderCardTitle(card.title, styles.cardPeregovorka)}
+                    {renderCardTitle(t(card.title), styles.cardPeregovorka)}
                   </span>
                   <div className={styles.cardMeta}>
                     <InfoButton
@@ -221,7 +223,7 @@ export function CalendarDayPortrait({
                       onClick={(e) => { e.stopPropagation(); setTooltipCard(card); }}
                     />
                     <Icon name="clock" color="blue" size="xs" />
-                    <span className={styles.cardDuration}>{card.durationLabel ?? formatDuration(card.durationSlots, card.durationMin)}</span>
+                    <span className={styles.cardDuration}>{card.durationLabel ? t(card.durationLabel) : formatDuration(card.durationSlots, card.durationMin, t)}</span>
                   </div>
                 </div>
                 );
@@ -249,8 +251,8 @@ export function CalendarDayPortrait({
         <div className={styles.overlay} onClick={() => setShowUtcInfo(false)}>
           <div onClick={(e) => e.stopPropagation()}>
             <PopUp
-              description="Сотрудники Яндекса работают в разных часовых поясах и точках мира"
-              buttonLabel="Понятно"
+              description={t("Сотрудники Яндекса работают в разных часовых поясах и точках мира")}
+              buttonLabel={t("Понятно")}
               onButtonClick={() => setShowUtcInfo(false)}
               compact
             />
@@ -268,7 +270,7 @@ export function CalendarDayPortrait({
                 {bottomTextItalic && <p className={`${styles.popupParagraph} ${styles.popupParagraphItalic}`}>{bottomTextItalic}</p>}
               </>
             }
-            buttonLabel="Понятно"
+            buttonLabel={t("Понятно")}
             onButtonClick={() => setShowIntro(false)}
           />
         </div>
@@ -278,15 +280,15 @@ export function CalendarDayPortrait({
         <div className={styles.overlay} onClick={() => setTooltipCard(null)}>
           <div onClick={e => e.stopPropagation()}>
             <PopUp
-              title={tooltipCard.title}
+              title={t(tooltipCard.title)}
               description={
                 <div className={styles.tooltipDescription}>
                   <div className={styles.tooltipDuration}>
                     <Icon name="clock" color="blue" size="xs" />
-                    <span>{tooltipCard.durationLabel ?? formatDuration(tooltipCard.durationSlots, tooltipCard.durationMin)}</span>
+                    <span>{tooltipCard.durationLabel ? t(tooltipCard.durationLabel) : formatDuration(tooltipCard.durationSlots, tooltipCard.durationMin, t)}</span>
                   </div>
                   <span>
-                    {parseGlossarySegments(tooltipCard.tooltip, tooltipCard.glossary ?? []).map((seg, i) =>
+                    {parseGlossarySegments(t(tooltipCard.tooltip), tooltipCard.glossary ?? []).map((seg, i) =>
                       seg.tooltip ? (
                         <span
                           key={i}
@@ -302,7 +304,7 @@ export function CalendarDayPortrait({
                   </span>
                 </div>
               }
-              buttonLabel="Понятно"
+              buttonLabel={t("Понятно")}
               onButtonClick={() => setTooltipCard(null)}
             />
           </div>
@@ -313,9 +315,9 @@ export function CalendarDayPortrait({
         <div className={styles.termOverlay} onClick={() => setActiveTerm(null)}>
           <div onClick={(e) => e.stopPropagation()}>
             <PopUp
-              title={activeTerm.word.charAt(0).toUpperCase() + activeTerm.word.slice(1)}
-              description={activeTerm.definition}
-              buttonLabel="Понятно"
+              title={(() => { const w = t(activeTerm.word); return w.charAt(0).toUpperCase() + w.slice(1); })()}
+              description={t(activeTerm.definition)}
+              buttonLabel={t("Понятно")}
               onButtonClick={() => setActiveTerm(null)}
               compact
             />

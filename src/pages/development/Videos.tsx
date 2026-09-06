@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, useOutletContext } from 'react-router';
+import { useTranslation } from 'react-i18next';
 import { Background, Player } from '../../components/ui';
 import type { SectionData } from '../../types/game';
 import styles from './Videos.module.css';
@@ -7,6 +8,7 @@ import styles from './Videos.module.css';
 export function Videos() {
   const navigate = useNavigate();
   const data = useOutletContext<SectionData>();
+  const { t } = useTranslation('development');
 
   const [playingIndex, setPlayingIndex] = useState<number | null>(null);
 
@@ -22,13 +24,13 @@ export function Videos() {
     <Background theme="cobalt" orientation="landscape" onBack={handleBack}>
       <div className={styles.wrapper}>
         <div className={styles.content}>
-          <h2 className={styles.title}>Истории яндексоидов</h2>
+          <h2 className={styles.title}>{t("Истории яндексоидов")}</h2>
 
           <div className={styles.grid}>
             {data.videos.map((video, index) => (
               <div key={index} className={styles.item}>
                 <Player
-                  title={video.title}
+                  title={t(video.title)}
                   state="default"
                   orientation="vertical"
                   src={video.src}
@@ -45,7 +47,7 @@ export function Videos() {
         <div className={styles.videoOverlay} onClick={closeOverlay}>
           <div className={styles.videoOverlayInner} onClick={(e) => e.stopPropagation()}>
             <Player
-              title={activeVideo.title}
+              title={t(activeVideo.title)}
               state="playing"
               orientation="vertical"
               src={activeVideo.src}

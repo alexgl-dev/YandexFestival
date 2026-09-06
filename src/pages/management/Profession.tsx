@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, useParams, useOutletContext } from 'react-router';
+import { useTranslation } from 'react-i18next';
 import { Background, Badge, PopUp } from '../../components/ui';
 import type { SectionData, GlossaryTerm } from '../../types/game';
 import styles from './Profession.module.css';
@@ -31,6 +32,7 @@ export function Profession() {
   const navigate = useNavigate();
   const { professionId } = useParams();
   const data = useOutletContext<SectionData>();
+  const { t } = useTranslation('management');
 
   const [activeTerm, setActiveTerm] = useState<GlossaryTerm | null>(null);
 
@@ -41,7 +43,7 @@ export function Profession() {
     return (
       <Background theme="orange" orientation="portrait" onBack={() => navigate(`/${data.slug}/description`)}>
         <div className={styles.wrapper}>
-          <p className={styles.notFound}>Профессия не найдена</p>
+          <p className={styles.notFound}>{t('Профессия не найдена')}</p>
         </div>
       </Background>
     );
@@ -56,22 +58,22 @@ export function Profession() {
   return (
     <Background theme="orange" orientation="portrait" onBack={() => navigate(`/${data.slug}/description`)}>
       <div className={styles.wrapper}>
-        <h2 className={styles.title}>{profession.title}</h2>
+        <h2 className={styles.title}>{t(profession.title)}</h2>
 
         {hasSections ? (
           <div className={styles.sections}>
             {profession.sections!.map((section) => (
               <div key={section.heading} className={styles.sectionCard}>
-                <h3 className={styles.sectionHeading}>{section.heading}</h3>
+                <h3 className={styles.sectionHeading}>{t(section.heading)}</h3>
                 <p className={styles.sectionText}>
-                  {renderWithGlossary(section.text, glossary, setActiveTerm)}
+                  {renderWithGlossary(t(section.text), glossary, setActiveTerm)}
                 </p>
               </div>
             ))}
           </div>
         ) : (
           <div className={styles.card}>
-            <p className={styles.description}>{profession.description}</p>
+            <p className={styles.description}>{t(profession.description)}</p>
           </div>
         )}
 
@@ -79,7 +81,7 @@ export function Profession() {
           {prev && (
             <span onClick={() => navigate(`/${data.slug}/description/${prev.id}`)} className={styles.navLink}>
               <Badge
-                label={prev.title}
+                label={t(prev.title)}
                 type="outline"
                 icon={<img src="/icons/icon-arrow.svg" alt="" className={styles.navArrowIconLeft} />}
               />
@@ -88,7 +90,7 @@ export function Profession() {
           {next && (
             <span onClick={() => navigate(`/${data.slug}/description/${next.id}`)} className={styles.navLink}>
               <Badge
-                label={next.title}
+                label={t(next.title)}
                 type="outline"
                 icon={<img src="/icons/icon-arrow.svg" alt="" className={styles.navArrowIconRight} />}
                 iconPosition="end"
@@ -102,9 +104,9 @@ export function Profession() {
         <div className={styles.overlay} onClick={() => setActiveTerm(null)}>
           <div onClick={(e) => e.stopPropagation()}>
             <PopUp
-              title={activeTerm.word.charAt(0).toUpperCase() + activeTerm.word.slice(1)}
-              description={activeTerm.definition}
-              buttonLabel="Понятно"
+              title={(() => { const w = t(activeTerm.word); return w.charAt(0).toUpperCase() + w.slice(1); })()}
+              description={t(activeTerm.definition)}
+              buttonLabel={t('Понятно')}
               onButtonClick={() => setActiveTerm(null)}
               compact
             />

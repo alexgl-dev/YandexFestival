@@ -1,4 +1,5 @@
 import { useMemo, useState, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Background, Button, InfoButton, PopUp } from '../../../components/ui';
 import type { Task } from '../../../types/game';
 import { GameInstruction } from '../GameInstruction';
@@ -27,6 +28,7 @@ type Popup =
 const ROTATIONS = [-2.5, 1.8, -1.2, 2.2, -1.8, 0.8, -2.2, 1.5, -0.8, 2.8, -1.5, 0.6, -2, 1.2, -0.5];
 
 export function CategorizeGame({ task, onComplete, onBack, theme = 'cobalt', orientation = 'landscape' }: GameProps) {
+  const { t } = useTranslation('sharedGames1');
   const step = task.steps[0];
   const categories = step?.categories ?? [];
   const items = step?.items ?? [];
@@ -155,10 +157,10 @@ export function CategorizeGame({ task, onComplete, onBack, theme = 'cobalt', ori
         answer: label,
         correct,
         explanation: correct
-          ? 'Абсолютно верно.'
+          ? t("Абсолютно верно.")
           : placedCatId
-            ? `Иконка «${label}» ошибочно помещена в «${placedCatTitle}». ${item.wrongHint ?? ''}`.trim()
-            : 'Иконка не распределена.',
+            ? `${t("Иконка «{{label}}» ошибочно помещена в «{{category}}».", { label: t(label), category: t(placedCatTitle) })} ${item.wrongHint ? t(item.wrongHint) : ''}`.trim()
+            : t("Иконка не распределена."),
         group: placedCatTitle,
       };
     });
@@ -201,10 +203,10 @@ export function CategorizeGame({ task, onComplete, onBack, theme = 'cobalt', ori
                 onDrop={(e) => handleDrop(e, cat.id)}
               >
                 {cat.image && (
-                  <img src={cat.image} alt={cat.title} className={styles.categoryImage} />
+                  <img src={cat.image} alt={t(cat.title)} className={styles.categoryImage} />
                 )}
                 <div className={styles.columnHeader}>
-                  <span className={styles.columnTitle}>{cat.title}</span>
+                  <span className={styles.columnTitle}>{t(cat.title)}</span>
                   {cat.tooltip && (
                     <InfoButton
                       size="sm"
@@ -214,7 +216,7 @@ export function CategorizeGame({ task, onComplete, onBack, theme = 'cobalt', ori
                         e.stopPropagation();
                         if (popup) return;
                         if (!cat.tooltip) return;
-                        setPopup({ kind: 'category', title: cat.title, tooltip: cat.tooltip });
+                        setPopup({ kind: 'category', title: t(cat.title), tooltip: t(cat.tooltip) });
                       }}
                     />
                   )}
@@ -241,9 +243,9 @@ export function CategorizeGame({ task, onComplete, onBack, theme = 'cobalt', ori
                           }}
                         >
                           {it?.image ? (
-                            <img src={it.image} alt={label} className={styles.placedChipIcon} draggable={false} />
+                            <img src={it.image} alt={t(label)} className={styles.placedChipIcon} draggable={false} />
                           ) : (
-                            <span className={styles.placedChipText}>{label}</span>
+                            <span className={styles.placedChipText}>{t(label)}</span>
                           )}
                         </button>
                       );
@@ -288,15 +290,15 @@ export function CategorizeGame({ task, onComplete, onBack, theme = 'cobalt', ori
                   onClick={(e) => {
                     e.stopPropagation();
                     if (popup) return;
-                    setPopup({ kind: 'info', title: label, description: item.explanation });
+                    setPopup({ kind: 'info', title: t(label), description: t(item.explanation) });
                   }}
                 />
                 {item.image ? (
-                  <img src={item.image} alt={label} className={styles.cardIcon} draggable={false} />
+                  <img src={item.image} alt={t(label)} className={styles.cardIcon} draggable={false} />
                 ) : item.emoji ? (
                   <span className={styles.cardEmoji}>{item.emoji}</span>
                 ) : null}
-                <span className={styles.cardText}>{label}</span>
+                <span className={styles.cardText}>{t(label)}</span>
               </div>
             );
           })}
@@ -304,7 +306,7 @@ export function CategorizeGame({ task, onComplete, onBack, theme = 'cobalt', ori
 
         {isOnCompleteMode && allPlaced && (
           <div className={styles.checkWrap}>
-            <Button label="Проверить" type="secondary" onClick={handleCheck} />
+            <Button label={t("Проверить")} type="secondary" onClick={handleCheck} />
           </div>
         )}
       </div>
@@ -316,7 +318,7 @@ export function CategorizeGame({ task, onComplete, onBack, theme = 'cobalt', ori
             <PopUp
               title={popup.title}
               description={popup.tooltip}
-              buttonLabel="Понятно"
+              buttonLabel={t("Понятно")}
               onButtonClick={handlePopupDismiss}
             />
           )}
@@ -324,7 +326,7 @@ export function CategorizeGame({ task, onComplete, onBack, theme = 'cobalt', ori
             <PopUp
               title={popup.title}
               description={popup.description}
-              buttonLabel="Понятно"
+              buttonLabel={t("Понятно")}
               onButtonClick={handlePopupDismiss}
             />
           )}

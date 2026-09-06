@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Background, Button, PopUp } from '../../components/ui';
 import { parseInstructionMarkup } from './instructionMarkup';
 import styles from './TaskResult.module.css';
@@ -18,6 +19,7 @@ interface TaskResultProps {
 }
 
 export function TaskResult({ results, onContinue, theme = 'orange', orientation = 'portrait' }: TaskResultProps) {
+  const { t } = useTranslation('sharedOther');
   const [activeTerm, setActiveTerm] = useState<{ term: string; definition: string } | null>(null);
 
   const hasGroups = results.length > 0 && results.every((r) => !!r.group);
@@ -43,12 +45,12 @@ export function TaskResult({ results, onContinue, theme = 'orange', orientation 
       ].join(' ')}
     >
       <span className={styles.itemText}>
-        <span className={styles.itemAnswer}>{result.answer}</span>
+        <span className={styles.itemAnswer}>{t(result.answer)}</span>
         {result.explanation ? (
           <span className={styles.itemExplanation}>
             {' — '}
             {parseInstructionMarkup(
-              result.explanation,
+              t(result.explanation),
               (term, definition) => setActiveTerm({ term, definition }),
               `tr-${index}`,
               styles.termBtn,
@@ -64,20 +66,20 @@ export function TaskResult({ results, onContinue, theme = 'orange', orientation 
       <div className={styles.wrapper}>
         <div className={styles.card}>
           <div className={styles.header}>
-            <h2 className={styles.cardTitle}>Результаты</h2>
+            <h2 className={styles.cardTitle}>{t("Результаты")}</h2>
           </div>
           <div className={styles.items}>
             {hasGroups
               ? groups.map((g) => (
                   <div key={g.name} className={styles.group}>
-                    <h3 className={styles.groupTitle}>{g.name}</h3>
+                    <h3 className={styles.groupTitle}>{t(g.name)}</h3>
                     {g.items.map(({ result, index }) => renderItem(result, index))}
                   </div>
                 ))
               : results.map((r, i) => renderItem(r, i))}
           </div>
           <div className={styles.buttonWrap}>
-            <Button label="Далее" type="big_white" onClick={onContinue} />
+            <Button label={t("Далее")} type="big_white" onClick={onContinue} />
           </div>
         </div>
       </div>
@@ -88,7 +90,7 @@ export function TaskResult({ results, onContinue, theme = 'orange', orientation 
             <PopUp
               title={activeTerm.term.charAt(0).toUpperCase() + activeTerm.term.slice(1)}
               description={activeTerm.definition}
-              buttonLabel="Понятно"
+              buttonLabel={t("Понятно")}
               onButtonClick={() => setActiveTerm(null)}
               compact
             />

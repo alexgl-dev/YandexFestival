@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Background, Button, Icon } from '../../../components/ui';
 import type { Task } from '../../../types/game';
 import { GameInstruction } from '../GameInstruction';
@@ -31,13 +32,13 @@ function pickRandom<T>(items: T[], count: number): T[] {
   return shuffled.slice(0, Math.min(count, items.length));
 }
 
-function pluralSeconds(n: number): string {
+function pluralSeconds(n: number, t: (key: string) => string): string {
   const abs = Math.abs(n) % 100;
   const last = abs % 10;
-  if (abs > 10 && abs < 20) return 'секунд';
-  if (last === 1) return 'секунду';
-  if (last >= 2 && last <= 4) return 'секунды';
-  return 'секунд';
+  if (abs > 10 && abs < 20) return t("секунд");
+  if (last === 1) return t("секунду");
+  if (last >= 2 && last <= 4) return t("секунды");
+  return t("секунд");
 }
 
 /**
@@ -47,6 +48,7 @@ function pluralSeconds(n: number): string {
  * `sampleSize` случайных фото из `countItems` без повторов; итог — onComplete со всеми раундами.
  */
 export function CountGame({ task, onComplete, onBack, theme = 'cobalt', orientation = 'landscape' }: GameProps) {
+  const { t } = useTranslation('sharedGames1');
   const step = task.steps[0];
   const pool = step?.countItems ?? [];
   const sampleSize = step?.sampleSize ?? pool.length;
@@ -111,10 +113,10 @@ export function CountGame({ task, onComplete, onBack, theme = 'cobalt', orientat
 
       <div className={styles.layout}>
         <div className={styles.metaRow}>
-          <span className={styles.stepCounter}>Фото {roundIndex + 1} из {totalRounds}</span>
+          <span className={styles.stepCounter}>{t("Фото {{n}} из {{total}}", { n: roundIndex + 1, total: totalRounds })}</span>
           {phase === 'input' && (
             <div className={styles.timerBox}>
-              <span className={styles.timerLabel}>Прошло</span>
+              <span className={styles.timerLabel}>{t("Прошло")}</span>
               <div className={styles.timerCircle}>
                 <span className={styles.timerNum}>
                   {String(Math.floor(elapsed / 60)).padStart(2, '0')}:{String(elapsed % 60).padStart(2, '0')}
@@ -127,7 +129,7 @@ export function CountGame({ task, onComplete, onBack, theme = 'cobalt', orientat
         {phase === 'input' ? (
           <div className={styles.mainRow}>
             <div className={styles.photoCard}>
-              <p className={styles.prompt}>Посчитай, сколько на фото объектов: {countLabel}</p>
+              <p className={styles.prompt}>{t("Посчитай, сколько на фото объектов: {{label}}", { label: t(countLabel) })}</p>
               <img src={current.image} alt="" className={styles.photo} draggable={false} />
             </div>
 
@@ -171,29 +173,29 @@ export function CountGame({ task, onComplete, onBack, theme = 'cobalt', orientat
             <div className={styles.compareCard}>
               <Icon name={isCorrect ? 'done' : 'close'} color={isCorrect ? 'blue' : 'red'} size="m" />
               <p className={styles.compareLine}>
-                Ты: <strong>{answer}</strong> за <strong>{submittedSeconds}</strong> {pluralSeconds(submittedSeconds)}
+                {t("Ты:")} <strong>{answer}</strong> {t("за")} <strong>{submittedSeconds}</strong> {pluralSeconds(submittedSeconds, t)}
               </p>
               <p className={styles.compareLine}>
-                Нейросеть: <strong>{current.detected}</strong> за <strong>{current.aiTimeMs}</strong> мс
+                {t("Нейросеть:")} <strong>{current.detected}</strong> {t("за")} <strong>{current.aiTimeMs}</strong> {t("мс")}
               </p>
               <p className={styles.compareLine}>
-                Правильный ответ: <strong>{current.actual}</strong>
+                {t("Правильный ответ:")} <strong>{current.actual}</strong>
               </p>
-              {current.comment && <p className={styles.comment}>{current.comment}</p>}
+              {current.comment && <p className={styles.comment}>{t(current.comment)}</p>}
             </div>
           </div>
         )}
 
         {phase === 'input' ? (
           <Button
-            label="Проверить"
+            label={t("Проверить")}
             type="secondary"
             onClick={handleCheck}
             className={`${styles.actionButton} ${!answer ? styles.actionButtonDisabled : ''}`}
           />
         ) : (
           <Button
-            label={isLastRound ? 'Результаты' : 'Дальше'}
+            label={isLastRound ? t("Результаты") : t("Дальше")}
             type="secondary"
             onClick={handleNext}
             className={styles.actionButton}

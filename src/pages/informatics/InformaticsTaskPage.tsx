@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { useNavigate, useParams, useOutletContext } from 'react-router';
+import { useTranslation } from 'react-i18next';
 import type { SectionData, Task } from '../../types/game';
 import { TaskIntro } from '../shared/TaskIntro';
 import { TaskMoral } from '../shared/TaskMoral';
@@ -13,12 +14,13 @@ type Phase = 'intro' | 'game' | 'moral';
  * Экрана «результаты» нет — все механики трека дают фидбек внутри игры.
  */
 export function InformaticsTaskPage() {
+  const { t } = useTranslation('informatics');
   const { taskId } = useParams();
   const data = useOutletContext<SectionData>();
-  const task = data.tasks.find((t) => t.id === taskId);
+  const task = data.tasks.find((item) => item.id === taskId);
 
   if (!task) {
-    return <div>Задание не найдено</div>;
+    return <div>{t("Задание не найдено")}</div>;
   }
 
   // key по taskId — при смене задания состояние фаз сбрасывается без эффекта.

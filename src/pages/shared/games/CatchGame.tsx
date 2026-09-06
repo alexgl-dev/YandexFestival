@@ -1,4 +1,5 @@
 import { useState, useCallback, useRef, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Background, PopUp } from '../../../components/ui';
 import type { Task, CatchObject } from '../../../types/game';
 import { GameInstruction } from '../GameInstruction';
@@ -41,6 +42,7 @@ export function CatchGame({
   theme = 'cobalt',
   orientation = 'landscape',
 }: GameProps) {
+  const { t } = useTranslation('sharedGames1');
   const step = task.steps[0];
   const objects = step?.objects ?? [];
   const catcherConfig = step?.catcher;
@@ -242,7 +244,7 @@ export function CatchGame({
         {/* Score */}
         <div className={styles.score}>
           <span className={styles.scoreLabel}>
-            {catcherConfig?.label ?? 'Поймано'}:
+            {t(catcherConfig?.label ?? 'Поймано')}:
           </span>
           <span className={styles.scoreValue}>
             {caughtCount} / {objects.length}
@@ -261,7 +263,7 @@ export function CatchGame({
             <img
               className={styles.bugIcon}
               src={activeBug.object.icon}
-              alt={activeBug.object.title}
+              alt={t(activeBug.object.title)}
               draggable={false}
             />
           </div>
@@ -279,7 +281,7 @@ export function CatchGame({
             <img
               className={styles.bugIcon}
               src={activeBug.object.icon}
-              alt={activeBug.object.title}
+              alt={t(activeBug.object.title)}
               draggable={false}
             />
           </div>
@@ -293,7 +295,7 @@ export function CatchGame({
           <div className={styles.catcherHandle} />
           <div className={styles.catcherBody}>
             <span className={styles.catcherLabel}>
-              {catcherConfig?.label ?? 'Сачок'}
+              {t(catcherConfig?.label ?? 'Сачок')}
             </span>
           </div>
         </div>
@@ -308,10 +310,10 @@ export function CatchGame({
             <PopUp
               icon="done"
               iconColor="blue"
-              title={lastCaughtObject.title}
-              description={lastCaughtObject.description}
+              title={t(lastCaughtObject.title)}
+              description={t(lastCaughtObject.description)}
               buttonLabel={
-                currentIndex + 1 >= objects.length ? 'Результаты' : 'Дальше'
+                currentIndex + 1 >= objects.length ? t("Результаты") : t("Дальше")
               }
               onButtonClick={handlePopupDismiss}
             />

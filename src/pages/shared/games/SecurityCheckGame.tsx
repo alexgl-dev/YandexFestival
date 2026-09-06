@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Background, Button, Icon, PopUp } from '../../../components/ui';
 import type { EmailBlock, EmailContent, EmailField, Task } from '../../../types/game';
 import { GameInstruction } from '../GameInstruction';
@@ -29,10 +30,11 @@ export function SecurityCheckGame({
   theme = 'cobalt',
   orientation = 'landscape',
 }: GameProps) {
+  const { t } = useTranslation('sharedGames2');
   const step = task.steps[0];
   const items = step?.items ?? [];
   const labels = step?.labels ?? [];
-  const correctSharedText = step?.resultCorrect ?? 'Ты правильно оценил это письмо.';
+  const correctSharedText = step?.resultCorrect ? t(step.resultCorrect) : t("Ты правильно оценил это письмо.");
 
   const [currentIdx, setCurrentIdx] = useState(0);
   const [results, setResults] = useState<GameResult[]>([]);
@@ -61,14 +63,14 @@ export function SecurityCheckGame({
       const result: GameResult = {
         answer: pickedLabel?.title ?? labelId,
         correct: isCorrect,
-        explanation: isCorrect ? correctSharedText : currentItem.explanation,
+        explanation: isCorrect ? correctSharedText : t(currentItem.explanation),
       };
       setResults((prev) => [...prev, result]);
       setActiveNote(null);
       setPopup({
         kind: 'feedback',
         correct: isCorrect,
-        explanation: isCorrect ? correctSharedText : currentItem.explanation,
+        explanation: isCorrect ? correctSharedText : t(currentItem.explanation),
       });
     },
     [currentItem, labels, correctSharedText],
@@ -94,7 +96,7 @@ export function SecurityCheckGame({
 
       <div className={styles.wrapper}>
         <div className={styles.counter}>
-          Письмо {currentIdx + 1} из {items.length}
+          {t("Письмо {{current}} из {{total}}", { current: currentIdx + 1, total: items.length })}
         </div>
 
         <EmailCard
@@ -111,7 +113,7 @@ export function SecurityCheckGame({
             return (
               <Button
                 key={label.id}
-                label={label.title}
+                label={t(label.title)}
                 type="secondary"
                 onClick={() => handleVerdict(label.id)}
                 className={isDanger ? styles.btnDanger : styles.btnSafe}
@@ -126,9 +128,9 @@ export function SecurityCheckGame({
           <PopUp
             icon={popup.correct ? 'done' : 'close'}
             iconColor={popup.correct ? 'blue' : 'red'}
-            title={popup.correct ? 'Верно!' : 'Ошибка'}
+            title={popup.correct ? t("Верно!") : t("Ошибка")}
             description={popup.explanation}
-            buttonLabel={currentIdx + 1 >= items.length ? 'Результаты' : 'Следующее письмо'}
+            buttonLabel={currentIdx + 1 >= items.length ? t("Результаты") : t("Следующее письмо")}
             onButtonClick={handlePopupAction}
           />
         </div>
@@ -152,12 +154,13 @@ function EmailCard({
   hintsVisible: boolean;
   onToggleHints: () => void;
 }) {
+  const { t } = useTranslation('sharedGames2');
   return (
     <div className={styles.emailCard}>
       <div className={styles.emailCardScroll}>
         <div className={styles.emailHeader}>
           <EmailRow
-            label="От кого"
+            label={t("От кого")}
             field={email.from}
             keyBase="from"
             activeNote={activeNote}
@@ -165,7 +168,7 @@ function EmailCard({
             hintsRevealed={hintsVisible}
           />
           <EmailRow
-            label="Кому"
+            label={t("Кому")}
             field={email.to}
             keyBase="to"
             activeNote={activeNote}
@@ -173,7 +176,7 @@ function EmailCard({
             hintsRevealed={hintsVisible}
           />
           <EmailRow
-            label="Тема"
+            label={t("Тема")}
             field={email.subject}
             keyBase="subject"
             activeNote={activeNote}
@@ -196,7 +199,7 @@ function EmailCard({
       </div>
       <div className={styles.hintFooter}>
         <Button
-          label={hintsVisible ? 'Скрыть подсказку' : 'Показать подсказку'}
+          label={hintsVisible ? t("Скрыть подсказку") : t("Показать подсказку")}
           type="secondary"
           className={styles.hintButton}
           onClick={onToggleHints}
@@ -251,6 +254,7 @@ function EmailBodyBlock({
   onNoteClick: (key: string, note?: string) => void;
   hintsRevealed: boolean;
 }) {
+  const { t } = useTranslation('sharedGames2');
   const isActive = activeNote === keyBase;
 
   if (block.type === 'link') {
@@ -299,7 +303,7 @@ function EmailBodyBlock({
               size="s"
             />
           </span>
-          <span className={styles.attachmentName}>{block.text}</span>
+          <span className={styles.attachmentName}>{t(block.text)}</span>
           {block.note && (
             <span
               className={styles.noteMark}
@@ -311,7 +315,7 @@ function EmailBodyBlock({
           )}
           {isActive && block.note && hintsRevealed && (
             <span className={styles.noteTooltip} onClick={(e) => e.stopPropagation()}>
-              {block.note}
+              {t(block.note)}
             </span>
           )}
         </button>
@@ -355,12 +359,13 @@ function NotableText({
   className?: string;
   hintsRevealed: boolean;
 }) {
+  const { t } = useTranslation('sharedGames2');
   const hasNote = !!note;
   const showHighlights = hintsRevealed && hasNote;
 
   if (!hasNote) {
     const cls = className ?? styles.valueText;
-    return <span className={cls}>{renderMultiline(text)}</span>;
+    return <span className={cls}>{renderMultiline(t(text))}</span>;
   }
 
   const cls = [
@@ -386,7 +391,7 @@ function NotableText({
           : undefined
       }
     >
-      {renderMultiline(text)}
+      {renderMultiline(t(text))}
       <span
         className={styles.noteMark}
         style={{ visibility: showHighlights ? 'visible' : 'hidden' }}
@@ -396,7 +401,7 @@ function NotableText({
       </span>
       {isActive && showHighlights && (
         <span className={styles.noteTooltip} onClick={(e) => e.stopPropagation()}>
-          {note}
+          {t(note ?? '')}
         </span>
       )}
     </span>

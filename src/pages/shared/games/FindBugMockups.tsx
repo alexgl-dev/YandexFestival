@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import styles from './FindBugMockups.module.css';
 
 /* ============================
@@ -5,14 +6,15 @@ import styles from './FindBugMockups.module.css';
    Bug: no search button
    ============================ */
 export function BooksMockup({ className }: { className?: string }) {
+  const { t } = useTranslation('sharedGames2');
   const books = [
-    { emoji: '📗', title: 'Евгений Онегин', author: 'А.С. Пушкин' },
-    { emoji: '📘', title: 'Война и мир', author: 'Л.Н. Толстой' },
-    { emoji: '📕', title: 'Мёртвые души', author: 'Н.В. Гоголь' },
-    { emoji: '📙', title: 'Отцы и дети', author: 'И.С. Тургенев' },
-    { emoji: '📗', title: 'Преступление и наказание', author: 'Ф.М. Достоевский' },
-    { emoji: '📘', title: 'Капитанская дочка', author: 'А.С. Пушкин' },
-    { emoji: '📕', title: 'Анна Каренина', author: 'Л.Н. Толстой' },
+    { emoji: '📗', title: t("Евгений Онегин"), author: t("А.С. Пушкин") },
+    { emoji: '📘', title: t("Война и мир"), author: t("Л.Н. Толстой") },
+    { emoji: '📕', title: t("Мёртвые души"), author: t("Н.В. Гоголь") },
+    { emoji: '📙', title: t("Отцы и дети"), author: t("И.С. Тургенев") },
+    { emoji: '📗', title: t("Преступление и наказание"), author: t("Ф.М. Достоевский") },
+    { emoji: '📘', title: t("Капитанская дочка"), author: t("А.С. Пушкин") },
+    { emoji: '📕', title: t("Анна Каренина"), author: t("Л.Н. Толстой") },
   ];
 
   return (
@@ -20,16 +22,16 @@ export function BooksMockup({ className }: { className?: string }) {
       {/* Header — NO search icon, that's the bug */}
       <div className={styles.booksHeader}>
         <span className={styles.booksLogo}>📚</span>
-        <span className={styles.booksTitle}>Бесплатно. Книги–онлайн</span>
+        <span className={styles.booksTitle}>{t("Бесплатно. Книги–онлайн")}</span>
         {/* search icon intentionally absent */}
       </div>
 
       {/* Category tabs */}
       <div className={styles.booksTabs}>
-        <span className={`${styles.booksTab} ${styles.booksTabActive}`}>Все</span>
-        <span className={styles.booksTab}>Классика</span>
-        <span className={styles.booksTab}>Современность</span>
-        <span className={styles.booksTab}>Детские</span>
+        <span className={`${styles.booksTab} ${styles.booksTabActive}`}>{t("Все")}</span>
+        <span className={styles.booksTab}>{t("Классика")}</span>
+        <span className={styles.booksTab}>{t("Современность")}</span>
+        <span className={styles.booksTab}>{t("Детские")}</span>
       </div>
 
       {/* Book list */}
@@ -40,7 +42,7 @@ export function BooksMockup({ className }: { className?: string }) {
             <div className={styles.bookInfo}>
               <p className={styles.bookName}>{book.title}</p>
               <p className={styles.bookAuthor}>{book.author}</p>
-              <span className={styles.bookFree}>Бесплатно</span>
+              <span className={styles.bookFree}>{t("Бесплатно")}</span>
             </div>
             <span className={styles.bookArrow}>›</span>
           </div>
@@ -55,6 +57,7 @@ export function BooksMockup({ className }: { className?: string }) {
    Bug: no back button
    ============================ */
 export function MessengerMockup({ className }: { className?: string }) {
+  const { t } = useTranslation('sharedGames2');
   return (
     <div className={`${styles.mockup} ${className ?? ''}`}>
       {/* Header — NO back arrow, that's the bug */}
@@ -62,8 +65,8 @@ export function MessengerMockup({ className }: { className?: string }) {
         {/* back button intentionally absent */}
         <div className={styles.messengerAvatar}>М</div>
         <div className={styles.messengerContactInfo}>
-          <span className={styles.messengerContactName}>Максим</span>
-          <span className={styles.messengerOnline}>в сети</span>
+          <span className={styles.messengerContactName}>{t("Максим")}</span>
+          <span className={styles.messengerOnline}>{t("в сети")}</span>
         </div>
         <div className={styles.messengerActions}>
           <span className={styles.messengerActionIcon}>📞</span>
@@ -74,23 +77,23 @@ export function MessengerMockup({ className }: { className?: string }) {
       {/* Messages */}
       <div className={styles.messengerMessages}>
         <div className={`${styles.messageBubble} ${styles.messageLeft}`}>
-          <span>Привет! Как дела? 😊</span>
+          <span>{t("Привет! Как дела? 😊")}</span>
           <div className={styles.messageTime}>14:02</div>
         </div>
         <div className={`${styles.messageBubble} ${styles.messageRight}`}>
-          <span>Всё отлично, спасибо!</span>
+          <span>{t("Всё отлично, спасибо!")}</span>
           <div className={styles.messageTime}>14:03</div>
         </div>
         <div className={`${styles.messageBubble} ${styles.messageLeft}`}>
-          <span>Встретимся сегодня вечером?</span>
+          <span>{t("Встретимся сегодня вечером?")}</span>
           <div className={styles.messageTime}>14:05</div>
         </div>
         <div className={`${styles.messageBubble} ${styles.messageRight}`}>
-          <span>Конечно, в 19:00?</span>
+          <span>{t("Конечно, в 19:00?")}</span>
           <div className={styles.messageTime}>14:06</div>
         </div>
         <div className={`${styles.messageBubble} ${styles.messageLeft}`}>
-          <span>Отлично, договорились!</span>
+          <span>{t("Отлично, договорились!")}</span>
           <div className={styles.messageTime}>14:07</div>
         </div>
       </div>
@@ -98,7 +101,7 @@ export function MessengerMockup({ className }: { className?: string }) {
       {/* Message input — present (not the bug) */}
       <div className={styles.messengerInput}>
         <div className={styles.messengerInputField}>
-          <span className={styles.messengerInputPlaceholder}>Написать сообщение...</span>
+          <span className={styles.messengerInputPlaceholder}>{t("Написать сообщение...")}</span>
         </div>
         <button className={styles.messengerSendBtn}>➤</button>
       </div>
@@ -111,12 +114,13 @@ export function MessengerMockup({ className }: { className?: string }) {
    Bug: no "Оформить заказ" button
    ============================ */
 export function FoodMockup({ className }: { className?: string }) {
+  const { t } = useTranslation('sharedGames2');
   const items = [
-    { emoji: '🥤', name: 'Кола 0.5л', qty: 2, price: 298 },
-    { emoji: '🍔', name: 'Двойной бургер', qty: 1, price: 790 },
-    { emoji: '🍌', name: 'Бананы 1 кг', qty: 1, price: 220 },
-    { emoji: '🧃', name: 'Апельсиновый сок', qty: 2, price: 280 },
-    { emoji: '🍟', name: 'Картофель фри', qty: 1, price: 760 },
+    { emoji: '🥤', name: t("Кола 0.5л"), qty: 2, price: 298 },
+    { emoji: '🍔', name: t("Двойной бургер"), qty: 1, price: 790 },
+    { emoji: '🍌', name: t("Бананы 1 кг"), qty: 1, price: 220 },
+    { emoji: '🧃', name: t("Апельсиновый сок"), qty: 2, price: 280 },
+    { emoji: '🍟', name: t("Картофель фри"), qty: 1, price: 760 },
   ];
 
   return (
@@ -124,7 +128,7 @@ export function FoodMockup({ className }: { className?: string }) {
       {/* Header */}
       <div className={styles.foodHeader}>
         <span className={styles.foodBackArrow}>←</span>
-        <span className={styles.foodHeaderTitle}>Корзина</span>
+        <span className={styles.foodHeaderTitle}>{t("Корзина")}</span>
         <span className={styles.foodBadge}>5</span>
       </div>
 
@@ -148,12 +152,12 @@ export function FoodMockup({ className }: { className?: string }) {
 
       {/* Add more button */}
       <div className={styles.foodAddMore}>
-        <span className={styles.foodAddMoreText}>+ Добавить ещё</span>
+        <span className={styles.foodAddMoreText}>+ {t("Добавить ещё")}</span>
       </div>
 
       {/* Total */}
       <div className={styles.foodTotal}>
-        <span className={styles.foodTotalLabel}>Итого:</span>
+        <span className={styles.foodTotalLabel}>{t("Итого:")}</span>
         <span className={styles.foodTotalPrice}>2 348 ₽</span>
       </div>
 
@@ -168,12 +172,13 @@ export function FoodMockup({ className }: { className?: string }) {
    Bug: no cart icon in header
    ============================ */
 export function MarketplaceMockup({ className }: { className?: string }) {
+  const { t } = useTranslation('sharedGames2');
   return (
     <div className={`${styles.mockup} ${className ?? ''}`}>
       {/* Header — NO cart icon, that's the bug */}
       <div className={styles.shopHeader}>
         <span className={styles.shopMenuIcon}>☰</span>
-        <span className={styles.shopBrand}>Шоп-стар</span>
+        <span className={styles.shopBrand}>{t("Шоп-стар")}</span>
         <span className={styles.shopNotify}>🔔</span>
         {/* cart icon intentionally absent */}
       </div>
@@ -183,19 +188,19 @@ export function MarketplaceMockup({ className }: { className?: string }) {
 
       {/* Product info */}
       <div className={styles.shopBody}>
-        <p className={styles.shopProductName}>Наушники Premium BT-500</p>
+        <p className={styles.shopProductName}>{t("Наушники Premium BT-500")}</p>
         <div className={styles.shopPriceRow}>
           <span className={styles.shopPrice}>4 990 ₽</span>
           <span className={styles.shopOldPrice}>6 000 ₽</span>
         </div>
         <p className={styles.shopRating}>
-          ⭐ 4.8 <span className={styles.shopRatingMuted}>(256 отзывов)</span>
+          ⭐ 4.8 <span className={styles.shopRatingMuted}>{t("({{count}} отзывов)", { count: 256 })}</span>
         </p>
         <p className={styles.shopDescription}>
-          Беспроводные наушники с активным шумоподавлением. Время работы 30 часов. Bluetooth 5.0.
+          {t("Беспроводные наушники с активным шумоподавлением. Время работы 30 часов. Bluetooth 5.0.")}
         </p>
 
-        <p className={styles.shopColorLabel}>Цвет</p>
+        <p className={styles.shopColorLabel}>{t("Цвет")}</p>
         <div className={styles.shopColors}>
           <span className={`${styles.shopColorDot} ${styles.shopColorBlack}`} />
           <span className={styles.shopColorDot} style={{ background: '#fff', border: '2px solid #ccc' }} />
@@ -205,7 +210,7 @@ export function MarketplaceMockup({ className }: { className?: string }) {
 
       {/* Add to cart button — present but can't view cart */}
       <div className={styles.shopBtnArea}>
-        <button className={styles.shopAddBtn}>Добавить в корзину</button>
+        <button className={styles.shopAddBtn}>{t("Добавить в корзину")}</button>
       </div>
     </div>
   );

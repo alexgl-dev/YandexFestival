@@ -1,5 +1,6 @@
 import { useState, type ReactNode } from 'react';
 import { useNavigate } from 'react-router';
+import { useTranslation } from 'react-i18next';
 import { Background, PopUp } from '../../components/ui';
 import type { GlossaryTerm, Task } from '../../types/game';
 import { parseGlossarySegments } from './parseGlossarySegments';
@@ -118,7 +119,10 @@ export function TaskMoral({
   showTasksMenu = true,
 }: TaskMoralProps) {
   const navigate = useNavigate();
-  const { main, question } = parseMoral(task.moral);
+  const { t } = useTranslation('sharedOther');
+  // Перевод — цельная строка из словаря; глоссарий-подсветка внутри работает
+  // только для исходного русского текста.
+  const { main, question } = parseMoral(t(task.moral));
   const moralTooltips = task.moralTooltips ?? [];
   const [activeTooltip, setActiveTooltip] = useState<GlossaryTerm | null>(null);
 
@@ -145,9 +149,9 @@ export function TaskMoral({
     <Background theme={theme} orientation={orientation} showBackButton={false}>
       <PopUp
         description={description}
-        buttonLabel={isLast ? 'В меню' : 'Следующее задание'}
+        buttonLabel={isLast ? t("В меню") : t("Следующее задание")}
         onButtonClick={onNext}
-        secondaryButtonLabel={showTasksMenu ? 'Меню заданий' : undefined}
+        secondaryButtonLabel={showTasksMenu ? t("Меню заданий") : undefined}
         onSecondaryButtonClick={showTasksMenu ? () => navigate(`/${sectionSlug}/tasks`) : undefined}
       />
       {activeTooltip && (
@@ -156,7 +160,7 @@ export function TaskMoral({
             <PopUp
               title={activeTooltip.word.charAt(0).toUpperCase() + activeTooltip.word.slice(1)}
               description={activeTooltip.definition}
-              buttonLabel="Понятно"
+              buttonLabel={t("Понятно")}
               onButtonClick={() => setActiveTooltip(null)}
               compact
             />

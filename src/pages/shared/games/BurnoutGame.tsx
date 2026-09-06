@@ -1,4 +1,5 @@
 import { useState, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Background, Button, Icon, PopUp } from '../../../components/ui';
 import type { Task, TaskOption } from '../../../types/game';
 import { GameInstruction } from '../GameInstruction';
@@ -36,10 +37,10 @@ interface GameProps {
 
 type ProfileState = 'default' | 'correct' | 'wrong';
 
-function getProfileName(option: TaskOption, index: number): string {
+function getProfileName(option: TaskOption, index: number, t: (key: string, opts?: Record<string, unknown>) => string): string {
   if (option.name) return option.name;
   const [first] = (option.text ?? '').split(',');
-  return first?.trim() || `Профиль ${index + 1}`;
+  return first?.trim() || t("Профиль {{index}}", { index: index + 1 });
 }
 
 function getProfileRole(option: TaskOption): string {
@@ -55,6 +56,7 @@ export function BurnoutGame({
   theme = 'orange',
   orientation = 'portrait',
 }: GameProps) {
+  const { t } = useTranslation('sharedGames1');
   const step = task.steps[0];
   const options = step?.options ?? [];
 
@@ -87,7 +89,7 @@ export function BurnoutGame({
       const option = options[index];
       if (!option) return;
 
-      const name = getProfileName(option, index);
+      const name = getProfileName(option, index, t);
       const role = getProfileRole(option);
       const answer = [name, role].filter(Boolean).join(', ');
 
@@ -136,7 +138,7 @@ export function BurnoutGame({
         {step.prompt && <h2 className={styles.prompt}>{step.prompt}</h2>}
 
         <div className={styles.counter}>
-          Изучено: {visited.size}/{options.length}
+          {t("Изучено: {{visited}}/{{total}}", { visited: visited.size, total: options.length })}
         </div>
 
         <div className={styles.grid}>
@@ -148,7 +150,7 @@ export function BurnoutGame({
             const isLockedElsewhere =
               lockedCorrect !== null && lockedCorrect !== index;
 
-            const name = getProfileName(option, index);
+            const name = getProfileName(option, index, t);
             const role = getProfileRole(option);
             const quote = option.quote ?? '';
 
@@ -193,14 +195,14 @@ export function BurnoutGame({
                 type="button"
                 className={styles.popupClose}
                 onClick={handleClose}
-                aria-label="Закрыть"
+                aria-label={t("Закрыть")}
               >
                 <Icon name="close" color="red" size="m" />
               </button>
 
               <div className={styles.infoHeader}>
                 <span className={styles.infoRole}>{getProfileRole(popupOption)}</span>
-                <h3 className={styles.infoName}>{getProfileName(popupOption, popupIndex)}</h3>
+                <h3 className={styles.infoName}>{getProfileName(popupOption, popupIndex, t)}</h3>
               </div>
 
               {popupOption.quote && (
@@ -225,7 +227,7 @@ export function BurnoutGame({
 
               <div className={styles.infoAction}>
                 <Button
-                  label={popupOption.gender === 'f' ? 'Это она' : popupOption.gender === 'm' ? 'Это он' : 'Это он / она'}
+                  label={popupOption.gender === 'f' ? t("Это она") : popupOption.gender === 'm' ? t("Это он") : t("Это он / она")}
                   type="secondary"
                   onClick={() => handleChoose(popupIndex)}
                 />
@@ -237,9 +239,9 @@ export function BurnoutGame({
             <PopUp
               icon="done"
               iconColor="blue"
-              title={getProfileName(popupOption, popupIndex)}
-              description={popupOption.explanation}
-              buttonLabel="Результаты"
+              title={getProfileName(popupOption, popupIndex, t)}
+              description={t(popupOption.explanation)}
+              buttonLabel={t("Результаты")}
               onButtonClick={handleFinish}
             />
           )}
@@ -248,9 +250,9 @@ export function BurnoutGame({
             <PopUp
               icon="close"
               iconColor="red"
-              title={getProfileName(popupOption, popupIndex)}
-              description={popupOption.explanation}
-              buttonLabel="Попробовать снова"
+              title={getProfileName(popupOption, popupIndex, t)}
+              description={t(popupOption.explanation)}
+              buttonLabel={t("Попробовать снова")}
               onButtonClick={() => handleRetry(popupIndex)}
             />
           )}

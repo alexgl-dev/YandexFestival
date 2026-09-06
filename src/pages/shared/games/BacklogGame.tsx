@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Background, PopUp } from '../../../components/ui';
 import type { CatchObject, GlossaryTerm, Task } from '../../../types/game';
 import { GameInstruction } from '../GameInstruction';
@@ -32,6 +33,7 @@ function StickerCard({ title, variantIndex }: {
   title: string;
   variantIndex: number;
 }) {
+  const { t } = useTranslation('sharedGames1');
   const isDark = variantIndex % 3 === 2;
   return (
     <div className={styles.stickerWrap}>
@@ -42,7 +44,7 @@ function StickerCard({ title, variantIndex }: {
         draggable={false}
       />
       <div className={styles.stickerContent}>
-        <p className={`${styles.stickerTitle} ${isDark ? styles.stickerTitleDark : ''}`}>{title}</p>
+        <p className={`${styles.stickerTitle} ${isDark ? styles.stickerTitleDark : ''}`}>{t(title)}</p>
       </div>
     </div>
   );
@@ -83,6 +85,7 @@ export function BacklogGame({
   theme = 'cobalt',
   orientation = 'landscape',
 }: GameProps) {
+  const { t } = useTranslation('sharedGames1');
   const step = task.steps[0];
   const objects = step?.objects ?? [];
 
@@ -303,12 +306,12 @@ export function BacklogGame({
       <div className={styles.field}>
         {/* Counter */}
         <div className={styles.counter}>
-          <span className={styles.counterLabel}>Обработано</span>
+          <span className={styles.counterLabel}>{t("Обработано")}</span>
           <span className={styles.counterValue}>{progressText}</span>
         </div>
 
         {/* Prompt / hint */}
-        {step.prompt && <p className={styles.prompt}>{step.prompt}</p>}
+        {step.prompt && <p className={styles.prompt}>{t(step.prompt)}</p>}
 
         {/* Falling card — centered strictly on X axis, animated on Y */}
         {card && (
@@ -340,13 +343,13 @@ export function BacklogGame({
         <img
           src="/assets/games/backlog/basket.png"
           className={styles.basketIcon}
-          alt="Корзина"
+          alt={t("Корзина")}
           draggable={false}
         />
 
         {/* Swipe hint under card */}
         {card && !popup && (
-          <p className={styles.swipeHint}>Смахни в сторону лишнюю идею, а нужную пропусти вниз</p>
+          <p className={styles.swipeHint}>{t("Смахни в сторону лишнюю идею, а нужную пропусти вниз")}</p>
         )}
       </div>
 
@@ -357,9 +360,9 @@ export function BacklogGame({
             <PopUp
               icon={popup.correct ? 'done' : 'close'}
               iconColor={popup.correct ? 'blue' : 'red'}
-              title={popup.correct ? 'Верно!' : 'Не совсем...'}
-              description={renderCommentWithGlossary(popup.comment, popup.glossary, setActiveGlossary)}
-              buttonLabel="Дальше"
+              title={popup.correct ? t("Верно!") : t("Не совсем...")}
+              description={renderCommentWithGlossary(t(popup.comment), popup.glossary, setActiveGlossary)}
+              buttonLabel={t("Дальше")}
               onButtonClick={handlePopupDismiss}
             />
           </div>
@@ -371,9 +374,9 @@ export function BacklogGame({
         <div className={styles.overlay} onClick={() => setActiveGlossary(null)}>
           <div onClick={(e) => e.stopPropagation()}>
             <PopUp
-              title={activeGlossary.word.charAt(0).toUpperCase() + activeGlossary.word.slice(1)}
-              description={activeGlossary.definition}
-              buttonLabel="Понятно"
+              title={t(activeGlossary.word.charAt(0).toUpperCase() + activeGlossary.word.slice(1))}
+              description={t(activeGlossary.definition)}
+              buttonLabel={t("Понятно")}
               onButtonClick={() => setActiveGlossary(null)}
               compact
             />
@@ -408,67 +411,71 @@ function FinalCard({
   decisions: Decision[];
   onContinue: () => void;
 }) {
+  const { t } = useTranslation('sharedGames1');
   let title: string;
   let text: string;
   let iconCls: string;
   let iconGlyph: string;
 
   if (correctCount >= total) {
-    title = 'Бэклог под защитой';
-    text =
-      'Все твои решения оказались верными! Команда может работать спокойно: в бэклоге только то, что действительно важно.\n\nТы думал как продакт: не «было бы круто», а «какую проблему это решает». Именно это отличает хорошего менеджера.';
+    title = t("Бэклог под защитой");
+    text = t(
+      "Все твои решения оказались верными! Команда может работать спокойно: в бэклоге только то, что действительно важно.\n\nТы думал как продакт: не «было бы круто», а «какую проблему это решает». Именно это отличает хорошего менеджера."
+    );
     iconCls = 'iconCorrect';
     iconGlyph = '★';
   } else if (correctCount >= 6) {
-    title = 'Бэклог почти чистый';
-    text =
-      'С некоторыми из твоих решений можно поспорить. Это нормально: граница между нужным и лишним редко бывает очевидной. Зато большую часть потенциальных фич тебе удалось классифицировать совершенно верно.';
+    title = t("Бэклог почти чистый");
+    text = t(
+      "С некоторыми из твоих решений можно поспорить. Это нормально: граница между нужным и лишним редко бывает очевидной. Зато большую часть потенциальных фич тебе удалось классифицировать совершенно верно."
+    );
     iconCls = 'iconCorrect';
     iconGlyph = '✓';
   } else {
-    title = 'Бэклог в опасности';
-    text =
-      'Некоторые из твоих решений оказались не самыми дальновидными. И теперь в бэклоге есть спорные фичи.\n\nХорошая новость: именно за этим и нужен продакт-менеджер. Не чтобы принимать идеальные решения с первого раза, а чтобы задавать правильные вопросы и выбирать верный курс.';
+    title = t("Бэклог в опасности");
+    text = t(
+      "Некоторые из твоих решений оказались не самыми дальновидными. И теперь в бэклоге есть спорные фичи.\n\nХорошая новость: именно за этим и нужен продакт-менеджер. Не чтобы принимать идеальные решения с первого раза, а чтобы задавать правильные вопросы и выбирать верный курс."
+    );
     iconCls = 'iconWrong';
     iconGlyph = '!';
   }
 
   const wrongDecisions = decisions.filter((d) => !d.correct);
-  const choiceLabel = (c: 'trash' | 'backlog') => (c === 'trash' ? 'в корзину' : 'оставить в бэклоге');
+  const choiceLabel = (c: 'trash' | 'backlog') => (c === 'trash' ? t("в корзину") : t("оставить в бэклоге"));
 
   return (
     <div className={styles.finalCard}>
       <div className={[styles.commentIcon, styles[iconCls]].join(' ')}>{iconGlyph}</div>
       <h2 className={styles.finalTitle}>{title}</h2>
       <p className={styles.finalScore}>
-        Верных решений: <strong>{correctCount}</strong> из {total}
+        {t("Верных решений:")} <strong>{correctCount}</strong> {t("из {{total}}", { total })}
       </p>
       <p className={styles.finalText}>{text}</p>
 
       {wrongDecisions.length > 0 && (
         <div className={styles.mistakesList}>
-          <h3 className={styles.mistakesHeading}>Спорные решения</h3>
+          <h3 className={styles.mistakesHeading}>{t("Спорные решения")}</h3>
           {wrongDecisions.map((d) => (
             <div key={d.index} className={styles.mistakeItem}>
               <p className={styles.mistakeTitle}>
                 {d.emoji && <span className={styles.mistakeEmoji}>{d.emoji}</span>}
-                {d.title}
+                {t(d.title)}
               </p>
               <p className={styles.mistakeChoice}>
                 <span className={styles.choiceUser}>
-                  ты: <s>{choiceLabel(d.userChoice)}</s>
+                  {t("ты:")} <s>{choiceLabel(d.userChoice)}</s>
                 </span>
                 <span className={styles.choiceArrow}>→</span>
-                <span className={styles.choiceCorrect}>верно: {choiceLabel(d.correctChoice)}</span>
+                <span className={styles.choiceCorrect}>{t("верно:")} {choiceLabel(d.correctChoice)}</span>
               </p>
-              <p className={styles.mistakeComment}>{d.comment}</p>
+              <p className={styles.mistakeComment}>{t(d.comment)}</p>
             </div>
           ))}
         </div>
       )}
 
       <button className={styles.commentClose} onClick={onContinue}>
-        Далее
+        {t("Далее")}
       </button>
     </div>
   );

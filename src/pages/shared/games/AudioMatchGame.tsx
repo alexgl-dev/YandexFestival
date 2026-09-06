@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { PointerEvent as ReactPointerEvent } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Background } from '../../../components/ui';
 import type { Task, TaskPair } from '../../../types/game';
 import { GameInstruction } from '../GameInstruction';
@@ -39,6 +40,7 @@ function shuffle<T>(arr: T[]): T[] {
  * (pointer events + тап-фоллбэк: тап по кнопке, потом тап по картинке) — попытка сопоставить пару.
  */
 export function AudioMatchGame({ task, onComplete, onBack, theme = 'orange', orientation = 'portrait' }: GameProps) {
+  const { t } = useTranslation('sharedGames1');
   const step = task.steps[0];
   const pairs: TaskPair[] = useMemo(() => step?.pairs ?? [], [step]);
 
@@ -136,7 +138,7 @@ export function AudioMatchGame({ task, onComplete, onBack, theme = 'orange', ori
       stopPlayback();
       stopHintCycle();
       const result: GameResult = {
-        answer: `${pair.left.label || ''} → картинка`,
+        answer: t("{{label}} → картинка", { label: pair.left.label || '' }),
         correct: true,
         explanation: pair.explanation || '',
       };
@@ -228,7 +230,7 @@ export function AudioMatchGame({ task, onComplete, onBack, theme = 'orange', ori
     <Background theme={theme} orientation={orientation} onBack={onBack} backShowLabel={false}>
       <GameInstruction instruction={task.instruction} />
       <div className={styles.wrapper}>
-        {step.prompt && <p className={styles.prompt}>{step.prompt}</p>}
+        {step.prompt && <p className={styles.prompt}>{t(step.prompt)}</p>}
 
         <div className={styles.imagesRow}>
           {imageOrder.map((pairIndex) => {
@@ -274,7 +276,7 @@ export function AudioMatchGame({ task, onComplete, onBack, theme = 'orange', ori
                 onPointerUp={(e) => handleButtonPointerUp(e, pairIndex)}
                 onPointerCancel={handleButtonPointerCancel}
               >
-                {pair.left.label}
+                {t(pair.left.label || '')}
               </div>
             );
           })}

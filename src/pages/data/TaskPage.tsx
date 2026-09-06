@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, useParams, useOutletContext } from 'react-router';
+import { useTranslation } from 'react-i18next';
 import type { SectionData } from '../../types/game';
 import { TaskIntro } from '../shared/TaskIntro';
 import { TaskMoral } from '../shared/TaskMoral';
@@ -19,7 +20,8 @@ export function TaskPage() {
   const { taskId } = useParams();
   const navigate = useNavigate();
   const data = useOutletContext<SectionData>();
-  const task = data.tasks.find((t) => t.id === taskId);
+  const task = data.tasks.find((item) => item.id === taskId);
+  const { t } = useTranslation('data');
 
   const [phase, setPhase] = useState<Phase>('intro');
   const [results, setResults] = useState<Result[]>([]);
@@ -30,12 +32,12 @@ export function TaskPage() {
   }, [taskId]);
 
   if (!task) {
-    return <div className={styles.notFound}>Задание не найдено</div>;
+    return <div className={styles.notFound}>{t("Задание не найдено")}</div>;
   }
 
   const goToMenu = () => navigate(`/${data.slug}`);
   const goToNextTask = () => {
-    const next = data.tasks.find((t) => t.order === task.order + 1);
+    const next = data.tasks.find((item) => item.order === task.order + 1);
     if (next) {
       navigate(`/${data.slug}/tasks/${next.id}`);
     } else {

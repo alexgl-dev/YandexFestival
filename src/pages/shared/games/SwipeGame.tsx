@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Background, PopUp } from '../../../components/ui';
 import type { Task, CatchObject } from '../../../types/game';
 import { GameInstruction } from '../GameInstruction';
@@ -46,6 +47,7 @@ export function SwipeGame({
   theme = 'cobalt',
   orientation = 'portrait',
 }: GameProps) {
+  const { t } = useTranslation('sharedGames2');
   const step = task.steps[0];
   const objects: CatchObject[] = step?.objects ?? [];
 
@@ -280,7 +282,7 @@ export function SwipeGame({
         {/* Purity meter */}
         <div className={styles.purityBar}>
           <div className={styles.purityTop}>
-            <p className={styles.purityLabel}>Чистота данных</p>
+            <p className={styles.purityLabel}>{t("Чистота данных")}</p>
             <span className={styles.purityCount}>{purityCount} / {totalCards}</span>
           </div>
           <div className={styles.purityTrack}>
@@ -294,10 +296,10 @@ export function SwipeGame({
         {/* Swipe hints */}
         <div className={`${styles.hintLeft} ${styles.hintTrash}`}>
           <span className={styles.hintArrow}>←</span>
-          <span className={styles.hintText}>Мусор</span>
+          <span className={styles.hintText}>{t("Мусор")}</span>
         </div>
         <div className={`${styles.hintRight} ${styles.hintOk}`}>
-          <span className={styles.hintText}>Норм</span>
+          <span className={styles.hintText}>{t("Норм")}</span>
           <span className={styles.hintArrow}>→</span>
         </div>
 
@@ -326,12 +328,13 @@ export function SwipeGame({
             <PopUp
               icon={succeeded ? 'done' : 'close'}
               iconColor={succeeded ? 'blue' : 'red'}
-              title={succeeded ? 'База данных очищена!' : 'Слишком много мусора осталось!'}
+              title={succeeded ? t("База данных очищена!") : t("Слишком много мусора осталось!")}
               description={
-                `Правильных решений: ${purityCount} из ${totalCards}` +
-                (wrongCount > 0 ? ` · Ошибок: ${wrongCount}` : '')
+                wrongCount > 0
+                  ? t("Правильных решений: {{count}} из {{total}} · Ошибок: {{wrong}}", { count: purityCount, total: totalCards, wrong: wrongCount })
+                  : t("Правильных решений: {{count}} из {{total}}", { count: purityCount, total: totalCards })
               }
-              buttonLabel="Результаты"
+              buttonLabel={t("Результаты")}
               onButtonClick={() => onComplete(resultsRef.current)}
             />
           </div>
@@ -344,13 +347,14 @@ export function SwipeGame({
 // ——— Profile card visual ———————————————————————————————————————
 
 function ProfileCardContent({ object, num }: { object: CatchObject; num: number }) {
+  const { t } = useTranslation('sharedGames2');
   const f = object.fields;
   const numStr = String(num).padStart(2, '0');
 
   return (
     <>
       <div className={styles.cardHeader}>
-        <span className={styles.cardVariant}>ЗАПИСЬ БД</span>
+        <span className={styles.cardVariant}>{t("ЗАПИСЬ БД")}</span>
         <span className={styles.cardNum}>#{numStr}</span>
       </div>
 
@@ -368,7 +372,7 @@ function ProfileCardContent({ object, num }: { object: CatchObject; num: number 
 
       <div className={styles.cardFields}>
         <div className={styles.cardField}>
-          <span className={styles.fieldLabel}>Возраст</span>
+          <span className={styles.fieldLabel}>{t("Возраст")}</span>
           <span className={styles.fieldValue}>{f?.age ?? '—'}</span>
         </div>
         <div className={styles.cardField}>
@@ -376,7 +380,7 @@ function ProfileCardContent({ object, num }: { object: CatchObject; num: number 
           <span className={styles.fieldValue}>{f?.email ?? '—'}</span>
         </div>
         <div className={styles.cardField}>
-          <span className={styles.fieldLabel}>Город</span>
+          <span className={styles.fieldLabel}>{t("Город")}</span>
           <span className={styles.fieldValue}>{f?.city ?? '—'}</span>
         </div>
       </div>

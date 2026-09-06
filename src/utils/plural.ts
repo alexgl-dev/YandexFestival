@@ -1,3 +1,5 @@
+import i18n from '../i18n';
+
 /**
  * Russian noun pluralization by number.
  * Pass three forms: [1, 2-4, 5+]. Example: pluralRu(5, ['минута', 'минуты', 'минут']) === 'минут'.
@@ -11,7 +13,10 @@ export function pluralRu(n: number, forms: [string, string, string]): string {
   return forms[2];
 }
 
-/** Shortcut for «минута/минуты/минут». */
+/** Shortcut for «минута/минуты/минут» (or "minute(s)" when the UI language is English). */
 export function minutesLabel(n: number): string {
+  if (i18n.language === 'en') {
+    return `${n} ${n === 1 ? 'minute' : 'minutes'}`;
+  }
   return `${n} ${pluralRu(n, ['минута', 'минуты', 'минут'])}`;
 }

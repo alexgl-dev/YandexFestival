@@ -1,4 +1,5 @@
 import { useCallback, useMemo, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Background, Button, IconButton } from '../../../components/ui';
 import type { Task } from '../../../types/game';
 import { GameInstruction } from '../GameInstruction';
@@ -33,6 +34,7 @@ function hashString(s: string): number {
  * Картинка результата выбирается детерминированно по хэшу выбранных опций.
  */
 export function BuilderGame({ task, onComplete, onBack, theme = 'orange', orientation = 'portrait' }: GameProps) {
+  const { t } = useTranslation('sharedGames1');
   const step = task.steps[0];
   const fields = useMemo(() => step?.builderFields ?? [], [step]);
   const resultImages = step?.resultImages ?? [];
@@ -80,7 +82,7 @@ export function BuilderGame({ task, onComplete, onBack, theme = 'orange', orient
 
   const handleDone = useCallback(() => {
     const answer = fields.map((f) => selections[f.id]).filter(Boolean).join(', ');
-    onComplete([{ answer, correct: true, explanation: 'Робот собран по твоему описанию.' }]);
+    onComplete([{ answer, correct: true, explanation: t("Робот собран по твоему описанию.") }]);
   }, [fields, selections, onComplete]);
 
   const overlayClass = orientation === 'landscape' ? styles.overlayLandscape : styles.overlayPortrait;
@@ -101,9 +103,9 @@ export function BuilderGame({ task, onComplete, onBack, theme = 'orange', orient
                   data-field={field.id}
                   className={`${styles.fieldRow} ${invalid ? styles.fieldRowInvalid : ''}`}
                 >
-                  <span className={styles.fieldLabel}>{field.label}</span>
+                  <span className={styles.fieldLabel}>{t(field.label)}</span>
                   <Button
-                    label={value ?? 'Выбрать'}
+                    label={value ? t(value) : t("Выбрать")}
                     type={value ? 'main' : 'outline'}
                     onClick={() => setActiveFieldId(field.id)}
                     className={styles.fieldSelectBtn}
@@ -114,16 +116,16 @@ export function BuilderGame({ task, onComplete, onBack, theme = 'orange', orient
           </div>
 
           <div className={styles.actions}>
-            <Button label="Сбросить" type="secondary" onClick={handleReset} />
-            <Button label="Генерация" type="secondary" onClick={handleGenerate} />
+            <Button label={t("Сбросить")} type="secondary" onClick={handleReset} />
+            <Button label={t("Генерация")} type="secondary" onClick={handleGenerate} />
           </div>
         </div>
       ) : (
         <div className={styles.resultWrapper}>
           <div className={styles.resultImageFrame}>
-            <img src={resultImage ?? ''} alt="Твой робот" className={styles.resultImage} />
+            <img src={resultImage ?? ''} alt={t("Твой робот")} className={styles.resultImage} />
           </div>
-          <Button label="Готово" type="secondary" onClick={handleDone} />
+          <Button label={t("Готово")} type="secondary" onClick={handleDone} />
         </div>
       )}
 
@@ -131,14 +133,14 @@ export function BuilderGame({ task, onComplete, onBack, theme = 'orange', orient
         <div className={`${styles.overlay} ${overlayClass}`} onClick={() => setActiveFieldId(null)}>
           <div className={styles.picker} onClick={(e) => e.stopPropagation()}>
             <IconButton type="close" onClick={() => setActiveFieldId(null)} className={styles.pickerClose} />
-            <h2 className={styles.pickerTitle}>{activeField.label}</h2>
+            <h2 className={styles.pickerTitle}>{t(activeField.label)}</h2>
             <div className={`${styles.pickerOptions} ui-scrollbar`}>
               {activeField.options.map((option) => {
                 const isChosen = selections[activeField.id] === option;
                 return (
                   <Button
                     key={option}
-                    label={option}
+                    label={t(option)}
                     type="outline"
                     pressed={isChosen}
                     onClick={() => handleSelect(activeField.id, option)}

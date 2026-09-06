@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Background } from '../../../components/ui';
 import type { CalendarCardData } from '../../../types/game';
 import styles from './CalendarViewGame.module.css';
@@ -17,6 +18,7 @@ interface Props {
 }
 
 export function CalendarViewGame({ days, cards, theme = 'cobalt', startHour = 9, slotCount = 18, onBack }: Props) {
+  const { t } = useTranslation('sharedGames1');
   const [tooltipCard, setTooltipCard] = useState<CalendarCardData | null>(null);
   const [glossaryTerm, setGlossaryTerm] = useState<{ word: string; definition: string } | null>(null);
 
@@ -75,7 +77,7 @@ export function CalendarViewGame({ days, cards, theme = 'cobalt', startHour = 9,
                     }}
                     onClick={e => { e.stopPropagation(); setTooltipCard(card); }}
                   >
-                    <span className={styles.cardTitle}>{card.title}</span>
+                    <span className={styles.cardTitle}>{t(card.title)}</span>
                     <span className={styles.cardTime}>
                       {slotToTime(card.anchorStartSlot ?? 0)}–{slotToTime((card.anchorStartSlot ?? 0) + card.durationSlots)}
                     </span>
@@ -89,8 +91,8 @@ export function CalendarViewGame({ days, cards, theme = 'cobalt', startHour = 9,
       {tooltipCard && (
         <div className={styles.overlay} onClick={() => { setTooltipCard(null); setGlossaryTerm(null); }}>
           <div className={styles.tooltipCard} onClick={e => e.stopPropagation()}>
-            <p className={styles.tooltipTitle}>{tooltipCard.title}</p>
-            <p className={styles.tooltipText}>{tooltipCard.tooltip}</p>
+            <p className={styles.tooltipTitle}>{t(tooltipCard.title)}</p>
+            <p className={styles.tooltipText}>{t(tooltipCard.tooltip)}</p>
 
             {tooltipCard.glossary && tooltipCard.glossary.length > 0 && (
               <div className={styles.glossaryRow}>
@@ -100,7 +102,7 @@ export function CalendarViewGame({ days, cards, theme = 'cobalt', startHour = 9,
                     className={styles.glossaryChip}
                     onClick={() => setGlossaryTerm(glossaryTerm?.word === term.word ? null : term)}
                   >
-                    {term.word}
+                    {t(term.word)}
                   </button>
                 ))}
               </div>
@@ -108,13 +110,13 @@ export function CalendarViewGame({ days, cards, theme = 'cobalt', startHour = 9,
 
             {glossaryTerm && (
               <div className={styles.glossaryPopup}>
-                <p className={styles.glossaryWord}>{glossaryTerm.word}</p>
-                <p className={styles.glossaryDef}>{glossaryTerm.definition}</p>
+                <p className={styles.glossaryWord}>{t(glossaryTerm.word)}</p>
+                <p className={styles.glossaryDef}>{t(glossaryTerm.definition)}</p>
               </div>
             )}
 
             <button className={styles.tooltipClose} onClick={() => { setTooltipCard(null); setGlossaryTerm(null); }}>
-              Понятно
+              {t("Понятно")}
             </button>
           </div>
         </div>

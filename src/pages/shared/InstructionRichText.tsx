@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { PopUp } from '../../components/ui';
 import { parseInstructionMarkup, parseInstructionWithBoldMarkup } from './instructionMarkup';
 import styles from './GameInstruction.module.css';
@@ -21,6 +22,7 @@ function capitalize(s: string): string {
  * По клику на термин показывает унифицированный модальный PopUp с определением.
  */
 export function InstructionRichText({ text, withBold }: InstructionRichTextProps) {
+  const { t } = useTranslation('sharedOther');
   const [active, setActive] = useState<ActiveTerm | null>(null);
 
   useEffect(() => {
@@ -44,7 +46,7 @@ export function InstructionRichText({ text, withBold }: InstructionRichTextProps
             <PopUp
               title={capitalize(active.term)}
               description={active.definition}
-              buttonLabel="Понятно"
+              buttonLabel={t("Понятно")}
               onButtonClick={() => setActive(null)}
               compact
             />

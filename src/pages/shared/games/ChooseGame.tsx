@@ -1,4 +1,5 @@
 import { useState, useCallback, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Background, Card, PopUp } from '../../../components/ui';
 import type { Task, TaskOption } from '../../../types/game';
 import { GameInstruction } from '../GameInstruction';
@@ -21,6 +22,11 @@ interface GameProps {
 const VARIANT_LABELS = ['Вариант A', 'Вариант B', 'Вариант C', 'Вариант D', 'Вариант E', 'Вариант F'];
 
 export function ChooseGame({ task, onComplete, onBack, theme = 'orange', orientation = 'portrait' }: GameProps) {
+  const { t } = useTranslation('sharedGames1');
+  const variantLabel = useCallback(
+    (index: number) => (VARIANT_LABELS[index] ? t(VARIANT_LABELS[index]) : t("Вариант {{n}}", { n: index + 1 })),
+    [t],
+  );
   const [currentStep, setCurrentStep] = useState(0);
   const [selected, setSelected] = useState<number | null>(null);
   const [showPopup, setShowPopup] = useState(false);
@@ -52,7 +58,7 @@ export function ChooseGame({ task, onComplete, onBack, theme = 'orange', orienta
 
     if (!isImageMode && task.feedback === 'instant') {
       const result: GameResult = {
-        answer: option.text || VARIANT_LABELS[index] || `Вариант ${index + 1}`,
+        answer: option.text ? t(option.text) : variantLabel(index),
         correct: option.correct,
         explanation: option.explanation,
       };
@@ -69,7 +75,7 @@ export function ChooseGame({ task, onComplete, onBack, theme = 'orange', orienta
     if (option?.correct) {
       // Record result and advance
       const result: GameResult = {
-        answer: VARIANT_LABELS[selected] || `Вариант ${selected + 1}`,
+        answer: variantLabel(selected),
         correct: true,
         explanation: option.explanation,
       };
@@ -138,8 +144,8 @@ export function ChooseGame({ task, onComplete, onBack, theme = 'orange', orienta
                 const isSelected = selected === index;
                 const isDimmed = selected !== null && !isSelected;
                 const revealedState: 'flipped' | 'wrong' = option.correct ? 'flipped' : 'wrong';
-                const revealedTitle = option.correct ? 'Верно!' : 'Не совсем...';
-                const variantLabel = VARIANT_LABELS[index] || `Вариант ${index + 1}`;
+                const revealedTitle = option.correct ? t("Верно!") : t("Не совсем...");
+                const cardVariantLabel = variantLabel(index);
 
                 return (
                   <div
@@ -154,7 +160,7 @@ export function ChooseGame({ task, onComplete, onBack, theme = 'orange', orienta
                     <div className={styles.flipInner}>
                       <div className={`${styles.flipFace} ${styles.flipFront}`}>
                         <Card
-                          variant={variantLabel}
+                          variant={cardVariantLabel}
                           title=""
                           description=""
                           image={option.image}
@@ -164,7 +170,7 @@ export function ChooseGame({ task, onComplete, onBack, theme = 'orange', orienta
                       </div>
                       <div className={`${styles.flipFace} ${styles.flipBack}`}>
                         <Card
-                          variant={variantLabel}
+                          variant={cardVariantLabel}
                           title={revealedTitle}
                           description=""
                           state={revealedState}
@@ -182,11 +188,11 @@ export function ChooseGame({ task, onComplete, onBack, theme = 'orange', orienta
             {options.map((option, index) => (
               <Card
                 key={index}
-                variant={VARIANT_LABELS[index] || `Вариант ${index + 1}`}
-                title={option.text || ''}
+                variant={variantLabel(index)}
+                title={option.text ? t(option.text) : ''}
                 description=""
                 image={option.image}
-                hint={option.hint}
+                hint={option.hint ? t(option.hint) : undefined}
                 size="l"
                 state={getCardState(index, option)}
                 onClick={() => handleSelect(index)}
@@ -202,9 +208,9 @@ export function ChooseGame({ task, onComplete, onBack, theme = 'orange', orienta
             <PopUp
               icon={selectedOption.correct ? 'done' : 'close'}
               iconColor={selectedOption.correct ? 'blue' : 'red'}
-              title={selectedOption.correct ? 'Верно!' : 'Не совсем...'}
-              description={selectedOption.explanation}
-              buttonLabel={isLastStep ? 'Результаты' : 'Дальше'}
+              title={selectedOption.correct ? t("Верно!") : t("Не совсем...")}
+              description={t(selectedOption.explanation)}
+              buttonLabel={isLastStep ? t("Результаты") : t("Дальше")}
               onButtonClick={handlePopupAction}
             />
           </div>
@@ -215,12 +221,12 @@ export function ChooseGame({ task, onComplete, onBack, theme = 'orange', orienta
             <PopUp
               icon={selectedOption.correct ? 'done' : 'close'}
               iconColor={selectedOption.correct ? 'blue' : 'red'}
-              title={selectedOption.correct ? 'Верно!' : 'Не совсем...'}
-              description={selectedOption.explanation}
+              title={selectedOption.correct ? t("Верно!") : t("Не совсем...")}
+              description={t(selectedOption.explanation)}
               buttonLabel={
                 selectedOption.correct
-                  ? isLastStep ? 'Результаты' : 'Дальше'
-                  : 'Попробуй ещё раз'
+                  ? isLastStep ? t("Результаты") : t("Дальше")
+                  : t("Попробуй ещё раз")
               }
               onButtonClick={handleImageFeedbackAction}
             />
