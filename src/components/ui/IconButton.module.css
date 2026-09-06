@@ -1,17 +1,17 @@
 /* Icon button — Figma 28:703 (Back/Blue), 28:792 (White), 28:614 (Play), 28:617 (Pause), 77:491 (Close) */
 
-/* --- Back: pill «← Назад», 326×124 --- */
+/* --- Back: pill «← Назад», 245×93 --- */
 .back {
   display: inline-flex;
   align-items: center;
-  gap: var(--spacing-md);
-  height: 124px;
-  padding: 14px var(--spacing-2xl);
+  gap: 12px;
+  height: 93px;
+  padding: 9px var(--spacing-xl);
   border: none;
   border-radius: var(--radius-full);
   cursor: pointer;
-  backdrop-filter: blur(32.7px);
-  -webkit-backdrop-filter: blur(32.7px);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
   font-family: var(--font-family-text);
   transition: background-color 0.15s ease;
 }
@@ -36,13 +36,13 @@
 
 .backArrow {
   display: block;
-  width: 81px;
-  height: 66px;
+  width: 60px;
+  height: 50px;
   flex-shrink: 0;
 }
 
 .backLabel {
-  font-size: 45px;
+  font-size: var(--font-size-lg);
   font-weight: var(--font-weight-medium);
   letter-spacing: var(--letter-spacing-tight);
   line-height: var(--line-height-tight);

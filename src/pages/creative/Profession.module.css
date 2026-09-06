@@ -86,7 +86,9 @@
 
 .navigation {
   display: flex;
-  gap: var(--spacing-md);
+  justify-content: center;
+  gap: var(--spacing-xl);
+  margin-top: 90px;
 }
 
 .navLink {

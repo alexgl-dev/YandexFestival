@@ -280,7 +280,7 @@ export function CalendarDayPortrait({
             <PopUp
               title={tooltipCard.title}
               description={
-                <>
+                <div className={styles.tooltipDescription}>
                   <div className={styles.tooltipDuration}>
                     <Icon name="clock" color="blue" size="xs" />
                     <span>{tooltipCard.durationLabel ?? formatDuration(tooltipCard.durationSlots, tooltipCard.durationMin)}</span>
@@ -300,7 +300,7 @@ export function CalendarDayPortrait({
                       )
                     )}
                   </span>
-                </>
+                </div>
               }
               buttonLabel="Понятно"
               onButtonClick={() => setTooltipCard(null)}

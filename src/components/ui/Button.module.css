@@ -57,7 +57,7 @@
 .big,
 .big_white,
 .big_blue {
-  width: var(--button-big-width, 908px);
+  width: var(--button-big-width, 100%);
   max-width: 100%;
   min-height: 131px;
   padding: 36px 52px;

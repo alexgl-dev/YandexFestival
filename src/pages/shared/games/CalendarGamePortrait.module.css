@@ -416,12 +416,19 @@
   box-shadow: 0 24px 64px rgba(0, 0, 0, 0.35);
 }
 
+.tooltipDescription {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  align-items: center;
+}
+
 .tooltipDuration {
   display: flex;
   align-items: center;
   gap: var(--spacing-xs);
   font-family: var(--font-family);
-  font-size: var(--font-size-xs);
+  font-size: var(--font-size-lg);
   font-weight: var(--font-weight-regular);
   color: var(--color-text-muted);
   letter-spacing: var(--letter-spacing-xs);

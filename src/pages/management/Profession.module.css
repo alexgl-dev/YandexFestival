@@ -4,7 +4,7 @@
   gap: var(--spacing-lg);
   padding: var(--spacing-xl) 0;
   width: 100%;
-  max-width: 75%;
+  max-width: 80%;
   margin: 0 auto;
   box-sizing: border-box;
   font-family: var(--font-family);
@@ -54,7 +54,7 @@
 .sectionHeading {
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-bold);
-  color: var(--color-text-muted);
+  color: var(--color-black);
   letter-spacing: var(--letter-spacing-xs);
   line-height: var(--line-height-tight);
   margin: 0;
@@ -86,15 +86,23 @@
 
 .navigation {
   display: flex;
-  gap: var(--spacing-md);
+  justify-content: center;
+  gap: var(--spacing-xl);
+  margin-top: 90px;
 }
 
 .navLink {
   cursor: pointer;
+  width: fit-content;
 }
 
 .navArrowIconLeft {
   transform: rotate(180deg);
+  width: 15px !important;
+}
+
+.navArrowIconRight {
+  width: 15px !important;
 }
 
 /* Popup overlay */

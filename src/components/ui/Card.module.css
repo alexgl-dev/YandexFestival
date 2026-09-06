@@ -191,7 +191,7 @@
 .size_m .textBlock {
   flex: 1 1 0;
   gap: var(--spacing-md);
-  max-width: 560px;
+  max-width: var(--card-m-text-max-width, 560px);
 }
 
 /* Галочка pressed — в правом верхнем углу (Figma: 45px, отступ 40), место под неё не резервируем,
@@ -209,7 +209,7 @@
 }
 
 .size_m .title {
-  font-size: var(--card-title-size, var(--font-size-3xl));
+  font-size: var(--card-title-size, var(--font-size-lg));
   letter-spacing: var(--letter-spacing-md);
 }
 

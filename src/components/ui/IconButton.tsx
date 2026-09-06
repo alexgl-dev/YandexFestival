@@ -5,7 +5,7 @@ export interface IconButtonProps {
   /** default — синяя полупрозрачная (Back/Blue); light — белая полупрозрачная (White); orange — как light */
   variant?: 'default' | 'light' | 'orange';
   pressed?: boolean;
-  /** Оставлен для совместимости: у «Назад» размер в макете один — 326×124 */
+  /** Оставлен для совместимости: у «Назад» размер один — 245×93 */
   size?: 'sm' | 'md' | 'lg';
   onClick?: () => void;
   className?: string;
@@ -13,7 +13,7 @@ export interface IconButtonProps {
 
 /**
  * Icon button по Figma «OUT_Яндекс Музей» (28:614…77:491):
- * back — pill «← Назад» (стрелка 81×66 + YS Text Medium 45), blur-фон;
+ * back — pill «← Назад» (стрелка 60×50 + YS Text Medium 36), blur-фон;
  * play/pause — pill 110×76; close — белый круг 90 с крестом.
  */
 export function IconButton({ type, variant = 'default', pressed, onClick, className }: IconButtonProps) {

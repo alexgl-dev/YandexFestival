@@ -8,12 +8,13 @@
   align-items: center;
   gap: 65px;
   width: var(--width-content);
-  max-height: 90vh;
+  max-height: fit-content;
   padding: var(--spacing-2xl);
   border-radius: var(--radius-ml);
   background-color: var(--color-white);
   font-family: var(--font-family-text);
   box-sizing: border-box;
+
 }
 
 .topContent {
@@ -25,7 +26,7 @@
   padding-top: 55px;
   flex: 1 1 auto;
   min-height: 0;
-  overflow-y: auto;
+  overflow: hidden;
 }
 
 .iconArea {

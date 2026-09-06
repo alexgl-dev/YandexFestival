@@ -423,7 +423,7 @@ export function CalendarGamePortrait({ task, onComplete, onBack, theme = 'orange
             <PopUp
               title={tooltipCard.title}
               description={
-                <>
+                <div className={styles.tooltipDescription}>
                   {!tooltipCard.isAnchor && (
                     <div className={styles.tooltipDuration}>
                       <Icon name="clock" color="blue" size="xs" />
@@ -431,7 +431,7 @@ export function CalendarGamePortrait({ task, onComplete, onBack, theme = 'orange
                     </div>
                   )}
                   <span>{tooltipCard.tooltip}</span>
-                </>
+                </div>
               }
               buttonLabel="Понятно"
               onButtonClick={() => setTooltipCard(null)}
