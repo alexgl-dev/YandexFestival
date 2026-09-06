@@ -43,7 +43,8 @@ function shuffleWithinTitleGroups(items: TaskItem[]): TaskItem[] {
 }
 
 /** Число колонок сетки папок: сохраняет привычную 2×2 для 4 специалистов (development/task-distribution). */
-function getGridColumns(count: number): number {
+function getGridColumns(count: number, taskId?: string): number {
+  if (taskId === 'agency') return 1;
   if (count <= 1) return Math.max(count, 1);
   if (count === 3) return 3;
   if (count === 4) return 2;
@@ -67,9 +68,12 @@ export function DistributeGame({ task, onComplete, onBack, theme = 'cobalt', ori
   const correctText = step?.resultCorrect ?? 'Потрясающе!';
   const wrongText = step?.resultWrong ?? 'Ой! Это задача другого специалиста! Попробуй ещё раз, даже если наугад!';
 
-  const gridCols = getGridColumns(categories.length);
+  const gridCols = getGridColumns(categories.length, task.id);
   const gridRows = categories.length > 0 ? Math.ceil(categories.length / gridCols) : 1;
+  const isStackLayout = task.id === 'agency';
+  const isPortraitLayout = task.id === 'key-message';
   const gridColGap = gridCols >= 3 ? 'var(--spacing-md)' : orientation === 'portrait' ? 'var(--spacing-lg)' : '80px';
+  const useCompactProfiles = gridCols >= 3 && !categories.some((c) => c.image);
 
   const [currentIdx, setCurrentIdx] = useState(0);
   const [placements, setPlacements] = useState<Record<string, number[]>>(() =>
@@ -137,14 +141,17 @@ export function DistributeGame({ task, onComplete, onBack, theme = 'cobalt', ori
         instruction={task.instruction ?? task.intro}
         initialOpen={task.instruction?.trim() ? undefined : false}
       />
-      <div className={styles.layout} onClick={() => setActivePopup(null)}>
+      <div
+        className={`${styles.layout} ${isPortraitLayout ? styles.layoutPortrait : ''}`}
+        onClick={() => setActivePopup(null)}
+      >
 
         {/* ══ TOP: folder grid (2×2 for 4 specialists, adapts for other counts) ══ */}
         <div
-          className={styles.foldersGrid}
+          className={`${styles.foldersGrid} ${isStackLayout ? styles.foldersGridStack : ''} ${isPortraitLayout ? styles.foldersGridPortraits : ''}`}
           style={{
             gridTemplateColumns: `repeat(${gridCols}, 1fr)`,
-            gridTemplateRows: `repeat(${gridRows}, 1fr)`,
+            gridTemplateRows: `repeat(${gridRows}, ${isStackLayout || isPortraitLayout ? 'auto' : '1fr'})`,
             columnGap: gridColGap,
           }}
           onClick={(e) => e.stopPropagation()}
@@ -158,13 +165,13 @@ export function DistributeGame({ task, onComplete, onBack, theme = 'cobalt', ori
               <div key={cat.id} className={styles.specialistCell}>
 
                 {/* Profile row */}
-                <div className={`${styles.profileRow} ${gridCols >= 3 ? styles.profileRowCompact : ''}`}>
-                  <div className={styles.avatarWrap}>
+                <div className={`${styles.profileRow} ${useCompactProfiles ? styles.profileRowCompact : ''}`}>
+                  {/* <div className={styles.avatarWrap}>
                     {cat.avatar
                       ? <img src={cat.avatar} alt={cat.title} className={styles.avatarImg} />
                       : <span className={styles.avatarFallback}>{cat.title.charAt(0)}</span>
                     }
-                  </div>
+                  </div> */}
                   {hasDescription ? (
                     <button
                       className={styles.specNameBtn}
