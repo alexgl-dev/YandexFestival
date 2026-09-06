@@ -29,6 +29,13 @@ i18n.use(initReactI18next).init({
   fallbackLng: 'ru',
   ns: NAMESPACES,
   defaultNS: 'common',
+  // Общие компоненты (TaskIntro, TaskMoral, GameInstruction, календарные карточки
+  // и т.п.) рендерят текст из data.ts разных треков через t(), но сами привязаны
+  // к своему namespace (sharedOther/sharedGamesN/calendars). Перевод конкретной
+  // строки при этом лежит в namespace того трека, откуда пришли данные (creative,
+  // development, management, data, informatics). Поэтому при поиске ключа нужно
+  // проверять ВСЕ namespace, а не только свой.
+  fallbackNS: NAMESPACES,
   interpolation: { escapeValue: false },
   returnEmptyString: false,
   resources: {
