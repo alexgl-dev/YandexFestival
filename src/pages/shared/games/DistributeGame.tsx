@@ -62,9 +62,9 @@ export function DistributeGame({ task, onComplete, onBack, theme = 'cobalt', ori
   // (например development/task-distribution) сохраняют исходный порядок из data.ts без изменений.
   const [items] = useState<TaskItem[]>(() => {
     const base = step?.items ?? [];
-    if (task.id === 'agency') return shuffleArray(base);
-    if (task.id === 'key-message') return shuffleWithinTitleGroups(base);
-    return base;
+  if (task.id === 'agency') return shuffleArray(base);
+  if (task.id === 'key-message') return shuffleWithinTitleGroups(base);
+  return base;
   });
 
   const correctText = t(step?.resultCorrect ?? "Потрясающе!");
