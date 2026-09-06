@@ -6,7 +6,8 @@ export type Mechanic =
   | 'compare'        // одна картинка + кнопки-фильтры «глазами другого»
   | 'timeline'       // шкала времени с ползунком (история рекламы)
   | 'builder'        // конструктор из выпадающих параметров → результат-картинка (собери робота)
-  | 'count';         // посчитай объекты на фото и сравни с ИИ (Data Set)
+  | 'count'          // посчитай объекты на фото и сравни с ИИ (Data Set)
+  | 'team-pick';     // выбери нужных специалистов → картинка-сцена меняется (собери команду)
 export type Mode = 'group' | 'solo';
 export type Feedback = 'instant' | 'onComplete';
 
@@ -243,6 +244,8 @@ export interface TaskStep {
   sampleSize?: number;
   /** Что считаем — подпись для count («автомобили»). */
   countLabel?: string;
+  /** team-pick: кадры сцены (индекс = число уже выбранных верных специалистов). */
+  stageImages?: string[];
 }
 
 export interface Task {

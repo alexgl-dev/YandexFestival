@@ -29,6 +29,7 @@ import { CompareGame } from './games/CompareGame';
 import { TimelineGame } from './games/TimelineGame';
 import { BuilderGame } from './games/BuilderGame';
 import { CountGame } from './games/CountGame';
+import { TeamPickGame } from './games/TeamPickGame';
 import { GamePlaceholder } from './GamePlaceholder';
 
 interface GameRouterProps {
@@ -118,6 +119,8 @@ export function GameRouter({ task, onComplete, onBack, theme = 'orange', orienta
       return <BuilderGame task={task} onComplete={onComplete} onBack={onBack} theme={theme} orientation={orientation} />;
     case 'count':
       return <CountGame task={task} onComplete={onComplete} onBack={onBack} theme={theme} orientation={orientation} />;
+    case 'team-pick':
+      return <TeamPickGame task={task} onComplete={onComplete} onBack={onBack} theme={theme} orientation={orientation} />;
     default:
       return <GamePlaceholder task={task} onComplete={onComplete} theme={theme} orientation={orientation} />;
   }
