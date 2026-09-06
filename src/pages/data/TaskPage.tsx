@@ -51,7 +51,7 @@ export function TaskPage() {
         <TaskIntro
           task={task}
           onStart={() => setPhase('game')}
-          onBack={() => navigate(-1)}
+          onBack={() => navigate(`/${data.slug}/tasks`)}
           theme={data.theme}
           orientation={data.orientation}
         />
