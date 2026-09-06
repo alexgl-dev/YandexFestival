@@ -14,7 +14,7 @@ export function Videos() {
 
   const handleBack = () => {
     setPlayingIndex(null);
-    navigate(`/${data.slug}`);
+    navigate(-1);
   };
 
   const closeOverlay = () => setPlayingIndex(null);
