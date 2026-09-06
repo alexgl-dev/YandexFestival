@@ -141,6 +141,7 @@ export function DistributeGame({ task, onComplete, onBack, theme = 'cobalt', ori
     <Background theme={theme} orientation={orientation} onBack={onBack} backShowLabel={false}>
       <GameInstruction
         instruction={task.instruction ?? task.intro}
+        buttonLabel={task.instructionButtonLabel}
         initialOpen={task.instruction?.trim() ? undefined : false}
       />
       <div

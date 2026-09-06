@@ -113,6 +113,7 @@ export const accessSection: SectionData = {
       ],
       moral:
         'Молодец! Все описания подобраны верно. Благодаря альтернативному тексту контент становится доступен каждому.',
+      moralButtonLabel: 'Узнать новое',
     },
     {
       id: 'vision',
@@ -130,6 +131,7 @@ export const accessSection: SectionData = {
       introSecondaryButtonLabel: 'Посмотрю позже',
       instruction:
         'Выбери одну из пяти кнопок. Посмотри, как меняется картинка у людей с особенностями зрения',
+      instructionButtonLabel: 'Сравнить',
       steps: [
         {
           image: '/assets/games/access/vision-base.jpg',
@@ -174,6 +176,7 @@ export const accessSection: SectionData = {
       ],
       moral:
         'У тебя получилось посмотреть, как по-разному люди воспринимают одно и то же изображение. Чтобы контент был понятен всем, важно учитывать особенности.',
+      moralButtonLabel: 'Узнать новое',
     },
   ],
   videos: [],

@@ -268,9 +268,13 @@ export interface Task {
   /** Вторая кнопка на intro («Посмотрю позже» и т.п.) — ведёт назад в меню. */
   introSecondaryButtonLabel?: string;
   instruction?: string;
+  /** Подпись кнопки в оверлее инструкции (по умолчанию «Начать»). */
+  instructionButtonLabel?: string;
   steps: TaskStep[];
   moral: string;
   moralFailure?: string;
+  /** Подпись основной кнопки на экране moral (по умолчанию «В меню» / «Следующее задание»). */
+  moralButtonLabel?: string;
   /** Подсветка терминов в морали: тап открывает то же всплывающее окно, что и introTooltips на вступлении. */
   moralTooltips?: GlossaryTerm[];
   hidden?: boolean;

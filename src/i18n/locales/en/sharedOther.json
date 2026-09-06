@@ -12,16 +12,20 @@
   "Механика «{{mechanic}}» — в разработке": "Mechanic «{{mechanic}}» — coming soon",
   "Механика в разработке": "Mechanic coming soon",
   "Начать": "Start",
+  "Начать путешествие": "Start the journey",
   "Понятно": "Got it",
-  "Послушаю позже": "Listen later",
   "Послушать": "Listen",
+  "Послушаю позже": "Listen later",
   "Посмотрю позже": "Take a look later",
+  "Посмотреть ключевые сообщения": "View key messages",
   "Приступаю к работе": "Get to work",
   "Пропустить": "Skip",
   "Узнать!": "Learn!",
+  "Узнать новое": "Learn something new",
   "Результаты": "Results",
   "Робот": "Robot",
   "Следующее задание": "Next Task",
   "Соберу позже": "I'll assemble later",
-  "Соберу сейчас": "Assemble now"
+  "Соберу сейчас": "Assemble now",
+  "Сравнить": "Compare"
 }

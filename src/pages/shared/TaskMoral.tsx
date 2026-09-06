@@ -149,7 +149,7 @@ export function TaskMoral({
     <Background theme={theme} orientation={orientation} showBackButton={false}>
       <PopUp
         description={description}
-        buttonLabel={isLast ? t("В меню") : t("Следующее задание")}
+        buttonLabel={t(task.moralButtonLabel ?? (isLast ? 'В меню' : 'Следующее задание'))}
         onButtonClick={onNext}
         secondaryButtonLabel={showTasksMenu ? t("Меню заданий") : undefined}
         onSecondaryButtonClick={showTasksMenu ? () => navigate(`/${sectionSlug}/tasks`) : undefined}

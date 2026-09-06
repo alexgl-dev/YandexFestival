@@ -6,6 +6,8 @@ import styles from './GameInstruction.module.css';
 
 interface GameInstructionProps {
   instruction?: string;
+  /** Подпись кнопки закрытия оверлея (по умолчанию «Начать»). */
+  buttonLabel?: string;
   /** Если задано, начальное состояние оверлея; иначе при непустой инструкции открыт сразу (как в проверке безопасности). */
   initialOpen?: boolean;
   /** Вызывается при закрытии инструкции («Начать» или клик по фону). */
@@ -14,7 +16,7 @@ interface GameInstructionProps {
   onOpenChange?: (open: boolean) => void;
 }
 
-export function GameInstruction({ instruction, initialOpen, onClose, onOpenChange }: GameInstructionProps) {
+export function GameInstruction({ instruction, buttonLabel, initialOpen, onClose, onOpenChange }: GameInstructionProps) {
   const { t } = useTranslation('sharedOther');
   const hasInstruction = !!instruction?.trim();
   const [open, setOpen] = useState(
@@ -59,7 +61,7 @@ export function GameInstruction({ instruction, initialOpen, onClose, onOpenChang
                 styles.instructionLead,
                 styles.instructionItalic,
               )}
-              buttonLabel={t("Начать")}
+              buttonLabel={t(buttonLabel ?? 'Начать')}
               onButtonClick={close}
             />
           </div>
