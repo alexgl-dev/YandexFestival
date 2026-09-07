@@ -41,7 +41,7 @@ export function Profession() {
 
   if (!profession) {
     return (
-      <Background theme="cobalt" orientation="landscape" onBack={() => navigate(`/${data.slug}/description`)}>
+      <Background theme="cobalt" orientation="portrait" onBack={() => navigate(`/${data.slug}/description`)}>
         <div className={styles.wrapper}>
           <p className={styles.notFound}>{t("Профессия не найдена")}</p>
         </div>
@@ -56,7 +56,7 @@ export function Profession() {
   const hasSections = profession.sections && profession.sections.length > 0;
 
   return (
-    <Background theme="cobalt" orientation="landscape" onBack={() => navigate(`/${data.slug}/description`)}>
+    <Background theme="cobalt" orientation="portrait" onBack={() => navigate(`/${data.slug}/description`)}>
       <div className={styles.wrapper}>
         <h2 className={styles.title}>{t(profession.title)}</h2>
 

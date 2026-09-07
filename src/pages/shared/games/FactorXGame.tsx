@@ -37,7 +37,7 @@ interface PopupInfo {
   explanation: string;
 }
 
-export function FactorXGame({ task, onComplete, onBack, theme = 'cobalt' }: Props) {
+export function FactorXGame({ task, onComplete, onBack, theme = 'cobalt', orientation = 'portrait' }: Props) {
   const { t } = useTranslation('sharedGames2');
   const steps = task.steps;
   const totalSteps = steps.length;
@@ -145,14 +145,17 @@ export function FactorXGame({ task, onComplete, onBack, theme = 'cobalt' }: Prop
 
   const timerUrgent = timeLeft <= 5 && !instructionOpen;
   const totalVotes = tally.yes + tally.no;
+  const isPortrait = orientation === 'portrait';
+  const overlayClass = `${styles.overlay} ${isPortrait ? styles.overlayPortrait : styles.overlayLandscape}`;
+  const resultsScreenClass = `${styles.resultsScreen} ${isPortrait ? styles.overlayPortrait : styles.overlayLandscape}`;
 
   return (
-    <Background theme={theme} orientation="landscape" onBack={onBack} backShowLabel={false}>
+    <Background theme={theme} orientation={orientation} onBack={onBack} backShowLabel={false}>
       <GameInstruction instruction={task.instruction} onOpenChange={setInstructionOpen} />
       {!done && (
-        <div className={styles.layout}>
+        <div className={`${styles.layout} ${isPortrait ? styles.layoutPortrait : ''}`}>
           {/* Accuracy bar */}
-          <div className={styles.accuracyRow}>
+          <div className={`${styles.accuracyRow} ${isPortrait ? styles.accuracyRowPortrait : ''}`}>
             <span className={styles.accuracyLabelLeft}>{t("Неточная модель")}</span>
             <div className={styles.accuracyTrack}>
               <div className={styles.accuracyFill} style={{ width: `${accuracy}%` }} />
@@ -161,7 +164,7 @@ export function FactorXGame({ task, onComplete, onBack, theme = 'cobalt' }: Prop
           </div>
 
           {/* Meta row */}
-          <div className={styles.metaRow}>
+          <div className={`${styles.metaRow} ${isPortrait ? styles.metaRowPortrait : ''}`}>
             <span className={styles.stepCounter}>{t("Фактор {{n}} из {{total}}", { n: currentStep + 1, total: totalSteps })}</span>
             <div className={styles.timerBox}>
               <span className={styles.timerLabel}>{t("Осталось")}</span>
@@ -173,13 +176,13 @@ export function FactorXGame({ task, onComplete, onBack, theme = 'cobalt' }: Prop
 
           {/* Factor card */}
           <div className={styles.cardArea}>
-            <div className={styles.factorCard}>
-              <p className={styles.factorText}>{t(step.prompt ?? '')}</p>
+            <div className={`${styles.factorCard} ${isPortrait ? styles.factorCardPortrait : ''}`}>
+              <p className={`${styles.factorText} ${isPortrait ? styles.factorTextPortrait : ''}`}>{t(step.prompt ?? '')}</p>
             </div>
           </div>
 
           {/* Tally */}
-          <div className={styles.tallyRow}>
+          <div className={`${styles.tallyRow} ${isPortrait ? styles.tallyRowPortrait : ''}`}>
             <div className={styles.tallyChip}>
               <span className={styles.tallyLabel}>{t("Влияет")}</span>
               <span className={`${styles.tallyNum} ${styles.tallyNumYes}`}>{tally.yes}</span>
@@ -194,7 +197,7 @@ export function FactorXGame({ task, onComplete, onBack, theme = 'cobalt' }: Prop
           </div>
 
           {/* Vote buttons */}
-          <div className={styles.buttonsRow}>
+          <div className={`${styles.buttonsRow} ${isPortrait ? styles.buttonsRowPortrait : ''}`}>
             <button
               className={`${styles.voteBtn} ${styles.voteBtnYes}`}
               onClick={() => handleVote(true)}
@@ -215,7 +218,7 @@ export function FactorXGame({ task, onComplete, onBack, theme = 'cobalt' }: Prop
 
       {/* Per-step popup */}
       {popup && !done && (
-        <div className={styles.overlay}>
+        <div className={overlayClass}>
           <PopUp
             icon={popup.status === 'tie' ? undefined : popup.status === 'correct' ? 'done' : 'close'}
             iconColor={popup.status === 'correct' ? 'blue' : 'red'}
@@ -239,8 +242,8 @@ export function FactorXGame({ task, onComplete, onBack, theme = 'cobalt' }: Prop
 
       {/* Final results screen */}
       {done && (
-        <div className={styles.resultsScreen}>
-          <div className={styles.resultsCard}>
+        <div className={resultsScreenClass}>
+          <div className={`${styles.resultsCard} ${isPortrait ? styles.resultsCardPortrait : ''}`}>
             <div className={styles.resultsHeader}>
               <h2 className={styles.resultsTitle}>{t("Обучение модели завершено")}</h2>
               <p className={styles.resultsSummary}>

@@ -10,7 +10,7 @@ export function Description() {
   const { t } = useTranslation('data');
 
   return (
-    <Background theme="cobalt" orientation="landscape" onBack={() => navigate(`/${data.slug}`)}>
+    <Background theme="cobalt" orientation="portrait" onBack={() => navigate(`/${data.slug}`)}>
       <div className={styles.wrapper}>
         <h2 className={styles.title}>{t(data.title)}</h2>
 

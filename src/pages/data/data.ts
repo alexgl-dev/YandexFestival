@@ -5,7 +5,7 @@ export const dataSection: SectionData = {
   slug: 'data',
   title: 'Работа с данными',
   theme: 'cobalt',
-  orientation: 'landscape',
+  orientation: 'portrait',
 
   professions: [
     {

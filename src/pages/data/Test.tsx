@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate, useOutletContext } from 'react-router';
 import { useTranslation } from 'react-i18next';
-import { Background, Button, Card, PopUp } from '../../components/ui';
+import { Background, Button, Card, IconButton, PopUp } from '../../components/ui';
 
 import type { SectionData } from '../../types/game';
 import styles from './Test.module.css';
@@ -23,7 +23,7 @@ export function Test() {
 
   if (!bingo) {
     return (
-      <Background theme="cobalt" orientation="landscape" onBack={handleBack} backShowLabel={false}>
+      <Background theme="cobalt" orientation="portrait" onBack={handleBack} backShowLabel={false}>
         <div className={styles.wrapper}>
           <h2 className={styles.title}>{t("Бинго")}</h2>
           <p className={styles.placeholder}>{t("Бинго в разработке")}</p>
@@ -50,7 +50,6 @@ export function Test() {
     }
   };
 
-
   const handleQuestionBack = () => {
     if (questionIndex > 0) {
       setQuestionIndex((i) => i - 1);
@@ -72,7 +71,7 @@ export function Test() {
   // PHASE 1: INTRO
   if (phase === 'intro') {
     return (
-      <Background theme="cobalt" orientation="landscape" onBack={handleBack} backShowLabel={false}>
+      <Background theme="cobalt" orientation="portrait" onBack={handleBack} backShowLabel={false}>
         <div className={styles.wrapper}>
           <div className={styles.card}>
             <p className={styles.introText}>{t(bingo.intro)}</p>
@@ -87,13 +86,12 @@ export function Test() {
   // PHASE 2: QUESTIONS (1 per page)
   if (phase === 'questions') {
     return (
-      <Background theme="cobalt" orientation="landscape" onBack={handleBack} backShowLabel={false}>
+      <Background theme="cobalt" orientation="portrait" onBack={handleBack} backShowLabel={false}>
         <div className={styles.questionsLayout}>
           <p className={styles.questionPrompt}>{t(currentQuestion.prompt)}</p>
 
           <div className={styles.optionsGrid}>
             {currentQuestion.options.map((option) => {
-
               return (
                 <Card
                   key={option}
@@ -110,7 +108,7 @@ export function Test() {
 
           <div className={styles.bottomRow}>
             <div className={styles.bottomLeft}>
-              <Button label={t("Назад")} type="secondary" onClick={handleQuestionBack} />
+              <IconButton type="back" size="md" onClick={handleQuestionBack} />
               <span className={styles.pageCounter}>
                 {questionIndex + 1} / {totalQuestions}
               </span>
@@ -130,8 +128,24 @@ export function Test() {
 
   // PHASE 3: RESULT
   return (
-    <Background theme="cobalt" orientation="landscape" onBack={handleBack} backShowLabel={false}>
+    <Background theme="cobalt" orientation="portrait" onBack={handleBack} backShowLabel={false}>
       <div className={styles.resultLayout}>
+        <div className={styles.resultSide}>
+          <Card
+            variant=""
+            title={t("Бинго!")}
+            description={t(bingo.resultText)}
+            size="m"
+            state="default"
+            className={`${styles.resultCard} ${styles.resultCardMain}`}
+          />
+          <Button
+            label={t("В главное меню")}
+            type="secondary"
+            onClick={() => navigate(`/${data.slug}`)}
+          />
+        </div>
+
         <div className={styles.gridSide}>
           <div className={styles.bingoGrid}>
             {Array.from({ length: 9 }).map((_, cellIndex) => {
@@ -171,22 +185,6 @@ export function Test() {
               );
             })}
           </div>
-        </div>
-
-        <div className={styles.resultSide}>
-          <Card
-            variant=""
-            title={t("Бинго!")}
-            description={t(bingo.resultText)}
-            size="m"
-            state="default"
-            className={`${styles.resultCard} ${styles.resultCardMain}`}
-          />
-          <Button
-            label={t("В главное меню")}
-            type="secondary"
-            onClick={() => navigate(`/${data.slug}`)}
-          />
         </div>
       </div>
 

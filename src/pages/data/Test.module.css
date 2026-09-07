@@ -6,7 +6,7 @@
   gap: var(--spacing-2xl);
   padding: var(--spacing-2xl) 0;
   width: 100%;
-  max-width: var(--width-content);
+  max-width: 80%;
   margin: 0 auto;
   box-sizing: border-box;
   font-family: var(--font-family-text);
@@ -66,10 +66,8 @@
   display: flex;
   flex-direction: column;
   gap: var(--spacing-2xl);
-  padding: var(--spacing-2xl) 0;
+  padding: var(--spacing-2xl);
   width: 100%;
-  max-width: 80%;
-  margin: 0 auto;
   box-sizing: border-box;
   font-family: var(--font-family-text);
   align-items: center;
@@ -125,34 +123,33 @@
 
 .resultLayout {
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
   gap: var(--spacing-2xl);
-  padding: var(--spacing-2xl) 0;
+  padding: var(--spacing-2xl);
   width: 100%;
-  max-width: 80%;
-  height: 100%;
-  margin: 0 auto;
   box-sizing: border-box;
   font-family: var(--font-family-text);
 }
 
 .gridSide {
   flex-shrink: 0;
+  width: 100%;
 }
 
+/* Bingo grid: fills the result card width, square cells via aspect-ratio */
 .bingoGrid {
   display: grid;
-  grid-template-columns: repeat(3, 280px);
-  grid-template-rows: repeat(3, 280px);
+  grid-template-columns: repeat(3, 1fr);
   gap: var(--spacing-sm);
+  width: 100%;
 }
 
 /* --- Flip card cells --- */
 
 .cellWrapper {
-  width: 280px;
-  height: 280px;
+  width: 100%;
+  aspect-ratio: 1 / 1;
   perspective: 800px;
   cursor: pointer;
 }
@@ -219,8 +216,8 @@
 /* --- Center cell (expert) --- */
 
 .cellCenter {
-  width: 280px;
-  height: 280px;
+  width: 100%;
+  aspect-ratio: 1 / 1;
   border-radius: var(--radius-lg);
   background: var(--color-white);
   display: flex;
@@ -271,7 +268,6 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   gap: var(--spacing-lg);
   width: 100%;
 }
