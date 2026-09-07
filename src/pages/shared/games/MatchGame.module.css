@@ -295,6 +295,87 @@
   padding: var(--spacing-xs);
 }
 
+/* Портрет «Археология кода»: макеты и код рядом */
+.archaeologyPortrait {
+  overflow: hidden;
+  justify-content: flex-start;
+}
+
+.archaeologyPortrait .columnsPortraitStack {
+  flex-direction: row;
+  align-items: stretch;
+  gap: var(--spacing-md);
+  flex: 1;
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+  min-height: 0;
+}
+
+.archaeologyPortrait .columnLeft {
+  display: flex;
+  flex-direction: column;
+  flex: 0 0 38%;
+  max-width: 38%;
+  gap: var(--spacing-sm);
+  overflow-y: auto;
+  padding-bottom: var(--spacing-md);
+  align-self: stretch;
+  min-height: 0;
+}
+
+.archaeologyPortrait .columnLeft .mockupCard:last-child:nth-child(odd) {
+  grid-column: auto;
+  max-width: none;
+  justify-self: auto;
+}
+
+.archaeologyPortrait .columnRight {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 0;
+  min-width: 0;
+  gap: var(--spacing-sm);
+  overflow-y: auto;
+  padding-bottom: var(--spacing-md);
+  align-self: stretch;
+  min-height: 0;
+}
+
+.archaeologyPortrait .mockupCard {
+  min-height: 0;
+  flex-shrink: 0;
+}
+
+.archaeologyPortrait .cardCode {
+  padding: var(--spacing-sm);
+  align-items: stretch;
+  flex-shrink: 0;
+  gap: var(--spacing-sm);
+}
+
+.archaeologyPortrait .hintBtn {
+  position: static;
+  align-self: flex-end;
+  flex-shrink: 0;
+  font-size: var(--font-size-xs);
+  padding: var(--spacing-xs) var(--spacing-md);
+  margin: 0;
+}
+
+.archaeologyPortrait .codeBlock {
+  font-size: 20px;
+  line-height: 1.4;
+  white-space: pre-wrap;
+  overflow-wrap: break-word;
+  word-break: break-word;
+  padding: var(--spacing-sm);
+}
+
+.archaeologyPortrait .cardLabel {
+  font-size: var(--font-size-sm);
+}
+
 .charCardInfo {
   display: flex;
   flex-direction: row;

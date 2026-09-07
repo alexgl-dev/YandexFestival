@@ -38,12 +38,13 @@ export function TaskPage() {
     return <div className={styles.notFound}>{t("Задание не найдено")}</div>;
   }
 
-  // Портрет: распределение задач, проверка безопасности, знакомство, собери код
+  // Портрет: распределение задач, проверка безопасности, знакомство, собери код, археология
   const orientation =
     task.id === 'task-distribution' ||
     task.id === 'security-check' ||
     task.id === 'languages-intro' ||
-    task.id === 'shopping-list'
+    task.id === 'shopping-list' ||
+    task.id === 'code-archaeology'
       ? 'portrait'
       : (data.orientation ?? 'landscape');
 

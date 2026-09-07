@@ -146,7 +146,12 @@ export function CodeSequenceGame({
     dragGhostRef.current = null;
   }, []);
 
-  /** Drag-preview без «гигантского» размера: сцена Background масштабируется через CSS transform. */
+  /**
+   * Drag-preview в размере как на экране.
+   * Background масштабирует сцену через CSS transform — браузер для setDragImage
+   * берёт layout без transform родителя, поэтому превью «раздувается».
+   * CSS zoom меняет layout-размер снимка (в отличие от transform: scale).
+   */
   const setScaledDragImage = useCallback((e: DragEvent<HTMLElement>) => {
     clearDragGhost();
     const el = e.currentTarget;
@@ -154,18 +159,24 @@ export function CodeSequenceGame({
     if (!el.offsetWidth || !rect.width) return;
     const scale = rect.width / el.offsetWidth;
     const ghost = el.cloneNode(true) as HTMLElement;
-    ghost.style.position = 'fixed';
-    ghost.style.top = '-10000px';
-    ghost.style.left = '0';
+    ghost.removeAttribute('draggable');
+    ghost.style.position = 'absolute';
+    ghost.style.top = '0';
+    ghost.style.left = '-10000px';
     ghost.style.width = `${el.offsetWidth}px`;
     ghost.style.margin = '0';
-    ghost.style.transform = `scale(${scale})`;
-    ghost.style.transformOrigin = 'top left';
+    ghost.style.transform = 'none';
     ghost.style.pointerEvents = 'none';
     ghost.style.opacity = '1';
+    ghost.style.setProperty('zoom', String(scale));
     document.body.appendChild(ghost);
     dragGhostRef.current = ghost;
-    e.dataTransfer.setDragImage(ghost, rect.width / 2, rect.height / 2);
+    // С zoom хотспот — в визуальных (уже уменьшенных) пикселях, как getBoundingClientRect.
+    e.dataTransfer.setDragImage(
+      ghost,
+      e.clientX - rect.left,
+      e.clientY - rect.top,
+    );
   }, [clearDragGhost]);
 
   const allPlaced = slots.every((s) => s !== null);

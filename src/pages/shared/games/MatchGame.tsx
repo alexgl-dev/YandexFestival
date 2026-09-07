@@ -133,6 +133,7 @@ export function MatchGame({
   const step = task.steps[0];
   const pairs: TaskPair[] = step?.pairs ?? [];
   const isLanguagesIntro = task.id === 'languages-intro';
+  const isCodeArchaeology = task.id === 'code-archaeology';
 
   const shuffledRightIndices = useMemo(() => shuffle(pairs.map((_, i) => i)), [pairs]);
 
@@ -409,13 +410,22 @@ export function MatchGame({
           isLanguagesIntro ? styles.languagesIntro : '',
           isPortrait ? styles.wrapperPortrait : '',
           isLanguagesIntro && isPortrait ? styles.languagesIntroPortrait : '',
+          isCodeArchaeology && isPortrait ? styles.archaeologyPortrait : '',
         ]
           .filter(Boolean)
           .join(' ')}
       >
         {step?.prompt && <p className={styles.prompt}>{t(step.prompt)}</p>}
 
-        <div className={`${styles.columns} ${isPortrait && isLanguagesIntro ? styles.columnsPortraitRow : ''}`}>
+        <div
+          className={[
+            styles.columns,
+            isPortrait && isLanguagesIntro ? styles.columnsPortraitRow : '',
+            isPortrait && isCodeArchaeology ? styles.columnsPortraitStack : '',
+          ]
+            .filter(Boolean)
+            .join(' ')}
+        >
           <div className={`${styles.column} ${styles.columnLeft} ui-scrollbar`}>
             {pairs.map((pair, index) => renderLeftCard(pair, index))}
           </div>
