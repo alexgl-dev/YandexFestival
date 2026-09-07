@@ -12,6 +12,19 @@
   font-family: var(--font-family-text);
 }
 
+.wrapperPortrait {
+  max-width: 100%;
+  padding: 160px var(--spacing-2xl) var(--spacing-2xl);
+  gap: var(--spacing-xl);
+  justify-content: center;
+  overflow-y: auto;
+}
+
+.wrapperPortrait .counter {
+  font-size: var(--font-size-md);
+  text-transform: none;
+}
+
 .counter {
   font-family: var(--font-family-text);
   font-size: var(--font-size-sm);
@@ -44,6 +57,70 @@
   flex: 1;
   min-height: 0;
   box-sizing: border-box;
+}
+
+.emailCardPortrait {
+  max-width: 100%;
+  flex: 0 0 auto;
+  min-height: 0;
+  padding: var(--spacing-xl);
+  overflow: visible;
+}
+
+.emailCardPortrait .emailCardScroll {
+  flex: 0 0 auto;
+  overflow: visible;
+}
+
+.emailRowPortrait {
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  font-size: var(--font-size-md);
+}
+
+.emailRowPortrait .rowLabel {
+  width: auto;
+  padding-top: 0;
+  font-size: var(--font-size-md);
+  color: var(--color-text-muted);
+}
+
+.emailRowPortrait .valueText,
+.emailRowPortrait .notableHitArea {
+  font-size: var(--font-size-md);
+}
+
+.emailBodyPortrait {
+  font-size: var(--font-size-sm);
+}
+
+.emailBodyPortrait .emailBlock {
+  font-size: var(--font-size-sm);
+}
+
+.hintFooterPortrait {
+  justify-content: stretch;
+}
+
+.hintButtonPortrait {
+  width: 100% !important;
+  font-size: var(--font-size-md) !important;
+  font-weight: var(--font-weight-medium) !important;
+  padding: var(--spacing-sm) var(--spacing-lg) !important;
+}
+
+/* Ширину задаём явно: внутри inline-родителя max-width:100% схлопывает тултип в узкую колонку */
+.wrapperPortrait .noteTooltip {
+  left: 0;
+  right: auto;
+  width: 520px;
+  min-width: 320px;
+  max-width: none;
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+  z-index: 100;
+  word-break: normal;
+  overflow-wrap: break-word;
 }
 
 .emailCardScroll {
@@ -142,6 +219,7 @@
   outline-style: dashed;
   outline-color: transparent;
   outline-offset: 0;
+  z-index: 0;
 }
 
 .notable {
@@ -164,6 +242,7 @@
 
 .notableActive {
   filter: brightness(1.05);
+  z-index: 50;
 }
 
 .noteMark {
@@ -180,13 +259,15 @@
   font-size: var(--font-size-2xs);
   font-weight: var(--font-weight-bold);
   vertical-align: middle;
+  position: relative;
+  z-index: 1;
 }
 
 .noteTooltip {
   position: absolute;
   left: 0;
   top: calc(100% + var(--spacing-xs));
-  z-index: 10;
+  z-index: 100;
   display: block;
   max-width: 480px;
   min-width: 280px;
@@ -195,7 +276,7 @@
   color: var(--color-white);
   border-radius: var(--radius-sm);
   font-family: var(--font-family-text);
-  font-size: var(--font-size-2xs);
+  font-size: var(--font-size-xs);
   font-weight: var(--font-weight-regular);
   line-height: var(--line-height-relaxed);
   letter-spacing: var(--letter-spacing-xs);
@@ -251,6 +332,10 @@
   background: var(--color-overlay-red);
 }
 
+.attachment.notableActive {
+  z-index: 50;
+}
+
 .attachmentIcon {
   display: inline-flex;
   align-items: center;
@@ -269,6 +354,16 @@
   justify-content: center;
   align-items: center;
   flex-shrink: 0;
+}
+
+.verdictRowPortrait {
+  width: 100%;
+  gap: var(--spacing-md);
+}
+
+.verdictBtnPortrait {
+  flex: 1 1 0 !important;
+  width: 100% !important;
 }
 
 .btnSafe :global(.root),

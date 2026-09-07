@@ -24,6 +24,26 @@
   font-size: var(--font-size-lg);
 }
 
+/* Портретный экран: 2×2 папки + карточка задачи (task-distribution) */
+.layoutVertical {
+  width: 100%;
+  padding: 160px var(--spacing-2xl) var(--spacing-2xl);
+  gap: var(--spacing-xl);
+  justify-content: center;
+}
+
+.layoutVertical .taskCounter {
+  font-size: var(--font-size-md);
+}
+
+.layoutVertical .taskTitle {
+  font-size: var(--font-size-md);
+}
+
+.layoutVertical .taskText {
+  font-size: var(--font-size-md);
+}
+
 /* ══ 2×2 folder grid ══ */
 
 .foldersGrid {
@@ -84,6 +104,57 @@
 
 .foldersGridPortraits .specName {
   text-align: center;
+}
+
+/* Портрет: 2×2 папки без огромного margin-top */
+.foldersGridVertical {
+  flex: 0 0 auto;
+  min-height: 0;
+  margin-top: 0;
+  column-gap: var(--spacing-lg);
+  row-gap: var(--spacing-lg);
+  align-content: start;
+  width: 100%;
+}
+
+.foldersGridVertical .folderCard {
+  flex: none;
+  height: auto;
+  min-height: 0;
+  aspect-ratio: 1.15 / 1;
+}
+
+.foldersGridVertical .profileRow {
+  gap: var(--spacing-xs);
+}
+
+.foldersGridVertical .avatarWrap {
+  width: 40px;
+  height: 40px;
+}
+
+.foldersGridVertical .specNameStatic {
+  min-height: 48px;
+  padding: var(--spacing-xs) var(--spacing-sm);
+}
+
+.foldersGridVertical .specName {
+  font-size: var(--font-size-sm);
+}
+
+.foldersGridVertical .infoBtn {
+  width: 56px;
+  height: 56px;
+  font-size: var(--font-size-lg);
+}
+
+.layoutVertical .taskArea {
+  margin-top: 0;
+  width: 100%;
+}
+
+.layoutVertical .taskCard {
+  padding: var(--spacing-lg) var(--spacing-xl);
 }
 
 /* ══ Specialist cell ══ */

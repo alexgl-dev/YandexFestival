@@ -73,7 +73,8 @@ export function DistributeGame({ task, onComplete, onBack, theme = 'cobalt', ori
   const gridCols = getGridColumns(categories.length, task.id);
   const gridRows = categories.length > 0 ? Math.ceil(categories.length / gridCols) : 1;
   const isStackLayout = task.id === 'agency';
-  const isPortraitLayout = task.id === 'key-message';
+  const isKeyMessageLayout = task.id === 'key-message';
+  const isVerticalScreen = orientation === 'portrait' && !isKeyMessageLayout;
   const gridColGap = gridCols >= 3 ? 'var(--spacing-md)' : orientation === 'portrait' ? 'var(--spacing-lg)' : '80px';
   const useCompactProfiles = gridCols >= 3 && !categories.some((c) => c.image);
 
@@ -145,16 +146,16 @@ export function DistributeGame({ task, onComplete, onBack, theme = 'cobalt', ori
         initialOpen={task.instruction?.trim() ? undefined : false}
       />
       <div
-        className={`${styles.layout} ${isPortraitLayout ? styles.layoutPortrait : ''}`}
+        className={`${styles.layout} ${isKeyMessageLayout ? styles.layoutPortrait : ''} ${isVerticalScreen ? styles.layoutVertical : ''}`}
         onClick={() => setActivePopup(null)}
       >
 
         {/* ══ TOP: folder grid (2×2 for 4 specialists, adapts for other counts) ══ */}
         <div
-          className={`${styles.foldersGrid} ${isStackLayout ? styles.foldersGridStack : ''} ${isPortraitLayout ? styles.foldersGridPortraits : ''}`}
+          className={`${styles.foldersGrid} ${isStackLayout ? styles.foldersGridStack : ''} ${isKeyMessageLayout ? styles.foldersGridPortraits : ''} ${isVerticalScreen ? styles.foldersGridVertical : ''}`}
           style={{
             gridTemplateColumns: `repeat(${gridCols}, 1fr)`,
-            gridTemplateRows: `repeat(${gridRows}, ${isStackLayout || isPortraitLayout ? 'auto' : '1fr'})`,
+            gridTemplateRows: `repeat(${gridRows}, ${isStackLayout || isKeyMessageLayout || isVerticalScreen ? 'auto' : '1fr'})`,
             columnGap: gridColGap,
           }}
           onClick={(e) => e.stopPropagation()}

@@ -88,13 +88,15 @@ export function SecurityCheckGame({
     }
   }, [popup, currentIdx, items.length, results, onComplete]);
 
+  const isPortrait = orientation === 'portrait';
+
   if (!step || !currentItem || !email) return null;
 
   return (
     <Background theme={theme} orientation={orientation} onBack={onBack} backShowLabel={false}>
       <GameInstruction instruction={task.instruction} />
 
-      <div className={styles.wrapper}>
+      <div className={`${styles.wrapper} ${isPortrait ? styles.wrapperPortrait : ''}`}>
         <div className={styles.counter}>
           {t("Письмо {{current}} из {{total}}", { current: currentIdx + 1, total: items.length })}
         </div>
@@ -105,9 +107,10 @@ export function SecurityCheckGame({
           onNoteClick={handleNoteClick}
           hintsVisible={hintsVisible}
           onToggleHints={() => setHintsVisible((v) => !v)}
+          isPortrait={isPortrait}
         />
 
-        <div className={styles.verdictRow}>
+        <div className={`${styles.verdictRow} ${isPortrait ? styles.verdictRowPortrait : ''}`}>
           {labels.map((label) => {
             const isDanger = label.id === 'danger';
             return (
@@ -116,7 +119,7 @@ export function SecurityCheckGame({
                 label={t(label.title)}
                 type="secondary"
                 onClick={() => handleVerdict(label.id)}
-                className={isDanger ? styles.btnDanger : styles.btnSafe}
+                className={`${isDanger ? styles.btnDanger : styles.btnSafe} ${isPortrait ? styles.verdictBtnPortrait : ''}`}
               />
             );
           })}
@@ -147,16 +150,18 @@ function EmailCard({
   onNoteClick,
   hintsVisible,
   onToggleHints,
+  isPortrait,
 }: {
   email: EmailContent;
   activeNote: string | null;
   onNoteClick: (key: string, note?: string) => void;
   hintsVisible: boolean;
   onToggleHints: () => void;
+  isPortrait?: boolean;
 }) {
   const { t } = useTranslation('sharedGames2');
   return (
-    <div className={styles.emailCard}>
+    <div className={`${styles.emailCard} ${isPortrait ? styles.emailCardPortrait : ''}`}>
       <div className={styles.emailCardScroll}>
         <div className={styles.emailHeader}>
           <EmailRow
@@ -166,6 +171,7 @@ function EmailCard({
             activeNote={activeNote}
             onNoteClick={onNoteClick}
             hintsRevealed={hintsVisible}
+            isPortrait={isPortrait}
           />
           <EmailRow
             label={t("Кому")}
@@ -174,6 +180,7 @@ function EmailCard({
             activeNote={activeNote}
             onNoteClick={onNoteClick}
             hintsRevealed={hintsVisible}
+            isPortrait={isPortrait}
           />
           <EmailRow
             label={t("Тема")}
@@ -182,9 +189,10 @@ function EmailCard({
             activeNote={activeNote}
             onNoteClick={onNoteClick}
             hintsRevealed={hintsVisible}
+            isPortrait={isPortrait}
           />
         </div>
-        <div className={styles.emailBody}>
+        <div className={`${styles.emailBody} ${isPortrait ? styles.emailBodyPortrait : ''}`}>
           {email.body.map((block, idx) => (
             <EmailBodyBlock
               key={idx}
@@ -197,11 +205,11 @@ function EmailCard({
           ))}
         </div>
       </div>
-      <div className={styles.hintFooter}>
+      <div className={`${styles.hintFooter} ${isPortrait ? styles.hintFooterPortrait : ''}`}>
         <Button
           label={hintsVisible ? t("Скрыть подсказку") : t("Показать подсказку")}
           type="secondary"
-          className={styles.hintButton}
+          className={`${styles.hintButton} ${isPortrait ? styles.hintButtonPortrait : ''}`}
           onClick={onToggleHints}
         />
       </div>
@@ -216,6 +224,7 @@ function EmailRow({
   activeNote,
   onNoteClick,
   hintsRevealed,
+  isPortrait,
 }: {
   label: string;
   field: EmailField;
@@ -223,10 +232,11 @@ function EmailRow({
   activeNote: string | null;
   onNoteClick: (key: string, note?: string) => void;
   hintsRevealed: boolean;
+  isPortrait?: boolean;
 }) {
   const isActive = activeNote === keyBase;
   return (
-    <div className={styles.emailRow}>
+    <div className={`${styles.emailRow} ${isPortrait ? styles.emailRowPortrait : ''}`}>
       <span className={styles.rowLabel}>{label}:</span>
       <NotableText
         text={field.value}

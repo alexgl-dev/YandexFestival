@@ -38,6 +38,12 @@ export function TaskPage() {
     return <div className={styles.notFound}>{t("Задание не найдено")}</div>;
   }
 
+  // Портрет: «Распределение задач», «Проверка безопасности»; остальные — landscape
+  const orientation =
+    task.id === 'task-distribution' || task.id === 'security-check'
+      ? 'portrait'
+      : (data.orientation ?? 'landscape');
+
   const goToMenu = () => navigate(`/${data.slug}`);
   const goToNextTask = () => {
     const next = data.tasks.find((tsk) => tsk.order === task.order + 1);
@@ -56,7 +62,7 @@ export function TaskPage() {
           onStart={() => setPhase('game')}
           onBack={() => navigate(`/${data.slug}/tasks`)}
           theme={data.theme}
-          orientation={data.orientation}
+          orientation={orientation}
         />
       );
     case 'game':
@@ -85,7 +91,7 @@ export function TaskPage() {
             );
           }}
           theme={data.theme}
-          orientation={data.orientation}
+          orientation={orientation}
         />
       );
     case 'result':
@@ -94,7 +100,7 @@ export function TaskPage() {
           results={results}
           onContinue={() => setPhase('moral')}
           theme={data.theme}
-          orientation={data.orientation}
+          orientation={orientation}
         />
       );
     case 'moral':
@@ -105,7 +111,7 @@ export function TaskPage() {
           isLast={task.isLast}
           sectionSlug={data.slug}
           theme={data.theme}
-          orientation={data.orientation}
+          orientation={orientation}
         />
       );
   }
