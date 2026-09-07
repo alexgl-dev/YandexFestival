@@ -23,6 +23,26 @@
   );
 }
 
+.layoutPortrait .stepCounter {
+  font-size: var(--font-size-md);
+}
+
+.layoutPortrait .timerLabel {
+  font-size: var(--font-size-md);
+}
+
+.layoutPortrait .prompt {
+  font-size: var(--font-size-xl);
+}
+
+.layoutPortrait .compareLine {
+  font-size: var(--font-size-md);
+}
+
+.layoutPortrait .comment {
+  font-size: var(--font-size-sm);
+}
+
 /* ══ Meta row ══ */
 
 .metaRow {

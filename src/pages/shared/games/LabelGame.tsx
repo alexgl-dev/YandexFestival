@@ -1,6 +1,6 @@
 import { useState, useCallback, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Background, Button, Card, Icon, PopUp } from '../../../components/ui';
+import { Background, Button, Card, Icon, IconButton, PopUp } from '../../../components/ui';
 import type { Task } from '../../../types/game';
 import { GameInstruction } from '../GameInstruction';
 import { parseInstructionMarkup } from '../instructionMarkup';
@@ -27,7 +27,7 @@ export function LabelGame({
   onComplete,
   onBack,
   theme = 'cobalt',
-  orientation = 'landscape',
+  orientation = 'portrait',
 }: GameProps) {
   const { t } = useTranslation('sharedGames2');
   const step = task.steps[0];
@@ -129,102 +129,109 @@ export function LabelGame({
     setActiveTerm({ term, definition });
   }, []);
 
+  const isPortrait = orientation === 'portrait';
+
   return (
     <Background theme={theme} orientation={orientation} onBack={onBack} backShowLabel={false}>
       <GameInstruction instruction={task.instruction} />
 
-      <div className={styles.wrapper}>
-        {step?.prompt && <p className={styles.prompt}>{step.prompt}</p>}
-
-        {isCardMode ? (
-          <div className={styles.cardGrid}>
-            {items.map((item, idx) => {
-              const chosenId = answers[idx];
-              const label = labels.find((l) => l.id === chosenId);
-              const isActive = activeIdx === idx;
-              const isAnswered = !!chosenId;
-              const isWrong = wrongIdx.has(idx);
-              const state: 'default' | 'pressed' | 'flipped' | 'wrong' = isWrong
-                ? 'wrong'
-                : isActive
-                  ? 'flipped'
-                  : isAnswered
-                    ? 'pressed'
-                    : 'default';
-              const variantLabel = isAnswered && label ? t(label.title).toUpperCase() : t("ПИСЬМО 0{{num}}", { num: idx + 1 });
-              return (
-                <Card
-                  key={idx}
-                  variant={variantLabel}
-                  title={item.content?.description ? t(item.content.description) : item.title ? t(item.title) : ''}
-                  description=""
-                  size="l"
-                  state={state}
-                  onClick={() => handleHotspotClick(idx)}
-                />
-              );
-            })}
-          </div>
-        ) : (
-        <div className={styles.stageContainer}>
-          <div className={styles.stage}>
-          {image && (
-            <img src={image} alt="" className={styles.stageImage} draggable={false} />
+      <div className={`${styles.wrapper} ${isPortrait ? styles.wrapperPortrait : ''}`}>
+        <div className={`${styles.main} ${isPortrait ? styles.mainPortrait : ''}`}>
+          {step?.prompt && (
+            <p className={`${styles.prompt} ${isPortrait ? styles.promptPortrait : ''}`}>{t(step.prompt)}</p>
           )}
 
-          {items.map((item, idx) => {
-            const box = item.box;
-            if (!box) return null;
-            const chosenId = answers[idx];
-            const label = labels.find((l) => l.id === chosenId);
-            const isActive = activeIdx === idx;
-            const isAnswered = !!chosenId;
-            const isWrong = wrongIdx.has(idx);
-
-            const cls = [
-              styles.hotspot,
-              !isAnswered && !isWrong && styles.hotspotIdle,
-              isAnswered && !isWrong && styles.hotspotDone,
-              isActive && styles.hotspotActive,
-              isWrong && styles.hotspotWrong,
-            ]
-              .filter(Boolean)
-              .join(' ');
-
-            return (
-              <button
-                key={idx}
-                type="button"
-                className={cls}
-                style={{
-                  left: `${box.x}%`,
-                  top: `${box.y}%`,
-                  width: `${box.width}%`,
-                  height: `${box.height}%`,
-                }}
-                onClick={() => handleHotspotClick(idx)}
-              >
-                <span className={styles.hotspotNumber}>{idx + 1}</span>
-                {isAnswered && !isWrong && label && (
-                  <span className={styles.hotspotBadge}>
-                    <Icon name="done" color="white" size="s" />
-                    {t(label.title)}
-                  </span>
+          {isCardMode ? (
+            <div className={`${styles.cardGrid} ${isPortrait ? styles.cardGridPortrait : ''}`}>
+              {items.map((item, idx) => {
+                const chosenId = answers[idx];
+                const label = labels.find((l) => l.id === chosenId);
+                const isActive = activeIdx === idx;
+                const isAnswered = !!chosenId;
+                const isWrong = wrongIdx.has(idx);
+                const state: 'default' | 'pressed' | 'flipped' | 'wrong' = isWrong
+                  ? 'wrong'
+                  : isActive
+                    ? 'flipped'
+                    : isAnswered
+                      ? 'pressed'
+                      : 'default';
+                const variantLabel = isAnswered && label ? t(label.title).toUpperCase() : t("ПИСЬМО 0{{num}}", { num: idx + 1 });
+                return (
+                  <Card
+                    key={idx}
+                    variant={variantLabel}
+                    title={item.content?.description ? t(item.content.description) : item.title ? t(item.title) : ''}
+                    description=""
+                    size="l"
+                    state={state}
+                    onClick={() => handleHotspotClick(idx)}
+                  />
+                );
+              })}
+            </div>
+          ) : (
+            <div className={`${styles.stageContainer} ${isPortrait ? styles.stageContainerPortrait : ''}`}>
+              <div className={`${styles.stage} ${isPortrait ? styles.stagePortrait : ''}`}>
+                {image && (
+                  <img src={image} alt="" className={styles.stageImage} draggable={false} />
                 )}
-                {isWrong && (
-                  <span className={styles.hotspotBadgeError}>
-                    <Icon name="close" color="white" size="s" />
-                    {t("Ошибка")}
-                  </span>
-                )}
-              </button>
-            );
-          })}
-          </div>
+
+                {items.map((item, idx) => {
+                  const box = item.box;
+                  if (!box) return null;
+                  const chosenId = answers[idx];
+                  const label = labels.find((l) => l.id === chosenId);
+                  const isActive = activeIdx === idx;
+                  const isAnswered = !!chosenId;
+                  const isWrong = wrongIdx.has(idx);
+
+                  const cls = [
+                    styles.hotspot,
+                    isPortrait && styles.hotspotPortrait,
+                    !isAnswered && !isWrong && styles.hotspotIdle,
+                    isAnswered && !isWrong && styles.hotspotDone,
+                    isActive && styles.hotspotActive,
+                    isWrong && styles.hotspotWrong,
+                  ]
+                    .filter(Boolean)
+                    .join(' ');
+
+                  return (
+                    <button
+                      key={idx}
+                      type="button"
+                      className={cls}
+                      style={{
+                        left: `${box.x}%`,
+                        top: `${box.y}%`,
+                        width: `${box.width}%`,
+                        height: `${box.height}%`,
+                      }}
+                      onClick={() => handleHotspotClick(idx)}
+                    >
+                      <span className={styles.hotspotNumber}>{idx + 1}</span>
+                      {isAnswered && !isWrong && label && (
+                        <span className={styles.hotspotBadge}>
+                          <Icon name="done" color="white" size="xs" className={styles.hotspotBadgeIcon} />
+                          {t(label.title)}
+                        </span>
+                      )}
+                      {isWrong && (
+                        <span className={styles.hotspotBadgeError}>
+                          <Icon name="close" color="white" size="xs" className={styles.hotspotBadgeIcon} />
+                          {t("Ошибка")}
+                        </span>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
         </div>
-        )}
 
-        <div className={styles.footer}>
+        <div className={`${styles.footer} ${isPortrait ? styles.footerPortrait : ''}`}>
           <div className={styles.counter}>
             {t("Размечено: {{answeredCount}}/{{total}}", { answeredCount, total: items.length })}
           </div>
@@ -232,40 +239,36 @@ export function LabelGame({
             label={t("Готово")}
             type="secondary"
             onClick={handleSubmit}
-            className={!allAnswered ? styles.finishDisabled : ''}
+            className={`${isPortrait ? styles.finishPortrait : ''} ${!allAnswered ? styles.finishDisabled : ''}`}
           />
         </div>
       </div>
 
       {activeIdx !== null && !popup && (
         <div className={styles.pickerOverlay} onClick={handleClosePicker}>
-          <div className={styles.picker} onClick={(e) => e.stopPropagation()}>
+          <div
+            className={`${styles.picker} ${isPortrait ? styles.pickerPortrait : ''}`}
+            onClick={(e) => e.stopPropagation()}
+          >
             <div className={styles.pickerHeader}>
               <div className={styles.pickerTitle}>
                 {activeItem?.title
                   ? t("Выбери тег для объекта №{{num}}", { num: (activeIdx ?? 0) + 1 })
                   : t("Выбери тег")}
               </div>
-              <button
-                type="button"
-                className={styles.pickerClose}
-                onClick={handleClosePicker}
-                aria-label={t("Закрыть")}
-              >
-                <Icon name="close" color="red" size="s" />
-              </button>
+              <IconButton type="close" onClick={handleClosePicker} />
             </div>
             {activeItem?.boxTip && (
               <div className={styles.pickerBoxTip}>{t(activeItem.boxTip)}</div>
             )}
-            <div className={styles.pickerOptions}>
+            <div className={`${styles.pickerOptions} ${isPortrait ? styles.pickerOptionsPortrait : ''}`}>
               {pickerLabels.map((label) => {
                 const isChosen = activeIdx !== null && answers[activeIdx] === label.id;
                 return (
                   <Button
                     key={label.id}
                     label={t(label.title)}
-                    type={isChosen ? 'big' : 'main'}
+                    type="main"
                     pressed={isChosen}
                     onClick={() => handlePickLabel(label.id)}
                     className={styles.pickerBtn}

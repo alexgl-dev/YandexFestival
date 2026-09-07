@@ -13,6 +13,27 @@
   box-sizing: border-box;
 }
 
+.wrapperPortrait {
+  justify-content: flex-start;
+  padding: 180px var(--spacing-2xl) var(--spacing-2xl);
+  gap: var(--spacing-xl);
+}
+
+.main {
+  flex: 1 1 auto;
+  min-height: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-md);
+}
+
+.mainPortrait {
+  justify-content: center;
+  gap: var(--spacing-lg);
+}
+
 .prompt {
   flex: 0 0 auto;
   font-family: var(--font-family-text);
@@ -23,6 +44,11 @@
   margin: 0;
   max-width: 80%;
   line-height: 1.2;
+}
+
+.promptPortrait {
+  max-width: 100%;
+  font-size: var(--font-size-md);
 }
 
 .instructionToggle {
@@ -42,6 +68,11 @@
   justify-content: center;
 }
 
+.stageContainerPortrait {
+  flex: 0 0 auto;
+  width: 100%;
+}
+
 /* === Stage: dashcam image with hotspots, sized by height + aspect-ratio === */
 .stage {
   position: relative;
@@ -53,6 +84,12 @@
   overflow: hidden;
   background: #000;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.35);
+}
+
+.stagePortrait {
+  width: 100%;
+  max-width: 100%;
+  height: auto;
 }
 
 .stageImage {
@@ -78,6 +115,10 @@
   transition: border-color 0.2s, background 0.2s, transform 0.15s;
 }
 
+.hotspotPortrait {
+  border-radius: 8px;
+}
+
 .hotspot:focus-visible {
   outline: none;
 }
@@ -97,6 +138,14 @@
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-bold);
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.35);
+}
+
+.hotspotPortrait .hotspotNumber {
+  top: -14px;
+  left: -14px;
+  width: 36px;
+  height: 36px;
+  font-size: var(--font-size-xs);
 }
 
 /* Idle: pulsing dashed outline */
@@ -159,13 +208,27 @@
   transform: translateX(-50%);
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 6px 14px;
+  gap: var(--spacing-xs);
+  padding: var(--spacing-sm) var(--spacing-md);
   border-radius: var(--radius-full);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-medium);
   white-space: nowrap;
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.35);
+}
+
+.hotspotPortrait .hotspotBadge,
+.hotspotPortrait .hotspotBadgeError {
+  bottom: -16px;
+  padding: var(--spacing-sm) var(--spacing-md);
+  gap: var(--spacing-xs);
+  font-size: var(--font-size-2xs);
+}
+
+.hotspotBadgeIcon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
 }
 
 .hotspotBadge {
@@ -194,6 +257,17 @@
   --card-title-size: var(--font-size-sm);
 }
 
+.cardGridPortrait {
+  grid-template-columns: 1fr;
+  width: 100%;
+  align-content: start;
+  overflow-y: auto;
+}
+
+.cardGridPortrait > * {
+  width: 100% !important;
+}
+
 /* === Footer with counter + finish button === */
 .footer {
   flex: 0 0 auto;
@@ -206,11 +280,26 @@
   box-sizing: border-box;
 }
 
+.footerPortrait {
+  width: 100%;
+  flex: 0 0 auto;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+}
+
 .counter {
   font-family: var(--font-family-text);
   font-size: var(--font-size-lg);
   font-weight: var(--font-weight-medium);
   color: var(--color-white);
+}
+
+.footerPortrait .counter {
+  font-size: var(--font-size-md);
+}
+
+.finishPortrait {
+  width: 100% !important;
 }
 
 .finishDisabled {
@@ -244,6 +333,13 @@
   box-sizing: border-box;
 }
 
+.pickerPortrait {
+  max-width: 100%;
+  max-height: 70%;
+  overflow-y: auto;
+  padding: var(--spacing-xl);
+}
+
 .pickerHeader {
   display: flex;
   align-items: center;
@@ -256,23 +352,6 @@
   font-size: var(--font-size-lg);
   font-weight: var(--font-weight-medium);
   color: var(--color-black);
-}
-
-.pickerClose {
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  background: var(--color-grey-light);
-  border: none;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-}
-
-.pickerClose:hover {
-  background: var(--color-grey-secondary);
 }
 
 .pickerBoxTip {
@@ -288,6 +367,11 @@
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: var(--spacing-md);
+}
+
+.pickerOptionsPortrait {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--spacing-sm);
 }
 
 .pickerBtn {
