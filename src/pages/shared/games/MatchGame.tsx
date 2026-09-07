@@ -247,7 +247,7 @@ export function MatchGame({
                 >
                   <Button
                     label={t("Описание")}
-                    type="secondary"
+                    type={isLanguagesIntro && orientation === 'portrait' ? 'main' : 'secondary'}
                     className={styles.speechHintBtn}
                     onClick={() => setSpeechBubbleIndex(index)}
                   />
@@ -395,6 +395,7 @@ export function MatchGame({
 
   const allCorrect = results.filter((r) => r.correct).length === pairs.length;
   const overlayDimClass = orientation === 'portrait' ? styles.overlayPortrait : styles.overlayLandscape;
+  const isPortrait = orientation === 'portrait';
 
   // Speech bubble pair
   const bubblePair = speechBubbleIndex !== null ? pairs[speechBubbleIndex] : null;
@@ -402,10 +403,19 @@ export function MatchGame({
   return (
     <Background theme={theme} orientation={orientation} onBack={onBack} backShowLabel={false}>
       <GameInstruction instruction={task.instruction} initialOpen={!!task.instruction?.trim()} />
-      <div className={`${styles.wrapper} ${isLanguagesIntro ? styles.languagesIntro : ''}`}>
+      <div
+        className={[
+          styles.wrapper,
+          isLanguagesIntro ? styles.languagesIntro : '',
+          isPortrait ? styles.wrapperPortrait : '',
+          isLanguagesIntro && isPortrait ? styles.languagesIntroPortrait : '',
+        ]
+          .filter(Boolean)
+          .join(' ')}
+      >
         {step?.prompt && <p className={styles.prompt}>{t(step.prompt)}</p>}
 
-        <div className={styles.columns}>
+        <div className={`${styles.columns} ${isPortrait && isLanguagesIntro ? styles.columnsPortraitRow : ''}`}>
           <div className={`${styles.column} ${styles.columnLeft} ui-scrollbar`}>
             {pairs.map((pair, index) => renderLeftCard(pair, index))}
           </div>
@@ -422,7 +432,13 @@ export function MatchGame({
           onClick={() => { setSpeechBubbleIndex(null); setActiveTerm(null); }}
         >
           <div
-            className={`${styles.bubbleCard} ${isLanguagesIntro ? styles.bubbleCardLanguagesIntro : ''}`}
+            className={[
+              styles.bubbleCard,
+              isLanguagesIntro ? styles.bubbleCardLanguagesIntro : '',
+              isPortrait ? styles.bubbleCardPortrait : '',
+            ]
+              .filter(Boolean)
+              .join(' ')}
             onClick={(e) => e.stopPropagation()}
           >
             <div className={styles.bubbleHeader}>

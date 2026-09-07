@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useMemo, useRef, type ReactNode } from 'react';
+import { useState, useEffect, useCallback, useMemo, useRef, type DragEvent, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Background, Button, PopUp } from '../../../components/ui';
 import type { Task } from '../../../types/game';
@@ -139,6 +139,34 @@ export function CodeSequenceGame({
   const [tooltip, setTooltip] = useState<{ term: string; tip: string } | null>(null);
   const [briefingOpen, setBriefingOpen] = useState(false);
   const dragSourceRef = useRef<number | null>(null);
+  const dragGhostRef = useRef<HTMLElement | null>(null);
+
+  const clearDragGhost = useCallback(() => {
+    dragGhostRef.current?.remove();
+    dragGhostRef.current = null;
+  }, []);
+
+  /** Drag-preview без «гигантского» размера: сцена Background масштабируется через CSS transform. */
+  const setScaledDragImage = useCallback((e: DragEvent<HTMLElement>) => {
+    clearDragGhost();
+    const el = e.currentTarget;
+    const rect = el.getBoundingClientRect();
+    if (!el.offsetWidth || !rect.width) return;
+    const scale = rect.width / el.offsetWidth;
+    const ghost = el.cloneNode(true) as HTMLElement;
+    ghost.style.position = 'fixed';
+    ghost.style.top = '-10000px';
+    ghost.style.left = '0';
+    ghost.style.width = `${el.offsetWidth}px`;
+    ghost.style.margin = '0';
+    ghost.style.transform = `scale(${scale})`;
+    ghost.style.transformOrigin = 'top left';
+    ghost.style.pointerEvents = 'none';
+    ghost.style.opacity = '1';
+    document.body.appendChild(ghost);
+    dragGhostRef.current = ghost;
+    e.dataTransfer.setDragImage(ghost, rect.width / 2, rect.height / 2);
+  }, [clearDragGhost]);
 
   const allPlaced = slots.every((s) => s !== null);
 
@@ -291,8 +319,8 @@ export function CodeSequenceGame({
     };
   }, [slotResults, slots, blocks, t]);
 
-  const overlayDimClass =
-    orientation === 'portrait' ? styles.overlayPortrait : styles.overlayLandscape;
+  const isPortrait = orientation === 'portrait';
+  const overlayDimClass = isPortrait ? styles.overlayPortrait : styles.overlayLandscape;
 
   const robotSrc =
     mood === 'happy'
@@ -333,13 +361,29 @@ export function CodeSequenceGame({
       theme={theme}
       orientation={orientation}
       onBack={onBack}
-      contentClassName={styles.scrollableBackgroundContent}
+      contentClassName={
+        isPortrait ? styles.portraitBackgroundContent : styles.scrollableBackgroundContent
+      }
       backShowLabel={false}
     >
-      <div className={styles.codeSequenceShell}>
+      <div
+        className={[
+          styles.codeSequenceShell,
+          isPortrait ? styles.codeSequenceShellPortrait : '',
+        ]
+          .filter(Boolean)
+          .join(' ')}
+      >
         <GameInstruction instruction={task.instruction} />
         {briefingSource ? (
-          <div className={styles.floatingRobotWrap}>
+          <div
+            className={[
+              styles.floatingRobotWrap,
+              isPortrait ? styles.floatingRobotWrapPortrait : '',
+            ]
+              .filter(Boolean)
+              .join(' ')}
+          >
             <button
               type="button"
               className={`${styles.floatingRobot} ${styles[`mood_${mood}`]}`}
@@ -366,11 +410,20 @@ export function CodeSequenceGame({
           </div>
         ) : null}
 
-        <div className={styles.page} onClick={() => setTooltip(null)}>
+        <div
+          className={[styles.page, isPortrait ? styles.pagePortrait : '']
+            .filter(Boolean)
+            .join(' ')}
+          onClick={() => setTooltip(null)}
+        >
         {headingText && !briefingSource ? (
           <p className={styles.gameHeading}>{headingText}</p>
         ) : null}
-        <div className={styles.playArea}>
+        <div
+          className={[styles.playArea, isPortrait ? styles.playAreaPortrait : '']
+            .filter(Boolean)
+            .join(' ')}
+        >
         <div className={styles.poolRow}>
           <p className={styles.zoneLabel}>{t("Кусочки кода")}</p>
           <div className={styles.pool}>
@@ -387,9 +440,11 @@ export function CodeSequenceGame({
                       dragSourceRef.current = bIdx;
                       e.dataTransfer.effectAllowed = 'move';
                       e.dataTransfer.setData('text/plain', String(bIdx));
+                      setScaledDragImage(e);
                     }}
                     onDragEnd={() => {
                       dragSourceRef.current = null;
+                      clearDragGhost();
                     }}
                     onClick={(e) => {
                       e.stopPropagation();
@@ -462,9 +517,30 @@ export function CodeSequenceGame({
             setTooltip(null);
           }}
         >
-          <div className={styles.briefingModal} onClick={(e) => e.stopPropagation()}>
-            <div className={styles.briefingModalRow}>
-              <div className={`${styles.robot} ${styles.robotMedium} ${styles[`mood_${mood}`]}`}>
+          <div
+            className={[styles.briefingModal, isPortrait ? styles.briefingModalPortrait : '']
+              .filter(Boolean)
+              .join(' ')}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div
+              className={[
+                styles.briefingModalRow,
+                isPortrait ? styles.briefingModalRowPortrait : '',
+              ]
+                .filter(Boolean)
+                .join(' ')}
+            >
+              <div
+                className={[
+                  styles.robot,
+                  styles.robotMedium,
+                  isPortrait ? styles.robotMediumPortrait : '',
+                  styles[`mood_${mood}`],
+                ]
+                  .filter(Boolean)
+                  .join(' ')}
+              >
                 <img src={robotSrc} alt={t("Робот")} className={styles.robotImg} />
               </div>
               <div className={styles.briefingBubbleCol}>

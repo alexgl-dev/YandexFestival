@@ -26,11 +26,6 @@ export function TaskIntro({ task, onStart, onBack, theme = 'orange', orientation
 
   return (
     <Background theme={theme} orientation={orientation} onBack={onBack} backShowLabel={false}>
-      {task.id === 'shopping-list' && (
-        <div className={styles.floatingRobot}>
-          <img src="/illustrations/robot-blue.png" alt={t("Робот")} />
-        </div>
-      )}
       <div className={styles.wrapper}>
         <h2 className={styles.title}>{t(task.title)}</h2>
 

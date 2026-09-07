@@ -14,6 +14,12 @@
   height: 100%;
 }
 
+.wrapperPortrait {
+  max-width: 100%;
+  padding: 180px var(--spacing-xl) var(--spacing-xl);
+  gap: var(--spacing-lg);
+}
+
 .prompt {
   font-family: var(--font-family-text);
   font-size: var(--font-size-2xl);
@@ -208,6 +214,85 @@
 .languagesIntro .charCardContent {
   flex-wrap: wrap;
   align-items: flex-start;
+}
+
+/* Портрет «Знакомство»: две колонки рядом — люди уже, код шире */
+.languagesIntroPortrait .columnsPortraitRow {
+  flex-direction: row;
+  align-items: stretch;
+  gap: var(--spacing-md);
+}
+
+.languagesIntroPortrait .columnLeft {
+  flex: 0 0 32%;
+  max-width: 32%;
+  min-height: 0;
+  overflow-y: auto;
+  padding-bottom: var(--spacing-md);
+  gap: var(--spacing-sm);
+}
+
+.languagesIntroPortrait .columnRight {
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 0;
+  overflow-y: auto;
+  padding-bottom: var(--spacing-md);
+  gap: var(--spacing-sm);
+}
+
+.languagesIntroPortrait .compactAvatar {
+  width: 96px;
+  height: 96px;
+}
+
+/* Аватар → язык → «Описание» снизу */
+.languagesIntroPortrait .charCardContent {
+  flex-direction: column;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: var(--spacing-xs);
+  text-align: center;
+}
+
+.languagesIntroPortrait .charCardInfo {
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  gap: var(--spacing-xs);
+}
+
+.languagesIntroPortrait .charCardLabel {
+  font-size: var(--font-size-sm);
+  text-align: center;
+  flex: none;
+  width: 100%;
+}
+
+.languagesIntroPortrait .speechHintWrap {
+  width: 100%;
+}
+
+.languagesIntroPortrait .speechHintBtn {
+  width: 100% !important;
+  font-size: var(--font-size-sm) !important;
+  font-weight: var(--font-weight-medium) !important;
+  padding: var(--spacing-sm) var(--spacing-md) !important;
+}
+
+.languagesIntroPortrait .codeBlock {
+  font-size: 22px;
+  padding: var(--spacing-sm) var(--spacing-md);
+  line-height: 1.45;
+}
+
+.languagesIntroPortrait .card {
+  padding: var(--spacing-sm);
+}
+
+.languagesIntroPortrait .columnLeft .card {
+  align-items: stretch;
+  padding: var(--spacing-xs);
 }
 
 .charCardInfo {
@@ -456,6 +541,23 @@
 .bubbleCardLanguagesIntro .bubbleAvatar {
   width: 200px;
   height: 200px;
+}
+
+.bubbleCardPortrait {
+  max-width: calc(100% - var(--spacing-2xl) * 2);
+  max-height: 75%;
+  overflow-y: auto;
+  margin: 0 var(--spacing-2xl);
+  box-sizing: border-box;
+}
+
+.bubbleCardPortrait.bubbleCardLanguagesIntro .bubbleAvatar {
+  width: 140px;
+  height: 140px;
+}
+
+.bubbleCardPortrait .bubbleText {
+  font-size: var(--font-size-sm);
 }
 
 .bubbleAvatarImg {

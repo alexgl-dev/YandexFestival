@@ -7,6 +7,14 @@
   -webkit-overflow-scrolling: touch;
 }
 
+.portraitBackgroundContent {
+  align-items: center;
+  justify-content: center;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
 /* Якорь для робота (position: absolute) и основной сцены */
 .codeSequenceShell {
   position: relative;
@@ -353,7 +361,7 @@
 .poolPos2 { transform: rotate(-1deg) translateX(-6px); }
 
 .poolItemSelected {
-  transform: rotate(0) translateY(-8px) scale(1.03) !important;
+  transform: rotate(0) translateY(-8px) !important;
   box-shadow: 0 20px 48px rgba(65, 97, 255, 0.4);
 }
 
@@ -616,4 +624,167 @@
 
 .overlayTooltip {
   z-index: 10000;
+}
+
+/* ── Portrait: две группы в ряд (кусочки | порядок) ── */
+
+.codeSequenceShellPortrait {
+  padding-top: 0;
+  height: 100%;
+  min-height: 100%;
+  justify-content: center;
+}
+
+.pagePortrait {
+  max-width: 100%;
+  width: 100%;
+  padding: 160px var(--spacing-xl) calc(var(--spacing-2xl) * 4);
+  gap: var(--spacing-lg);
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+}
+
+.playAreaPortrait {
+  display: flex;
+  flex-direction: column;
+  gap: calc(var(--spacing-2xl) * 4);
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.pagePortrait .zoneLabel {
+  font-size: var(--font-size-md);
+  margin-bottom: var(--spacing-sm);
+  text-align: center;
+}
+
+.pagePortrait .pool,
+.pagePortrait .slots {
+  gap: var(--spacing-sm);
+  padding-top: var(--spacing-sm);
+  align-items: center;
+  width: 100%;
+}
+
+.pagePortrait .poolRow,
+.pagePortrait .slotsRow {
+  width: 100%;
+  align-items: center;
+}
+
+.pagePortrait .poolCell,
+.pagePortrait .slotWrap {
+  max-width: 640px;
+  width: 100%;
+  justify-content: center;
+}
+
+.pagePortrait .slotIndex {
+  width: 32px;
+  height: 32px;
+  font-size: 18px;
+  margin-top: 0;
+  align-self: center;
+}
+
+.pagePortrait .slotWrap {
+  gap: var(--spacing-sm);
+  align-items: center;
+}
+
+.pagePortrait .slot {
+  min-height: 72px;
+  padding: var(--spacing-xs) var(--spacing-sm);
+}
+
+.pagePortrait .slotPlaceholder {
+  font-size: var(--font-size-xs);
+}
+
+.pagePortrait .codeCard {
+  max-width: none;
+  padding: var(--spacing-md);
+}
+
+.pagePortrait .codeLangLabel {
+  font-size: 20px;
+  padding-bottom: var(--spacing-xs);
+}
+
+.pagePortrait .codePre {
+  font-size: 24px;
+  line-height: 1.45;
+}
+
+.pagePortrait .poolPos0,
+.pagePortrait .poolPos1,
+.pagePortrait .poolPos2 {
+  transform: none;
+}
+
+.pagePortrait .poolItem:hover,
+.pagePortrait .poolItemSelected {
+  transform: none !important;
+}
+
+.floatingRobotWrapPortrait {
+  bottom: var(--spacing-xl);
+  left: 50%;
+  transform: translateX(-50%);
+  animation: floatPortrait 3s ease-in-out infinite;
+}
+
+.floatingRobotWrapPortrait .floatingRobot {
+  width: 160px;
+  height: 160px;
+}
+
+.floatingRobotWrapPortrait .instructionBtn {
+  margin-top: -20px;
+  font-size: var(--font-size-xs);
+  padding: var(--spacing-xs) var(--spacing-lg);
+}
+
+@keyframes floatPortrait {
+  0%,
+  100% {
+    transform: translateX(-50%) translateY(0);
+  }
+  50% {
+    transform: translateX(-50%) translateY(-8px);
+  }
+}
+
+.briefingModalPortrait {
+  max-width: 100%;
+  padding: var(--spacing-xl);
+}
+
+.briefingModalRowPortrait {
+  flex-direction: column;
+  align-items: center;
+}
+
+.robotMediumPortrait {
+  width: 200px;
+  height: 200px;
+}
+
+.briefingModalPortrait .bubbleText,
+.briefingModalPortrait .bubblePromptItalic {
+  font-size: var(--font-size-sm);
+}
+
+.briefingModalPortrait .bubbleTail {
+  top: -18px;
+  left: 50%;
+  transform: translateX(-50%);
+  border-left: 14px solid transparent;
+  border-right: 14px solid transparent;
+  border-bottom: 20px solid var(--color-white);
+  border-top: none;
 }
