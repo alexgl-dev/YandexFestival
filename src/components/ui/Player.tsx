@@ -10,6 +10,10 @@ export interface PlayerProps {
   src?: string;
   /** Показывать название в левом нижнем углу (по умолчанию true). */
   showTitle?: boolean;
+  /** Позиция кнопки play/pause: center (по умолчанию) — центр кадра; top/bottom — верхняя/нижняя треть, чтобы не перекрывать вшитую в видео подпись. */
+  controlPosition?: 'center' | 'top' | 'bottom';
+  /** Цвет кнопки play: white (по умолчанию) — как в остальном ките; blue — синяя стрелка. */
+  controlVariant?: 'white' | 'blue';
   // Для режима без видео (фейковый таймер)
   currentTime?: string;
   totalTime?: string;
@@ -39,6 +43,8 @@ export function Player({
   currentTime,
   totalTime,
   progress,
+  controlPosition = 'center',
+  controlVariant = 'white',
   onPlay,
   onPause,
   className,
@@ -98,10 +104,12 @@ export function Player({
 
       <div className={styles.bgOverlay} />
 
-      {/* Кнопка play / pause по центру */}
+      {/* Кнопка play / pause — по центру или в верхней трети (см. controlPosition) */}
       {!isFullscreen && (
-        <div className={styles.control}>
-          <IconButton type={isPlaying ? 'pause' : 'play'} />
+        <div
+          className={`${styles.control} ${controlPosition === 'top' ? styles.controlTop : ''} ${controlPosition === 'bottom' ? styles.controlBottom : ''}`}
+        >
+          <IconButton type={isPlaying ? 'pause' : 'play'} variant={controlVariant === 'blue' ? 'blue' : 'default'} />
         </div>
       )}
 

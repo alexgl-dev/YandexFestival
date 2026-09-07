@@ -1,0 +1,9 @@
+<svg preserveAspectRatio="none" overflow="visible" style="display: block;" width="110" height="76" viewBox="0 0 110 76" fill="none" xmlns="http://www.w3.org/2000/svg">
+<foreignObject x="-40" y="-40" width="190" height="156"><div xmlns="http://www.w3.org/1999/xhtml" style="backdrop-filter:blur(20px);clip-path:url(#bgblur_0_2007_2009_clip_path);height:100%;width:100%"></div></foreignObject><g id="Icon button" data-figma-bg-blur-radius="40">
+<rect width="110" height="76" rx="38" fill="white" fill-opacity="0.2"/>
+<path id="Vector" d="M45.6826 23.1667C45.5134 23.0594 45.3207 23.0019 45.124 23C44.9274 22.9982 44.7337 23.0521 44.5628 23.1563C44.3919 23.2605 44.2498 23.4112 44.151 23.5931C44.0521 23.7751 44 23.9818 44 24.1923V51.8077C44 52.0182 44.0521 52.2249 44.151 52.4068C44.2498 52.5888 44.3919 52.7395 44.5628 52.8437C44.7337 52.9479 44.9274 53.0018 45.124 53C45.3207 52.9981 45.5134 52.9406 45.6826 52.8332L67.4543 39.0256C67.6206 38.92 67.7583 38.7699 67.854 38.5901C67.9497 38.4103 68 38.2069 68 38C68 37.7931 67.9497 37.5897 67.854 37.4099C67.7583 37.2301 67.6206 37.08 67.4543 36.9744L45.6826 23.1667Z" fill="#1D69FC" stroke="#1D69FC" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+</g>
+<defs>
+<clipPath id="bgblur_0_2007_2009_clip_path" transform="translate(40 40)"><rect width="110" height="76" rx="38"/>
+</clipPath></defs>
+</svg>

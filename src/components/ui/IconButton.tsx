@@ -3,8 +3,11 @@ import styles from './IconButton.module.css';
 
 export interface IconButtonProps {
   type: 'back' | 'play' | 'pause' | 'close';
-  /** default — синяя полупрозрачная (Back/Blue); light — белая полупрозрачная (White); orange — как light */
-  variant?: 'default' | 'light' | 'orange';
+  /**
+   * default — синяя полупрозрачная (Back/Blue); light — белая полупрозрачная (White); orange — как light.
+   * Для play — только 'blue' даёт синюю стрелку (вместо стандартной белой), остальные значения не влияют.
+   */
+  variant?: 'default' | 'light' | 'orange' | 'blue';
   pressed?: boolean;
   /** Оставлен для совместимости: у «Назад» размер один — 245×93 */
   size?: 'sm' | 'md' | 'lg';
@@ -55,10 +58,12 @@ export function IconButton({
     );
   }
 
+  const playClass = variant === 'blue' ? styles.playBlue : styles.play;
+
   return (
     <button
       type="button"
-      className={`${styles.media} ${type === 'play' ? styles.play : styles.pause} ${className ?? ''}`}
+      className={`${styles.media} ${type === 'play' ? playClass : styles.pause} ${className ?? ''}`}
       onClick={onClick}
       aria-label={type === 'play' ? t("Играть") : t("Пауза")}
     >

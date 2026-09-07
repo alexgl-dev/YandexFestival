@@ -54,6 +54,15 @@
   transform: translate(-50%, -50%) scale(1.5);
 }
 
+/* Верхняя/нижняя треть — чтобы не перекрывать вшитую в видео подпись с именем/должностью */
+.control.controlTop {
+  top: 22%;
+}
+
+.control.controlBottom {
+  top: 80%;
+}
+
 /* Название внизу слева: YS Text Medium 20, opacity 0.9 */
 .title {
   position: relative;

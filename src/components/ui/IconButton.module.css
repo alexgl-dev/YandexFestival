@@ -80,6 +80,12 @@
   -webkit-backdrop-filter: none;
 }
 
+.playBlue {
+  background: url('/icons/figma/iconbtn-play-blue.svg') center / 100% 100% no-repeat;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
 .pauseBars {
   display: block;
   width: 30px;
