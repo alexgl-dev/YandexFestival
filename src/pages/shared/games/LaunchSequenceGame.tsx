@@ -469,7 +469,7 @@ export function LaunchSequenceGame({
         {/* Prompt with inline tooltips */}
         {prompt && (
           <p className={styles.prompt}>
-            {renderTooltips(prompt, setWordTooltip, styles.tooltipWord)}
+            {renderTooltips(t(prompt), setWordTooltip, styles.tooltipWord)}
           </p>
         )}
 

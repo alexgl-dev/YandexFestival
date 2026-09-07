@@ -38,15 +38,16 @@ interface GameProps {
 type ProfileState = 'default' | 'correct' | 'wrong';
 
 function getProfileName(option: TaskOption, index: number, t: (key: string, opts?: Record<string, unknown>) => string): string {
-  if (option.name) return option.name;
+  if (option.name) return t(option.name);
   const [first] = (option.text ?? '').split(',');
-  return first?.trim() || t("Профиль {{index}}", { index: index + 1 });
+  return first?.trim() ? t(first.trim()) : t("Профиль {{index}}", { index: index + 1 });
 }
 
-function getProfileRole(option: TaskOption): string {
-  if (option.role) return option.role;
+function getProfileRole(option: TaskOption, t: (key: string) => string): string {
+  if (option.role) return t(option.role);
   const parts = (option.text ?? '').split(',');
-  return parts.slice(1).join(',').trim();
+  const role = parts.slice(1).join(',').trim();
+  return role ? t(role) : '';
 }
 
 export function BurnoutGame({
@@ -90,7 +91,7 @@ export function BurnoutGame({
       if (!option) return;
 
       const name = getProfileName(option, index, t);
-      const role = getProfileRole(option);
+      const role = getProfileRole(option, t);
       const answer = [name, role].filter(Boolean).join(', ');
 
       if (option.correct) {
@@ -135,7 +136,7 @@ export function BurnoutGame({
     <Background theme={theme} orientation={orientation} onBack={onBack} backShowLabel={false}>
       <GameInstruction instruction={task.instruction} />
       <div className={styles.wrapper}>
-        {step.prompt && <h2 className={styles.prompt}>{step.prompt}</h2>}
+        {step.prompt && <h2 className={styles.prompt}>{t(step.prompt)}</h2>}
 
         <div className={styles.counter}>
           {t("Изучено: {{visited}}/{{total}}", { visited: visited.size, total: options.length })}
@@ -151,8 +152,8 @@ export function BurnoutGame({
               lockedCorrect !== null && lockedCorrect !== index;
 
             const name = getProfileName(option, index, t);
-            const role = getProfileRole(option);
-            const quote = option.quote ?? '';
+            const role = getProfileRole(option, t);
+            const quote = option.quote ? t(option.quote) : '';
 
             const cellClasses = [
               styles.cell,
@@ -201,18 +202,18 @@ export function BurnoutGame({
               </button>
 
               <div className={styles.infoHeader}>
-                <span className={styles.infoRole}>{getProfileRole(popupOption)}</span>
+                <span className={styles.infoRole}>{getProfileRole(popupOption, t)}</span>
                 <h3 className={styles.infoName}>{getProfileName(popupOption, popupIndex, t)}</h3>
               </div>
 
               {popupOption.quote && (
-                <p className={styles.infoQuote}>«{popupOption.quote}»</p>
+                <p className={styles.infoQuote}>«{t(popupOption.quote)}»</p>
               )}
 
               {popupOption.details && popupOption.details.length > 0 && (
                 <ul className={styles.infoDetails}>
                   {popupOption.details.map((line, i) => {
-                    const { icon, text } = parseDetail(line);
+                    const { icon, text } = parseDetail(t(line));
                     return (
                       <li key={i} className={styles.infoDetailItem}>
                         {icon ? (

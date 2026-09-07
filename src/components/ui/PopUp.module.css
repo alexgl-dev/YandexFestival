@@ -51,8 +51,14 @@
   width: 100%;
   color: var(--color-black);
   text-align: center;
-  overflow-y: scroll;
+  overflow-y: auto;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE/Edge legacy */
+}
 
+.textBlock::-webkit-scrollbar {
+  width: 0;
+  height: 0;
 }
 
 .title {

@@ -59,7 +59,7 @@ export function Menu({
       )}
       {showLogo && (
         <img
-          src="/icons/figma/logo-white.svg"
+          src={i18n.language === 'en' ? '/icons/figma/logo-white-en.png' : '/icons/figma/logo-white.svg'}
           alt=""
           className={`${styles.logo} ${orientation === 'landscape' ? styles.logoLandscape : styles.logoPortrait}`}
         />
