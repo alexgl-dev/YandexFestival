@@ -7,7 +7,6 @@ import { Description } from './pages/creative/Description';
 import { Profession } from './pages/creative/Profession';
 import { TaskList } from './pages/creative/TaskList';
 import { TaskPage } from './pages/creative/TaskPage';
-import { Videos } from './pages/creative/Videos';
 import { Test } from './pages/creative/Test';
 import { DevelopmentLayout } from './pages/development/DevelopmentLayout';
 import { DevelopmentMenu } from './pages/development/DevelopmentMenu';
@@ -15,7 +14,6 @@ import { Description as DevDescription } from './pages/development/Description';
 import { Profession as DevProfession } from './pages/development/Profession';
 import { TaskList as DevTaskList } from './pages/development/TaskList';
 import { TaskPage as DevTaskPage } from './pages/development/TaskPage';
-import { Videos as DevVideos } from './pages/development/Videos';
 import { Test as DevTest } from './pages/development/Test';
 import { ManagementLayout } from './pages/management/ManagementLayout';
 import { ManagementMenu } from './pages/management/ManagementMenu';
@@ -23,7 +21,6 @@ import { Description as MgmtDescription } from './pages/management/Description';
 import { Profession as MgmtProfession } from './pages/management/Profession';
 import { TaskList as MgmtTaskList } from './pages/management/TaskList';
 import { TaskPage as MgmtTaskPage } from './pages/management/TaskPage';
-import { Videos as MgmtVideos } from './pages/management/Videos';
 import { Test as MgmtTest } from './pages/management/Test';
 import { DataLayout } from './pages/data/DataLayout';
 import { DataMenu } from './pages/data/DataMenu';
@@ -31,16 +28,15 @@ import { Description as DataDescription } from './pages/data/Description';
 import { Profession as DataProfession } from './pages/data/Profession';
 import { TaskList as DataTaskList } from './pages/data/TaskList';
 import { TaskPage as DataTaskPage } from './pages/data/TaskPage';
-import { Videos as DataVideos } from './pages/data/Videos';
 import { Test as DataTest } from './pages/data/Test';
 import { CalendarsLayout } from './pages/calendars/CalendarsLayout';
 import { CalendarsMenu } from './pages/calendars/CalendarsMenu';
 import { CalendarView } from './pages/calendars/CalendarView';
 import { BlockMenu } from './pages/blocks/BlockMenu';
+import { BlockVideos } from './pages/blocks/BlockVideos';
 import { InformaticsLayout } from './pages/informatics/InformaticsLayout';
 import { InformaticsMenu } from './pages/informatics/InformaticsMenu';
 import { InformaticsTaskPage } from './pages/informatics/InformaticsTaskPage';
-import { InformaticsVideos } from './pages/informatics/InformaticsVideos';
 import { accessSection } from './pages/informatics/access/data';
 import { advertisingSection } from './pages/informatics/advertising/data';
 import { mlSection } from './pages/informatics/ml/data';
@@ -56,12 +52,13 @@ function App() {
         <Route path="/ui-kit" element={<TestScreen />} />
         {/* Меню блока выставки — стартовый экран устройства */}
         <Route path="/block/:blockId" element={<BlockMenu />} />
+        {/* «Истории яндексоидов» блока — ролики всех его разделов на одном экране */}
+        <Route path="/block/:blockId/videos" element={<BlockVideos />} />
         {/* Разделы трека «Информатика во всём» — generic-страницы, данные пропом */}
         {informaticsSections.map((section) => (
           <Route key={section.slug} path={`/${section.slug}`} element={<InformaticsLayout data={section} />}>
             <Route index element={<InformaticsMenu />} />
             <Route path="tasks/:taskId" element={<InformaticsTaskPage />} />
-            <Route path="videos" element={<InformaticsVideos />} />
           </Route>
         ))}
         <Route path="/creative" element={<CreativeLayout />}>
@@ -70,7 +67,6 @@ function App() {
           <Route path="description/:professionId" element={<Profession />} />
           <Route path="tasks" element={<TaskList />} />
           <Route path="tasks/:taskId" element={<TaskPage />} />
-          <Route path="videos" element={<Videos />} />
           <Route path="test" element={<Test />} />
         </Route>
         <Route path="/development" element={<DevelopmentLayout />}>
@@ -79,7 +75,6 @@ function App() {
           <Route path="description/:professionId" element={<DevProfession />} />
           <Route path="tasks" element={<DevTaskList />} />
           <Route path="tasks/:taskId" element={<DevTaskPage />} />
-          <Route path="videos" element={<DevVideos />} />
           <Route path="test" element={<DevTest />} />
         </Route>
         <Route path="/management" element={<ManagementLayout />}>
@@ -88,7 +83,6 @@ function App() {
           <Route path="description/:professionId" element={<MgmtProfession />} />
           <Route path="tasks" element={<MgmtTaskList />} />
           <Route path="tasks/:taskId" element={<MgmtTaskPage />} />
-          <Route path="videos" element={<MgmtVideos />} />
           <Route path="test" element={<MgmtTest />} />
         </Route>
         <Route path="/data" element={<DataLayout />}>
@@ -97,7 +91,6 @@ function App() {
           <Route path="description/:professionId" element={<DataProfession />} />
           <Route path="tasks" element={<DataTaskList />} />
           <Route path="tasks/:taskId" element={<DataTaskPage />} />
-          <Route path="videos" element={<DataVideos />} />
           <Route path="test" element={<DataTest />} />
         </Route>
         <Route path="/calendars" element={<CalendarsLayout />}>

@@ -5,7 +5,8 @@ import type { SectionData } from '../../types/game';
 import { blockPath } from '../blocks/blocks';
 
 /**
- * Меню раздела «Информатика во всём»: пункт на каждое задание + «Видео», если есть ролики.
+ * Меню раздела «Информатика во всём»: пункт на каждое задание.
+ * Ролики раздела показываются не здесь, а в «Историях яндексоидов» блока (см. src/pages/blocks/videos.ts).
  * Названия пунктов — task.title (в доках это «Текст кнопки» основного меню).
  */
 export function InformaticsMenu() {
@@ -14,9 +15,6 @@ export function InformaticsMenu() {
   const data = useOutletContext<SectionData>();
 
   const items = [
-    ...(data.videos.length > 0
-      ? [{ label: t("Познакомься со специалистом"), onClick: () => navigate(`/${data.slug}/videos`) }]
-      : []),
     ...data.tasks
       .filter((task) => !task.hidden)
       .map((task) => ({ label: t(task.title), onClick: () => navigate(`/${data.slug}/tasks/${task.id}`) })),

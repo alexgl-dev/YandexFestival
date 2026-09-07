@@ -13,7 +13,6 @@ export function DevelopmentMenu() {
       items={[
         { label: t("Описание направления"), onClick: () => navigate('/development/description') },
         { label: t("Задачи на день"), onClick: () => navigate('/development/tasks') },
-        { label: t("Истории яндексоидов"), onClick: () => navigate('/development/videos') },
         { label: t("Бинго-знакомство"), onClick: () => navigate('/development/test') },
       ]}
       onBack={() => navigate('/block/development')}

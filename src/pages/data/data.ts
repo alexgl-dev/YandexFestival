@@ -667,12 +667,7 @@ export const dataSection: SectionData = {
       src: '/videos/004/data-analyst.mp4',
       subtitles: '/videos/004/data-analyst.vtt',
     },
-    {
-      profession: 'ml-engineer',
-      title: 'ML-инженер',
-      src: '/videos/004/ml-engineer.mp4',
-      subtitles: '/videos/004/ml-engineer.vtt',
-    },
+    // Ролик ML-инженера — файла /videos/004/ml-engineer.mp4 пока нет (запрошен у заказчика).
   ],
 
   bingo: {

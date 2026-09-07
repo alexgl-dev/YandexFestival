@@ -26,6 +26,7 @@ export const blocks: BlockData[] = [
     items: [
       { label: 'Календарь яндексоида', to: '/calendars' },
       { label: 'Менеджмент', to: '/management' },
+      { label: 'Истории яндексоидов', to: '/block/management/videos' },
       { label: 'Цифровая доступность', to: '/access' },
     ],
   },
@@ -36,7 +37,7 @@ export const blocks: BlockData[] = [
     orientation: 'portrait',
     items: [
       { label: 'Креативный трек', to: '/creative' },
-      { label: 'Интервью', to: '/creative/videos' },
+      { label: 'Истории яндексоидов', to: '/block/creative/videos' },
       { label: 'Креативный директор', to: '/advertising' },
     ],
   },
@@ -46,7 +47,7 @@ export const blocks: BlockData[] = [
     theme: 'cobalt',
     orientation: 'landscape',
     items: [
-      { label: 'Интервью с аналитиком', to: '/data/videos' },
+      { label: 'Истории яндексоидов', to: '/block/data/videos' },
       { label: 'Работа с данными', to: '/data' },
       { label: 'ML-инженер', to: '/ml/tasks/dataset' },
     ],
@@ -58,7 +59,7 @@ export const blocks: BlockData[] = [
     orientation: 'landscape',
     items: [
       { label: 'Разработка', to: '/development' },
-      { label: 'Интервью с разработчиком', to: '/development/videos' },
+      { label: 'Истории яндексоидов', to: '/block/development/videos' },
       { label: 'AI-тренер', to: '/ai/tasks/poems' },
     ],
   },

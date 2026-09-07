@@ -34,7 +34,6 @@
 
 .grid {
   display: flex;
-  flex-wrap: wrap;
   gap: var(--spacing-lg);
   width: 100%;
   justify-content: center;
@@ -43,10 +42,28 @@
   min-height: 0;
 }
 
-.item {
+/* Портретный экран: ролики в две колонки с переносом. */
+.grid.portrait {
+  flex-wrap: wrap;
+}
+
+.grid.portrait .item {
   flex: 1 1 40%;
-  min-width: 0;
   max-width: 48%;
+}
+
+/* Ландшафтный экран: ролики в один ряд. */
+.grid.landscape {
+  flex-direction: row;
+  flex-wrap: nowrap;
+}
+
+.grid.landscape .item {
+  flex: 0 1 calc((100% - 3 * var(--spacing-lg)) / 4);
+}
+
+.item {
+  min-width: 0;
   display: flex;
   justify-content: center;
 }
@@ -63,7 +80,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: rgba(0, 0, 0, 0.72);
+  background: var(--color-overlay-dark, rgba(0, 0, 0, 0.72));
   z-index: 50;
   padding: var(--spacing-2xl);
   box-sizing: border-box;
