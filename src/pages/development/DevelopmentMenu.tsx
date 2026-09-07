@@ -9,7 +9,7 @@ export function DevelopmentMenu() {
   return (
     <Menu
       theme="cobalt"
-      orientation="landscape"
+      orientation="portrait"
       items={[
         { label: t("Описание направления"), onClick: () => navigate('/development/description') },
         { label: t("Задачи на день"), onClick: () => navigate('/development/tasks') },

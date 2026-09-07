@@ -287,3 +287,54 @@
 .resultCardMain p {
   white-space: pre-line;
 }
+
+/* === Portrait === */
+
+.wrapperPortrait {
+  max-width: 80%;
+}
+
+.questionsLayoutPortrait {
+  max-width: 100%;
+  padding: var(--spacing-2xl);
+}
+
+.bottomRowPortrait {
+  flex-wrap: wrap;
+}
+
+.resultLayoutPortrait {
+  flex-direction: column;
+  height: auto;
+  max-width: 100%;
+  padding: var(--spacing-2xl);
+  gap: var(--spacing-2xl);
+}
+
+.gridSidePortrait {
+  width: 100%;
+}
+
+.bingoGridPortrait {
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: unset;
+  width: 100%;
+}
+
+.cellWrapperPortrait {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+}
+
+.cellCenterPortrait {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+}
+
+.resultSidePortrait {
+  flex: none;
+  width: 100%;
+  align-items: center;
+}

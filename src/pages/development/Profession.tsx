@@ -41,7 +41,7 @@ export function Profession() {
 
   if (!profession) {
     return (
-      <Background theme="cobalt" orientation="landscape" onBack={() => navigate(`/${data.slug}/description`)}>
+      <Background theme="cobalt" orientation="portrait" onBack={() => navigate(`/${data.slug}/description`)}>
         <div className={styles.wrapper}>
           <p className={styles.notFound}>{t("Профессия не найдена")}</p>
         </div>
@@ -55,12 +55,24 @@ export function Profession() {
   const glossary = profession.glossary ?? [];
   const hasSections = profession.sections && profession.sections.length > 0;
 
+  const securityBadgeLabel = t('Специалист по\nинформационной безопасности');
+  const badgeLabel = (prof: { id: string; title: string }) =>
+    prof.id === 'security-specialist' ? securityBadgeLabel : t(prof.title);
+  const badgeClass = (prof: { id: string }) =>
+    prof.id === 'security-specialist' ? styles.badgeMultiline : undefined;
+
   return (
-    <Background theme="cobalt" orientation="landscape" onBack={() => navigate(`/${data.slug}/description`)}>
+    <Background theme="cobalt" orientation="portrait" onBack={() => navigate(`/${data.slug}/description`)}>
       <div className={styles.wrapper}>
         <h2 className={styles.title}>
           {profession.id === 'devops-engineer' ? (
             <>DevOps-<br />{t("инженер")}</>
+          ) : profession.id === 'security-specialist' ? (
+            <>
+              {t('Специалист по')}
+              <br />
+              {t('информационной безопасности')}
+            </>
           ) : (
             t(profession.title)
           )}
@@ -87,8 +99,9 @@ export function Profession() {
           {prev && (
             <span onClick={() => navigate(`/${data.slug}/description/${prev.id}`)} className={styles.navLink}>
               <Badge
-                label={t(prev.title)}
+                label={badgeLabel(prev)}
                 type="outline"
+                className={badgeClass(prev)}
                 icon={<img src="/icons/icon-arrow.svg" alt="" className={styles.navArrowIconLeft} />}
               />
             </span>
@@ -96,8 +109,9 @@ export function Profession() {
           {next && (
             <span onClick={() => navigate(`/${data.slug}/description/${next.id}`)} className={styles.navLink}>
               <Badge
-                label={t(next.title)}
+                label={badgeLabel(next)}
                 type="outline"
+                className={badgeClass(next)}
                 icon={<img src="/icons/icon-arrow.svg" alt="" className={styles.navArrowIconRight} />}
                 iconPosition="end"
               />

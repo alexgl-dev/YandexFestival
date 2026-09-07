@@ -18,12 +18,13 @@ export function Test() {
         bingo={data.bingo}
         onBack={handleBack}
         theme={data.theme}
+        orientation="portrait"
       />
     );
   }
 
   return (
-    <Background theme="cobalt" orientation="landscape" onBack={handleBack}>
+    <Background theme="cobalt" orientation="portrait" onBack={handleBack}>
       <div className={styles.wrapper}>
         <h2 className={styles.title}>{t("Бинго-знакомство")}</h2>
         <p className={styles.placeholder}>{t("Бинго-знакомство в разработке")}</p>

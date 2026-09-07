@@ -10,15 +10,17 @@ interface BingoGameProps {
   bingo: BingoTest;
   onBack: () => void;
   theme?: 'cobalt' | 'orange';
+  orientation?: 'landscape' | 'portrait';
 }
 
-export function BingoGame({ bingo, onBack, theme = 'cobalt' }: BingoGameProps) {
+export function BingoGame({ bingo, onBack, theme = 'cobalt', orientation = 'portrait' }: BingoGameProps) {
   const { t } = useTranslation('sharedGames1');
   const [phase, setPhase] = useState<Phase>('intro');
   const [answers, setAnswers] = useState<Record<number, string>>({});
   const [popupCell, setPopupCell] = useState<number | null>(null);
   const [questionIndex, setQuestionIndex] = useState(0);
 
+  const isPortrait = orientation === 'portrait';
   const totalQuestions = bingo.questions.length;
   const currentQuestion = bingo.questions[questionIndex];
   const currentAnswer = answers[questionIndex];
@@ -37,7 +39,6 @@ export function BingoGame({ bingo, onBack, theme = 'cobalt' }: BingoGameProps) {
     }
   };
 
-
   // cellIndex 0-3 → question 0-3, cellIndex 4 = center, cellIndex 5-8 → question 4-7
   const getCellData = (cellIndex: number) => {
     if (cellIndex === 4) return null;
@@ -53,8 +54,8 @@ export function BingoGame({ bingo, onBack, theme = 'cobalt' }: BingoGameProps) {
   // ── PHASE 1: Intro ────────────────────────────────────────────────────────
   if (phase === 'intro') {
     return (
-      <Background theme={theme} orientation="landscape" onBack={handleBack} backShowLabel={false}>
-        <div className={styles.wrapper}>
+      <Background theme={theme} orientation={orientation} onBack={handleBack} backShowLabel={false}>
+        <div className={`${styles.wrapper} ${isPortrait ? styles.wrapperPortrait : ''}`}>
           <div className={styles.card}>
             <p className={styles.introText}>{t(bingo.intro)}</p>
             <p className={styles.instructionText}>{t(bingo.instruction)}</p>
@@ -68,8 +69,8 @@ export function BingoGame({ bingo, onBack, theme = 'cobalt' }: BingoGameProps) {
   // ── PHASE 2: Questions ────────────────────────────────────────────────────
   if (phase === 'questions') {
     return (
-      <Background theme={theme} orientation="landscape" onBack={handleBack} backShowLabel={false}>
-        <div className={styles.questionsLayout}>
+      <Background theme={theme} orientation={orientation} onBack={handleBack} backShowLabel={false}>
+        <div className={`${styles.questionsLayout} ${isPortrait ? styles.questionsLayoutPortrait : ''}`}>
           <p className={styles.questionPrompt}>{t(currentQuestion.prompt)}</p>
 
           <div className={styles.optionsGrid}>
@@ -88,7 +89,7 @@ export function BingoGame({ bingo, onBack, theme = 'cobalt' }: BingoGameProps) {
             })}
           </div>
 
-          <div className={styles.bottomRow}>
+          <div className={`${styles.bottomRow} ${isPortrait ? styles.bottomRowPortrait : ''}`}>
             <div className={styles.bottomLeft}>
               <Button
                 label={t("Назад")}
@@ -122,17 +123,35 @@ export function BingoGame({ bingo, onBack, theme = 'cobalt' }: BingoGameProps) {
   const popupData = popupCell !== null ? getCellData(popupCell) : null;
 
   return (
-    <Background theme={theme} orientation="landscape" onBack={handleBack} backShowLabel={false}>
-      <div className={styles.resultLayout}>
+    <Background theme={theme} orientation={orientation} onBack={handleBack} backShowLabel={false}>
+      <div className={`${styles.resultLayout} ${isPortrait ? styles.resultLayoutPortrait : ''}`}>
+        {isPortrait && (
+          <div className={`${styles.resultSide} ${styles.resultSidePortrait}`}>
+            <Card
+              variant=""
+              title={t("Бинго!")}
+              description={t(bingo.resultText)}
+              size="m"
+              state="default"
+              className={`${styles.resultCard} ${styles.resultCardMain}`}
+            />
+            <Button
+              label={t("В главное меню")}
+              type="secondary"
+              onClick={onBack}
+            />
+          </div>
+        )}
 
-        {/* Left — bingo grid */}
-        <div className={styles.gridSide}>
-          <div className={styles.bingoGrid}>
+        <div className={`${styles.gridSide} ${isPortrait ? styles.gridSidePortrait : ''}`}>
+          <div className={`${styles.bingoGrid} ${isPortrait ? styles.bingoGridPortrait : ''}`}>
             {Array.from({ length: 9 }).map((_, cellIndex) => {
-              // Center cell = expert
               if (cellIndex === 4) {
                 return (
-                  <div key={cellIndex} className={styles.cellCenter}>
+                  <div
+                    key={cellIndex}
+                    className={`${styles.cellCenter} ${isPortrait ? styles.cellCenterPortrait : ''}`}
+                  >
                     <span className={styles.cellCenterBadge}>{t("Эксперт")}</span>
                     <span className={styles.cellCenterName}>{t(bingo.expert.name)}</span>
                     <span className={styles.cellCenterRole}>{t(bingo.expert.role)}</span>
@@ -147,7 +166,7 @@ export function BingoGame({ bingo, onBack, theme = 'cobalt' }: BingoGameProps) {
               return (
                 <div
                   key={cellIndex}
-                  className={styles.cellWrapper}
+                  className={`${styles.cellWrapper} ${isPortrait ? styles.cellWrapperPortrait : ''}`}
                   onClick={() => setPopupCell(cellIndex)}
                 >
                   <div className={styles.cellInner}>
@@ -168,23 +187,23 @@ export function BingoGame({ bingo, onBack, theme = 'cobalt' }: BingoGameProps) {
           </div>
         </div>
 
-        {/* Right — main Bingo! intro */}
-        <div className={styles.resultSide}>
-          <Card
-            variant=""
-            title={t("Бинго!")}
-            description={t(bingo.resultText)}
-            size="m"
-            state="default"
-            className={`${styles.resultCard} ${styles.resultCardMain}`}
-          />
-          <Button
-            label={t("В главное меню")}
-            type="secondary"
-            onClick={onBack}
-          />
-        </div>
-
+        {!isPortrait && (
+          <div className={styles.resultSide}>
+            <Card
+              variant=""
+              title={t("Бинго!")}
+              description={t(bingo.resultText)}
+              size="m"
+              state="default"
+              className={`${styles.resultCard} ${styles.resultCardMain}`}
+            />
+            <Button
+              label={t("В главное меню")}
+              type="secondary"
+              onClick={onBack}
+            />
+          </div>
+        )}
       </div>
 
       {popupData && (

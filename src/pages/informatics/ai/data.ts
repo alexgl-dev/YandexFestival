@@ -9,7 +9,7 @@ export const aiSection: SectionData = {
   slug: 'ai',
   title: 'AI-тренер',
   theme: 'cobalt',
-  orientation: 'landscape',
+  orientation: 'portrait',
   block: 'development',
   professions: [],
   description: '',

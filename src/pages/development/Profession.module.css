@@ -2,9 +2,9 @@
   display: flex;
   flex-direction: column;
   gap: var(--spacing-lg);
-  padding: var(--spacing-xl) 0;
+  padding: 120px 0 var(--spacing-xl);
   width: 100%;
-  max-width: 75%;
+  max-width: 80%;
   margin: 0 auto;
   box-sizing: border-box;
   font-family: var(--font-family-text);
@@ -35,10 +35,10 @@
   margin: 0;
 }
 
-/* Sections (2×2 grid for landscape) */
+/* Sections — одна колонка (портрет) */
 .sections {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr;
   gap: var(--spacing-md);
 }
 
@@ -94,6 +94,12 @@
 
 .navLink {
   cursor: pointer;
+}
+
+.badgeMultiline {
+  white-space: pre-line;
+  text-align: center;
+  line-height: var(--line-height-normal);
 }
 
 .navArrowIconLeft {
