@@ -3,12 +3,12 @@ import { useNavigate, useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { Background, Player } from '../../components/ui';
 import { findBlock, blockPath } from './blocks';
-import { videosForBlock } from './videos';
+import { videosForBlock, localizedVideoSrc } from './videos';
 import styles from './BlockVideos.module.css';
 
 /** «Истории яндексоидов» блока: ролики всех разделов блока на одном экране. */
 export function BlockVideos() {
-  const { t } = useTranslation(['blocks', 'management', 'creative', 'data', 'development', 'informatics']);
+  const { t, i18n } = useTranslation(['blocks', 'management', 'creative', 'data', 'development', 'informatics']);
   const navigate = useNavigate();
   const { blockId } = useParams();
   const block = findBlock(blockId);
@@ -41,8 +41,10 @@ export function BlockVideos() {
                   title={t(video.title, { ns: video.ns })}
                   state="default"
                   orientation="vertical"
-                  src={video.src}
+                  src={localizedVideoSrc(video.src, i18n.language)}
                   showTitle={false}
+                  controlPosition="bottom"
+                  controlVariant="blue"
                   onPlay={() => setPlayingIndex(index)}
                 />
               </div>
@@ -58,7 +60,7 @@ export function BlockVideos() {
               title={t(activeVideo.title, { ns: activeVideo.ns })}
               state="playing"
               orientation="vertical"
-              src={activeVideo.src}
+              src={localizedVideoSrc(activeVideo.src, i18n.language)}
               showTitle={false}
               onPause={closeOverlay}
             />

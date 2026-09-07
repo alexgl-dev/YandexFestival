@@ -179,5 +179,11 @@ export const accessSection: SectionData = {
       moralButtonLabel: 'Узнать новое',
     },
   ],
-  videos: [],
+  videos: [
+    {
+      profession: 'vasilina',
+      title: 'Василина Дрогичинская',
+      src: '/videos/access/vasilina.mp4',
+    },
+  ],
 };

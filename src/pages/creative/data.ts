@@ -612,16 +612,19 @@ export const creativeSection: SectionData = {
 
   videos: [
     {
-      profession: 'graphic-designer',
-      title: 'Графический дизайнер',
-      src: '/videos/001/graphic-designer.mp4',
-      subtitles: '/videos/001/graphic-designer.vtt',
+      profession: 'aleksandra',
+      title: 'Александра Новохацкая',
+      src: '/videos/001/aleksandra.mp4',
     },
     {
-      profession: 'ux-designer',
-      title: 'UX-дизайнер',
-      src: '/videos/001/ux-designer.mp4',
-      subtitles: '/videos/001/ux-designer.vtt',
+      profession: 'dasha',
+      title: 'Даша',
+      src: '/videos/001/dasha.mp4',
+    },
+    {
+      profession: 'sergey',
+      title: 'Сергей Шляхов',
+      src: '/videos/001/sergey.mp4',
     },
   ],
 

@@ -912,22 +912,19 @@ export const developmentSection: SectionData = {
 
   videos: [
     {
-      profession: 'alexandr',
+      profession: 'aleksandr',
       title: 'Александр',
-      src: '/videos/002/alexandr.mp4',
-      subtitles: '/videos/002/alexandr.vtt',
+      src: '/videos/002/aleksandr.mp4',
     },
     {
-      profession: 'backend-developer',
-      title: 'Бэкенд-разработчик',
-      src: '/videos/002/backend-developer.mp4',
-      subtitles: '/videos/002/backend-developer.vtt',
+      profession: 'alexey',
+      title: 'Алексей',
+      src: '/videos/002/alexey.mp4',
     },
     {
       profession: 'maxim',
       title: 'Максим',
       src: '/videos/002/maxim.mp4',
-      subtitles: '/videos/002/maxim.vtt',
     },
   ],
 

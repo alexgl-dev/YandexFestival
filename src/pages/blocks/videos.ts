@@ -43,3 +43,16 @@ export function videosForBlock(blockId?: string): BlockVideo[] {
 export function blockHasVideos(blockId?: string): boolean {
   return videosForBlock(blockId).length > 0;
 }
+
+/**
+ * Путь к ролику на нужном языке. Конвенция: у каждого RU-файла лежит
+ * англоязычная версия рядом, в подпапке `en/` (например
+ * `/videos/003/kirill.mp4` → `/videos/003/en/kirill.mp4`). При добавлении
+ * нового ролика с одним лишь RU-файлом переключение на EN покажет пустой
+ * плеер — держать оба файла в паре.
+ */
+export function localizedVideoSrc(src: string, lang: string): string {
+  if (lang !== 'en') return src;
+  const lastSlash = src.lastIndexOf('/');
+  return `${src.slice(0, lastSlash)}/en${src.slice(lastSlash)}`;
+}
