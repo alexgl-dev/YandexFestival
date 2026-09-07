@@ -24,3 +24,6 @@ playwright-report
 *.njsproj
 *.sln
 *.sw?
+
+# Kiosk browser profile (start.bat)
+.kiosk-profile/
