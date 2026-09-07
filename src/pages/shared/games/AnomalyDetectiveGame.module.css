@@ -12,6 +12,13 @@
   box-sizing: border-box;
 }
 
+.wrapperPortrait {
+  justify-content: flex-start;
+  padding: 180px var(--spacing-2xl) var(--spacing-2xl);
+  gap: var(--spacing-lg);
+  overflow-y: auto;
+}
+
 .prompt {
   font-family: var(--font-family-text);
   font-size: var(--font-size-xl);
@@ -22,6 +29,12 @@
   max-width: 1400px;
   letter-spacing: var(--letter-spacing-xs);
   line-height: var(--line-height-normal);
+  flex-shrink: 0;
+}
+
+.promptPortrait {
+  font-size: var(--font-size-lg);
+  max-width: 100%;
 }
 
 .stage {
@@ -35,6 +48,15 @@
   min-height: 0;
 }
 
+.stagePortrait {
+  flex-direction: column;
+  width: 100%;
+  max-width: 100%;
+  flex: 1;
+  min-height: 0;
+  gap: var(--spacing-lg);
+}
+
 .graphs {
   display: flex;
   flex-direction: column;
@@ -42,6 +64,11 @@
   flex: 1;
   min-width: 0;
   align-items: center;
+}
+
+.graphsPortrait {
+  width: 100%;
+  flex: 0 0 auto;
 }
 
 .graphsStacked {
@@ -57,6 +84,16 @@
 .graphsStacked .graphSvg {
   flex: 1;
   height: 0;
+  min-height: 0;
+}
+
+.stagePortrait .graphsStacked .graphCard {
+  flex: 0 0 auto;
+}
+
+.stagePortrait .graphsStacked .graphSvg {
+  flex: none;
+  height: auto;
   min-height: 0;
 }
 
@@ -76,6 +113,14 @@
   padding: var(--spacing-md) var(--spacing-2xl);
 }
 
+.stagePortrait .graphCard {
+  padding: var(--spacing-lg) var(--spacing-xl);
+}
+
+.stagePortrait .graphCardCompact {
+  padding: var(--spacing-md) var(--spacing-lg);
+}
+
 .graphTitle {
   font-family: var(--font-family-text);
   font-size: var(--font-size-sm);
@@ -84,6 +129,10 @@
   margin: 0;
   letter-spacing: var(--letter-spacing-xs);
   line-height: var(--line-height-tight);
+}
+
+.stagePortrait .graphTitle {
+  font-size: var(--font-size-xs);
 }
 
 .graphHint {
@@ -195,10 +244,23 @@
   align-self: stretch;
 }
 
+.optionsPortrait {
+  width: 100%;
+  flex-shrink: 0;
+  justify-content: flex-start;
+  --card-title-size: var(--font-size-sm);
+  --card-desc-size: var(--font-size-xs);
+  --card-m-min-height: 0;
+}
+
 .options > * {
   width: 100% !important;
   padding: var(--spacing-lg) var(--spacing-xl);
   gap: var(--spacing-sm);
+}
+
+.optionsPortrait > * {
+  padding: var(--spacing-md) var(--spacing-lg);
 }
 
 .options :global(.size_m) :global(.header),
@@ -210,6 +272,11 @@
   display: flex;
   justify-content: center;
   width: 100%;
+  flex-shrink: 0;
+}
+
+.wrapperPortrait .actions > * {
+  width: 100%;
 }
 
 .overlay {
@@ -220,6 +287,8 @@
   justify-content: center;
   background: var(--color-overlay-dark);
   z-index: 9999;
+  padding: var(--spacing-2xl);
+  box-sizing: border-box;
 }
 
 /* ── Wow popup ── */
@@ -240,6 +309,11 @@
   box-shadow: 0 24px 64px rgba(0, 0, 0, 0.4);
 }
 
+.wowPopupPortrait {
+  max-width: 100%;
+  width: 100%;
+}
+
 .wowHeader {
   display: flex;
   align-items: center;
@@ -253,6 +327,13 @@
   color: var(--color-black);
   letter-spacing: var(--letter-spacing-sm);
   line-height: var(--line-height-tight);
+}
+
+.wowDescriptionWrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  width: 100%;
 }
 
 .wowDescription {

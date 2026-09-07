@@ -255,7 +255,7 @@ export function AnomalyDetectiveGame({
   onComplete,
   onBack,
   theme = 'cobalt',
-  orientation = 'landscape',
+  orientation = 'portrait',
 }: GameProps) {
   const { t } = useTranslation('sharedGames1');
   const options = useMemo<TaskOption[]>(() => {
@@ -345,11 +345,12 @@ export function AnomalyDetectiveGame({
     }
 
     if (popup.kind === 'wow') {
+      // Показать второй график — «Верно!» только после повторного выбора варианта
       setWordTooltip(null);
       setShowMentions(true);
       setRequestedExtra(true);
       setPhase('reveal');
-      setPopup({ kind: 'success', option: popup.option });
+      setPopup(null);
       return;
     }
 
@@ -381,6 +382,8 @@ export function AnomalyDetectiveGame({
   };
 
   const WOW_DESCRIPTION = t("Проверим её с помощью дополнительных данных. Хороший аналитик всегда [верифицирует]{tooltip: \"Верифицировать — проверять гипотезу с помощью дополнительных данных или фактов, чтобы подтвердить или опровергнуть её.\"} [гипотезу]{tooltip: \"Гипотеза — предположение, которое ещё не доказано, но кажется правдоподобным и требует проверки.\"}.");
+
+  const isPortrait = orientation === 'portrait';
 
   const popupProps = (() => {
     if (!popup) return null;
@@ -438,11 +441,11 @@ export function AnomalyDetectiveGame({
   return (
     <Background theme={theme} orientation={orientation} onBack={onBack} backShowLabel={false}>
       <GameInstruction instruction={task.instruction} />
-      <div className={styles.wrapper}>
-        <p className={styles.prompt}>{promptText}</p>
+      <div className={`${styles.wrapper} ${isPortrait ? styles.wrapperPortrait : ''}`}>
+        <p className={`${styles.prompt} ${isPortrait ? styles.promptPortrait : ''}`}>{promptText}</p>
 
-        <div className={styles.stage}>
-          <div className={`${styles.graphs} ${showMentions ? styles.graphsStacked : ''}`}>
+        <div className={`${styles.stage} ${isPortrait ? styles.stagePortrait : ''}`}>
+          <div className={`${styles.graphs} ${showMentions ? styles.graphsStacked : ''} ${isPortrait ? styles.graphsPortrait : ''}`}>
             <GraphCard
               title={t(VIEWS_TITLE)}
               data={VIEWS}
@@ -471,7 +474,7 @@ export function AnomalyDetectiveGame({
           </div>
 
           {phase !== 'find' && (
-            <div className={styles.options}>
+            <div className={`${styles.options} ${isPortrait ? styles.optionsPortrait : ''}`}>
               {options.map((option, i) => (
                 <Card
                   key={i}
@@ -512,32 +515,33 @@ export function AnomalyDetectiveGame({
       )}
 
       {popup?.kind === 'wow' && (
-        <div className={styles.overlay} onClick={() => { if (!wordTooltip) {} }}>
-          <div className={styles.wowPopup}>
-            <div className={styles.wowHeader}>
-              <span className={styles.wowTitle}>{t("Интересная версия")}</span>
-            </div>
-            <p className={styles.wowDescription}>
-              {renderTooltips(WOW_DESCRIPTION, setWordTooltip, styles.tooltipWord)}
-            </p>
-            {wordTooltip && (
-              <div className={styles.wordTooltipBox}>
-                <p className={styles.wordTooltipText}>{wordTooltip}</p>
-                <button
-                  type="button"
-                  className={styles.wordTooltipClose}
-                  onClick={() => setWordTooltip(null)}
-                >
-                  ✕
-                </button>
+        <div className={styles.overlay}>
+          <PopUp
+            icon="done"
+            iconColor="blue"
+            title={t("Интересная версия")}
+            description={
+              <div className={styles.wowDescriptionWrap}>
+                <p className={styles.wowDescription}>
+                  {renderTooltips(WOW_DESCRIPTION, setWordTooltip, styles.tooltipWord)}
+                </p>
+                {wordTooltip && (
+                  <div className={styles.wordTooltipBox}>
+                    <p className={styles.wordTooltipText}>{wordTooltip}</p>
+                    <button
+                      type="button"
+                      className={styles.wordTooltipClose}
+                      onClick={() => setWordTooltip(null)}
+                    >
+                      ✕
+                    </button>
+                  </div>
+                )}
               </div>
-            )}
-            <Button
-              label={t("Сверить графики")}
-              type="secondary"
-              onClick={handlePopupAction}
-            />
-          </div>
+            }
+            buttonLabel={t("Сверить графики")}
+            onButtonClick={handlePopupAction}
+          />
         </div>
       )}
     </Background>
