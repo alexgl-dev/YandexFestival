@@ -50,7 +50,11 @@ export function GameInstruction({ instruction, buttonLabel, initialOpen, onClose
           role="presentation"
           onClick={close}
         >
-          <div role="presentation" onClick={(e) => e.stopPropagation()}>
+          <div
+            role="presentation"
+            className={styles.popupWrap}
+            onClick={(e) => e.stopPropagation()}
+          >
             <PopUp
               title={t("Инструкция")}
               description={parseInstructionWithBoldMarkup(

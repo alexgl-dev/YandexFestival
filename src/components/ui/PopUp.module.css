@@ -8,13 +8,15 @@
   align-items: center;
   gap: 50px;
   width: var(--width-content);
-  max-height: 100vh;
+  /* 70% от родителя с явной высотой (оверлей сцены / .popupWrap).
+     Если родитель height: auto — % игнорируется, попап растёт по контенту. */
+  max-height: 70%;
   padding: var(--spacing-2xl);
   border-radius: var(--radius-ml);
   background-color: var(--color-white);
   font-family: var(--font-family-text);
   box-sizing: border-box;
-
+  min-height: 0;
 }
 
 .topContent {
@@ -24,7 +26,6 @@
   align-items: center;
   width: 100%;
   padding-top: 55px;
-  
   flex: 1 1 auto;
   min-height: 0;
 }
@@ -51,6 +52,8 @@
   width: 100%;
   color: var(--color-black);
   text-align: center;
+  flex: 1 1 auto;
+  min-height: 0;
   overflow-y: auto;
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* IE/Edge legacy */

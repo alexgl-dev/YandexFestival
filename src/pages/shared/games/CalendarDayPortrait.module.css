@@ -209,7 +209,7 @@
   overflow: hidden;
 }
 
-/* ── Slot lines ── */
+/* ── Slot lines (disabled for ready-made calendars — keep cards only) ── */
 
 .slot {
   position: absolute;
@@ -219,19 +219,15 @@
   pointer-events: none;
 }
 
-.slotHour {
-  border-top: 4px solid rgba(255, 255, 255, 0.5);
-}
-
-.slotHalf {
-  border-top: 2px solid rgba(255, 255, 255, 0.15);
+.slotHour,
+.slotHalf,
+.slotLast {
+  border: none;
 }
 
 .slotLast {
   top: auto;
   bottom: 0;
-  border-top: none;
-  border-bottom: 4px solid rgba(255, 255, 255, 0.5);
 }
 
 /* ── Event cards ── */

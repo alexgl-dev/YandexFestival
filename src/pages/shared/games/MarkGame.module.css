@@ -87,6 +87,13 @@
 .listItemWrap {
   width: 100%;
   min-width: 0;
+  border-radius: inherit;
+  overflow: hidden;
+}
+
+/* ListItem radius (20) меньше обводки (32) — белое вылезает из кольца */
+.listItemWrap > div {
+  border-radius: var(--radius-lg);
 }
 
 /* Leave room for the status + info icons on the right */
