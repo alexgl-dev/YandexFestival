@@ -45,7 +45,7 @@ export const blocks: BlockData[] = [
     id: 'data',
     title: 'Блок 3 — Аналитика',
     theme: 'cobalt',
-    orientation: 'landscape',
+    orientation: 'portrait',
     items: [
       { label: 'Истории яндексоидов', to: '/block/data/videos' },
       { label: 'Работа с данными', to: '/data' },

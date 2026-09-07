@@ -47,7 +47,7 @@ function pluralSeconds(n: number, t: (key: string) => string): string {
  * экран сравнения (фото с разметкой нейросети, «ты» vs «нейросеть», правильный ответ, comment) → «Дальше».
  * `sampleSize` случайных фото из `countItems` без повторов; итог — onComplete со всеми раундами.
  */
-export function CountGame({ task, onComplete, onBack, theme = 'cobalt', orientation = 'landscape' }: GameProps) {
+export function CountGame({ task, onComplete, onBack, theme = 'cobalt', orientation = 'portrait' }: GameProps) {
   const { t } = useTranslation('sharedGames1');
   const step = task.steps[0];
   const pool = step?.countItems ?? [];
@@ -111,7 +111,7 @@ export function CountGame({ task, onComplete, onBack, theme = 'cobalt', orientat
     <Background theme={theme} orientation={orientation} onBack={onBack} backShowLabel={false}>
       <GameInstruction instruction={task.instruction} onOpenChange={setInstructionOpen} />
 
-      <div className={styles.layout}>
+      <div className={`${styles.layout} ${orientation === 'portrait' ? styles.layoutPortrait : ''}`}>
         <div className={styles.metaRow}>
           <span className={styles.stepCounter}>{t("Фото {{n}} из {{total}}", { n: roundIndex + 1, total: totalRounds })}</span>
           {phase === 'input' && (
@@ -127,13 +127,13 @@ export function CountGame({ task, onComplete, onBack, theme = 'cobalt', orientat
         </div>
 
         {phase === 'input' ? (
-          <div className={styles.mainRow}>
+          <div className={`${styles.mainRow} ${orientation === 'portrait' ? styles.mainRowPortrait : ''}`}>
             <div className={styles.photoCard}>
               <p className={styles.prompt}>{t("Посчитай, сколько на фото объектов: {{label}}", { label: t(countLabel) })}</p>
               <img src={current.image} alt="" className={styles.photo} draggable={false} />
             </div>
 
-            <div className={styles.inputCard}>
+            <div className={`${styles.inputCard} ${orientation === 'portrait' ? styles.bottomCardPortrait : ''}`}>
               <input
                 className={styles.answerInput}
                 type="text"
@@ -165,12 +165,16 @@ export function CountGame({ task, onComplete, onBack, theme = 'cobalt', orientat
             </div>
           </div>
         ) : (
-          <div className={styles.mainRow}>
+          <div className={`${styles.mainRow} ${orientation === 'portrait' ? styles.mainRowPortrait : ''}`}>
             <div className={styles.photoCard}>
+              {/* Пустой слот той же высоты, что и prompt — чтобы карточка не прыгала */}
+              <p className={`${styles.prompt} ${styles.promptPlaceholder}`} aria-hidden="true">
+                &nbsp;
+              </p>
               <img src={current.segmented} alt="" className={styles.photo} draggable={false} />
             </div>
 
-            <div className={styles.compareCard}>
+            <div className={`${styles.compareCard} ${orientation === 'portrait' ? styles.bottomCardPortrait : ''}`}>
               <Icon name={isCorrect ? 'done' : 'close'} color={isCorrect ? 'blue' : 'red'} size="m" />
               <p className={styles.compareLine}>
                 {t("Ты:")} <strong>{answer}</strong> {t("за")} <strong>{submittedSeconds}</strong> {pluralSeconds(submittedSeconds, t)}
@@ -191,14 +195,14 @@ export function CountGame({ task, onComplete, onBack, theme = 'cobalt', orientat
             label={t("Проверить")}
             type="secondary"
             onClick={handleCheck}
-            className={`${styles.actionButton} ${!answer ? styles.actionButtonDisabled : ''}`}
+            className={`${styles.actionButton} ${orientation === 'portrait' ? styles.actionButtonPortrait : ''} ${!answer ? styles.actionButtonDisabled : ''}`}
           />
         ) : (
           <Button
             label={isLastRound ? t("Результаты") : t("Дальше")}
             type="secondary"
             onClick={handleNext}
-            className={styles.actionButton}
+            className={`${styles.actionButton} ${orientation === 'portrait' ? styles.actionButtonPortrait : ''}`}
           />
         )}
       </div>

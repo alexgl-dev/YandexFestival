@@ -46,7 +46,7 @@ export const mlSection: SectionData = {
   slug: 'ml',
   title: 'ML-инженер',
   theme: 'cobalt',
-  orientation: 'landscape',
+  orientation: 'portrait',
   block: 'data',
   professions: [],
   description: '',

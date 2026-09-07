@@ -1,4 +1,4 @@
-/* CountGame — landscape 1920×1080 */
+/* CountGame — landscape 1920×1080 / portrait 1080×1920 */
 
 .layout {
   display: flex;
@@ -8,6 +8,19 @@
   padding: 120px 80px 140px;
   box-sizing: border-box;
   gap: var(--spacing-lg);
+}
+
+.layoutPortrait {
+  padding: 120px var(--spacing-2xl) 160px;
+  gap: var(--spacing-xl);
+  /* Высота нижней панели = keypad (4×96 + gaps) + input + padding — одна на input и compare */
+  --count-bottom-height: calc(
+    var(--spacing-2xl) * 2 +
+    88px +
+    var(--spacing-lg) +
+    96px * 4 +
+    var(--spacing-sm) * 3
+  );
 }
 
 /* ══ Meta row ══ */
@@ -20,6 +33,7 @@
   width: 90%;
   align-self: center;
   min-height: 72px;
+  margin-top: 50px;
 }
 
 .stepCounter {
@@ -76,9 +90,20 @@
   align-self: center;
 }
 
+.mainRowPortrait {
+  flex: 1;
+  height: auto;
+  min-height: 0;
+  flex-direction: column;
+  width: 100%;
+  gap: var(--spacing-xl);
+}
+
 .photoCard {
   flex: 1;
   min-width: 0;
+  min-height: 0;
+  overflow: hidden;
   background: var(--color-white);
   border-radius: var(--radius-lg);
   padding: var(--spacing-xl);
@@ -92,6 +117,7 @@
 
 .prompt {
   margin: 0;
+  flex-shrink: 0;
   font-family: var(--font-family-text);
   font-size: var(--font-size-md);
   font-weight: var(--font-weight-medium);
@@ -100,11 +126,21 @@
   line-height: var(--line-height-normal);
 }
 
+.promptPlaceholder {
+  visibility: hidden;
+  user-select: none;
+}
+
+/*
+  img в flex-колонке: intrinsic-высота не даёт сжаться.
+  flex-basis: 0 + min-height: 0 → размер от свободного места, object-fit вписывает картинку.
+*/
 .photo {
-  max-width: 100%;
-  max-height: 100%;
-  flex: 1;
+  flex: 1 1 0;
   min-height: 0;
+  min-width: 0;
+  width: 100%;
+  height: 0;
   object-fit: contain;
   border-radius: var(--radius-sm);
 }
@@ -122,6 +158,16 @@
   align-items: center;
   justify-content: center;
   gap: var(--spacing-lg);
+}
+
+/* Одна высота для keypad и блока сравнения — иначе photoCard (flex:1) прыгает */
+.bottomCardPortrait {
+  flex: 0 0 var(--count-bottom-height);
+  height: var(--count-bottom-height);
+  width: 100%;
+  padding: var(--spacing-2xl);
+  box-sizing: border-box;
+  overflow-y: auto;
 }
 
 .answerInput {
@@ -214,7 +260,19 @@
   width: 500px !important;
 }
 
+.actionButtonPortrait {
+  width: calc(100% - var(--spacing-2xl) * 2) !important;
+  max-width: 100%;
+  bottom: var(--spacing-2xl);
+}
+
 .actionButtonDisabled {
   opacity: 0.4;
   pointer-events: none;
+}
+
+/* Portrait: фото занимает оставшееся место сверху */
+.mainRowPortrait .photoCard {
+  flex: 1 1 0;
+  width: 100%;
 }
