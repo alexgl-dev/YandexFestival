@@ -55,7 +55,7 @@ export function Profession() {
   const glossary = profession.glossary ?? [];
   const hasSections = profession.sections && profession.sections.length > 0;
 
-  const securityBadgeLabel = t('Специалист по\nинформационной безопасности');
+  const securityBadgeLabel = t('Специалист\nпо информационной безопасности');
   const badgeLabel = (prof: { id: string; title: string }) =>
     prof.id === 'security-specialist' ? securityBadgeLabel : t(prof.title);
   const badgeClass = (prof: { id: string }) =>
@@ -69,9 +69,9 @@ export function Profession() {
             <>DevOps-<br />{t("инженер")}</>
           ) : profession.id === 'security-specialist' ? (
             <>
-              {t('Специалист по')}
+              {t('Специалист')}
               <br />
-              {t('информационной безопасности')}
+              {t('по информационной безопасности')}
             </>
           ) : (
             t(profession.title)
