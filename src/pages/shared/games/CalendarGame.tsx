@@ -173,7 +173,7 @@ export function CalendarGame({ task, onComplete, onBack, theme = 'orange' }: Pro
     <Background theme={theme} orientation="landscape" onBack={onBack} backShowLabel={false}>
       <GameInstruction instruction={task.instruction} />
       <div className={styles.gameRoot}>
-        {step.prompt && <p className={styles.prompt}>{step.prompt}</p>}
+        {step.prompt && <p className={styles.prompt}>{t(step.prompt)}</p>}
         <div className={styles.layout}>
 
         {/* ══ LEFT: task pool ══ */}

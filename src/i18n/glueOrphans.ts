@@ -74,8 +74,9 @@ export function glueOrphans(text: string): string {
 
   // Lookbehind не съедает разделитель — иначе следующее короткое слово
   // (после обычного) пропускается: пробел уже ушёл в предыдущий матч.
+  // Lookahead допускает открывающие кавычки/скобки: «с ·«умными»».
   return text.replace(
-    /(?<![\p{L}\p{N}])([\p{L}]+)( +)(?=[\p{L}\p{N}])/gu,
+    /(?<![\p{L}\p{N}])([\p{L}]+)( +)(?=[«„“"'(\[]*[\p{L}\p{N}])/gu,
     (match, word: string) => {
       if (SHORT_WORDS.has(word.toLowerCase())) {
         return `${word}${NBSP}`;

@@ -119,7 +119,7 @@ export function ChooseGame({ task, onComplete, onBack, theme = 'orange', orienta
       <GameInstruction instruction={task.instruction} />
       <div className={styles.wrapper}>
         {!isImageMode && step.prompt && (
-          <p className={styles.prompt}>{step.prompt}</p>
+          <p className={styles.prompt}>{t(step.prompt)}</p>
         )}
 
         {isImageMode ? (
@@ -134,7 +134,7 @@ export function ChooseGame({ task, onComplete, onBack, theme = 'orange', orienta
                   />
                 )}
                 {step.prompt && (
-                  <p className={styles.promptText}>{step.prompt}</p>
+                  <p className={styles.promptText}>{t(step.prompt)}</p>
                 )}
               </div>
             )}

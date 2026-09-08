@@ -291,7 +291,7 @@ export function SwipeGame({
         </div>
 
         {/* Prompt */}
-        {step.prompt && <p className={styles.prompt}>{step.prompt}</p>}
+        {step.prompt && <p className={styles.prompt}>{t(step.prompt)}</p>}
 
         {/* Swipe hints */}
         <div className={`${styles.hintLeft} ${styles.hintTrash}`}>

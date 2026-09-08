@@ -181,7 +181,7 @@ export function CategorizeGame({ task, onComplete, onBack, theme = 'cobalt', ori
     <Background theme={theme} orientation={orientation} onBack={onBack} backShowLabel={false}>
       <GameInstruction instruction={task.instruction} />
       <div className={styles.wrapper}>
-        {step.prompt && <p className={styles.instruction}>{step.prompt}</p>}
+        {step.prompt && <p className={styles.instruction}>{t(step.prompt)}</p>}
 
         {/* Drop zones */}
         <div className={styles.columnsArea}>
