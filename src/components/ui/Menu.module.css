@@ -47,10 +47,10 @@
   background-color: var(--color-grey-card);
 }
 
-/* --- Language switcher: pill top-right, mirrors back button offsets --- */
+/* --- Language switcher: pill bottom-right, mirrors back button offsets --- */
 .languageSwitcher {
   position: absolute;
-  top: var(--spacing-2xl);
+  bottom: var(--spacing-2xl);
   right: var(--spacing-2xl);
   z-index: 2;
   display: flex;

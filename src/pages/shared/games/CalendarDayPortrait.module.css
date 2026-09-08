@@ -41,6 +41,7 @@
 
 .popupParagraph {
   margin: 0;
+  white-space: pre-line;
 }
 
 .popupParagraph + .popupParagraph {
@@ -93,6 +94,7 @@
   color: var(--color-black);
   line-height: var(--line-height-relaxed);
   text-align: left;
+  white-space: pre-line;
 }
 
 .outroText {

@@ -1,5 +1,6 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
+import { glueOrphansPostProcessor } from './glueOrphans';
 import { NAMESPACES } from './namespaces';
 
 import enCommon from './locales/en/common.json';
@@ -24,7 +25,10 @@ const storedLanguage = localStorage.getItem(LANGUAGE_STORAGE_KEY);
  * отдельного словаря нет: i18next возвращает ключ как есть, если перевода
  * не нашлось, а ключ и есть исходный русский текст.
  */
-i18n.use(initReactI18next).init({
+i18n
+  .use(glueOrphansPostProcessor)
+  .use(initReactI18next)
+  .init({
   lng: storedLanguage === 'en' ? 'en' : 'ru',
   fallbackLng: 'ru',
   ns: NAMESPACES,
@@ -36,6 +40,7 @@ i18n.use(initReactI18next).init({
   // development, management, data, informatics). Поэтому при поиске ключа нужно
   // проверять ВСЕ namespace, а не только свой.
   fallbackNS: NAMESPACES,
+  postProcess: ['glueOrphans'],
   interpolation: { escapeValue: false },
   returnEmptyString: false,
   resources: {
