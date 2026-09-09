@@ -27,7 +27,7 @@ export const blocks: BlockData[] = [
       { label: 'Календарь яндексоида', to: '/calendars' },
       { label: 'Менеджмент', to: '/management' },
       { label: 'Истории яндексоидов', to: '/block/management/videos' },
-      { label: 'Цифровая доступность', to: '/access' },
+      { label: 'Цифровая доступность', to: '/access/tasks/vision' },
     ],
   },
   {
