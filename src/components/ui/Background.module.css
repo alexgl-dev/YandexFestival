@@ -46,7 +46,7 @@
 /* --- Back button --- */
 .backButton {
   position: absolute;
-  top: var(--spacing-2xl);
+  bottom: var(--spacing-2xl);
   left: var(--spacing-2xl);
   z-index: 2;
 }
