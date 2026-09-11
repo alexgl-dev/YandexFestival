@@ -36,7 +36,6 @@ export function Menu({
       orientation={orientation}
       showBackButton={!!onBack}
       onBack={onBack}
-      backShowLabel
       className={className}
     >
       {showLanguageSwitcher && (

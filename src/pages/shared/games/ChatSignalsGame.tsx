@@ -193,7 +193,7 @@ export function ChatSignalsGame({ task, onComplete, onBack, theme = 'orange', or
       <GameInstruction instruction={task.instruction} />
       <div className={styles.page}>
         <div className={styles.gameHeader}>
-          <IconButton type="back" variant={theme === 'orange' ? 'orange' : 'light'} size="md" onClick={onBack} />
+          <IconButton type="back" variant={theme === 'orange' ? 'orange' : 'light'} size="md" showLabel={false} onClick={onBack} />
           <div className={styles.headerPills}>
             <div className={styles.timerPill}>
               <span>⏱</span>

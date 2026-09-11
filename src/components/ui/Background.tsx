@@ -14,7 +14,7 @@ export interface BackgroundProps {
   orientation?: 'landscape' | 'portrait';
   showBackButton?: boolean;
   onBack?: () => void;
-  /** Показывать подпись «Назад». В меню — true, в играх — false (чтобы не заезжало). */
+  /** Показывать подпись «Назад». По умолчанию только стрелка. */
   backShowLabel?: boolean;
   children?: ReactNode;
   className?: string;
@@ -32,7 +32,7 @@ export function Background({
   orientation = 'landscape',
   showBackButton = true,
   onBack,
-  backShowLabel = true,
+  backShowLabel = false,
   children,
   className,
   contentClassName,
