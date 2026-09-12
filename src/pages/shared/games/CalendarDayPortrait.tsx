@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Background, Icon, IconButton, InfoButton, PopUp } from '../../../components/ui';
+import { Background, Icon, InfoButton, PopUp } from '../../../components/ui';
 import type { CalendarCardData, GlossaryTerm } from '../../../types/game';
 import { getWeekDays, type CalendarDay } from '../../../utils/calendarDays';
 import { parseGlossarySegments } from '../parseGlossarySegments';
@@ -132,14 +132,9 @@ export function CalendarDayPortrait({
   const dayLayouts = computeDayLayouts(dayCards, slotPct);
 
   return (
-    <Background theme={theme} orientation="portrait" showBackButton={false}>
+    <Background theme={theme} orientation="portrait" onBack={onBack}>
       <div className={styles.root}>
         <div className={styles.wrapper}>
-
-          <div className={styles.leftColumn}>
-            <IconButton type="back" variant="light" size="lg" showLabel={false} onClick={onBack} />
-          </div>
-
           <div className={styles.rightColumn}>
             {topText && <p className={styles.introText}>{topText}</p>}
 
