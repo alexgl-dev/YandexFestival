@@ -127,7 +127,7 @@ export function QuizGame({ task, onComplete, onBack, theme = 'cobalt', orientati
                   onClick={() => handleSelect(index)}
                 />
                 <Button
-                  label={t("Это Алиса")}
+                  label={t("Это Алиса AI")}
                   type="secondary"
                   onClick={() => handleSelect(index)}
                   className={isDisabled ? styles.answerButtonDisabled : ''}
